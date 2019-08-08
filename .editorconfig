@@ -1,0 +1,26 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root                     = true
+
+[*]
+charset                  = utf-8
+indent_style             = space
+indent_size              = 4
+trim_trailing_whitespace = true
+
+[Makefile]
+indent_style             = tab
+tab_width                = 4
+trim_trailing_whitespace = false
+
+[*.{mk,psm1,sh}]
+indent_style             = tab
+tab_width                = 4
+trim_trailing_whitespace = false
+
+[*.{yml,json,xml}]
+indent_size              = 2
+
+[*.md]
+trim_trailing_whitespace = false
