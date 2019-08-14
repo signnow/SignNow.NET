@@ -17,8 +17,7 @@ namespace SignNow.Net
         /// Initialize a new instance of SignNow Client
         /// </summary>
         /// <param name="httpClient">
-        /// The <see cref="ISignNowClient"/> client to use. If <c>null</c>, an HTTP client will be
-        /// created with default parameters.
+        /// If <c>null</c>, an HTTP client will be created with default parameters.
         /// </param>
         public SignNowClient(HttpClient httpClient = null)
         {
@@ -31,7 +30,7 @@ namespace SignNow.Net
 
             var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return ProcessResponse<TResponse>(response);
+            return await ProcessResponse<TResponse>(response);
         }
 
         /// <summary>
@@ -44,6 +43,11 @@ namespace SignNow.Net
             return new HttpClient();
         }
 
+        /// <summary>
+        /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
+        /// </summary>
+        /// <param name="requestOptions"></param>
+        /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
             var httpMethod = new HttpMethod(requestOptions.Method);
@@ -55,12 +59,18 @@ namespace SignNow.Net
                 requestMessage.Headers.Add(header.Key, header.Value);
             }
 
-            requestMessage.Content = this.CreateContent(httpMethod, requestOptions.Content);
+            requestMessage.Content = this.CreateJsonContent(httpMethod, requestOptions.Content);
 
             return requestMessage;
         }
 
-        private HttpContent CreateContent(HttpMethod method, string content)
+        /// <summary>
+        /// Prepare Json Content from String
+        /// </summary>
+        /// <param name="method">Request Method</param>
+        /// <param name="content">String content</param>
+        /// <returns></returns>
+        private HttpContent CreateJsonContent(HttpMethod method, string content)
         {
             if (method == HttpMethod.Post)
             {
@@ -70,19 +80,20 @@ namespace SignNow.Net
             return null;
         }
 
-        private TResponse ProcessResponse<TResponse>(HttpResponseMessage response)
+        private async Task<TResponse> ProcessResponse<TResponse>(HttpResponseMessage response)
         {
-            if (response.StatusCode != HttpStatusCode.OK)
+            var contentAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch
             {
                 throw new NotImplementedException();
             }
 
-            TResponse responseObj;
-
-            var content = response.Content.ReadAsStringAsync().Result;
-            responseObj = JsonConvert.SerializeObject(content);
-
-            return responseObj;
+            return JsonConvert.DeserializeObject<TResponse>(contentAsString);
         }
     }
 }
