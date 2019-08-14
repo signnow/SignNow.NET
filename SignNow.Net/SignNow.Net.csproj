@@ -26,4 +26,7 @@
       <Folder Include="_Internal\Model\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="SignNowClient.cs" />
+    </ItemGroup>
 </Project>
