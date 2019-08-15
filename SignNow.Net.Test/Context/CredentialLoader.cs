@@ -11,7 +11,7 @@ namespace SignNow.Net.Test.Context
         private readonly ICredentialProvider credentialProvider;
 
         public CredentialLoader(Uri credentialsTarget):this(
-            new JsonFileCredentialProvider(Environment.ExpandEnvironmentVariables(Path.Combine(credentialsDirectory, credentialsTarget.Host))))
+            new JsonFileCredentialProvider(GetCredentialsFilePath(credentialsTarget)))
         {
         }
 
@@ -20,10 +20,19 @@ namespace SignNow.Net.Test.Context
             this.credentialProvider = credentialProvider;
         }
 
-
         public CredentialModel GetCredentials()
         {
             return credentialProvider.GetCredential();
+        }
+
+        static string GetCredentialsFileName(Uri credentialsTarget)
+        {
+            return $"{credentialsTarget.Host}.json";
+        }
+
+        static string GetCredentialsFilePath (Uri credentialsTarget)
+        {
+            return Environment.ExpandEnvironmentVariables(Path.Combine(credentialsDirectory, GetCredentialsFileName(credentialsTarget)));
         }
     }
 }

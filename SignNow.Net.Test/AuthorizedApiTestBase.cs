@@ -12,8 +12,8 @@ namespace SignNow.Net.Test
         {
             var userCredentialsLoader = new CredentialLoader(ApplicationBaseUrl);
             var apiCredentialsLoader = new CredentialLoader(ApiBaseUrl);
-            var apiCreds = userCredentialsLoader.GetCredentials();
-            var userCreds = apiCredentialsLoader.GetCredentials();
+            var apiCreds = apiCredentialsLoader.GetCredentials();
+            var userCreds = userCredentialsLoader.GetCredentials();
             var oauth = new OAuth2Service(apiCreds.Login, apiCreds.Password);
             Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, default).Result;//TODO: fix Scope parameter once the method is implemented
         }
