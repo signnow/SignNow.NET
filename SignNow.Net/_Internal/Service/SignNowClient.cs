@@ -21,7 +21,7 @@ namespace SignNow.Net._Internal.Service
         /// </param>
         public SignNowClient(HttpClient httpClient = null)
         {
-            this.HttpClient = httpClient ?? MakeDefaultHttpClient();
+            this.HttpClient = httpClient ?? new HttpClient();
         }
 
         /// <summary>
@@ -40,15 +40,6 @@ namespace SignNow.Net._Internal.Service
             return await ProcessResponse<TResponse>(response);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Net.Http.HttpClient"/> class
-        /// with default parameters.
-        /// </summary>
-        /// <returns>The new instance of the <see cref="System.Net.Http.HttpClient"/> class.</returns>
-        private HttpClient MakeDefaultHttpClient()
-        {
-            return new HttpClient();
-        }
 
         /// <summary>
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
@@ -57,16 +48,13 @@ namespace SignNow.Net._Internal.Service
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
-            var httpMethod = new HttpMethod(requestOptions.Method);
-            var requestMessage = new HttpRequestMessage(httpMethod, requestOptions.Uri);
+            var httpMethod = new HttpMethod(requestOptions.HttpMethod);
+            var requestMessage = new HttpRequestMessage(httpMethod, requestOptions.RequestUrl.ToString());
 
 
-            foreach (var header in requestOptions.Headers)
-            {
-                requestMessage.Headers.Add(header.Key, header.Value);
-            }
+            requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
 
-            requestMessage.Content = this.CreateJsonContent(httpMethod, requestOptions.Content);
+            requestMessage.Content = this.CreateJsonContent(httpMethod, requestOptions.Content.ToString());
 
             return requestMessage;
         }
@@ -79,7 +67,7 @@ namespace SignNow.Net._Internal.Service
         /// <returns></returns>
         private HttpContent CreateJsonContent(HttpMethod method, string content)
         {
-            if (method == HttpMethod.Post)
+            if (method == HttpMethod.Post || method == HttpMethod.Put)
             {
                 return new StringContent(content, System.Text.Encoding.UTF8, "application/json");
             }
