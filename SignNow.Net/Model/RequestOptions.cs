@@ -11,7 +11,7 @@ namespace SignNow.Net.Model
 
         public abstract string HttpMethod { get; }
 
-        Token Token { get; set; }
+        public Token Token { get; set; }
     }
 
     public class GetHttpRequestOptions : RequestOptions
