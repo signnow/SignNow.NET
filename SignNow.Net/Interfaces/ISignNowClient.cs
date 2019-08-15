@@ -3,7 +3,7 @@ using SignNow.Net.Model;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignNow.Net.Interface
+namespace SignNow.Net.Interfaces
 {
     public interface ISignNowClient
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SignNow.Net._Internal.Constants
+namespace SignNow.Net.Internal.Constants
 {
     static class ApiUrl
     {

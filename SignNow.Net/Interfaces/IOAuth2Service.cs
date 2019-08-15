@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignNow.Net.Interface
+namespace SignNow.Net.Interfaces
 {
     public interface IOAuth2Service
     {
