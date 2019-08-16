@@ -1,5 +1,6 @@
 
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Interface;
 using SignNow.Net.Model;
 using System;
@@ -85,7 +86,7 @@ namespace SignNow.Net._Internal.Service
             }
             catch
             {
-                throw new NotImplementedException();
+                throw new SignNowException(response.ReasonPhrase);
             }
 
             return JsonConvert.DeserializeObject<TResponse>(contentAsString);
