@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Method = System.Net.Http.HttpMethod;
 
 namespace SignNow.Net.Model
 {
@@ -9,21 +10,21 @@ namespace SignNow.Net.Model
 
         public Uri RequestUrl { get; set; }
 
-        public abstract string HttpMethod { get; }
+        public abstract Method HttpMethod { get; }
 
         public Token Token { get; set; }
     }
 
     public class GetHttpRequestOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Get.ToString();
+        public override Method HttpMethod => Method.Get;
     }
 
     public class PostHttpRequesOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Post.ToString();
+        public override Method HttpMethod => Method.Post;
 
-        public PostHttpRequesOptions(object content)
+        public PostHttpRequesOptions(object content = null)
         {
             Content = content;
         }
@@ -31,9 +32,9 @@ namespace SignNow.Net.Model
 
     public class PutHttpRequesOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Put.ToString();
+        public override Method HttpMethod => Method.Put;
 
-        public PutHttpRequesOptions(object content)
+        public PutHttpRequesOptions(object content = null)
         {
             Content = content;
         }
@@ -41,16 +42,16 @@ namespace SignNow.Net.Model
 
     public class DeleteHttpRequesOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Delete.ToString();
+        public override Method HttpMethod => Method.Delete;
     }
 
     public class HeadHttpRequestOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Head.ToString();
+        public override Method HttpMethod => Method.Head;
     }
 
     public class OptionsHttpRequestOptions : RequestOptions
     {
-        public override string HttpMethod => System.Net.Http.HttpMethod.Options.ToString();
+        public override Method HttpMethod => Method.Options;
     }
 }
