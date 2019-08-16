@@ -1,5 +1,5 @@
-using SignNow.Net._Internal.Constants;
-using SignNow.Net.Interface;
+using SignNow.Net.Internal.Constants;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
 using System.IO;
@@ -32,9 +32,25 @@ namespace SignNow.Net.Service
             throw new NotImplementedException();
         }
 
-        public Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, bool extractFields = true, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Uploads a file and creates a document. This method accepts .doc, .docx, .pdf, and .png file types.
+        /// </summary>
+        /// <param name="documentContent">Document content stream</param>
+        /// <param name="extractFields">Set true to extract simple field tags (default value) from document if any. This setting affects only .doc, .docx and .pdf file types. See <see cref="https://campus.barracuda.com/product/signnow/doc/41113461/rest-endpoints-api"/></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Operation result object containing ID of the new document.</returns>
+        public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, bool extractFields = true, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var documentRequestRelativeUrl = "/document" + (extractFields ? "/fieldextract" : string.Empty);
+            var requestFullUrl = new Uri(ApiBaseUrl, documentRequestRelativeUrl);
+            var requestOptions = new RequestOptions();
+            //var requestOptions = new RequestOptions
+            //{
+            //    RequestUrl = requestFullUrl,
+            //    HttpMethod = "POST",
+            //    Content = documentContent
+            //};
+            return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }
 }

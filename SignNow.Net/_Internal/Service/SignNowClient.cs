@@ -1,14 +1,14 @@
 
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Interface;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignNow.Net._Internal.Service
+namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {

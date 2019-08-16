@@ -1,5 +1,5 @@
-using SignNow.Net._Internal.Constants;
-using SignNow.Net.Interface;
+using SignNow.Net.Internal.Constants;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
