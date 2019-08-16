@@ -89,7 +89,7 @@ namespace AcceptanceTests
         }
         void DeleteDocument(string id)
         {
-            docService.DeleteDocumentAsync(id).RunSynchronously();
+            //docService.DeleteDocumentAsync(id).RunSynchronously();
         }
     }
 }

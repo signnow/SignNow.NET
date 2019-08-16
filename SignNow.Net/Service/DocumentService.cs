@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using SignNow.Net._Internal.Requests;
 
 namespace SignNow.Net.Service
 {
@@ -46,7 +47,14 @@ namespace SignNow.Net.Service
 
         private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
+            var requestOptions = new PostHttpRequesOptions
+            {
+                RequestUrl = requestFullUrl,
+                Content = new MultipartFormDataHttpContent(documentContent),
+                Token = this.Token
+            };
+            return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }
 }

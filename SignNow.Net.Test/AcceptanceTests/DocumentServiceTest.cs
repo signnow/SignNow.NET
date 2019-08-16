@@ -13,7 +13,7 @@ namespace AcceptanceTests
         readonly string txtFilePath = "..\\..\\..\\TestData\\Documents\\DocumentUpload.jpg";
         public DocumentServiceTest()
         {
-            docService = new DocumentService(Token);
+            docService = new DocumentService(ApiBaseUrl, Token);
         }
     }
 }
