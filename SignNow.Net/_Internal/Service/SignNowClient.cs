@@ -49,13 +49,20 @@ namespace SignNow.Net.Internal.Service
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
-            var httpMethod = new HttpMethod(requestOptions.HttpMethod);
-            var requestMessage = new HttpRequestMessage(httpMethod, requestOptions.RequestUrl.ToString());
+            if (requestOptions.RequestUrl == null)
+            {
+                throw new ArgumentException("Url cannot be empty or null.");
+            }
 
+            var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
+            var contentBody = requestOptions.Content == null ? string.Empty : requestOptions.Content.ToString();
 
-            requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
+            if (requestOptions.Token != null)
+            {
+                requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
+            }
 
-            requestMessage.Content = this.CreateJsonContent(httpMethod, requestOptions.Content.ToString());
+            requestMessage.Content = this.CreateJsonContent(requestOptions.HttpMethod, contentBody);
 
             return requestMessage;
         }
