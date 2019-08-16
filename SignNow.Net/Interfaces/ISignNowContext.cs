@@ -1,4 +1,4 @@
-namespace SignNow.Net.Interface
+namespace SignNow.Net.Interfaces
 {
     public interface ISignNowContext
     {
