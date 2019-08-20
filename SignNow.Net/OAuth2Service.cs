@@ -3,6 +3,10 @@ using SignNow.Net.Internal.Constants;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,18 +23,22 @@ namespace SignNow.Net
         }
         public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : base(apiBaseUrl)
         {
-
+            _clientId = clientId;
+            _clientSecret = clientSecret;
+            _apiBaseUrl = apiBaseUrl;
         }
         protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
         {
-
+            _clientId = clientId;
+            _clientSecret = clientSecret;
+            _apiBaseUrl = apiBaseUrl;
         }
         public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
             var options = new RequestOptions
             {
