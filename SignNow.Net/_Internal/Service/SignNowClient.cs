@@ -4,6 +4,7 @@ using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace SignNow.Net.Internal.Service
 
             var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-            return await ProcessResponse<TResponse>(response);
+            return await HandleResponse<TResponse>(response);
         }
 
 
@@ -51,18 +52,20 @@ namespace SignNow.Net.Internal.Service
         {
             if (requestOptions.RequestUrl == null)
             {
-                throw new ArgumentException("Url cannot be empty or null.");
+                throw new ArgumentException("RequestUrl cannot be empty or null.");
             }
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
-            var contentBody = requestOptions.Content == null ? string.Empty : requestOptions.Content.ToString();
 
             if (requestOptions.Token != null)
             {
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
             }
 
-            requestMessage.Content = this.CreateJsonContent(requestOptions.HttpMethod, contentBody);
+            if (requestOptions.Content != null)
+            {
+                requestMessage.Content = this.CreateJsonContent(requestOptions.HttpMethod, requestOptions.Content.ToString());
+            }
 
             return requestMessage;
         }
@@ -83,20 +86,50 @@ namespace SignNow.Net.Internal.Service
             return null;
         }
 
-        private async Task<TResponse> ProcessResponse<TResponse>(HttpResponseMessage response)
+        /// <summary>
+        /// Process raw HTTP response into requested domain type.
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <param name="response">The <see cref="HttpResponseMessage"/> to handle</param>
+        /// <returns></returns>
+        private async Task<TResponse> HandleResponse<TResponse>(HttpResponseMessage response)
         {
-            var contentAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var mimeType = response.Content.Headers.ContentType?.MediaType;
+            var responseObj = default(TResponse);
+
+            switch (mimeType)
+            {
+                case "application/json":
+                    var contentAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    responseObj = JsonConvert.DeserializeObject<TResponse>(contentAsString);
+
+                case "application/octet-stream":
+                    var streamContent = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    string content;
+
+                    using (StreamReader streamReader = new StreamReader(streamContent, System.Text.Encoding.Unicode))
+                    {
+                        content = streamReader.ReadToEnd();
+                    }
+
+                    responseObj = JsonConvert.DeserializeObject<TResponse>(content);
+
+                default:
+                    break;
+            }
+
 
             try
             {
                 response.EnsureSuccessStatusCode();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new SignNowException(response.ReasonPhrase);
+                throw new SignNowException(response.ReasonPhrase, ex);
             }
 
-            return JsonConvert.DeserializeObject<TResponse>(contentAsString);
+            return responseObj;
         }
     }
 }
