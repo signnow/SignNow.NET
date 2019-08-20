@@ -103,6 +103,7 @@ namespace SignNow.Net.Internal.Service
                     var contentAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     responseObj = JsonConvert.DeserializeObject<TResponse>(contentAsString);
+                    break;
 
                 case "application/octet-stream":
                     var streamContent = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -114,6 +115,7 @@ namespace SignNow.Net.Internal.Service
                     }
 
                     responseObj = JsonConvert.DeserializeObject<TResponse>(content);
+                    break;
 
                 default:
                     break;
