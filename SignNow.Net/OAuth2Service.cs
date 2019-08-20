@@ -23,16 +23,12 @@ namespace SignNow.Net
         }
         public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : base(apiBaseUrl)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _apiBaseUrl = apiBaseUrl;
         }
+
         protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
         {
-            _clientId = clientId;
-            _clientSecret = clientSecret;
-            _apiBaseUrl = apiBaseUrl;
         }
+
         public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
