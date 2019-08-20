@@ -1,10 +1,11 @@
 
 using Newtonsoft.Json;
-using SignNow.Net.Interface;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +30,8 @@ namespace SignNow.Net.Internal.Service
 
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("Authorization", $"Basic {appToken}");
-            client.DefaultRequestHeaders.Add("Content-Type", requestOptions.ContentType);
+            client.DefaultRequestHeaders.Accept.Add(
+                            new MediaTypeWithQualityHeaderValue(requestOptions.ContentType));
 
             var body = new Dictionary<string, string>
             {
@@ -44,7 +46,7 @@ namespace SignNow.Net.Internal.Service
                 body.Add("scope", $"/{Scope.User.ToString().ToLower()}");
 
             var content = new FormUrlEncodedContent(body);
-            var response = await client.PostAsync(requestOptions.URL, content);
+            var response = await client.PostAsync("https://api-eval.signnow.com/oauth2/token", content);
             var responseString = await response.Content.ReadAsStringAsync();
             response.Dispose();
 
