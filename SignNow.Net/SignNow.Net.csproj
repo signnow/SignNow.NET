@@ -28,6 +28,10 @@
     <ItemGroup>
       <Folder Include="_Internal\Interface\" />
       <Folder Include="_Internal\Model\" />
+      <Folder Include="Exceptions\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="SignNowClient.cs" />
+    </ItemGroup>
 </Project>
