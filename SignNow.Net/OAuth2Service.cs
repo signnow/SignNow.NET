@@ -38,7 +38,6 @@ namespace SignNow.Net
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
             var url = $"{ApiBaseUrl}/oauth2/token";
-            url = "https://api-eval.signnow.com/oauth2/token";
 
             var body = new Dictionary<string, string>
             {
