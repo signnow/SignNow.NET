@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace SignNow.Net.Model
 {
     public class Token
@@ -6,5 +8,9 @@ namespace SignNow.Net.Model
         {
             return "token";
         }
+        
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
     }
 }
+
