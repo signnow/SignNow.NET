@@ -58,32 +58,16 @@ namespace SignNow.Net.Internal.Service
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
             if (requestOptions.Token != null)
-            {
+            {                
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
             }
 
             if (requestOptions.Content != null)
             {
-                requestMessage.Content = this.CreateJsonContent(requestOptions.HttpMethod, requestOptions.Content.ToString());
+                requestMessage.Content = (HttpContent)requestOptions.Content;
             }
 
             return requestMessage;
-        }
-
-        /// <summary>
-        /// Prepare Json Content from String
-        /// </summary>
-        /// <param name="method">Request Method</param>
-        /// <param name="content">String content</param>
-        /// <returns></returns>
-        private HttpContent CreateJsonContent(HttpMethod method, string content)
-        {
-            if (method == HttpMethod.Post || method == HttpMethod.Put)
-            {
-                return new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-            }
-
-            return null;
         }
 
         /// <summary>

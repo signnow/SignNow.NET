@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Model;
@@ -36,16 +37,24 @@ namespace SignNow.Net
 
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
-            var options = new RequestOptions
+            var url = $"{ApiBaseUrl}/oauth2/token";
+            url = "https://api-eval.signnow.com/oauth2/token";
+
+            var body = new Dictionary<string, string>
             {
-                URL = $"{ApiUrl.ApiBaseUrl}oauth2/token",
-                GrantType = "password",
-                ContentType = "application/x-www-form-urlencoded",
-                ClientId = ClientId,
-                ClientSecret = ClientSecret,
-                Scope = scope,
-                Login = login,
-                Password = password
+               { "grant_type", "password" },
+               { "username", login },
+               { "password", password }
+            };
+
+            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
+            var appToken = Convert.ToBase64String(plainTextBytes);
+
+            var options = new PostHttpRequesOptions()
+            {
+                Token = new Token { AccessToken = appToken, TokenType = TokenTypeEnum.Basic },
+                Content = new FormUrlEncodedContent(body),
+                RequestUrl = new Uri(url)
             };
 
             return await SignNowClient.RequestAsync<Token>(options);

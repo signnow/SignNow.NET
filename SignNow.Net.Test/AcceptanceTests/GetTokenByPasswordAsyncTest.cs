@@ -18,9 +18,10 @@ namespace SignNow.Net.Test.AcceptanceTests
             var authObject = new OAuth2Service(user.Login, user.Password);
             var tokenTask = authObject.GetTokenAsync(creds.Login, creds.Password, Scope.All);
 
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+            Task.WaitAll(tokenTask);
 
-            Task.WhenAll(tokenTask);
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+                        
             var token = tokenTask.Result;
 
             Assert.IsNotNull(token, "Token is null");
