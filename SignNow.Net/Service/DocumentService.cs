@@ -27,9 +27,14 @@ namespace SignNow.Net.Service
             throw new NotImplementedException();
         }
 
-        public Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc />
+        public async Task<DeleteDocumentResponse> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            var requestedDocument = "/document/" + documentId;
+
+            var requestOptions = new DeleteHttpRequestOptions();
+
+            return await SignNowClient.RequestAsync<DeleteDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
