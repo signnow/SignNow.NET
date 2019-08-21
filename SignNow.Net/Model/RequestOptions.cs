@@ -20,27 +20,27 @@ namespace SignNow.Net.Model
         public override Method HttpMethod => Method.Get;
     }
 
-    public class PostHttpRequesOptions : RequestOptions
+    public class PostHttpRequestOptions : RequestOptions
     {
         public override Method HttpMethod => Method.Post;
 
-        public PostHttpRequesOptions(object content = null)
+        public PostHttpRequestOptions(object content = null)
         {
             Content = content;
         }
     }
 
-    public class PutHttpRequesOptions : RequestOptions
+    public class PutHttpRequestOptions : RequestOptions
     {
         public override Method HttpMethod => Method.Put;
 
-        public PutHttpRequesOptions(object content = null)
+        public PutHttpRequestOptions(object content = null)
         {
             Content = content;
         }
     }
 
-    public class DeleteHttpRequesOptions : RequestOptions
+    public class DeleteHttpRequestOptions : RequestOptions
     {
         public override Method HttpMethod => Method.Delete;
     }

@@ -43,7 +43,7 @@ namespace SignNow.Net.Service
         {
             var documentRequestRelativeUrl = "/document" + (extractFields ? "/fieldextract" : string.Empty);
             var requestFullUrl = new Uri(ApiBaseUrl, documentRequestRelativeUrl);
-            var requestOptions = new RequestOptions();
+            var requestOptions = new PostHttpRequestOptions();
             //var requestOptions = new RequestOptions
             //{
             //    RequestUrl = requestFullUrl,
