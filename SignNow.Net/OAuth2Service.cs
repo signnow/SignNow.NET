@@ -1,3 +1,4 @@
+using SignNow.Net._Internal.Requests;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Model;
@@ -54,11 +55,10 @@ namespace SignNow.Net
 
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
-
             var options = new PostHttpRequesOptions()
             {
                 Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
-                Content = new FormUrlEncodedContent(body),
+                Content = new FormUrlEncodedHttpContent(body),
                 RequestUrl = new Uri(url)
             };
 
