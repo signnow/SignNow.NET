@@ -32,24 +32,28 @@ namespace SignNow.Net.Service
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Uploads a file and creates a document. This method accepts .doc, .docx, .pdf, and .png file types.
-        /// </summary>
-        /// <param name="documentContent">Document content stream</param>
-        /// <param name="extractFields">Set true to extract simple field tags (default value) from document if any. This setting affects only .doc, .docx and .pdf file types. See <see cref="https://campus.barracuda.com/product/signnow/doc/41113461/rest-endpoints-api"/></param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        /// <returns>Operation result object containing ID of the new document.</returns>
-        public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, bool extractFields = true, CancellationToken cancellationToken = default)
+        ///<inheritdoc/>
+        public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, CancellationToken cancellationToken = default)
         {
-            var documentRequestRelativeUrl = "/document" + (extractFields ? "/fieldextract" : string.Empty);
-            var requestFullUrl = new Uri(ApiBaseUrl, documentRequestRelativeUrl);
-            var requestOptions = new RequestOptions();
-            //var requestOptions = new RequestOptions
-            //{
-            //    RequestUrl = requestFullUrl,
-            //    HttpMethod = "POST",
-            //    Content = documentContent
-            //};
+            return await UploadDocumentAsync("/document", documentContent, cancellationToken).ConfigureAwait(false);
+        }
+
+        ///<inheritdoc/>
+        public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, CancellationToken cancellationToken = default)
+        {
+            return await UploadDocumentAsync("/document/fieldextract", documentContent, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, CancellationToken cancellationToken = default)
+        {
+            var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
+            //var requestOptions = new RequestOptions;
+            var requestOptions = new PostHttpRequesOptions
+            {
+                RequestUrl = requestFullUrl,
+                Content = documentContent,
+                Token = this.Token
+            };
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }

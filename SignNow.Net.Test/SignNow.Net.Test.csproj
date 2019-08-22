@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <Folder Include="FeatureTests\" />
-    <Folder Include="AcceptanceTests\" />
-    <Folder Include="UnitTests\" />
   </ItemGroup>
 
 </Project>
