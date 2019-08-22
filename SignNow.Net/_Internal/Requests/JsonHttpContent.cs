@@ -1,17 +1,17 @@
-using System.Net.Http;
-using System.Text;
-using Newtonsoft.Json;
-using SignNow.Net.Interfaces;
-
 namespace SignNow.Net._Internal.Requests
 {
-    public class JsonHttpContent : IContent
+    using System.Net.Http;
+    using System.Text;
+    using Newtonsoft.Json;
+    using SignNow.Net.Interfaces;
+
+    internal class JsonHttpContent : IContent
     {
-        private object ContentBody;
+        private object contentBody;
 
         public JsonHttpContent(object contentBody)
         {
-            this.ContentBody = contentBody;
+            this.contentBody = contentBody;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace SignNow.Net._Internal.Requests
         public HttpContent GetHttpContent()
         {
             return new StringContent(
-                JsonConvert.SerializeObject(this.ContentBody),
+                JsonConvert.SerializeObject(this.contentBody),
                 Encoding.UTF8, "application/json");
         }
     }

@@ -13,7 +13,7 @@ namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {
-        private System.Net.Http.HttpClient HttpClient { get; }
+        private HttpClient HttpClient { get; }
 
         /// <summary>
         /// Initialize a new instance of SignNow Client
@@ -62,10 +62,7 @@ namespace SignNow.Net.Internal.Service
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
             }
 
-            if (requestOptions.HttpMethod == HttpMethod.Post || requestOptions.HttpMethod == HttpMethod.Put)
-            {
-                requestMessage.Content = requestOptions.Content?.GetHttpContent();
-            }
+            requestMessage.Content = requestOptions.Content?.GetHttpContent();
 
             return requestMessage;
         }
