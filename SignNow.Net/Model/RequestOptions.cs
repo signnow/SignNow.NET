@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using SignNow.Net.Interfaces;
 using Method = System.Net.Http.HttpMethod;
@@ -28,7 +27,7 @@ namespace SignNow.Net.Model
 
         public PostHttpRequesOptions(IContent ContentObj = null)
         {
-            Content = Content == null ? null : ContentObj.Content;
+            Content = Content == null ? null : ContentObj.Content();
         }
     }
 
@@ -38,7 +37,7 @@ namespace SignNow.Net.Model
 
         public PutHttpRequesOptions(IContent ContentObj = null)
         {
-            Content = Content == null ? null : ContentObj.Content;
+            Content = Content == null ? null : ContentObj.Content();
         }
     }
 

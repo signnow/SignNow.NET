@@ -7,6 +7,6 @@ namespace SignNow.Net.Interfaces
     /// </summary>
     public interface IContent
     {
-        HttpContent Content { get; }
+        HttpContent Content();
     }
 }
