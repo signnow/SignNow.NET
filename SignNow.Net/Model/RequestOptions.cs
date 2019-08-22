@@ -7,7 +7,7 @@ namespace SignNow.Net.Model
 {
     public abstract class RequestOptions
     {
-        public HttpContent Content { get; set; }
+        public IContent Content { get; set; }
 
         public Uri RequestUrl { get; set; }
 
@@ -27,7 +27,7 @@ namespace SignNow.Net.Model
 
         public PostHttpRequesOptions(IContent ContentObj = null)
         {
-            Content = Content == null ? null : ContentObj.Content();
+            Content = ContentObj;
         }
     }
 
@@ -37,7 +37,7 @@ namespace SignNow.Net.Model
 
         public PutHttpRequesOptions(IContent ContentObj = null)
         {
-            Content = Content == null ? null : ContentObj.Content();
+            Content = ContentObj;
         }
     }
 
