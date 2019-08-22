@@ -23,7 +23,7 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrievedSuccessfully()
+        public void TokenRetrieving_Success()
         {
             var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
@@ -39,14 +39,14 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrievingFailed_WrongPassword()
+        public void TokenRetrieving_Fail_WrongPassword()
         {
             var tokenTask = authObject.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
 
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword");
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
@@ -55,7 +55,7 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrievingFailed_WrongClientSecret()
+        public void TokenRetrieving_Fail_WrongClientSecret()
         {
             authObject = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
             var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
@@ -63,7 +63,7 @@ namespace SignNow.Net.Test.AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword");
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
