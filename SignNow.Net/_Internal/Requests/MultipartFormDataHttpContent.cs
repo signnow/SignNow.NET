@@ -3,7 +3,7 @@ using System.Net.Http;
 using SignNow.Net.Interfaces;
 using System.Net.Http.Headers;
 
-namespace SignNow.Net._Internal.Requests
+namespace SignNow.Net.Internal.Requests
 {
     /// <summary>
     /// A container for content encoded using <c>multipart/form-data</c> MIME type.
