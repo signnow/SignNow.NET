@@ -6,16 +6,14 @@ using SignNow.Net.Test;
 namespace AcceptanceTests
 {
     [TestClass]
-    public class DocumentServiceTest : AuthorizedApiTestBase
+    public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
         readonly IDocumentService docService;
+        readonly string pdfFilePath = "..\\..\\..\\TestData\\Documents\\DocumentUpload.pdf";
+        readonly string txtFilePath = "..\\..\\..\\TestData\\Documents\\DocumentUpload.jpg";
         public DocumentServiceTest()
         {
             docService = new DocumentService(Token);
-        }
-        [TestMethod]
-        public void DocumentUploadWithFieldExtract()
-        {
         }
     }
 }

@@ -32,11 +32,13 @@ namespace SignNow.Net.Service
             throw new NotImplementedException();
         }
 
+        ///<inheritdoc/>
         public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, CancellationToken cancellationToken = default)
         {
             return await UploadDocumentAsync("/document", documentContent, cancellationToken).ConfigureAwait(false);
         }
 
+        ///<inheritdoc/>
         public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, CancellationToken cancellationToken = default)
         {
             return await UploadDocumentAsync("/document/fieldextract", documentContent, cancellationToken).ConfigureAwait(false);
@@ -45,13 +47,13 @@ namespace SignNow.Net.Service
         private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
-            var requestOptions = new RequestOptions();
-            //var requestOptions = new RequestOptions
-            //{
-            //    RequestUrl = requestFullUrl,
-            //    HttpMethod = "POST",
-            //    Content = documentContent
-            //};
+            //var requestOptions = new RequestOptions;
+            var requestOptions = new PostHttpRequesOptions
+            {
+                RequestUrl = requestFullUrl,
+                Content = documentContent,
+                Token = this.Token
+            };
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }

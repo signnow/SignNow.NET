@@ -16,7 +16,7 @@ namespace SignNow.Net.Interfaces
         Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Uploads a file to the SignNow account, creates a document and extracts simple field tags if any. This method accepts .doc, .docx and .pdf file types. See <see cref="https://campus.barracuda.com/product/signnow/doc/41113461/rest-endpoints-api"/>
+        ///  Uploads a file to the SignNow account, creates a document and extracts simple field tags if any. This method accepts .doc, .docx and .pdf file types. See <a href="https://campus.barracuda.com/product/signnow/doc/41113461/rest-endpoints-api">SignNow REST endpoints</a>
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
