@@ -1,18 +1,21 @@
+using SignNow.Net.Service;
 using System;
-using System.Collections.Generic;
+using System.Net.Http;
+using SignNow.Net.Interfaces;
 using Method = System.Net.Http.HttpMethod;
 
 namespace SignNow.Net.Model
 {
     public abstract class RequestOptions
     {
-        public object Content { get; set; }
+        public IContent Content { get; set; }
 
         public Uri RequestUrl { get; set; }
 
         public abstract Method HttpMethod { get; }
 
         public Token Token { get; set; }
+
     }
 
     public class GetHttpRequestOptions : RequestOptions
@@ -24,9 +27,9 @@ namespace SignNow.Net.Model
     {
         public override Method HttpMethod => Method.Post;
 
-        public PostHttpRequestOptions(object content = null)
+        public PostHttpRequestOptions(IContent ContentObj = null)
         {
-            Content = content;
+            Content = ContentObj;
         }
     }
 
@@ -34,9 +37,9 @@ namespace SignNow.Net.Model
     {
         public override Method HttpMethod => Method.Put;
 
-        public PutHttpRequestOptions(object content = null)
+        public PutHttpRequestOptions(IContent ContentObj = null)
         {
-            Content = content;
+            Content = ContentObj;
         }
     }
 
