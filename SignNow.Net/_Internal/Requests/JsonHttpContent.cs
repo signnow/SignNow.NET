@@ -15,7 +15,7 @@ namespace SignNow.Net._Internal.Requests
         }
 
         /// <summary>
-        /// Creates Json Http Content from string
+        /// Creates Json Http Content from object
         /// </summary>
         /// <returns>HttpContent</returns>
         public HttpContent GetHttpContent()
