@@ -31,6 +31,8 @@ namespace SignNow.Net._Internal.Requests
                 Name = "file"
             };
 
+            _streamContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
+
             return _streamContent;
         }
     }
