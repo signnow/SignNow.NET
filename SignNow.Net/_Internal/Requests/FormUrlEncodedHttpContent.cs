@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using System.Net.Http;
+using SignNow.Net.Interfaces;
+
 namespace SignNow.Net._Internal.Requests
 {
-    using System.Collections.Generic;
-    using System.Net.Http;
-    using SignNow.Net.Interfaces;
-
     /// <summary>
     /// A container for name/value pairs encoded with <c>application/x-www-form-urlencoded</c>
     /// </summary>

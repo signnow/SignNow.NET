@@ -1,10 +1,10 @@
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
+
 namespace SignNow.Net._Internal.Requests
 {
-    using System.Net.Http;
-    using System.Text;
-    using Newtonsoft.Json;
-    using SignNow.Net.Interfaces;
-
     internal class JsonHttpContent : IContent
     {
         private object contentBody;
