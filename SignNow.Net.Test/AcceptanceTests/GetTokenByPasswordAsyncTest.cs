@@ -9,10 +9,10 @@ namespace SignNow.Net.Test.AcceptanceTests
     [TestClass]
     public class GetTokenByPasswordAsyncTest : ApiTestBase
     {
-        const string BAD_REQUEST = "Bad Request";
-        
-        CredentialModel clientInfo, userCredentials;
-        OAuth2Service authObject;
+        private const string BAD_REQUEST = "Bad Request";
+
+        private CredentialModel clientInfo, userCredentials;
+        private OAuth2Service authObject;
 
         [TestInitialize]
         public void TestInitialize()
@@ -51,8 +51,7 @@ namespace SignNow.Net.Test.AcceptanceTests
             catch
             {
                 Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
-            }            
-            
+            }
         }
 
         [TestMethod]
