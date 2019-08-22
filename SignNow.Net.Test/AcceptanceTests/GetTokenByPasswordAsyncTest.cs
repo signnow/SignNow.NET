@@ -13,16 +13,14 @@ namespace SignNow.Net.Test.AcceptanceTests
 
         private CredentialModel clientInfo, userCredentials;
         private OAuth2Service authObjectParam2, authObjectParam3;
-        private Uri testApiUri; 
 
         [TestInitialize]
         public void TestInitialize()
         {
-            testApiUri = new Uri("https://api-eval.signnow.com/");
             clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
             userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
             authObjectParam2 = new OAuth2Service(clientInfo.Login, clientInfo.Password);
-            authObjectParam3 = new OAuth2Service(testApiUri, clientInfo.Login, clientInfo.Password);
+            authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, clientInfo.Password);
         }
 
         [TestMethod]
@@ -141,7 +139,7 @@ namespace SignNow.Net.Test.AcceptanceTests
         [TestMethod]
         public void Ctor3Params_TokenRetrieving_Fail_WrongClientSecret()
         {
-            authObjectParam3 = new OAuth2Service(testApiUri, clientInfo.Login, "client_secret_wrong");
+            authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, "client_secret_wrong");
             var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             try
