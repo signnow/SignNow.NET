@@ -12,8 +12,8 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="login">user's login</param>
         /// <param name="password">user's password</param>
-        /// <param name="scope">parameter 'scope' for HHTP request</param>
-        /// <param name="cancellationToken">stopping method's execution</param>
+        /// <param name="scope">parameter 'scope' for HTTP request</param>
+        /// <param name="cancellationToken">stopping method's execution object</param>
         /// <returns>Token-object</returns>
         Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default(CancellationToken));
 
