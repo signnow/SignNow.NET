@@ -58,7 +58,7 @@ namespace SignNow.Net.Internal.Service
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
             if (requestOptions.Token != null)
-            {
+            {                
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
             }
 

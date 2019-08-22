@@ -1,3 +1,4 @@
+using SignNow.Net.Service;
 using System;
 using System.Net.Http;
 using SignNow.Net.Interfaces;
@@ -14,6 +15,7 @@ namespace SignNow.Net.Model
         public abstract Method HttpMethod { get; }
 
         public Token Token { get; set; }
+
     }
 
     public class GetHttpRequestOptions : RequestOptions
