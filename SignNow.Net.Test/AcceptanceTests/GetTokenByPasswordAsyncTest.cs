@@ -23,9 +23,25 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrieving_Success()
+        public void TokenRetrieving_Success_ScopeAll()
         {
             var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+
+            Task.WaitAll(tokenTask);
+
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+
+            var token = tokenTask.Result;
+
+            Assert.IsNotNull(token, "Token is null");
+            if (String.IsNullOrEmpty(token.AccessToken))
+                Assert.Fail("Access token is empty");
+        }
+
+        [TestMethod]
+        public void TokenRetrieving_Success_ScopeUser()
+        {
+            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
 
             Task.WaitAll(tokenTask);
 

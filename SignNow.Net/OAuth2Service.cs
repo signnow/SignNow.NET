@@ -5,7 +5,6 @@ using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,22 +18,16 @@ namespace SignNow.Net
 
         public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
         {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
         }
 
-        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : base(apiBaseUrl)
+        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : this(apiBaseUrl, clientId, clientSecret, null)
         {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-            ApiBaseUrl = apiBaseUrl;
         }
 
         protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
-            ApiBaseUrl = apiBaseUrl;
         }
 
         public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
@@ -42,15 +35,21 @@ namespace SignNow.Net
             throw new NotImplementedException();
         }
 
+        ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
             var url = $"{ApiBaseUrl}oauth2/token";
+
+            var scopeParam = "*";
+            if (scope != Scope.All)
+                scopeParam = scope.ToString().ToLower();
 
             var body = new Dictionary<string, string>
             {
                { "grant_type", "password" },
                { "username", login },
-               { "password", password }
+               { "password", password },
+               { "scope", scopeParam }
             };
 
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
