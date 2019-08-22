@@ -40,16 +40,12 @@ namespace SignNow.Net
         {
             var url = $"{ApiBaseUrl}oauth2/token";
 
-            var scopeParam = "*";
-            if (scope != Scope.All)
-                scopeParam = scope.ToString().ToLower();
-
             var body = new Dictionary<string, string>
             {
                { "grant_type", "password" },
                { "username", login },
                { "password", password },
-               { "scope", scopeParam }
+               { "scope", scope.ToString() }
             };
 
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");

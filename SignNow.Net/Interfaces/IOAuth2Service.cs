@@ -8,12 +8,12 @@ namespace SignNow.Net.Interfaces
     public interface IOAuth2Service
     {
         /// <summary>
-        /// Retrieve Acccess token by client's login and password
+        /// Retrieve Access token by user's login and passwor
         /// </summary>
-        /// <param name="login">user's login</param>
-        /// <param name="password">user's password</param>
-        /// <param name="scope">parameter 'scope' for HTTP request</param>
-        /// <param name="cancellationToken">stopping method's execution object</param>
+        /// <param name="login">User's login</param>
+        /// <param name="password">User's password</param>
+        /// <param name="scope">Specify a scope for token request</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Token-object</returns>
         Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default(CancellationToken));
 

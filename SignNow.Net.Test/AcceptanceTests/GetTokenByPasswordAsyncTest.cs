@@ -12,20 +12,23 @@ namespace SignNow.Net.Test.AcceptanceTests
         private const string BAD_REQUEST = "Bad Request";
 
         private CredentialModel clientInfo, userCredentials;
-        private OAuth2Service authObject;
+        private OAuth2Service authObjectParam2, authObjectParam3;
+        private Uri testApiUri; 
 
         [TestInitialize]
         public void TestInitialize()
         {
+            testApiUri = new Uri("https://api-eval.signnow.com/");
             clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
             userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
-            authObject = new OAuth2Service(clientInfo.Login, clientInfo.Password);
+            authObjectParam2 = new OAuth2Service(clientInfo.Login, clientInfo.Password);
+            authObjectParam3 = new OAuth2Service(testApiUri, clientInfo.Login, clientInfo.Password);
         }
 
         [TestMethod]
-        public void TokenRetrieving_Success_ScopeAll()
+        public void Ctor2Params_TokenRetrieving_Success_ScopeAll()
         {
-            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             Task.WaitAll(tokenTask);
 
@@ -39,9 +42,9 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrieving_Success_ScopeUser()
+        public void Ctor2Params_TokenRetrieving_Success_ScopeUser()
         {
-            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
 
             Task.WaitAll(tokenTask);
 
@@ -55,9 +58,9 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrieving_Fail_WrongPassword()
+        public void Ctor2Params_TokenRetrieving_Fail_WrongPassword()
         {
-            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
 
             try
             {
@@ -71,10 +74,75 @@ namespace SignNow.Net.Test.AcceptanceTests
         }
 
         [TestMethod]
-        public void TokenRetrieving_Fail_WrongClientSecret()
+        public void Ctor2Params_TokenRetrieving_Fail_WrongClientSecret()
         {
-            authObject = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
-            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+            authObjectParam2 = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+
+            try
+            {
+                Task.WaitAll(tokenTask);
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+            }
+            catch
+            {
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+            }
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Success_ScopeAll()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+
+            Task.WaitAll(tokenTask);
+
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+
+            var token = tokenTask.Result;
+
+            Assert.IsNotNull(token, "Token is null");
+            if (String.IsNullOrEmpty(token.AccessToken))
+                Assert.Fail("Access token is empty");
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Success_ScopeUser()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
+
+            Task.WaitAll(tokenTask);
+
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+
+            var token = tokenTask.Result;
+
+            Assert.IsNotNull(token, "Token is null");
+            if (String.IsNullOrEmpty(token.AccessToken))
+                Assert.Fail("Access token is empty");
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Fail_WrongPassword()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
+
+            try
+            {
+                Task.WaitAll(tokenTask);
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+            }
+            catch
+            {
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+            }
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Fail_WrongClientSecret()
+        {
+            authObjectParam3 = new OAuth2Service(testApiUri, clientInfo.Login, "client_secret_wrong");
+            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             try
             {
