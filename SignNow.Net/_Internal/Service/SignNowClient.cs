@@ -35,11 +35,11 @@ namespace SignNow.Net.Internal.Service
         /// <returns></returns>
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            var request = CreateHttpRequest(requestOptions);
-
-            var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            return await HandleResponse<TResponse>(response);
+            using (var request = CreateHttpRequest(requestOptions))
+                using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                return await HandleResponse<TResponse>(response).ConfigureAwait(false);
+            }             
         }
 
 

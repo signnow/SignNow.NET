@@ -29,7 +29,6 @@
       <Folder Include="_Internal\Interfaces\" />
       <Folder Include="_Internal\Model\" />
       <Folder Include="Exceptions\" />
-      <Folder Include="_Internal\Requests\" />
     </ItemGroup>
 
     <ItemGroup>

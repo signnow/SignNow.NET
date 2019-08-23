@@ -20,8 +20,4 @@
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FeatureTests\" />
-  </ItemGroup>
-
 </Project>

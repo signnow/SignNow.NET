@@ -3,7 +3,7 @@ using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 
-namespace SignNow.Net._Internal.Requests
+namespace SignNow.Net.Internal.Requests
 {
     internal class JsonHttpContent : IContent
     {
