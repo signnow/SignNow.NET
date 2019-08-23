@@ -11,13 +11,13 @@ namespace UnitTests.Context
         /// <summary>
         /// User Home Dir relative to OS
         /// </summary>
-        public string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-        public string testDomain = @"https://api.signnow.test";
-        public Uri testUrl;
+        private string testDomain = @"https://api.signnow.test";
+        private Uri testUrl;
 
-        public string testCredentialFile;
-        public string testCredentialPath;
+        private string testCredentialFile;
+        private string testCredentialPath;
 
         [TestInitialize]
         public void TestInitialize()
@@ -62,8 +62,19 @@ namespace UnitTests.Context
             var testCredentialLoader = new CredentialLoader(this.testUrl);
             var testCredentials = testCredentialLoader.GetCredentials();
 
-            Assert.AreEqual("test", testCredentials.Login);
-            Assert.AreEqual("signnow", testCredentials.Password);
+            var message = "You have to specify json string with `{0}` text properties in the {1}";
+
+            Assert.AreEqual(
+                "test",
+                testCredentials.Login,
+                string.Format(message, "login", testCredentialFile)
+                );
+
+            Assert.AreEqual(
+                "signnow",
+                testCredentials.Password,
+                string.Format(message, "password", testCredentialFile)
+                );
         }
     }
 }

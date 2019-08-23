@@ -24,7 +24,6 @@
     <Folder Include="FeatureTests\" />
     <Folder Include="AcceptanceTests\" />
     <Folder Include="UnitTests\" />
-    <Folder Include="AcceptanceTests\Service\" />
     <Folder Include="UnitTests\Context\" />
   </ItemGroup>
 

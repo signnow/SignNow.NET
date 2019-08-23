@@ -35,7 +35,8 @@ namespace SignNow.Net.Service
 
             var requestOptions = new DeleteHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, requestedDocument)
+                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                Token = this.Token
             };
 
             return await SignNowClient.RequestAsync<DeleteDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
