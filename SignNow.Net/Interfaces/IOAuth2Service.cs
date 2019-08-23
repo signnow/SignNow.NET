@@ -8,7 +8,7 @@ namespace SignNow.Net.Interfaces
     public interface IOAuth2Service
     {
         /// <summary>
-        /// Retrieve Access token by user's login and passwor
+        /// Retrieve Access token by user's login and password
         /// </summary>
         /// <param name="login">User's login</param>
         /// <param name="password">User's password</param>
@@ -17,9 +17,25 @@ namespace SignNow.Net.Interfaces
         /// <returns>Token-object</returns>
         Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken));//TODO: https://pdffiller.atlassian.net/wiki/spaces/API2/pages/911769793/Grant+type+authorization+code
+        /// <summary>
+        /// Retrieve Access token by user's authorization code
+        /// </summary>
+        /// <param name="code">User's authorization code</param>
+        /// <param name="scope">Specify a scope for token request</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>Token-object</returns>
+        Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Create Authorization URL to retrieve user token using authorization code
+        /// </summary>
+        /// <param name="scope">Specify a scope for token request</param>
+        /// <param name="redirectUrl">Authorization code will send as query parameter to this redirect url</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns></returns>
+        Task<Uri> GetAuthorizationUrlAsync(Scope scope, string redirectUrl, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken));
 

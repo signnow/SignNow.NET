@@ -1,10 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net;
 using SignNow.Net.Model;
+using SignNow.Net.Test;
 using SignNow.Net.Test.Context;
 using System;
 using System.Threading.Tasks;
 
-namespace SignNow.Net.Test.AcceptanceTests
+namespace AcceptanceTests
 {
     [TestClass]
     public class GetTokenByPasswordAsyncTest : ApiTestBase

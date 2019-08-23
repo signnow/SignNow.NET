@@ -11,13 +11,9 @@ namespace SignNow.Net.Test.AcceptanceTests
         [TestMethod]
         public void AuthorizationUrlRetriever()
         {
-            var redirectUrl = "https://www.google.com";
-
-            redirectUrl = "https://localhost:44355/api/values";
-
             var user = new CredentialLoader(ApiBaseUrl).GetCredentials();
             var authObject = new OAuth2Service(user.Login, user.Password);
-            var urlTask = authObject.GetAuthorizationUrlAsync(Model.Scope.All, redirectUrl);
+            var urlTask = authObject.GetAuthorizationUrlAsync(Model.Scope.All, "https://www.google.com");
 
             Assert.IsNotNull(urlTask.IsFaulted, $"Authorization Url retreiving error: {urlTask.Exception}");
 
