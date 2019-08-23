@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using SignNow.Net._Internal.Requests;
+using SignNow.Net.Internal.Requests;
 
 namespace SignNow.Net.Service
 {
@@ -34,24 +34,24 @@ namespace SignNow.Net.Service
         }
 
         ///<inheritdoc/>
-        public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, CancellationToken cancellationToken = default)
+        public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
-            return await UploadDocumentAsync("/document", documentContent, cancellationToken).ConfigureAwait(false);
+            return await UploadDocumentAsync("/document", documentContent, fileName, cancellationToken).ConfigureAwait(false);
         }
 
         ///<inheritdoc/>
-        public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, CancellationToken cancellationToken = default)
+        public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
-            return await UploadDocumentAsync("/document/fieldextract", documentContent, cancellationToken).ConfigureAwait(false);
+            return await UploadDocumentAsync("/document/fieldextract", documentContent, fileName, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, CancellationToken cancellationToken = default)
+        private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
             var requestOptions = new PostHttpRequesOptions
             {
                 RequestUrl = requestFullUrl,
-                Content = new MultipartFormDataHttpContent(documentContent),
+                Content = new FileHttpContent(documentContent, fileName),
                 Token = this.Token
             };
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);

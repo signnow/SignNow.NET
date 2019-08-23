@@ -5,6 +5,7 @@ using SignNow.Net.Test;
 using SignNow.Net.Test.SignNow;
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,12 +16,12 @@ namespace AcceptanceTests
         [TestMethod]
         public void DocumentUploadWorksForPDF()
         {
-            using (var fileStream = File.OpenRead(pdfFilePath))
+            using (var fileStream = File.OpenRead(PdfFilePath))
             {
                 string docId = default;
                 try
                 {
-                    var uploadResponse = docService.UploadDocumentAsync(fileStream).Result;
+                    var uploadResponse = docService.UploadDocumentAsync(fileStream, pdfFileName).Result;
                     docId = uploadResponse.Id;
                     Assert.IsNotNull(uploadResponse.Id, "Document Upload result should contain non-null Id property value on successful upload");
                 }
@@ -35,12 +36,12 @@ namespace AcceptanceTests
         [TestMethod]
         public void DocumentUploadWithFieldExtractWorksForPDF()
         {
-            using (var fileStream = File.OpenRead(pdfFilePath))
+            using (var fileStream = File.OpenRead(PdfFilePath))
             {
                 string docId = default;
                 try
                 {
-                    var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream).Result;
+                    var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
                     //TODO: test if fields were extracted correctly
                     docId = uploadResponse.Id;
                     Assert.IsNotNull(uploadResponse.Id, "Document Upload result should contain non-null Id property value on successful upload");
@@ -65,20 +66,21 @@ namespace AcceptanceTests
             DocumentUploadException(docService.UploadDocumentWithFieldExtractAsync);
         }
 
-        void DocumentUploadException (Func<Stream, CancellationToken, Task<UploadDocumentResponse>> uploadFunction)
+        void DocumentUploadException (Func<Stream, string, CancellationToken, Task<UploadDocumentResponse>> uploadFunction)
         {
-            using (var fileStream = File.OpenRead(txtFilePath))
+            using (var fileStream = File.OpenRead(TxtFilePath))
             {
                 string docId = default;
                 try
                 {
-                    var uploadResponse = uploadFunction(fileStream,default).Result;
+                    var uploadResponse = uploadFunction(fileStream, txtFileName,default).Result;
                     docId = uploadResponse.Id;
 
                 }
-                catch (SignNowException ex)
+                catch (AggregateException ex)
                 {
-                    Assert.AreEqual(ErrorMessages.InvalidFileType, ex.Message);
+                    
+                    Assert.AreEqual(ErrorMessages.InvalidFileType, ex.InnerException.Message);
                 }
                 finally
                 {
@@ -89,6 +91,16 @@ namespace AcceptanceTests
         }
         void DeleteDocument(string id)
         {
+            if (string.IsNullOrEmpty(id))
+                return;
+            using (var client = new HttpClient())
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{id}"))
+            {
+                requestMessage.Headers.Add("Authorization", Token.GetAccessToken());
+                var response = client.SendAsync(requestMessage).Result;
+                response.EnsureSuccessStatusCode();
+            }
+                
             //docService.DeleteDocumentAsync(id).RunSynchronously();
         }
     }
