@@ -17,6 +17,12 @@ namespace AcceptanceTests
         private OAuth2Service authObjectParam2, authObjectParam3;
         private string authCode = "fac566fb5d926c7dd590f6eea7f8b6c10cbe469b";
 
+        /// <summary>
+        /// TO DO:  use GetAuthorizationUrlTest to retrieve authorization URL and get AUTH. CODE from HTTP-GET Responce
+        /// on this URL and use this code in current test
+        /// Make Positive Test
+        /// </summary>
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -24,36 +30,6 @@ namespace AcceptanceTests
             userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
             authObjectParam2 = new OAuth2Service(clientInfo.Login, clientInfo.Password);
             authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, clientInfo.Password);
-        }
-
-        [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Success_ScopeAll()
-        {
-            var tokenTask = authObjectParam2.GetTokenAsync(authCode, Scope.All);
-
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-
-            Task.WhenAll(tokenTask);
-            var token = tokenTask.Result;
-
-            Assert.IsNotNull(token, "Token is null");
-            if (String.IsNullOrEmpty(token.AccessToken))
-                Assert.Fail("Access token is empty");
-        }
-
-        [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Success_ScopeUser()
-        {
-            var tokenTask = authObjectParam2.GetTokenAsync(authCode, Scope.User);
-
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-
-            Task.WhenAll(tokenTask);
-            var token = tokenTask.Result;
-
-            Assert.IsNotNull(token, "Token is null");
-            if (String.IsNullOrEmpty(token.AccessToken))
-                Assert.Fail("Access token is empty");
         }
 
         [TestMethod]
@@ -87,38 +63,6 @@ namespace AcceptanceTests
             {
                 Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
             }
-        }
-
-        //*******************************************
-
-        [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Success_ScopeAll()
-        {
-            var tokenTask = authObjectParam3.GetTokenAsync(authCode, Scope.All);
-
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-
-            Task.WhenAll(tokenTask);
-            var token = tokenTask.Result;
-
-            Assert.IsNotNull(token, "Token is null");
-            if (String.IsNullOrEmpty(token.AccessToken))
-                Assert.Fail("Access token is empty");
-        }
-
-        [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Success_ScopeUser()
-        {
-            var tokenTask = authObjectParam3.GetTokenAsync(authCode, Scope.User);
-
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-
-            Task.WhenAll(tokenTask);
-            var token = tokenTask.Result;
-
-            Assert.IsNotNull(token, "Token is null");
-            if (String.IsNullOrEmpty(token.AccessToken))
-                Assert.Fail("Access token is empty");
         }
 
         [TestMethod]

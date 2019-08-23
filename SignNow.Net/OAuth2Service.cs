@@ -32,16 +32,20 @@ namespace SignNow.Net
         }
 
         ///<inheritdoc/>
-        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Uri> GetAuthorizationUrlAsync(string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var urlStr = ApiUrl.ApiBaseUrl.ToString();
+            var uriBuilder = new UriBuilder(ApiUrl.ApiBaseUrl);
 
-            if (urlStr.Contains("api-eval."))  //test
-                urlStr = urlStr.Replace("api-eval", "eval");
-            else if (urlStr.Contains("api."))  //prod
-                urlStr = urlStr.Replace("api.", "");
+            if (ApiUrl.ApiBaseUrl.Host.Equals("api-eval.signnow.com")) //test
+                uriBuilder.Host = "eval.signnow.com";
+            else if (ApiUrl.ApiBaseUrl.Host.Equals("api.signnow.com")) // prod
+                uriBuilder.Host = "signnow.com";
 
-            return new Uri($"{urlStr}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
+            var relativeUrl = $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}";
+
+            return new Uri(uriBuilder.Uri, relativeUrl);
+
+            //return new Uri($"{urlStr}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>

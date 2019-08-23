@@ -1,26 +1,34 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net;
+using SignNow.Net.Test;
 using SignNow.Net.Test.Context;
 using System;
-using System.Threading.Tasks;
 
-namespace SignNow.Net.Test.AcceptanceTests
+namespace AcceptanceTests
 {
     [TestClass]
     public class GetAuthorizationUrlTest : ApiTestBase
     {
         [TestMethod]
-        public void AuthorizationUrlRetriever()
+        public void AuthorizationUrl_Validated()
         {
             var user = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var authObject = new OAuth2Service(user.Login, user.Password);
-            var urlTask = authObject.GetAuthorizationUrlAsync(Model.Scope.All, "https://www.google.com");
 
-            Assert.IsNotNull(urlTask.IsFaulted, $"Authorization Url retreiving error: {urlTask.Exception}");
+            var clientId = user.Login;
+            var clientSecter = user.Password;
+            var redirectUrl = "https://localhost:1000/";
 
-            Task.WhenAll(urlTask);
+            var authObject = new OAuth2Service(clientId, clientSecter);
+            var uri = authObject.GetAuthorizationUrlAsync(redirectUrl).Result;
 
-            if (String.IsNullOrEmpty(urlTask.Result.ToString()))
+            if (String.IsNullOrEmpty(uri.ToString()))
                 Assert.Fail("Authorization Url is empty");
+
+            Assert.AreEqual(uri.Scheme, "https");
+
+            Assert.AreEqual(uri.Query, $"?client_id={clientId}&response_type=code&redirect_uri={redirectUrl}");
+
+            Assert.AreEqual(uri.LocalPath, "/proxy/index.php/authorize");
         }
     }
 }
