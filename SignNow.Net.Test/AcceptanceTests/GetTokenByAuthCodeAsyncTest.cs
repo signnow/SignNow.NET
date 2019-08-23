@@ -14,7 +14,7 @@ namespace AcceptanceTests
         private const string BAD_REQUEST = "Bad Request";
 
         private CredentialModel clientInfo, userCredentials;
-        private OAuth2Service authObject;
+        private OAuth2Service authObjectParam2, authObjectParam3;
         private string authCode = "fac566fb5d926c7dd590f6eea7f8b6c10cbe469b";
 
         [TestInitialize]
@@ -22,13 +22,14 @@ namespace AcceptanceTests
         {
             clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
             userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
-            authObject = new OAuth2Service(ApiBaseUrl, clientInfo.Login, clientInfo.Password);
+            authObjectParam2 = new OAuth2Service(clientInfo.Login, clientInfo.Password);
+            authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, clientInfo.Password);
         }
 
         [TestMethod]
         public void Ctor2Params_TokenRetrieving_Success_ScopeAll()
         {
-            var tokenTask = authObject.GetTokenAsync(authCode, Scope.All);
+            var tokenTask = authObjectParam2.GetTokenAsync(authCode, Scope.All);
 
             Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
 
@@ -43,7 +44,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void Ctor2Params_TokenRetrieving_Success_ScopeUser()
         {
-            var tokenTask = authObject.GetTokenAsync(authCode, Scope.User);
+            var tokenTask = authObjectParam2.GetTokenAsync(authCode, Scope.User);
 
             Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
 
@@ -58,7 +59,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void Ctor2Params_TokenRetrieving_Fail_WrongAuthCode()
         {
-            var tokenTask = authObject.GetTokenAsync("wrong_auth_code", Scope.All);
+            var tokenTask = authObjectParam2.GetTokenAsync("wrong_auth_code", Scope.All);
 
             try
             {
@@ -74,8 +75,73 @@ namespace AcceptanceTests
         [TestMethod]
         public void Ctor2Params_TokenRetrieving_Fail_WrongClientSecret()
         {
-            authObject = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
-            var tokenTask = authObject.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+            authObjectParam2 = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+
+            try
+            {
+                Task.WaitAll(tokenTask);
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+            }
+            catch
+            {
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+            }
+        }
+
+        //*******************************************
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Success_ScopeAll()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync(authCode, Scope.All);
+
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+
+            Task.WhenAll(tokenTask);
+            var token = tokenTask.Result;
+
+            Assert.IsNotNull(token, "Token is null");
+            if (String.IsNullOrEmpty(token.AccessToken))
+                Assert.Fail("Access token is empty");
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Success_ScopeUser()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync(authCode, Scope.User);
+
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
+
+            Task.WhenAll(tokenTask);
+            var token = tokenTask.Result;
+
+            Assert.IsNotNull(token, "Token is null");
+            if (String.IsNullOrEmpty(token.AccessToken))
+                Assert.Fail("Access token is empty");
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Fail_WrongAuthCode()
+        {
+            var tokenTask = authObjectParam3.GetTokenAsync("wrong_auth_code", Scope.All);
+
+            try
+            {
+                Task.WaitAll(tokenTask);
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
+            }
+            catch
+            {
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+            }
+        }
+
+        [TestMethod]
+        public void Ctor3Params_TokenRetrieving_Fail_WrongClientSecret()
+        {
+            authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, "client_secret_wrong");
+            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             try
             {
