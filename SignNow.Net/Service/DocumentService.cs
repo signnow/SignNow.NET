@@ -46,15 +46,7 @@ namespace SignNow.Net.Service
 
         private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, CancellationToken cancellationToken = default)
         {
-            var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
-            //var requestOptions = new RequestOptions;
-            var requestOptions = new PostHttpRequesOptions
-            {
-                RequestUrl = requestFullUrl,
-                Content = documentContent,
-                Token = this.Token
-            };
-            return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+            throw new NotImplementedException();
         }
     }
 }
