@@ -5,7 +5,7 @@ namespace SignNow.Net.Test.Context
 {
     class CredentialLoader
     {
-        const string credentialsDirectory = @"Pass";
+        public const string credentialsDirectory = @"Pass";
 
         private readonly ICredentialProvider credentialProvider;
 
