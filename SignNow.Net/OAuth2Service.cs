@@ -1,4 +1,4 @@
-using SignNow.Net._Internal.Requests;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
