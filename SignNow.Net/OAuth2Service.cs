@@ -31,9 +31,18 @@ namespace SignNow.Net
             ClientSecret = clientSecret;
         }
 
-        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
+        }
+
+        /// <summary>
+        /// Get Url of login page
+        /// </summary>
+        /// <param name="scope">request parameter</param>
+        /// <param name="redirectUrl">URL for retireving token</param>
+        /// <param name="cancellationToken">cancel operation</param>
+        /// <returns></returns>
+        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, string redirectUrl,  CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            return new Uri ($"{ApiUrl.ApiBaseUrl}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>
@@ -61,9 +70,27 @@ namespace SignNow.Net
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Retrive Access Token with Auth. code
+        /// </summary>
+        /// <param name="code">authorization code</param>
+        /// <param name="scope">request parameter</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            var options = new RequestOptions
+            {
+                URL = $"{ApiUrl.ApiBaseUrl}oauth2/token",
+                GrantType = "authorization_code",
+                AuthorizationCode = code,
+                ContentType = "application/x-www-form-urlencoded",
+                ClientId = ClientId,
+                ClientSecret = ClientSecret,
+                Scope = scope
+            };
+
+            return await SignNowClient.RequestAsync<Token>(options);
         }
 
         public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
