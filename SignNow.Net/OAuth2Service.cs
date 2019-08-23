@@ -31,18 +31,17 @@ namespace SignNow.Net
             ClientSecret = clientSecret;
         }
 
-        }
-
-        /// <summary>
-        /// Get Url of login page
-        /// </summary>
-        /// <param name="scope">request parameter</param>
-        /// <param name="redirectUrl">URL for retireving token</param>
-        /// <param name="cancellationToken">cancel operation</param>
-        /// <returns></returns>
-        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, string redirectUrl,  CancellationToken cancellationToken = default(CancellationToken))
+        ///<inheritdoc/>
+        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new Uri ($"{ApiUrl.ApiBaseUrl}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
+            var urlStr = ApiUrl.ApiBaseUrl.ToString();
+
+            if (urlStr.Contains("api-eval."))  //test
+                urlStr = urlStr.Replace("api-eval", "eval");
+            else if (urlStr.Contains("api."))  //prod
+                urlStr = urlStr.Replace("api.", "");
+
+            return new Uri($"{urlStr}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>
@@ -70,27 +69,28 @@ namespace SignNow.Net
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Retrive Access Token with Auth. code
-        /// </summary>
-        /// <param name="code">authorization code</param>
-        /// <param name="scope">request parameter</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var options = new RequestOptions
+            var url = $"{ApiBaseUrl}oauth2/token";
+
+            var body = new Dictionary<string, string>
             {
-                URL = $"{ApiUrl.ApiBaseUrl}oauth2/token",
-                GrantType = "authorization_code",
-                AuthorizationCode = code,
-                ContentType = "application/x-www-form-urlencoded",
-                ClientId = ClientId,
-                ClientSecret = ClientSecret,
-                Scope = scope
+               { "grant_type", "authorization_code" },
+               { "code", code },
+               { "scope", scope.AsString() }
             };
 
-            return await SignNowClient.RequestAsync<Token>(options);
+            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
+            var appToken = Convert.ToBase64String(plainTextBytes);
+            var options = new PostHttpRequesOptions()
+            {
+                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
+                Content = new FormUrlEncodedHttpContent(body),
+                RequestUrl = new Uri(url)
+            };
+
+            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
         public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
