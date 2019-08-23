@@ -1,16 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace SignNow.Net.Test.Context
 {
     class CredentialLoader
     {
-        const string credentialsDirectory = @"%USERPROFILE%\Pass";
+        const string credentialsDirectory = @"Pass";
+
         private readonly ICredentialProvider credentialProvider;
 
-        public CredentialLoader(Uri credentialsTarget):this(
+        public CredentialLoader(Uri credentialsTarget) : this(
             new JsonFileCredentialProvider(GetCredentialsFilePath(credentialsTarget)))
         {
         }
@@ -30,9 +29,12 @@ namespace SignNow.Net.Test.Context
             return $"{credentialsTarget.Host}.json";
         }
 
-        static string GetCredentialsFilePath (Uri credentialsTarget)
+        static string GetCredentialsFilePath(Uri credentialsTarget)
         {
-            return Environment.ExpandEnvironmentVariables(Path.Combine(credentialsDirectory, GetCredentialsFileName(credentialsTarget)));
+            var userHomeFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            return Environment.ExpandEnvironmentVariables(
+                Path.Combine(userHomeFolder, credentialsDirectory, GetCredentialsFileName(credentialsTarget)));
         }
     }
 }
