@@ -1,6 +1,7 @@
-using SignNow.Net._Internal.Requests;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
@@ -45,7 +46,7 @@ namespace SignNow.Net
                { "grant_type", "password" },
                { "username", login },
                { "password", password },
-               { "scope", scope.ToString() }
+               { "scope", scope.AsString() }
             };
 
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
