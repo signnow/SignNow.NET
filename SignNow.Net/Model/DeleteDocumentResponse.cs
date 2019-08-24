@@ -5,6 +5,6 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Document deletion status message
         /// </summary>
-        public string status { get; set; }
+        public string Status { get; set; }
     }
 }

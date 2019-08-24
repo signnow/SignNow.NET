@@ -29,7 +29,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<DeleteDocumentResponse> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<DeleteDocumentResponse> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestedDocument = "/document/" + documentId;
 

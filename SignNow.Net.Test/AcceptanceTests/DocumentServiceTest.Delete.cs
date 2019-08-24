@@ -15,7 +15,7 @@ namespace AcceptanceTests
 
             Assert.AreEqual(
                 "success",
-                deleteResponse.status,
+                deleteResponse.Status,
                 "Document Delete result has error, status shoul contains 'success' for successful deletion"
                 );
         }
