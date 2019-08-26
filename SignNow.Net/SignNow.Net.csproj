@@ -2,6 +2,21 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
+        <Version>0.0.0-alpha</Version>
+        <Authors>SignNow Inc.</Authors>
+        <Company>SignNow Inc.</Company>
+        <Description>SignNow.Net is a .NET 4.5+ class library for the SignNow API.  (Official Library)</Description>
+        <PackageProjectUrl>https://github.com/signnow/SignNow.NET</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>e-signature;pdf;forms;document;saas</PackageTags>
+        <PackageReleaseNotes>Features implemented:
+- Authorizaton token retrieval
+- Document upload
+- Document delete
+- Create signing link</PackageReleaseNotes>
+        <PackageIconUrl></PackageIconUrl>
     </PropertyGroup>
 
     <ItemGroup>
