@@ -28,8 +28,8 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="documentId">Identity of the document to be removed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        /// <returns>Operation result object containing `status` of the operation.</returns>
-        Task<DeleteDocumentResponse> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
+        /// <returns></returns>
+        Task<Stream> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default);
     }

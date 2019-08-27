@@ -36,12 +36,26 @@ namespace SignNow.Net.Internal.Service
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
-                using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
+            using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
                 return await HandleResponse<TResponse>(response).ConfigureAwait(false);
             }             
         }
 
+        /// <summary>
+        /// HTTP requests which returns Stream response
+        /// </summary>
+        /// <param name="requestOptions"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        {
+            using (var request = CreateHttpRequest(requestOptions))
+            using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            }
+        }
 
         /// <summary>
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
@@ -70,7 +84,7 @@ namespace SignNow.Net.Internal.Service
         /// <summary>
         /// Process raw HTTP response into requested domain type.
         /// </summary>
-        /// <typeparam name="T">The type to return</typeparam>
+        /// <typeparam name="TResponse">The type to return</typeparam>
         /// <param name="response">The <see cref="HttpResponseMessage"/> to handle</param>
         /// <returns></returns>
         private async Task<TResponse> HandleResponse<TResponse>(HttpResponseMessage response)

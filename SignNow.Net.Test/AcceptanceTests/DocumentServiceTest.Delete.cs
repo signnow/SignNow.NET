@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Test;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace AcceptanceTests
 {
@@ -11,12 +12,12 @@ namespace AcceptanceTests
         {
             var testDocumentId = UploadTestDocument(PdfFilePath);
 
-            var deleteResponse = docService.DeleteDocumentAsync(testDocumentId).Result;
+            var deleteResponse = docService.DeleteDocumentAsync(testDocumentId);
+            Task.WaitAll(deleteResponse);
 
-            Assert.AreEqual(
-                "success",
-                deleteResponse.Status,
-                "Document Delete result has error, status shoul contains 'success' for successful deletion"
+            Assert.IsTrue(
+                deleteResponse.IsCompletedSuccessfully,
+                "Document Delete result has error, status code is not Successful"
                 );
         }
 
