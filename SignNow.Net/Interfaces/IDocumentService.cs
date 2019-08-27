@@ -31,6 +31,12 @@ namespace SignNow.Net.Interfaces
         /// <returns></returns>
         Task<Stream> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Creates URL to sign the document containing fillable fields using web browser.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to create signing link for</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>Operation result object containing URL to sign the document using web browser.</returns>
         Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }
