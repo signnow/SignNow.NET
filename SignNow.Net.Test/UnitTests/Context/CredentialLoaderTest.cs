@@ -3,7 +3,7 @@ using SignNow.Net.Test.Context;
 using System;
 using System.IO;
 
-namespace UnitTests.Context
+namespace UnitTests
 {
     [TestClass]
     public class CredentialLoaderTest
