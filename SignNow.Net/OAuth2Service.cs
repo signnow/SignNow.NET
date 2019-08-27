@@ -34,16 +34,16 @@ namespace SignNow.Net
         ///<inheritdoc/>
         public async Task<Uri> GetAuthorizationUrlAsync(string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var uriBuilder = new UriBuilder(ApiUrl.ApiBaseUrl);
+            var host = ApiUrl.ApiBaseUrl.Host;
+            var targetHost = host;
 
-            if (ApiUrl.ApiBaseUrl.Host.Equals("api-eval.signnow.com")) //test
-                uriBuilder.Host = "eval.signnow.com";
-            else if (ApiUrl.ApiBaseUrl.Host.Equals("api.signnow.com")) // prod
-                uriBuilder.Host = "signnow.com";
+            if (host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "eval.signnow.com";
+            else if (host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "signnow.com";
 
-            var relativeUrl = $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}";
-
-            return new Uri(uriBuilder.Uri, relativeUrl);
+            var hostUri = new Uri( $"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
+            return new Uri(hostUri, $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>

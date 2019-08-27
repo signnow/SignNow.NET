@@ -50,11 +50,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
 
@@ -67,11 +67,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
 
@@ -115,11 +115,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
 
@@ -132,11 +132,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
     }
