@@ -26,6 +26,8 @@ namespace AcceptanceTests
             Assert.AreEqual(uri.Query, $"?client_id={clientId}&response_type=code&redirect_uri={redirectUrl}");
 
             Assert.AreEqual(uri.LocalPath, "/proxy/index.php/authorize");
+
+            Assert.AreEqual(uri.Host, "eval.signnow.com");
         }
     }
 }
