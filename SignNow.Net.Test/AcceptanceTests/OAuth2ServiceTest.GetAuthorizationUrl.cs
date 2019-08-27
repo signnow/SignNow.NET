@@ -6,16 +6,13 @@ using System;
 
 namespace AcceptanceTests
 {
-    [TestClass]
-    public class OAuth2ServiceTest_AuthorizationUrl : ApiTestBase
+    public partial class OAuth2ServiceTest : ApiTestBase
     {
         [TestMethod]
-        public void GetAuthorizationUrlAsync_UrlValidated()
+        public void GetAuthorizationUrl_UrlValidated()
         {
-            var user = new CredentialLoader(ApiBaseUrl).GetCredentials();
-
-            var clientId = user.Login;
-            var clientSecter = user.Password;
+            var clientId = clientInfo.Login;
+            var clientSecter = clientInfo.Password;
             var redirectUrl = "https://localhost:1000/";
 
             var authObject = new OAuth2Service(clientId, clientSecter);
