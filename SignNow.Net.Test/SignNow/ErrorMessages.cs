@@ -7,5 +7,6 @@ namespace SignNow.Net.Test.SignNow
     static class ErrorMessages
     {
         public const string InvalidFileType = "Invalid file type.";
+        public const string BadRequestHttpError = "Bad Request";
     }
 }

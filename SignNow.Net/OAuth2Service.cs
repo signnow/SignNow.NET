@@ -44,8 +44,6 @@ namespace SignNow.Net
             var relativeUrl = $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}";
 
             return new Uri(uriBuilder.Uri, relativeUrl);
-
-            //return new Uri($"{urlStr}proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>

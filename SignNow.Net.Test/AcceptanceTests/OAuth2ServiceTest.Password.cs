@@ -3,16 +3,15 @@ using SignNow.Net;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
 using SignNow.Net.Test.Context;
+using SignNow.Net.Test.SignNow;
 using System;
 using System.Threading.Tasks;
 
 namespace AcceptanceTests
 {
     [TestClass]
-    public class GetTokenByPasswordAsyncTest : ApiTestBase
+    public partial class OAuth2ServiceTest : ApiTestBase
     {
-        private const string BAD_REQUEST = "Bad Request";
-
         private CredentialModel clientInfo, userCredentials;
         private OAuth2Service authObjectParam2, authObjectParam3;
 
@@ -26,7 +25,7 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Success_ScopeAll()
+        public void Ctor2Params_TokenRetrievingByPassword_Success_ScopeAll()
         {
             var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
@@ -42,7 +41,7 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Success_ScopeUser()
+        public void Ctor2Params_TokenRetrievingByPassword_Success_ScopeUser()
         {
             var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
 
@@ -58,23 +57,23 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Fail_WrongPassword()
+        public void Ctor2Params_TokenRetrievingByPassword_Fail_WrongPassword()
         {
             var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
 
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
         [TestMethod]
-        public void Ctor2Params_TokenRetrieving_Fail_WrongClientSecret()
+        public void Ctor2Params_TokenRetrievingByPassword_Fail_WrongClientSecret()
         {
             authObjectParam2 = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
             var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
@@ -82,16 +81,16 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
         [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Success_ScopeAll()
+        public void Ctor3Params_TokenRetrievingByPassword_Success_ScopeAll()
         {
             var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
@@ -107,7 +106,7 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Success_ScopeUser()
+        public void Ctor3Params_TokenRetrievingByPassword_Success_ScopeUser()
         {
             var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.User);
 
@@ -123,23 +122,23 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Fail_WrongPassword()
+        public void Ctor3Params_TokenRetrievingByPassword_Fail_WrongPassword()
         {
             var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, "wrong_password", Scope.All);
 
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
         [TestMethod]
-        public void Ctor3Params_TokenRetrieving_Fail_WrongClientSecret()
+        public void Ctor3Params_TokenRetrievingByPassword_Fail_WrongClientSecret()
         {
             authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, "client_secret_wrong");
             var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
@@ -147,11 +146,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
     }

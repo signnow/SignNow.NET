@@ -3,18 +3,14 @@ using SignNow.Net;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
 using SignNow.Net.Test.Context;
+using SignNow.Net.Test.SignNow;
 using System;
 using System.Threading.Tasks;
 
 namespace AcceptanceTests
 {
-    [TestClass]
-    public class GetTokenByAuthCodeAsyncTest : ApiTestBase
+    public partial class OAuth2ServiceTest : ApiTestBase
     {
-        private const string BAD_REQUEST = "Bad Request";
-
-        private CredentialModel clientInfo, userCredentials;
-        private OAuth2Service authObjectParam2, authObjectParam3;
         private string authCode = "fac566fb5d926c7dd590f6eea7f8b6c10cbe469b";
 
         /// <summary>
@@ -23,14 +19,6 @@ namespace AcceptanceTests
         /// Make Positive Test
         /// </summary>
 
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
-            authObjectParam2 = new OAuth2Service(clientInfo.Login, clientInfo.Password);
-            authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, clientInfo.Password);
-        }
 
         [TestMethod]
         public void Ctor2Params_TokenRetrieving_Fail_WrongAuthCode()
@@ -40,11 +28,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
@@ -57,11 +45,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
@@ -73,11 +61,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
 
@@ -90,11 +78,11 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequestHttpError}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequestHttpError);
             }
         }
     }
