@@ -31,9 +31,19 @@ namespace SignNow.Net
             ClientSecret = clientSecret;
         }
 
-        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
+        ///<inheritdoc/>
+        public async Task<Uri> GetAuthorizationUrlAsync(string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            var host = ApiUrl.ApiBaseUrl.Host;
+            var targetHost = host;
+
+            if (host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "eval.signnow.com";
+            else if (host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "signnow.com";
+
+            var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
+            return new Uri(hostUri, $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
         }
 
         ///<inheritdoc/>
@@ -61,9 +71,28 @@ namespace SignNow.Net
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
+        ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            var url = $"{ApiBaseUrl}oauth2/token";
+
+            var body = new Dictionary<string, string>
+            {
+               { "grant_type", "authorization_code" },
+               { "code", code },
+               { "scope", scope.AsString() }
+            };
+
+            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
+            var appToken = Convert.ToBase64String(plainTextBytes);
+            var options = new PostHttpRequesOptions()
+            {
+                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
+                Content = new FormUrlEncodedHttpContent(body),
+                RequestUrl = new Uri(url)
+            };
+
+            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
         public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
