@@ -6,6 +6,6 @@ namespace SignNow.Net.Test.SignNow
         public const string InvalidFileType = "Invalid file type.";
         public const string CannotCreateSigningLinksOnDocumentsWithNoFields = "Cannot create signing links on documents with no fields";
         public const string TheDocumentIdShouldHave40Characters = "The document id should have exactly 40 characters.";
-        public const string BadRequestHttpError = "Bad Request";
+        public const string BadRequest = "Bad Request";
     }
 }

@@ -36,8 +36,6 @@ namespace SignNow.Net.Interfaces
         /// <returns>Authorization page URL for access code retrieval</returns>
         Task<Uri> GetAuthorizationUrlAsync(string redirectUrl, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken));
-
         Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
