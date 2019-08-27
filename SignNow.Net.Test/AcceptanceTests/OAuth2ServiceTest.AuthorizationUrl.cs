@@ -7,10 +7,10 @@ using System;
 namespace AcceptanceTests
 {
     [TestClass]
-    public class GetAuthorizationUrlTest : ApiTestBase
+    public class OAuth2ServiceTest_AuthorizationUrl : ApiTestBase
     {
         [TestMethod]
-        public void AuthorizationUrl_Validated()
+        public void GetAuthorizationUrlAsync_UrlValidated()
         {
             var user = new CredentialLoader(ApiBaseUrl).GetCredentials();
 
