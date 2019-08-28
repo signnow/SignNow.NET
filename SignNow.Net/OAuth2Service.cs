@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace SignNow.Net
 {
@@ -47,14 +48,14 @@ namespace SignNow.Net
 
             var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
             return new Uri(
-                hostUri, relativeUri: $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl.ToString()}");
+                hostUri, relativeUri: $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
+
+
         }
 
         ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
-            var url = $"{ApiBaseUrl}oauth2/token";
-
             var body = new Dictionary<string, string>
             {
                { "grant_type", "password" },
@@ -63,23 +64,12 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
-            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
-            var appToken = Convert.ToBase64String(plainTextBytes);
-            var options = new PostHttpRequesOptions()
-            {
-                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
-                Content = new FormUrlEncodedHttpContent(body),
-                RequestUrl = new Uri(url)
-            };
-
-            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+            return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
         ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
         {
-            var url = $"{ApiBaseUrl}oauth2/token";
-
             var body = new Dictionary<string, string>
             {
                { "grant_type", "authorization_code" },
@@ -87,16 +77,7 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
-            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
-            var appToken = Convert.ToBase64String(plainTextBytes);
-            var options = new PostHttpRequesOptions()
-            {
-                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
-                Content = new FormUrlEncodedHttpContent(body),
-                RequestUrl = new Uri(url)
-            };
-
-            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+            return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
         public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
@@ -107,6 +88,22 @@ namespace SignNow.Net
         public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
+        }
+
+        async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
+        {
+            var url = new Uri(ApiBaseUrl, "oauth2/token");
+
+            var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
+            var appToken = Convert.ToBase64String(plainTextBytes);
+            var options = new PostHttpRequesOptions()
+            {
+                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
+                Content = new FormUrlEncodedHttpContent(body),
+                RequestUrl = url
+            };
+
+            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
     }
 }
