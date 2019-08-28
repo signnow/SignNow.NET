@@ -1,17 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Test;
 using SignNow.Net.Test.SignNow;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace AcceptanceTests
 {
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
-        private IEnumerable<IDocumentService> DocServices => new IDocumentService[] {new SignNowContext(ApiBaseUrl, Token).Documents };
         [TestMethod]
         public void SigningLinkCreatedSuccessfully()
         {
