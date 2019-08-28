@@ -13,10 +13,10 @@ namespace AcceptanceTests
         {
             var clientId = clientInfo.Login;
             var clientSecter = clientInfo.Password;
-            var redirectUrl = "https://localhost:1000/";
+            var redirectUrl = new Uri("https://localhost:1000/");
 
             var authObject = new OAuth2Service(clientId, clientSecter);
-            var uri = authObject.GetAuthorizationUrlAsync(redirectUrl).Result;
+            var uri = authObject.GetAuthorizationUrl(redirectUrl);
 
             if (String.IsNullOrEmpty(uri.ToString()))
                 Assert.Fail("Authorization Url is empty");

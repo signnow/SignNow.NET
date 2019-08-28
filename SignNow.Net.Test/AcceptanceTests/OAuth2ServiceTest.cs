@@ -8,13 +8,10 @@ namespace AcceptanceTests
     [TestClass]
     public partial class OAuth2ServiceTest : ApiTestBase
     {
-        private string authCode = "fac566fb5d926c7dd590f6eea7f8b6c10cbe469b";
-
         private CredentialModel clientInfo, userCredentials;
         private OAuth2Service authObjectParam2, authObjectParam3;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public OAuth2ServiceTest()
         {
             clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
             userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();

@@ -32,8 +32,11 @@ namespace SignNow.Net
         }
 
         ///<inheritdoc/>
-        public async Task<Uri> GetAuthorizationUrlAsync(string redirectUrl, CancellationToken cancellationToken = default(CancellationToken))
+        public Uri GetAuthorizationUrl(Uri redirectUrl)
         {
+            if (redirectUrl == null)
+                throw new ArgumentNullException(nameof(redirectUrl));
+
             var host = ApiUrl.ApiBaseUrl.Host;
             var targetHost = host;
 
@@ -43,7 +46,8 @@ namespace SignNow.Net
                 targetHost = "signnow.com";
 
             var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
-            return new Uri(hostUri, $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl}");
+            return new Uri(
+                hostUri, relativeUri: $"proxy/index.php/authorize?client_id={ClientId}&response_type=code&redirect_uri={redirectUrl.ToString()}");
         }
 
         ///<inheritdoc/>
@@ -72,7 +76,7 @@ namespace SignNow.Net
         }
 
         ///<inheritdoc/>
-        public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
         {
             var url = $"{ApiBaseUrl}oauth2/token";
 
@@ -95,12 +99,12 @@ namespace SignNow.Net
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
         }
 
-        public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

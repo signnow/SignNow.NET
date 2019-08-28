@@ -16,68 +16,42 @@ namespace AcceptanceTests
         /// </summary>
 
         [TestMethod]
-        public void Ctor2Params_GetToken_Fail_WrongAuthCode()
+        public void GetToken_Fail_WrongAuthCode()
         {
             var tokenTask = authObjectParam2.GetTokenAsync("wrong_auth_code", Scope.All);
+            var tokenTaskExt = authObjectParam3.GetTokenAsync("wrong_auth_code", Scope.All);
 
             try
             {
-                Task.WaitAll(tokenTask);
+                Task.WaitAll(tokenTask, tokenTaskExt);
                 Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong authorization code. Recieved Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
                 Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
+                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
 
         [TestMethod]
-        public void Ctor2Params_GetToken_Fail_WrongClientSecret()
+        public void GetToken_Fail_WrongClientSecret()
         {
             authObjectParam2 = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
-            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
-
-            try
-            {
-                Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
-            }
-            catch
-            {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
-            }
-        }
-
-        [TestMethod]
-        public void Ctor3Params_GetToken_Fail_WrongAuthCode()
-        {
-            var tokenTask = authObjectParam3.GetTokenAsync("wrong_auth_code", Scope.All);
-
-            try
-            {
-                Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
-            }
-            catch
-            {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
-            }
-        }
-
-        [TestMethod]
-        public void Ctor3Params_GetToken_Fail_WrongClientSecret()
-        {
             authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, "client_secret_wrong");
-            var tokenTask = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
+            var tokenTaskExt = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             try
             {
-                Task.WaitAll(tokenTask);
+                Task.WaitAll(tokenTask, tokenTaskExt);
                 Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
                 Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
+                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
     }
