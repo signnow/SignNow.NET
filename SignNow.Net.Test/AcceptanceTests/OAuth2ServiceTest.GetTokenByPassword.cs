@@ -10,6 +10,8 @@ namespace AcceptanceTests
 {
     public partial class OAuth2ServiceTest : ApiTestBase
     {
+#pragma warning disable CA1031 // Do not catch general exception types
+
         [TestMethod]
         public void GetTokenByPassword_Success_ScopeAll()
         {
@@ -95,5 +97,7 @@ namespace AcceptanceTests
                 Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
+#pragma warning restore CA1031 // Do not catch general exception types
+
     }
 }

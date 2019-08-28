@@ -37,7 +37,7 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        public Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

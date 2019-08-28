@@ -8,7 +8,7 @@ namespace AcceptanceTests
     [TestClass]
     public partial class OAuth2ServiceTest : ApiTestBase
     {
-        private CredentialModel clientInfo, userCredentials;
+        private readonly CredentialModel clientInfo, userCredentials;
         private OAuth2Service authObjectParam2, authObjectParam3;
 
         public OAuth2ServiceTest()

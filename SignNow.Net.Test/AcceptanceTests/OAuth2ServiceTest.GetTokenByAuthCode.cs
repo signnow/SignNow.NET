@@ -15,6 +15,8 @@ namespace AcceptanceTests
         /// Make Positive Test
         /// </summary>
 
+#pragma warning disable CA1031 // Do not catch general exception types
+            
         [TestMethod]
         public void GetToken_Fail_WrongAuthCode()
         {
@@ -54,5 +56,8 @@ namespace AcceptanceTests
                 Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
             }
         }
+
+#pragma warning restore CA1031 // Do not catch general exception types
+
     }
 }
