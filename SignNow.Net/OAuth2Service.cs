@@ -1,15 +1,15 @@
-using SignNow.Net.Internal.Requests;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace SignNow.Net
 {
