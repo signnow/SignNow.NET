@@ -38,6 +38,13 @@ namespace SignNow.Net.Internal.Service
             using (var request = CreateHttpRequest(requestOptions))
             using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                if (!response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    throw new SignNowException(responseData);
+                }
+
                 return await HandleResponse<TResponse>(response).ConfigureAwait(false);
             }             
         }
@@ -53,6 +60,13 @@ namespace SignNow.Net.Internal.Service
             using (var request = CreateHttpRequest(requestOptions))
             using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                if (! response.IsSuccessStatusCode)
+                {
+                    var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    throw new SignNowException(responseData);
+                }
+
                 return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
             }
         }
@@ -114,17 +128,7 @@ namespace SignNow.Net.Internal.Service
 
                 default:
                     break;
-            }
-
-
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
-                throw new SignNowException(response.ReasonPhrase, ex);
-            }
+            }       
 
             return responseObj;
         }

@@ -28,7 +28,7 @@ namespace SignNow.Net.Service
         public async Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, "/link");
-            var requestOptions = new PostHttpRequesOptions
+            var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestFullUrl,
                 Content = new JsonHttpContent(new { document_id = documentId }),
