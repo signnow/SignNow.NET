@@ -26,7 +26,6 @@
         <Reference Include="System" />-->
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="_Internal\Interfaces\" />
       <Folder Include="_Internal\Model\" />
       <Folder Include="Exceptions\" />
     </ItemGroup>
