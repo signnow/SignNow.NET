@@ -91,7 +91,7 @@ namespace SignNow.Net.Internal.Service
 
             if (requestOptions.Token != null)
             {                
-                requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAccessToken());
+                requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAuthorizationHeaderValue());
             }
 
             requestMessage.Content = requestOptions.Content?.GetHttpContent();

@@ -6,7 +6,7 @@ namespace SignNow.Net.Interfaces
 {
     public interface IUserService
     {
-        Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default(CancellationToken));
-        Task<CreateUserResponse> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default);
+        Task<CreateUserResponse> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken = default);
     }
 }

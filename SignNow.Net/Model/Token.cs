@@ -22,7 +22,7 @@ namespace SignNow.Net.Model
         [JsonProperty("last_login")]
         public int LastLogin { get; set; }
 
-        public string GetAccessToken()
+        public string GetAuthorizationHeaderValue()
         {
             return $"{TokenType} {AccessToken}";
         }

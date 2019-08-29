@@ -98,7 +98,7 @@ namespace AcceptanceTests
             using (var client = new HttpClient())
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{id}"))
             {
-                requestMessage.Headers.Add("Authorization", Token.GetAccessToken());
+                requestMessage.Headers.Add("Authorization", Token.GetAuthorizationHeaderValue());
                 var response = client.SendAsync(requestMessage).Result;
                 response.EnsureSuccessStatusCode();
             }
