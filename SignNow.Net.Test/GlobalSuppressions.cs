@@ -5,11 +5,5 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>", Scope = "member", Target = "~M:SignNow.Net.Test.Context.JsonCredentialProvider.GetCredential~SignNow.Net.Test.Context.CredentialModel")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetAuthorizationUrl_UrlValidated")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetToken_Fail_WrongClientSecret")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetToken_Fail_WrongAuthCode")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetTokenByPassword_Success_ScopeAll")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetTokenByPassword_Success_ScopeUser")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetTokenByPassword_Fail_WrongPassword")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "<Pending>", Scope = "member", Target = "~M:AcceptanceTests.OAuth2ServiceTest.GetTokenByPassword_Fail_WrongClientSecret")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Scope = "module")]
 
