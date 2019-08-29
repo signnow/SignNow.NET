@@ -63,11 +63,11 @@ namespace SignNow.Net.Test.AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user password. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "Invalid credentials.");
             }
         }
 
@@ -84,7 +84,7 @@ namespace SignNow.Net.Test.AcceptanceTests
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "invalid_client");
             }
         }
 
@@ -128,11 +128,11 @@ namespace SignNow.Net.Test.AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask);
-                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user paassword. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"{BAD_REQUEST}\" with wrong user password. Recieved Exception: {tokenTask.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "Invalid credentials.");
             }
         }
 
@@ -149,7 +149,7 @@ namespace SignNow.Net.Test.AcceptanceTests
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, BAD_REQUEST);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "invalid_client");
             }
         }
     }

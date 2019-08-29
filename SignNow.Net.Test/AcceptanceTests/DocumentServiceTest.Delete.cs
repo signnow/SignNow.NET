@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Test;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,9 +22,9 @@ namespace AcceptanceTests
                 );
         }
 
-        [DataRow("da057e65e97c9fa6b96485ca4970260f30958001", "{\"errors\":[{\"code\":65544,\"message\":\"internal api error\"}]}")]
-        [DataRow("da057e65e97c9fa6b", "{\"404\":\"Unable to find a route to match the URI: document\\/da057e65e97c9fa6b\"}")]
-        [DataRow("test", "{\"404\":\"Unable to find a route to match the URI: document\\/test\"}")]
+        [DataRow("da057e65e97c9fa6b96485ca4970260f30958001", "internal api error")]
+        [DataRow("da057e65e97c9fa6b", @"Unable to find a route to match the URI: document/da057e65e97c9fa6b")]
+        [DataRow("test", @"Unable to find a route to match the URI: document/test")]
         [DataTestMethod]
         public void Cannot_Delete_Document_with_wrong_ID(string documentId, string errorMessage)
         {
@@ -32,6 +33,10 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(deleteResponse);
+            }
+            catch (SignNowException ex)
+            {
+                Assert.AreEqual(ex.Message, errorMessage);
             }
             catch
             {
