@@ -1,11 +1,12 @@
-using SignNow.Net.Internal.Requests;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,16 +32,30 @@ namespace SignNow.Net
             ClientSecret = clientSecret;
         }
 
-        public async Task<Uri> GetAuthorizationUrlAsync(Scope scope, CancellationToken cancellationToken = default(CancellationToken))
+        ///<inheritdoc/>
+        public Uri GetAuthorizationUrl(Uri redirectUrl)
         {
-            throw new NotImplementedException();
+            if (redirectUrl == null)
+                throw new ArgumentNullException(nameof(redirectUrl));
+
+            var host = ApiUrl.ApiBaseUrl.Host;
+            var targetHost = host;
+
+            if (host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "eval.signnow.com";
+            else if (host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+                targetHost = "signnow.com";
+
+            var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
+            return new Uri(
+                hostUri, relativeUri: $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
+
+
         }
 
         ///<inheritdoc/>
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
-            var url = $"{ApiBaseUrl}oauth2/token";
-
             var body = new Dictionary<string, string>
             {
                { "grant_type", "password" },
@@ -49,31 +64,46 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
+            return await ExecuteTokenRequest(body).ConfigureAwait(false);
+        }
+
+        ///<inheritdoc/>
+        public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
+        {
+            var body = new Dictionary<string, string>
+            {
+               { "grant_type", "authorization_code" },
+               { "code", code },
+               { "scope", scope.AsString() }
+            };
+
+            return await ExecuteTokenRequest(body).ConfigureAwait(false);
+        }
+
+        public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
+        {
+            var url = new Uri(ApiBaseUrl, "oauth2/token");
+
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
             var options = new PostHttpRequesOptions()
             {
                 Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
                 Content = new FormUrlEncodedHttpContent(body),
-                RequestUrl = new Uri(url)
+                RequestUrl = url
             };
 
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
-        }
-
-        public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
         }
     }
 }
