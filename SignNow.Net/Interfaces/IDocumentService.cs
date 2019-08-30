@@ -29,7 +29,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be removed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<Stream> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
+        Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates URL to sign the document containing fillable fields using web browser.

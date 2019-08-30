@@ -38,7 +38,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<Stream> DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestedDocument = "/document/" + documentId;
 
@@ -48,7 +48,7 @@ namespace SignNow.Net.Service
                 Token = this.Token
             };
 
-            return await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         ///<inheritdoc/>

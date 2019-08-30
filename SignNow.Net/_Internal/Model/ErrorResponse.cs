@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
@@ -30,9 +31,24 @@ namespace SignNow.Net.Internal.Model
             if (!string.IsNullOrEmpty(Error404))
                 message = Error404;
 
-            if (Errors != null && Errors.Count == 1)
-                message = Errors[0].Message;
+            if (Errors != null)
+            {
+                if (Errors.Count == 1)
+                    message = Errors[0].Message;
 
+                // Aggergate all Messages
+                if (Errors.Count > 1)
+                {
+                    var strBuilder = new StringBuilder();
+
+                    foreach (ErrorResponseContext item in Errors)
+                    {
+                        strBuilder.AppendLine(item.Message);
+                    }
+                    message = strBuilder.ToString();
+                }
+            }
+           
             return message;
         }
     }

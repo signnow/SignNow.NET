@@ -47,9 +47,9 @@ namespace SignNow.Net.Internal.Service
         /// <param name="requestOptions"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        public async Task RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
+            await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, CancellationToken cancellationToken = default)
@@ -68,10 +68,19 @@ namespace SignNow.Net.Internal.Service
             if (!response.IsSuccessStatusCode)
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var apiError = context;
 
-                var apiError = JsonConvert.DeserializeObject<ErrorResponse>(context);
+                try
+                {
+                    var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
 
-                throw new SignNowException(apiError.GetErrorMessage());
+                    apiError = converter.Adapt(response.Content).Result.GetErrorMessage();
+                }
+                catch (JsonSerializationException)
+                {
+                }
+
+                throw new SignNowException(apiError, response.StatusCode);
             }
         }
 
