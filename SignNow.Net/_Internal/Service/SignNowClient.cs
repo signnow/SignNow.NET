@@ -72,9 +72,9 @@ namespace SignNow.Net.Internal.Service
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
-                    var adapterTask = await converter.Adapt(response.Content).ConfigureAwait(false);
+                    var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
 
-                    apiError = adapterTask.GetErrorMessage();
+                    apiError = errorResponse.GetErrorMessage();
 
                 }
                 catch (JsonSerializationException)

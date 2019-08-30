@@ -25,6 +25,8 @@ namespace UnitTests
 
             Assert.AreEqual(testMessage, ex.Message, $"Exception {ex.Message.GetType().ToString()} should have '{testMessage}'");
             Assert.AreEqual(HttpStatusCode.BadRequest, ex.HttpStatusCode, $"Exception HttpStatusCode should be '{HttpStatusCode.BadRequest.ToString()}'");
+            Assert.IsTrue(ex.Data.Contains("HttpStatusCode"));
+            Assert.AreEqual(HttpStatusCode.BadRequest, ex.Data["HttpStatusCode"]);
         }
 
         [TestMethod]
