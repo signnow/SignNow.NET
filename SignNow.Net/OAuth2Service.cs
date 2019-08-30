@@ -96,7 +96,7 @@ namespace SignNow.Net
 
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
-            var options = new PostHttpRequesOptions()
+            var options = new PostHttpRequestOptions()
             {
                 Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
                 Content = new FormUrlEncodedHttpContent(body),

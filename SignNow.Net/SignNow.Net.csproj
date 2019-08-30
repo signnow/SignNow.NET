@@ -33,7 +33,6 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <Reference Include="System.Net.Http.WebRequest" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="_Internal\Interfaces\" />
       <Folder Include="_Internal\Model\" />
       <Folder Include="Exceptions\" />
     </ItemGroup>

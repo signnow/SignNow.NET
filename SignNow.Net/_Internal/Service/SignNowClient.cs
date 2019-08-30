@@ -2,9 +2,11 @@
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Interfaces;
+using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,13 +37,53 @@ namespace SignNow.Net.Internal.Service
         /// <returns></returns>
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            using (var request = CreateHttpRequest(requestOptions))
-                using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
-            {
-                return await HandleResponse<TResponse>(response).ConfigureAwait(false);
-            }             
+            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);           
         }
 
+        /// <summary>
+        /// HTTP requests which returns Stream response
+        /// </summary>
+        /// <param name="requestOptions"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        {
+            await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, CancellationToken cancellationToken = default)
+        {
+            using (var request = CreateHttpRequest(requestOptions))
+            using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
+            {
+                await ProcessErroResponse(response);
+
+                return await adapter.Adapt(response.Content).ConfigureAwait(false);
+            }
+        }
+
+        private async Task ProcessErroResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var apiError = context;
+
+                try
+                {
+                    var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
+                    var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
+
+                    apiError = errorResponse.GetErrorMessage();
+
+                }
+                catch (JsonSerializationException)
+                {
+                }
+
+                throw new SignNowException(apiError, response.StatusCode);
+            }
+        }
 
         /// <summary>
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
@@ -65,54 +107,6 @@ namespace SignNow.Net.Internal.Service
             requestMessage.Content = requestOptions.Content?.GetHttpContent();
 
             return requestMessage;
-        }
-
-        /// <summary>
-        /// Process raw HTTP response into requested domain type.
-        /// </summary>
-        /// <typeparam name="T">The type to return</typeparam>
-        /// <param name="response">The <see cref="HttpResponseMessage"/> to handle</param>
-        /// <returns></returns>
-        private async Task<TResponse> HandleResponse<TResponse>(HttpResponseMessage response)
-        {
-            var mimeType = response.Content.Headers.ContentType?.MediaType;
-            var responseObj = default(TResponse);
-
-            switch (mimeType)
-            {
-                case "application/json":
-                    var contentAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    responseObj = JsonConvert.DeserializeObject<TResponse>(contentAsString);
-                    break;
-
-                case "application/octet-stream":
-                    var streamContent = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                    string content;
-
-                    using (StreamReader streamReader = new StreamReader(streamContent, System.Text.Encoding.Unicode))
-                    {
-                        content = streamReader.ReadToEnd();
-                    }
-
-                    responseObj = JsonConvert.DeserializeObject<TResponse>(content);
-                    break;
-
-                default:
-                    break;
-            }
-
-
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
-                throw new SignNowException(response.ReasonPhrase, ex);
-            }
-
-            return responseObj;
         }
     }
 }

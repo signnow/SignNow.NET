@@ -26,13 +26,13 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong authorization code. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Recieved Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
-                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "internal api error");
+                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, "internal api error");
             }
         }
 
@@ -47,13 +47,13 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"{ErrorMessages.BadRequest}\" with wrong user's client secret. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
-                Assert.AreEqual(tokenTask.Exception.InnerException.Message, ErrorMessages.BadRequest);
-                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, ErrorMessages.BadRequest);
+                Assert.AreEqual(tokenTask.Exception.InnerException.Message, "invalid_client");
+                Assert.AreEqual(tokenTaskExt.Exception.InnerException.Message, "invalid_client");
             }
         }
 
