@@ -1,22 +1,24 @@
 using System;
-using System.Collections;
 using System.Net;
 
 namespace SignNow.Net.Exceptions
 {
     public class SignNowException : Exception
     {
+        private HttpStatusCode httpStatusCode;
+
         public HttpStatusCode HttpStatusCode
         {
             get
             {
-                if (Data.Contains(HttpStatusCode))
-                    return (System.Net.HttpStatusCode)Data["HttpStatusCode"];
-
-                return default;
+                return this.httpStatusCode;
             }
 
-            set => Data["HttpStatusCode"] = value;
+            set
+            {
+                Data["HttpStatusCode"] = value;
+                this.httpStatusCode = value;
+            }
         }
 
         public SignNowException() { }

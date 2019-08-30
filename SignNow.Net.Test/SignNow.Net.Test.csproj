@@ -25,6 +25,7 @@
     <Folder Include="AcceptanceTests\" />
     <Folder Include="UnitTests\" />
     <Folder Include="UnitTests\Context\" />
+    <Folder Include="UnitTests\Exceptions\" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,6 @@ using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,8 +72,10 @@ namespace SignNow.Net.Internal.Service
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
+                    var adapterTask = await converter.Adapt(response.Content).ConfigureAwait(false);
 
-                    apiError = converter.Adapt(response.Content).Result.GetErrorMessage();
+                    apiError = adapterTask.GetErrorMessage();
+
                 }
                 catch (JsonSerializationException)
                 {
