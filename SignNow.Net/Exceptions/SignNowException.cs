@@ -16,7 +16,7 @@ namespace SignNow.Net.Exceptions
 
             set
             {
-                Data["HttpStatusCode"] = value;
+                Data["HttpStatusCode"] = (int)value;
                 this.httpStatusCode = value;
             }
         }
