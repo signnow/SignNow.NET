@@ -1,20 +1,28 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
+using System;
 using System.Net;
 
 namespace UnitTests
 {
     [TestClass]
-    public class SignNowExceptionTest
+    public partial class SignNowExceptionTest
     {
-        private readonly string testMessage = "Test Exception Message";
+        private readonly static string testMessage = "Test Exception Message";
+
+        private readonly string assertExceptionPropertyShouldHaveValue = "Exception '{0}' should have '{1}'";
+        private readonly string assertExceptionPropertyShouldBe        = "Exception '{0}' should be '{1}'";
 
         [TestMethod]
         public void Exception_Has_Message()
         {
             var ex = new SignNowException(testMessage);
 
-            Assert.AreEqual(testMessage, ex.Message, $"Exception Message should have '{testMessage}'");
+            Assert.AreEqual(
+                testMessage,
+                ex.Message,
+                String.Format(assertExceptionPropertyShouldHaveValue, "Message", testMessage)
+                );
         }
 
         [TestMethod]
@@ -22,8 +30,18 @@ namespace UnitTests
         {
             var ex = new SignNowException(testMessage, HttpStatusCode.BadRequest);
 
-            Assert.AreEqual(testMessage, ex.Message, $"Exception {ex.Message.GetType().ToString()} should have '{testMessage}'");
-            Assert.AreEqual(HttpStatusCode.BadRequest, ex.HttpStatusCode, $"Exception HttpStatusCode should be '{HttpStatusCode.BadRequest.ToString()}'");
+            Assert.AreEqual(
+                testMessage,
+                ex.Message,
+                String.Format(assertExceptionPropertyShouldHaveValue, ex.Message.GetType().ToString(), testMessage)
+                );
+
+            Assert.AreEqual(
+                HttpStatusCode.BadRequest,
+                ex.HttpStatusCode,
+                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.BadRequest.ToString())
+                );
+
             Assert.IsTrue(ex.Data.Contains("HttpStatusCode"));
             Assert.AreEqual((int)HttpStatusCode.BadRequest, ex.Data["HttpStatusCode"]);
         }
@@ -33,11 +51,19 @@ namespace UnitTests
         {
             var ex = new SignNowException(testMessage, HttpStatusCode.Forbidden);
 
-            Assert.AreEqual(HttpStatusCode.Forbidden, ex.HttpStatusCode, $"Exception HttpStatusCode should be '{HttpStatusCode.Forbidden.ToString()}'");
+            Assert.AreEqual(
+                HttpStatusCode.Forbidden,
+                ex.HttpStatusCode,
+                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.Forbidden.ToString())
+                );
 
             ex.HttpStatusCode = HttpStatusCode.InternalServerError;
 
-            Assert.AreEqual(HttpStatusCode.InternalServerError, ex.HttpStatusCode, $"Exception HttpStatusCode should be '{HttpStatusCode.InternalServerError.ToString()}'");
+            Assert.AreEqual(
+                HttpStatusCode.InternalServerError,
+                ex.HttpStatusCode,
+                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.InternalServerError.ToString())
+                );
         }
 
         [TestMethod]
