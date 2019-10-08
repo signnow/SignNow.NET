@@ -18,11 +18,7 @@ namespace UnitTests
         {
             var ex = new SignNowException(testMessage);
 
-            Assert.AreEqual(
-                testMessage,
-                ex.Message,
-                String.Format(assertExceptionPropertyShouldHaveValue, "Message", testMessage)
-                );
+            Assert.AreEqual(testMessage, ex.Message);
         }
 
         [TestMethod]
@@ -30,17 +26,8 @@ namespace UnitTests
         {
             var ex = new SignNowException(testMessage, HttpStatusCode.BadRequest);
 
-            Assert.AreEqual(
-                testMessage,
-                ex.Message,
-                String.Format(assertExceptionPropertyShouldHaveValue, ex.Message.GetType().ToString(), testMessage)
-                );
-
-            Assert.AreEqual(
-                HttpStatusCode.BadRequest,
-                ex.HttpStatusCode,
-                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.BadRequest.ToString())
-                );
+            Assert.AreEqual(testMessage, ex.Message);
+            Assert.AreEqual(HttpStatusCode.BadRequest, ex.HttpStatusCode);
 
             Assert.IsTrue(ex.Data.Contains("HttpStatusCode"));
             Assert.AreEqual((int)HttpStatusCode.BadRequest, ex.Data["HttpStatusCode"]);
@@ -51,31 +38,25 @@ namespace UnitTests
         {
             var ex = new SignNowException(testMessage, HttpStatusCode.Forbidden);
 
-            Assert.AreEqual(
-                HttpStatusCode.Forbidden,
-                ex.HttpStatusCode,
-                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.Forbidden.ToString())
-                );
+            Assert.AreEqual(HttpStatusCode.Forbidden, ex.HttpStatusCode);
 
             ex.HttpStatusCode = HttpStatusCode.InternalServerError;
 
-            Assert.AreEqual(
-                HttpStatusCode.InternalServerError,
-                ex.HttpStatusCode,
-                String.Format(assertExceptionPropertyShouldBe, "HttpStatusCode", HttpStatusCode.InternalServerError.ToString())
-                );
+            Assert.AreEqual(HttpStatusCode.InternalServerError, ex.HttpStatusCode);
         }
 
         [TestMethod]
         public void Exception_Have_InnerException()
         {
-            var innerEx = new SignNowException("Inner Exception Message", HttpStatusCode.Forbidden);
+            var innerExMessage = "Test Forbidden Message";
+
+            var innerEx   = new SignNowException(innerExMessage, HttpStatusCode.Forbidden);
             var exception = new SignNowException(testMessage, innerEx);
 
             Assert.AreEqual(default, exception.HttpStatusCode);
-            Assert.AreEqual(testMessage, exception.Message);
+            Assert.AreEqual(testMessage + $" ({innerExMessage})", exception.Message);
             Assert.AreEqual(HttpStatusCode.Forbidden, ((SignNowException)exception.InnerException).HttpStatusCode);
-            Assert.AreEqual("Inner Exception Message", exception.InnerException.Message);
+            Assert.AreEqual(innerExMessage, exception.InnerException.Message);
         }
     }
 }
