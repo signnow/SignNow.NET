@@ -27,37 +27,23 @@ namespace UnitTests
         [TestMethod]
         public void Exception_Contains_Exceptions_List()
         {
-            var nativeExceptions = new List<Exception>();
-            var snExceptions     = new List<SignNowException>();
+            var snExceptions = new List<SignNowException>();
 
             var snAggregateMsg = new StringBuilder("L1 Ex Message Example");
 
             for (int i = 0; i < 10; i++)
             {
-                nativeExceptions.Add(new Exception($"inner-exception {i}"));
                 snExceptions.Add(new SignNowException($"inner-exception {i}"));
                 snAggregateMsg.AppendFormat(" (inner-exception {0})", i);
             }
 
-            var natEx = new SignNowException("L1 Ex Message Example", nativeExceptions);
             var snEx  = new SignNowException("L1 Ex Message Example", snExceptions);
 
-            Assert.AreEqual(10, natEx.InnerExceptions.Count);
             Assert.AreEqual(10, snEx.InnerExceptions.Count);
-
-            Assert.AreEqual(snAggregateMsg.ToString(), natEx.Message);
             Assert.AreEqual(snAggregateMsg.ToString(), snEx.Message);
 
 
             var index = 0;
-            foreach (Exception innerEx in natEx.InnerExceptions)
-            {
-                var innerExMsg = String.Format("inner-exception {0}", index++);
-
-                Assert.AreEqual(innerExMsg, innerEx.Message);
-            }
-
-            index = 0;
             foreach (SignNowException innerEx in snEx.InnerExceptions)
             {
                 var innerExMsg = String.Format("inner-exception {0}", index++);

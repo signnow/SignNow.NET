@@ -45,7 +45,7 @@ namespace SignNow.Net.Exceptions
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception. </param>
         /// <param name="innerExceptions">The exceptions that are the cause of the current exception.</param>
-        public SignNowException(string message, IEnumerable<Exception> innerExceptions) : base(message, innerExceptions) { }
+        public SignNowException(string message, IEnumerable<SignNowException> innerExceptions) : base(message, innerExceptions) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignNow.Net.Exceptions.SignNowException" /> class
