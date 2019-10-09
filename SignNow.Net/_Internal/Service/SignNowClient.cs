@@ -37,7 +37,7 @@ namespace SignNow.Net.Internal.Service
         /// <returns></returns>
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);           
+            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -56,13 +56,13 @@ namespace SignNow.Net.Internal.Service
             using (var request = CreateHttpRequest(requestOptions))
             using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                await ProcessErroResponse(response);
+                await ProcessErrorResponse(response);
 
                 return await adapter.Adapt(response.Content).ConfigureAwait(false);
             }
         }
 
-        private async Task ProcessErroResponse(HttpResponseMessage response)
+        private async Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
@@ -100,7 +100,7 @@ namespace SignNow.Net.Internal.Service
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
             if (requestOptions.Token != null)
-            {                
+            {
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAuthorizationHeaderValue());
             }
 
