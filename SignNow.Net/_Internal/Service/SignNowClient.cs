@@ -7,6 +7,7 @@ using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
