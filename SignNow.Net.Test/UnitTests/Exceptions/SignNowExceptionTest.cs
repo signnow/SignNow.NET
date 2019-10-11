@@ -8,7 +8,7 @@ namespace UnitTests
     [TestClass]
     public partial class SignNowExceptionTest
     {
-        private readonly static string testMessage = "Test Exception Message";
+        private const string testMessage = "Test Exception Message";
 
         private readonly string assertExceptionPropertyShouldHaveValue = "Exception '{0}' should have '{1}'";
         private readonly string assertExceptionPropertyShouldBe        = "Exception '{0}' should be '{1}'";

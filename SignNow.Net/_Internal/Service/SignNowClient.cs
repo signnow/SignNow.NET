@@ -56,7 +56,7 @@ namespace SignNow.Net.Internal.Service
             using (var request = CreateHttpRequest(requestOptions))
             using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                await ProcessErrorResponse(response);
+                await ProcessErrorResponse(response).ConfigureAwait(false);
 
                 return await adapter.Adapt(response.Content).ConfigureAwait(false);
             }
