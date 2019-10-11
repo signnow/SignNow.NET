@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
@@ -62,6 +61,12 @@ namespace SignNow.Net.Internal.Service
             }
         }
 
+        /// <summary>
+        /// Process Error Response to prepare SignNow Exception
+        /// </summary>
+        /// <param name="response"></param>
+        /// <exception cref="SignNowException">SignNow Exception.</exception>
+        /// <returns></returns>
         private async Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
@@ -75,13 +80,16 @@ namespace SignNow.Net.Internal.Service
                     var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
 
                     apiError = errorResponse.GetErrorMessage();
-
                 }
                 catch (JsonSerializationException)
                 {
                 }
 
-                throw new SignNowException(apiError, response.StatusCode);
+                throw new SignNowException(apiError, response.StatusCode)
+                {
+                    RawHeaders = response.Headers,
+                    RawResponse = response.Content.ReadAsStringAsync().Result
+                };
             }
         }
 
@@ -89,6 +97,7 @@ namespace SignNow.Net.Internal.Service
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
         /// </summary>
         /// <param name="requestOptions"></param>
+        /// <exception cref="ArgumentException">The <paramref name="requestOptions">RequestUrl</paramref> argument is a null.</exception>
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
