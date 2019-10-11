@@ -4,3 +4,10 @@
 # into ~/.global_gitignore
 # @see: https://help.github.com/en/articles/ignoring-files#create-a-global-gitignore
 #
+/.vs/SignNow.Net
+/SignNow.Net/bin/Debug
+/SignNow.Net/obj
+/SignNow.Net.Test/obj
+/SignNow.Net.Test/bin/Debug/netcoreapp2.2
+/SignNow.Net.Framework4.5.Test/bin/Debug
+/SignNow.Net.Framework4.5.Test/obj/Debug
