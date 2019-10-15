@@ -59,6 +59,7 @@ namespace UnitTests
         [DataRow("{\"error\": \"invalid_request\"}", HttpStatusCode.BadRequest)]
         [DataRow("{\"error\": \"invalid_token\",\"code\": 1537}", HttpStatusCode.BadRequest)]
         [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error\"}]}", HttpStatusCode.BadRequest)]
+        [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error1\"},{\"code\": 65542,\"message\": \"internal api error2\"}]}", HttpStatusCode.BadRequest)]
         [DataRow("{\"404\": \"Unable to find a route to match the URI: event_subscription\"}", HttpStatusCode.BadRequest)]
         public void Exception_Handled_As_Aggregation(string errors, HttpStatusCode statusCode)
         {
@@ -66,17 +67,35 @@ namespace UnitTests
 
             var snExceptions = new List<SignNowException>();
             var erroredTasks = new System.Threading.Tasks.Task[items];
-            var errorMsg = JsonConvert.DeserializeObject<ErrorResponse>(errors).GetErrorMessage();
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errors);
+            var errorMsg = errorResponse.GetErrorMessage();
 
-            Action<string, HttpStatusCode> responseJob = (string err, HttpStatusCode httpStatus) =>
+            Action<ErrorResponse, HttpStatusCode> responseJob = (ErrorResponse err, HttpStatusCode httpStatus) =>
             {
-                throw new SignNowException(errorMsg, httpStatus);
+                if (err.Errors != null)
+                {
+                    var innerSnExc = new List<SignNowException>();
+
+                    foreach (ErrorResponseContext error in err.Errors)
+                    {
+                        innerSnExc.Add(new SignNowException(error.Message, httpStatus));
+                    }
+
+                    var innerSnException = new SignNowException(errorResponse.GetErrorMessage(), innerSnExc) { HttpStatusCode = httpStatus };
+
+                    // Override error Message for case when 'Errors' contains several inner errors
+                    errorMsg = innerSnException.Message;
+
+                    throw innerSnException;
+                }
+
+                throw new SignNowException(errorResponse.GetErrorMessage(), httpStatus);
             };
 
             for (var i = 0; i < items; i++)
             {
                 var jobid = i;
-                erroredTasks[i] = System.Threading.Tasks.Task.Run( () => responseJob(errors, statusCode) );
+                erroredTasks[i] = System.Threading.Tasks.Task.Run( () => responseJob(errorResponse, statusCode) );
             }
 
             try
