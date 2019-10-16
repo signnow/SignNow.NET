@@ -6,6 +6,8 @@ using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,11 +75,17 @@ namespace SignNow.Net.Internal.Service
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
+                SignNowException snException = default;
 
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
                     var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
+
+                    if (null != errorResponse.Errors)
+                    {
+                        snException = ProcessException(errorResponse, response.StatusCode);
+                    }
 
                     apiError = errorResponse.GetErrorMessage();
                 }
@@ -85,12 +93,31 @@ namespace SignNow.Net.Internal.Service
                 {
                 }
 
-                throw new SignNowException(apiError, response.StatusCode)
+                throw new SignNowException(apiError, snException)
                 {
                     RawHeaders = response.Headers,
-                    RawResponse = response.Content.ReadAsStringAsync().Result
+                    RawResponse = response.Content.ReadAsStringAsync().Result,
+                    HttpStatusCode = response.StatusCode
                 };
             }
+        }
+
+        /// <summary>
+        /// Process Errors and creates inner SignNow Exceptions
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private SignNowException ProcessException(ErrorResponse response, HttpStatusCode statusCode)
+        {
+            var innerExceptions = new List<SignNowException>();
+
+            foreach (ErrorResponseContext error in response.Errors)
+            {
+                innerExceptions.Add(new SignNowException(error.Message, statusCode));
+            }
+
+            return new SignNowException(response.GetErrorMessage(), innerExceptions) { HttpStatusCode = statusCode };          
         }
 
         /// <summary>
