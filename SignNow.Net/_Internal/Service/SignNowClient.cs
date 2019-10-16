@@ -7,6 +7,7 @@ using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -84,7 +85,7 @@ namespace SignNow.Net.Internal.Service
 
                     if (null != errorResponse.Errors)
                     {
-                        snException = ProcessException(errorResponse, response.StatusCode);
+                        snException = (SignNowException)errorResponse.Errors?.Select(e => new SignNowException(e.Message));
                     }
 
                     apiError = errorResponse.GetErrorMessage();
@@ -100,24 +101,6 @@ namespace SignNow.Net.Internal.Service
                     HttpStatusCode = response.StatusCode
                 };
             }
-        }
-
-        /// <summary>
-        /// Process Errors and creates inner SignNow Exceptions
-        /// </summary>
-        /// <param name="response"></param>
-        /// <param name="statusCode"></param>
-        /// <returns></returns>
-        private SignNowException ProcessException(ErrorResponse response, HttpStatusCode statusCode)
-        {
-            var innerExceptions = new List<SignNowException>();
-
-            foreach (ErrorResponseContext error in response.Errors)
-            {
-                innerExceptions.Add(new SignNowException(error.Message, statusCode));
-            }
-
-            return new SignNowException(response.GetErrorMessage(), innerExceptions) { HttpStatusCode = statusCode };          
         }
 
         /// <summary>
