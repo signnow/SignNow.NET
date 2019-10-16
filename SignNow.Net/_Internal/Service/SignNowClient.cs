@@ -6,10 +6,12 @@ using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
+using System.Net;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SignNow.Net.Internal.Service
 {
@@ -78,7 +80,7 @@ namespace SignNow.Net.Internal.Service
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
-                SignNowException snException = default;
+                var snException = new List<SignNowException>();
 
                 try
                 {
@@ -87,7 +89,7 @@ namespace SignNow.Net.Internal.Service
 
                     if (null != errorResponse.Errors)
                     {
-                        snException = (SignNowException)errorResponse.Errors?.Select(e => new SignNowException(e.Message));
+                        snException.Add((SignNowException)errorResponse.Errors?.Select(e => new SignNowException(e.Message)));
                     }
 
                     apiError = errorResponse.GetErrorMessage();
