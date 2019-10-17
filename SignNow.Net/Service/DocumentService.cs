@@ -15,16 +15,18 @@ namespace SignNow.Net.Service
         {
 
         }
+
         public DocumentService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
         {
 
         }
+
         internal protected DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
 
         }
 
-        ///<inheritdoc/>
+        /// <inheritdoc />
         public async Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, "/link");
@@ -51,13 +53,13 @@ namespace SignNow.Net.Service
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        ///<inheritdoc/>
+        /// <inheritdoc />
         public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
             return await UploadDocumentAsync("/document", documentContent, fileName, cancellationToken).ConfigureAwait(false);
         }
 
-        ///<inheritdoc/>
+        /// <inheritdoc />
         public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
             return await UploadDocumentAsync("/document/fieldextract", documentContent, fileName, cancellationToken).ConfigureAwait(false);
