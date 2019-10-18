@@ -80,7 +80,7 @@ namespace SignNow.Net.Internal.Service
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
-                var snException = new List<SignNowException>();
+                var snException = new SignNowException[0];
 
                 try
                 {
@@ -89,7 +89,7 @@ namespace SignNow.Net.Internal.Service
 
                     if (null != errorResponse.Errors)
                     {
-                        snException.Add((SignNowException)errorResponse.Errors?.Select(e => new SignNowException(e.Message)));
+                        snException = errorResponse.Errors?.Select(e => new SignNowException(e.Message)).ToArray();
                     }
 
                     apiError = errorResponse.GetErrorMessage();
