@@ -89,7 +89,7 @@ namespace SignNow.Net.Internal.Service
 
                     if (null != errorResponse.Errors)
                     {
-                        snException = errorResponse.Errors?.Select(e => new SignNowException(e.Message)).ToArray();
+                        snException = errorResponse.Errors.Select(e => new SignNowException(e.Message)).ToArray();
                     }
 
                     apiError = errorResponse.GetErrorMessage();
