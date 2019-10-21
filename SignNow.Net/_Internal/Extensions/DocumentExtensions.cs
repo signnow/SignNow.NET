@@ -23,9 +23,8 @@ namespace SignNow.Net.Internal.Extensions
             if (!regex.IsMatch(documentId))
             {
                 throw new ArgumentException(
-                    "Wrong Document Id <" +
-                    documentId +
-                    ">. Allowed format should contains chars only [a-zA-Z0-9_] and lenght should be 40 symbols."
+                    "Invalid format of Document Id <" + documentId + ">. " +
+                    "The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed."
                     );
             }
 

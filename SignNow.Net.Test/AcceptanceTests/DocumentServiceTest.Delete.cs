@@ -37,7 +37,7 @@ namespace AcceptanceTests
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
 
             var regex = new Regex(@"^[a-zA-Z0-9_]{40,40}$");
-            var message = "Wrong Document Id <" + documentId + ">. Allowed format should contains chars only [a-zA-Z0-9_] and lenght should be 40 symbols.";
+            var message = "Invalid format of Document Id <" + documentId + ">. The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.";
 
             Assert.IsFalse(regex.IsMatch(documentId), documentId);
 
