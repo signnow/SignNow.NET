@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace SignNow.Net.Exceptions
 {
@@ -10,16 +11,33 @@ namespace SignNow.Net.Exceptions
 
         public HttpStatusCode HttpStatusCode
         {
-            get
-            {
-                return this.httpStatusCode;
-            }
+            get { return httpStatusCode; }
 
             set
             {
                 Data["HttpStatusCode"] = (int)value;
-                this.httpStatusCode = value;
+                httpStatusCode = value;
             }
+        }
+
+        public HttpResponseHeaders RawHeaders
+        {
+            get
+            {
+                return Data.Contains("RawHeaders") ? (HttpResponseHeaders)Data["RawHeaders"] : default;
+            }
+
+            set { Data["RawHeaders"] = value; }
+        }
+
+        public string RawResponse
+        {
+            get
+            {
+                return Data.Contains("RawResponse") ? (string)Data["RawResponse"] : String.Empty;
+            }
+
+            set { Data["RawResponse"] = value;  }
         }
 
         public SignNowException() { }
@@ -54,7 +72,7 @@ namespace SignNow.Net.Exceptions
         /// <param name="message">The error message that explains the reason for the exception. </param>
         public SignNowException(string message, HttpStatusCode httpStatusCode) : base(message)
         {
-            this.HttpStatusCode = httpStatusCode;
+            HttpStatusCode = httpStatusCode;
         }
     }
 }

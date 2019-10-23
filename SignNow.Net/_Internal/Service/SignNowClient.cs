@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
@@ -8,9 +7,11 @@ using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
 using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SignNow.Net.Internal.Service
 {
@@ -42,7 +43,7 @@ namespace SignNow.Net.Internal.Service
         /// <returns></returns>
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);           
+            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -61,32 +62,48 @@ namespace SignNow.Net.Internal.Service
             using (var request = CreateHttpRequest(requestOptions))
             using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                await ProcessErroResponse(response);
+                await ProcessErrorResponse(response).ConfigureAwait(false);
 
                 return await adapter.Adapt(response.Content).ConfigureAwait(false);
             }
         }
 
-        private async Task ProcessErroResponse(HttpResponseMessage response)
+        /// <summary>
+        /// Process Error Response to prepare SignNow Exception
+        /// </summary>
+        /// <param name="response"></param>
+        /// <exception cref="SignNowException">SignNow Exception.</exception>
+        /// <returns></returns>
+        private async Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
+                var snException = new SignNowException[0];
 
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
                     var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
 
-                    apiError = errorResponse.GetErrorMessage();
+                    if (null != errorResponse.Errors)
+                    {
+                        snException = errorResponse.Errors.Select(e => new SignNowException(e.Message)).ToArray();
+                    }
 
+                    apiError = errorResponse.GetErrorMessage();
                 }
                 catch (JsonSerializationException)
                 {
                 }
 
-                throw new SignNowException(apiError, response.StatusCode);
+                throw new SignNowException(apiError, snException)
+                {
+                    RawHeaders = response.Headers,
+                    RawResponse = response.Content.ReadAsStringAsync().Result,
+                    HttpStatusCode = response.StatusCode
+                };
             }
         }
 
@@ -94,6 +111,7 @@ namespace SignNow.Net.Internal.Service
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
         /// </summary>
         /// <param name="requestOptions"></param>
+        /// <exception cref="ArgumentException">The <paramref name="requestOptions">RequestUrl</paramref> argument is a null.</exception>
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
@@ -105,7 +123,7 @@ namespace SignNow.Net.Internal.Service
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
             if (requestOptions.Token != null)
-            {                
+            {
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAuthorizationHeaderValue());
             }
 
