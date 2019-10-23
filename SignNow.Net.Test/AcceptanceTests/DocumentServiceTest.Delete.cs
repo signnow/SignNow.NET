@@ -1,8 +1,10 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Test;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AcceptanceTests
 {
@@ -22,27 +24,37 @@ namespace AcceptanceTests
                 );
         }
 
-        [DataRow("da057e65e97c9fa6b96485ca4970260f30958001", "internal api error")]
-        [DataRow("da057e65e97c9fa6b", @"Unable to find a route to match the URI: document/da057e65e97c9fa6b")]
-        [DataRow("test", @"Unable to find a route to match the URI: document/test")]
+        [DataRow("da057e65e97c9fa6b96485ca4970260f309580019999")]
+        [DataRow("da057e65e97c9fa6b9648")]
+        [DataRow("test")]
+        [DataRow("#")]
+        [DataRow("--test-------------------------------------")]
+        [DataRow("_valid_part_of_document_id_____________!")]
+        [DataRow("000000000000000000000000000000000000000 ")]
         [DataTestMethod]
-        public void Cannot_Delete_Document_with_wrong_ID(string documentId, string errorMessage)
+        public void Cannot_Delete_Document_With_Wrong_ID(string documentId)
         {
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
+
+            var regex = new Regex(@"^[a-zA-Z0-9_]{40,40}$");
+            var message = "Invalid format of Document Id <" + documentId + ">. The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.";
+
+            Assert.IsFalse(regex.IsMatch(documentId), documentId);
 
             try
             {
                 Task.WaitAll(deleteResponse);
             }
-            catch (SignNowException ex)
+            catch (AggregateException ex)
             {
-                Assert.AreEqual(ex.Message, errorMessage);
+                foreach (var exception in ex.InnerExceptions)
+                {
+                    Console.WriteLine(documentId);
+                    Assert.AreEqual(message, exception.Message);
+
+                }
             }
-            catch
-            {
-                Assert.AreEqual(deleteResponse.Exception.InnerException.Message, errorMessage);
-            }
-        }     
+        }
 
         private string UploadTestDocument(string filePath)
         {

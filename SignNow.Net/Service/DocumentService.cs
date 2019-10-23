@@ -1,4 +1,5 @@
 using SignNow.Net.Internal.Constants;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
@@ -42,7 +43,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = "/document/" + documentId;
+            var requestedDocument = "/document/" + documentId.ValidateDocumentId();
 
             var requestOptions = new DeleteHttpRequestOptions
             {
@@ -74,6 +75,7 @@ namespace SignNow.Net.Service
                 Content = new FileHttpContent(documentContent, fileName),
                 Token = this.Token
             };
+
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }
