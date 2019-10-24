@@ -2,6 +2,7 @@ using System.IO;
 using System.Net.Http;
 using SignNow.Net.Interfaces;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SignNow.Net.Internal.Requests
 {
@@ -19,13 +20,13 @@ namespace SignNow.Net.Internal.Requests
             this.fileName = fileName;
         }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose HttpContent object before losing scope", Justification = "It should be disposed via HttpContent.Dispose()")]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:ToString('N') could vary depend on locale settings", Justification = "Currently IFormatProvider is reserved and does not contribute to method execution")]
         public HttpContent GetHttpContent()
         {
             //return CreateStreamContent(this.streamContent);
             var content = new MultipartFormDataContent($"----{Guid.NewGuid().ToString("N")}-----");
-#pragma warning disable CA2000 // Dispose objects before losing scope. It should be disposed via HttpContent.Dispose()
             content.Add(new StreamContent(streamContent), "file", fileName);
-#pragma warning restore CA2000 // Dispose objects before losing scope
             return content;
         }
     }
