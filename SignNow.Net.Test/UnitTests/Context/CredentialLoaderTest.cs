@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Test.Context;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace UnitTests
@@ -57,6 +58,7 @@ namespace UnitTests
         }
 
         [TestMethod]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:string.Format could vary based on locale", Justification = "Locale is not used for this test")]
         public void ItCanObtainProperFilePath()
         {
             var testCredentialLoader = new CredentialLoader(this.testUrl);

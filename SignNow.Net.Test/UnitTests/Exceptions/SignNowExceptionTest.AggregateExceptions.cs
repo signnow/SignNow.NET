@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,6 +10,7 @@ using SignNow.Net.Internal.Model;
 
 namespace UnitTests
 {
+    [SuppressMessage("Microsoft.Globalization", "CA1303:Message string literals should be taken from resource file", Justification = "In the unit tests below no reason to use resource file")]
     public partial class SignNowExceptionTest
     {
         [TestMethod]
@@ -28,6 +30,7 @@ namespace UnitTests
         }
 
         [TestMethod]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:StringBuilder.AppendFormat could vary based on locale", Justification = "Locale is not used for this test")]
         public void Exception_Contains_Exceptions_List()
         {
             var snExceptions = new List<SignNowException>();
@@ -61,6 +64,7 @@ namespace UnitTests
         [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error\"}]}", HttpStatusCode.BadRequest)]
         [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error1\"},{\"code\": 65542,\"message\": \"internal api error2\"}]}", HttpStatusCode.BadRequest)]
         [DataRow("{\"404\": \"Unable to find a route to match the URI: event_subscription\"}", HttpStatusCode.BadRequest)]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:String.Format could vary based on locale", Justification = "Locale is not used for this test")]
         public void Exception_Handled_As_Aggregation(string errors, HttpStatusCode statusCode)
         {
             var items = 3;

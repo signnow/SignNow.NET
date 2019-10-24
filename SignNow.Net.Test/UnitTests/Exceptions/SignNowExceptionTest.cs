@@ -1,17 +1,16 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace UnitTests
 {
+    [SuppressMessage("Microsoft.Globalization", "CA1303:Message string literals should be taken from resource file", Justification = "In the unit tests below no reason to use resource file")]
     [TestClass]
     public partial class SignNowExceptionTest
     {
         private const string testMessage = "Test Exception Message";
-
-        private readonly string assertExceptionPropertyShouldHaveValue = "Exception '{0}' should have '{1}'";
-        private readonly string assertExceptionPropertyShouldBe        = "Exception '{0}' should be '{1}'";
 
         [TestMethod]
         public void Exception_Has_Message()
