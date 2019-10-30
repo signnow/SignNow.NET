@@ -28,6 +28,11 @@ Bugs fixed:
         <PackageIconUrl>https://avatars0.githubusercontent.com/u/3308995?s=200&amp;v=4</PackageIconUrl>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NeutralLanguage>en-US</NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <NoWarn>1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -61,4 +66,19 @@ Bugs fixed:
         <NeutralLanguage>en-US</NeutralLanguage>
     </PropertyGroup>
 
+
+    <ItemGroup>
+      <Compile Update="Exceptions\ExceptionMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ExceptionMessages.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Exceptions\ExceptionMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
 </Project>

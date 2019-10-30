@@ -9,7 +9,7 @@ namespace SignNow.Net.Internal.Requests
     /// </summary>
     internal class FormUrlEncodedHttpContent : IContent
     {
-        private IDictionary<string, string> formData;
+        private readonly IDictionary<string, string> formData;
 
         public FormUrlEncodedHttpContent(IDictionary<string, string> nameValueCollection)
         {

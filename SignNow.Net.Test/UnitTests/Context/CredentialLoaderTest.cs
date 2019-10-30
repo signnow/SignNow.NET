@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Test.Context;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace UnitTests
@@ -11,9 +12,9 @@ namespace UnitTests
         /// <summary>
         /// User Home Dir relative to OS
         /// </summary>
-        private string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private readonly string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-        private string testDomain = @"https://api.signnow.test";
+        private readonly string testDomain = @"https://api.signnow.test";
         private Uri testUrl;
 
         private string testCredentialFile;
@@ -57,6 +58,7 @@ namespace UnitTests
         }
 
         [TestMethod]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:string.Format could vary based on locale", Justification = "Locale is not used for this test")]
         public void ItCanObtainProperFilePath()
         {
             var testCredentialLoader = new CredentialLoader(this.testUrl);

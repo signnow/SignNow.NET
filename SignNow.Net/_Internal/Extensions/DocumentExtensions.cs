@@ -10,7 +10,7 @@ namespace SignNow.Net.Internal.Extensions
         /// Allowed format must be: 40-chars
         /// Allowed chars: digist, symbols a-z A-Z, underscore
         /// </summary>
-        private static string documentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
+        private const string documentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
         /// <summary>
         /// Validates Document ID

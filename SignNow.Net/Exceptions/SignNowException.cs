@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 
 namespace SignNow.Net.Exceptions
 {
+#if NET45 || NETSTANDARD2_0
+    [Serializable]
+#endif
     public class SignNowException : AggregateException
     {
         private HttpStatusCode httpStatusCode;
@@ -70,9 +75,14 @@ namespace SignNow.Net.Exceptions
         /// with a specified error message and response status code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception. </param>
+        /// <param name="httpStatusCode">Http status code related to exception</param>
         public SignNowException(string message, HttpStatusCode httpStatusCode) : base(message)
         {
             HttpStatusCode = httpStatusCode;
         }
+
+    #if NET45 || NETSTANDARD2_0
+        protected SignNowException(SerializationInfo info, StreamingContext context) : base (info, context) { }
+    #endif
     }
 }

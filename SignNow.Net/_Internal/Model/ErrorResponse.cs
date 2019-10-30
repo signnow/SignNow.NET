@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -19,6 +20,7 @@ namespace SignNow.Net.Internal.Model
         public string Error404 { get; set; }
 
         [JsonProperty("errors")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:Change Errors to be readonly", Justification = "Json deserialization will not work without set")]
         public List<ErrorResponseContext> Errors { get; set; }
 
         public string GetErrorMessage()

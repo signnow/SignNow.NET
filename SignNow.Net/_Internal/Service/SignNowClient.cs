@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SignNow.Net.Internal.Service
 {
@@ -29,7 +30,7 @@ namespace SignNow.Net.Internal.Service
         {
 #if NET45
             // With .NET Framework 4.5, it's necessary to manually enable support for TLS 1.2.
-            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
         }
@@ -74,31 +75,33 @@ namespace SignNow.Net.Internal.Service
         /// <param name="response"></param>
         /// <exception cref="SignNowException">SignNow Exception.</exception>
         /// <returns></returns>
-        private async Task ProcessErrorResponse(HttpResponseMessage response)
+        [SuppressMessage("Microsoft.Performance", "CA1825:Unnecessary zero-length array allocation", Justification = "Solution Array.Empty<>() works only for .NetStandard2.0, no significant memory or performance improvement")]
+        private async static Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
                 var snException = new SignNowException[0];
-
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
                     var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
 
-                    if (null != errorResponse.Errors)
+                    if (errorResponse.Errors?.Count > 1)
                     {
                         snException = errorResponse.Errors.Select(e => new SignNowException(e.Message)).ToArray();
                     }
 
                     apiError = errorResponse.GetErrorMessage();
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (JsonSerializationException)
                 {
                 }
+#pragma warning restore CA1031 // Do not catch general exception types
 
-                throw new SignNowException(apiError, snException)
+                throw new SignNowException(apiError,snException)
                 {
                     RawHeaders = response.Headers,
                     RawResponse = response.Content.ReadAsStringAsync().Result,
@@ -113,11 +116,11 @@ namespace SignNow.Net.Internal.Service
         /// <param name="requestOptions"></param>
         /// <exception cref="ArgumentException">The <paramref name="requestOptions">RequestUrl</paramref> argument is a null.</exception>
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
-        private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
+        private static HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
             if (requestOptions.RequestUrl == null)
             {
-                throw new ArgumentException("RequestUrl cannot be empty or null.");
+                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull); 
             }
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
