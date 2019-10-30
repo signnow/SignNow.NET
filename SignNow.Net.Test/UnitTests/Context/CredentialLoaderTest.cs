@@ -12,9 +12,9 @@ namespace UnitTests
         /// <summary>
         /// User Home Dir relative to OS
         /// </summary>
-        private string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        private readonly string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-        private string testDomain = @"https://api.signnow.test";
+        private readonly string testDomain = @"https://api.signnow.test";
         private Uri testUrl;
 
         private string testCredentialFile;

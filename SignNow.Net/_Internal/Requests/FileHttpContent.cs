@@ -25,8 +25,10 @@ namespace SignNow.Net.Internal.Requests
         public HttpContent GetHttpContent()
         {
             //return CreateStreamContent(this.streamContent);
-            var content = new MultipartFormDataContent($"----{Guid.NewGuid().ToString("N")}-----");
-            content.Add(new StreamContent(streamContent), "file", fileName);
+            var content = new MultipartFormDataContent($"----{Guid.NewGuid().ToString("N")}-----")
+            {
+                { new StreamContent(streamContent), "file", fileName }
+            };
             return content;
         }
     }

@@ -7,7 +7,7 @@ namespace SignNow.Net.Internal.Requests
 {
     internal class JsonHttpContent : IContent
     {
-        private object contentBody;
+        private readonly object contentBody;
 
         public JsonHttpContent(object contentBody)
         {

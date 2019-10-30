@@ -74,7 +74,7 @@ namespace UnitTests
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errors);
             var errorMsg = errorResponse.GetErrorMessage();
 
-            Action<ErrorResponse, HttpStatusCode> responseJob = (ErrorResponse err, HttpStatusCode httpStatus) =>
+            void responseJob(ErrorResponse err, HttpStatusCode httpStatus)
             {
                 if (err.Errors != null)
                 {
@@ -94,7 +94,7 @@ namespace UnitTests
                 }
 
                 throw new SignNowException(errorResponse.GetErrorMessage(), httpStatus);
-            };
+            }
 
             for (var i = 0; i < items; i++)
             {

@@ -30,7 +30,7 @@ namespace SignNow.Net.Internal.Service
         {
 #if NET45
             // With .NET Framework 4.5, it's necessary to manually enable support for TLS 1.2.
-            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
         }
@@ -101,6 +101,7 @@ namespace SignNow.Net.Internal.Service
                 }
                 catch (JsonSerializationException)
                 {
+                    throw;
                 }
 
                 throw new SignNowException(apiError, snException)
