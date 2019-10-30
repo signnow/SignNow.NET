@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
@@ -25,7 +25,7 @@ Bugs fixed:
 - Fixed IOException: Authentication failed because the remote party has closed the transport stream in .NET 4.5 project.
 
 - Fixed some code annotations to be visible via IntelliSense.</PackageReleaseNotes>
-        <PackageIconUrl>https://avatars0.githubusercontent.com/u/3308995?s=200&amp;v=4</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
@@ -34,7 +34,9 @@ Bugs fixed:
     <PropertyGroup>
       <NoWarn>1591</NoWarn>
     </PropertyGroup>
-
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
           <PrivateAssets>all</PrivateAssets>
