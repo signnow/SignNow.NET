@@ -12,6 +12,7 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <param name="fileName">Uploaded document file name</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
         Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
@@ -20,6 +21,7 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <param name="fileName">Uploaded document file name</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
         Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 

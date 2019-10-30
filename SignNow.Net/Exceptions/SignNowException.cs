@@ -75,6 +75,7 @@ namespace SignNow.Net.Exceptions
         /// with a specified error message and response status code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception. </param>
+        /// <param name="httpStatusCode">Http status code related to exception</param>
         public SignNowException(string message, HttpStatusCode httpStatusCode) : base(message)
         {
             HttpStatusCode = httpStatusCode;
