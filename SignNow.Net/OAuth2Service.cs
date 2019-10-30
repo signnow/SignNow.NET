@@ -81,17 +81,15 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
-        [SuppressMessage("Temporary", "CS1998:Method lacks await", Justification = "Suppressed till method not implemented")]
-        public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        [SuppressMessage("Temporary", "CS1998:Method lacks await", Justification = "Suppressed till method not implemented")]
-        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
         {

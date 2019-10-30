@@ -75,18 +75,14 @@ namespace SignNow.Net.Internal.Service
         /// <param name="response"></param>
         /// <exception cref="SignNowException">SignNow Exception.</exception>
         /// <returns></returns>
-        [SuppressMessage("", "CA1822:Method does not access instance data and can be marked as static", Justification = "Method is private and used inside instance method, it will not be used without the instance")]
-        private async Task ProcessErrorResponse(HttpResponseMessage response)
+        [SuppressMessage("Microsoft.Performance", "CA1825:Unnecessary zero-length array allocation", Justification = "Solution Array.Empty<>() works only for .NetStandard2.0, no significant memory or performance improvement")]
+        private async static Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
                 var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiError = context;
-#if NETSTANDARD2_0
-                var snException = Array.Empty<SignNowException>(); 
-#else
                 var snException = new SignNowException[0];
-#endif
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
@@ -119,8 +115,7 @@ namespace SignNow.Net.Internal.Service
         /// <param name="requestOptions"></param>
         /// <exception cref="ArgumentException">The <paramref name="requestOptions">RequestUrl</paramref> argument is a null.</exception>
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
-        [SuppressMessage("", "CA1822:Method does not access instance data and can be marked as static", Justification = "Method is private and used inside instance method, it will not be used without the instance")]
-        private HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
+        private static HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
             if (requestOptions.RequestUrl == null)
             {

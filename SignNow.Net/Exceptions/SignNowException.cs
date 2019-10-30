@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 
 namespace SignNow.Net.Exceptions
 {
-    [SuppressMessage("Microsoft.Usage", "CA2237:Mark with SerializableAttribute as Exception implements ISeriazable", Justification = "It is required in case of several AppDomains are used")]
+#if NET45 || NETSTANDARD2_0
+    [Serializable]
+#endif
     public class SignNowException : AggregateException
     {
         private HttpStatusCode httpStatusCode;
@@ -76,5 +79,9 @@ namespace SignNow.Net.Exceptions
         {
             HttpStatusCode = httpStatusCode;
         }
+
+    #if NET45 || NETSTANDARD2_0
+        protected SignNowException(SerializationInfo info, StreamingContext context) : base (info, context) { }
+    #endif
     }
 }
