@@ -88,19 +88,20 @@ namespace SignNow.Net.Internal.Service
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
                     var errorResponse = await converter.Adapt(response.Content).ConfigureAwait(false);
 
-                    if (null != errorResponse.Errors)
+                    if (errorResponse.Errors?.Count > 1)
                     {
                         snException = errorResponse.Errors.Select(e => new SignNowException(e.Message)).ToArray();
                     }
 
                     apiError = errorResponse.GetErrorMessage();
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (JsonSerializationException)
                 {
-                    throw;
                 }
+#pragma warning restore CA1031 // Do not catch general exception types
 
-                throw new SignNowException(apiError, snException)
+                throw new SignNowException(apiError,snException)
                 {
                     RawHeaders = response.Headers,
                     RawResponse = response.Content.ReadAsStringAsync().Result,
