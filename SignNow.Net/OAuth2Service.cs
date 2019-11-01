@@ -54,7 +54,7 @@ namespace SignNow.Net
 
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
             var body = new Dictionary<string, string>
@@ -68,7 +68,7 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
         {
             var body = new Dictionary<string, string>
@@ -81,6 +81,7 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
