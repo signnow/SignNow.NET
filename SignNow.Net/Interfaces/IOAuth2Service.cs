@@ -19,7 +19,7 @@ namespace SignNow.Net.Interfaces
 
         Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default);
 
-        //Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default);
+        Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default);
 
         Uri GetAuthorizationUrl(Uri redirectUrl);
 
