@@ -19,6 +19,8 @@ namespace SignNow.Net
         private string ClientId { get; set; }
         private string ClientSecret { get; set; }
 
+        private Uri OAuthRequestUrl { get; set; }
+
         public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
         {
         }
@@ -31,9 +33,10 @@ namespace SignNow.Net
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
+            OAuthRequestUrl = new Uri(ApiBaseUrl, "oauth2/token");
         }
 
-        ///<inheritdoc/>
+        /// <inheritdoc />
         public Uri GetAuthorizationUrl(Uri redirectUrl)
         {
             if (redirectUrl == null)
@@ -96,20 +99,26 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var options = new GetHttpRequestOptions()
+            {
+                Token = new Token { AccessToken = token.AccessToken, TokenType = TokenType.Bearer },
+                RequestUrl = OAuthRequestUrl
+        };
+
+            var validToken = await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+
+            return validToken.AccessToken == token.AccessToken;
         }
 
         async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
         {
-            var url = new Uri(ApiBaseUrl, "oauth2/token");
-
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
             var options = new PostHttpRequestOptions()
             {
                 Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
                 Content = new FormUrlEncodedHttpContent(body),
-                RequestUrl = url
+                RequestUrl = OAuthRequestUrl
             };
 
             return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
