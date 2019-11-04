@@ -15,15 +15,15 @@ namespace AcceptanceTests
             TestToken = authObjectParam2.
                 GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All).
                 Result;
+
+            Assert.IsNotNull(TestToken, "Token is null");
+            Assert.IsFalse(String.IsNullOrEmpty(TestToken.AccessToken));
+            Assert.IsFalse(String.IsNullOrEmpty(TestToken.RefreshToken));
         }
 
         [TestMethod]
         public void Should_Refresh_Token()
         {
-            Assert.IsNotNull(TestToken, "Token is null");
-            Assert.IsFalse(String.IsNullOrEmpty(TestToken.AccessToken));
-            Assert.IsFalse(String.IsNullOrEmpty(TestToken.RefreshToken));
-
             var freshToken = authObjectParam2.
                 RefreshTokenAsync(TestToken).
                 Result;
@@ -35,10 +35,6 @@ namespace AcceptanceTests
         [TestMethod]
         public void Should_Validate_Access_Token()
         {
-            Assert.IsNotNull(TestToken, "Token is null");
-            Assert.IsFalse(String.IsNullOrEmpty(TestToken.AccessToken));
-            Assert.IsFalse(String.IsNullOrEmpty(TestToken.RefreshToken));
-
             var validToken = authObjectParam3.
                 ValidateTokenAsync(TestToken).
                 Result;
