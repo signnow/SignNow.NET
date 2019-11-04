@@ -7,6 +7,8 @@ namespace SignNow.Net.Interfaces
 {
     public interface IOAuth2Service
     {
+        Uri GetAuthorizationUrl(Uri redirectUrl);
+
         /// <summary>
         /// Retrieve Access token by user's login and password
         /// </summary>
@@ -34,8 +36,12 @@ namespace SignNow.Net.Interfaces
         /// <returns><see cref="Token" /> object</returns>
         Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default);
 
-        Uri GetAuthorizationUrl(Uri redirectUrl);
-
-        //Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Verify an access token for a user
+        /// </summary>
+        /// <param name="token">User's access <see cref="Token" /></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns><see cref="Boolean" /></returns>
+        Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default);
     }
 }

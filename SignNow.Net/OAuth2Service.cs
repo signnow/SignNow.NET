@@ -93,10 +93,11 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
-        //public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <inheritdoc />
+        public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
 
         async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
         {
