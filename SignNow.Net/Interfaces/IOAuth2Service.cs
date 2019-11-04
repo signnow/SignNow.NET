@@ -7,6 +7,12 @@ namespace SignNow.Net.Interfaces
 {
     public interface IOAuth2Service
     {
+        /// <summary>
+        /// Returns authorization URI for OAuth2 flow
+        /// </summary>
+        /// <param name="redirectUrl"></param>
+        /// <returns><see cref="Uri" /></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="redirectUrl" /> argument is a null.</exception>
         Uri GetAuthorizationUrl(Uri redirectUrl);
 
         /// <summary>
@@ -34,6 +40,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="token">User's access <see cref="Token" /></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns><see cref="Token" /> object</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="token"/> argument is a null.</exception>
         Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -42,6 +49,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="token">User's access <see cref="Token" /></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns><see cref="Boolean" /></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="token"/> argument is a null.</exception>
         Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default);
     }
 }

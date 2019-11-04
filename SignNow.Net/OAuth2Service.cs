@@ -87,6 +87,9 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
+
             var body = new Dictionary<string, string>
             {
                 { "grant_type", "refresh_token" },
@@ -99,11 +102,14 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
-            var options = new GetHttpRequestOptions()
+            if (token == null)
+                throw new ArgumentNullException(nameof(token));
+
+            var options = new GetHttpRequestOptions
             {
                 Token = new Token { AccessToken = token.AccessToken, TokenType = TokenType.Bearer },
                 RequestUrl = OAuthRequestUrl
-        };
+            };
 
             var validToken = await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
 
@@ -114,7 +120,7 @@ namespace SignNow.Net
         {
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
-            var options = new PostHttpRequestOptions()
+            var options = new PostHttpRequestOptions
             {
                 Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
                 Content = new FormUrlEncodedHttpContent(body),
