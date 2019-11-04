@@ -22,9 +22,9 @@ namespace AcceptanceTests
         [TestMethod]
         public void ExceptionHandlingTest()
         {
-            var documentId = "mstestSignNowDotNetSDK";
-            var errorMessage = "Unable to find a route to match the URI: document/mstestSignNowDotNetSDK";
-            var rawErrorResponse = "{\"404\":\"Unable to find a route to match the URI: document\\/mstestSignNowDotNetSDK\"}";
+            var documentId = "mstestSignNowDotNetSDK000000000000000000";
+            var errorMessage = "Unable to find a route to match the URI: document/" + documentId;
+            var rawErrorResponse = "{\"404\":\"Unable to find a route to match the URI: document\\/" + documentId + "\"}";
 
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
 
