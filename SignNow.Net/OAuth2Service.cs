@@ -84,7 +84,13 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var body = new Dictionary<string, string>
+            {
+                { "grant_type", "refresh_token" },
+                { "refresh_token", token.RefreshToken }
+            };
+
+            return await ExecuteTokenRequest(body).ConfigureAwait(false);
         }
 
         //public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)

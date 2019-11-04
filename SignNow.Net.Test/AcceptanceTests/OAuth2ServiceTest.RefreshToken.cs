@@ -20,6 +20,15 @@ namespace AcceptanceTests
             Assert.IsNotNull(token, "Token is null");
             Assert.IsFalse(String.IsNullOrEmpty(token.AccessToken));
             Assert.IsFalse(String.IsNullOrEmpty(token.RefreshToken));
+
+            var refreshTask = authObjectParam2.RefreshTokenAsync(token);
+
+            Task.WaitAll(refreshTask);
+
+            var freshToken = refreshTask.Result;
+
+            Assert.IsNotNull(freshToken, "Token is null");
+            Assert.AreNotSame(token.AccessToken, freshToken.AccessToken, "Token is not refreshed");
         }
     }
 }
