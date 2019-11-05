@@ -1,3 +1,4 @@
+using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
@@ -105,15 +106,24 @@ namespace SignNow.Net
             if (token == null)
                 throw new ArgumentNullException(nameof(token));
 
+            var isTokenValid = false;
             var options = new GetHttpRequestOptions
             {
                 Token = new Token { AccessToken = token.AccessToken, TokenType = TokenType.Bearer },
                 RequestUrl = OAuthRequestUrl
             };
 
-            var validToken = await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+            try
+            {
+                var validToken = await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+                isTokenValid = validToken.AccessToken == token.AccessToken;
+            }
+            catch (SignNowException ex)
+            {
+                isTokenValid &= ex.Message == "invalid_token";
+            }
 
-            return validToken.AccessToken == token.AccessToken;
+            return isTokenValid;
         }
 
         async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)

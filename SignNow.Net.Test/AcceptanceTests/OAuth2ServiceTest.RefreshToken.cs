@@ -41,5 +41,22 @@ namespace AcceptanceTests
 
             Assert.IsTrue(validToken);
         }
+
+        [TestMethod]
+        public void Should_Validate_Wrong_Access_Token()
+        {
+            var wrongToken = new Token
+            {
+                AccessToken = "wrongToken",
+                RefreshToken = "wrongRefreshToken",
+                Scope = Scope.All.ToString()
+            };
+
+            var validToken = authObjectParam3.
+                ValidateTokenAsync(wrongToken).
+                Result;
+
+            Assert.IsFalse(validToken);
+        }
     }
 }
