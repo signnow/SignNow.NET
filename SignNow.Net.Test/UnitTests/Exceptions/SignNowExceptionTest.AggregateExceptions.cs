@@ -58,80 +58,80 @@ namespace UnitTests
             }
         }
 
-        [TestMethod]
-        [DataRow("{\"error\": \"invalid_request\"}", HttpStatusCode.BadRequest)]
-        [DataRow("{\"error\": \"invalid_token\",\"code\": 1537}", HttpStatusCode.BadRequest)]
-        [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error\"}]}", HttpStatusCode.BadRequest)]
-        [DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error1\"},{\"code\": 65542,\"message\": \"internal api error2\"}]}", HttpStatusCode.BadRequest)]
-        [DataRow("{\"404\": \"Unable to find a route to match the URI: event_subscription\"}", HttpStatusCode.BadRequest)]
-        [SuppressMessage("Microsoft.Globalization", "CA1305:String.Format could vary based on locale", Justification = "Locale is not used for this test")]
-        public void Exception_Handled_As_Aggregation(string errors, HttpStatusCode statusCode)
-        {
-            var items = 3;
+        //[TestMethod]
+        //[DataRow("{\"error\": \"invalid_request\"}", HttpStatusCode.BadRequest)]
+        //[DataRow("{\"error\": \"invalid_token\",\"code\": 1537}", HttpStatusCode.BadRequest)]
+        //[DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error\"}]}", HttpStatusCode.BadRequest)]
+        //[DataRow("{\"errors\": [{\"code\": 65541,\"message\": \"internal api error1\"},{\"code\": 65542,\"message\": \"internal api error2\"}]}", HttpStatusCode.BadRequest)]
+        //[DataRow("{\"404\": \"Unable to find a route to match the URI: event_subscription\"}", HttpStatusCode.BadRequest)]
+        //[SuppressMessage("Microsoft.Globalization", "CA1305:String.Format could vary based on locale", Justification = "Locale is not used for this test")]
+        //public void Exception_Handled_As_Aggregation(string errors, HttpStatusCode statusCode)
+        //{
+        //    var items = 3;
 
-            var snExceptions = new List<SignNowException>();
-            var erroredTasks = new System.Threading.Tasks.Task[items];
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errors);
-            var errorMsg = errorResponse.GetErrorMessage();
+        //    var snExceptions = new List<SignNowException>();
+        //    var erroredTasks = new System.Threading.Tasks.Task[items];
+        //    var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errors);
+        //    var errorMsg = errorResponse.GetErrorMessage();
 
-            void responseJob(ErrorResponse err, HttpStatusCode httpStatus)
-            {
-                if (err.Errors != null)
-                {
-                    var innerSnExc = new List<SignNowException>();
+        //    void responseJob(ErrorResponse err, HttpStatusCode httpStatus)
+        //    {
+        //        if (err.Errors != null)
+        //        {
+        //            var innerSnExc = new List<SignNowException>();
 
-                    foreach (ErrorResponseContext error in err.Errors)
-                    {
-                        innerSnExc.Add(new SignNowException(error.Message, httpStatus));
-                    }
+        //            foreach (ErrorResponseContext error in err.Errors)
+        //            {
+        //                innerSnExc.Add(new SignNowException(error.Message, httpStatus));
+        //            }
 
-                    var innerSnException = new SignNowException(errorResponse.GetErrorMessage(), innerSnExc) { HttpStatusCode = httpStatus };
+        //            var innerSnException = new SignNowException(errorResponse.GetErrorMessage(), innerSnExc) { HttpStatusCode = httpStatus };
 
-                    // Override error Message for case when 'Errors' contains several inner errors
-                    errorMsg = innerSnException.Message;
+        //            // Override error Message for case when 'Errors' contains several inner errors
+        //            errorMsg = innerSnException.Message;
 
-                    throw innerSnException;
-                }
+        //            throw innerSnException;
+        //        }
 
-                throw new SignNowException(errorResponse.GetErrorMessage(), httpStatus);
-            }
+        //        throw new SignNowException(errorResponse.GetErrorMessage(), httpStatus);
+        //    }
 
-            for (var i = 0; i < items; i++)
-            {
-                var jobid = i;
-                erroredTasks[i] = System.Threading.Tasks.Task.Run( () => responseJob(errorResponse, statusCode) );
-            }
+        //    for (var i = 0; i < items; i++)
+        //    {
+        //        var jobid = i;
+        //        erroredTasks[i] = System.Threading.Tasks.Task.Run( () => responseJob(errorResponse, statusCode) );
+        //    }
 
-            try
-            {
-                System.Threading.Tasks.Task.WaitAll(erroredTasks);
-            }
-            catch (AggregateException aEx)
-            {
-                foreach (SignNowException ex in aEx.InnerExceptions)
-                {
-                    Assert.AreEqual(errorMsg, ex.Message);
-                    Assert.AreEqual((int)statusCode, ex.Data["HttpStatusCode"]);
+        //    try
+        //    {
+        //        System.Threading.Tasks.Task.WaitAll(erroredTasks);
+        //    }
+        //    catch (AggregateException aEx)
+        //    {
+        //        foreach (SignNowException ex in aEx.InnerExceptions)
+        //        {
+        //            Assert.AreEqual(errorMsg, ex.Message);
+        //            Assert.AreEqual((int)statusCode, ex.Data["HttpStatusCode"]);
 
-                    snExceptions.Add(ex);
-                }
-            }
+        //            snExceptions.Add(ex);
+        //        }
+        //    }
 
-            try
-            {
-                throw new SignNowException("CollectedExceptions", snExceptions);
-            }
-            catch (SignNowException snExc)
-            {
-                foreach (SignNowException ex in snExc.InnerExceptions)
-                {
-                    Assert.AreEqual(errorMsg, ex.Message);
-                }
+        //    try
+        //    {
+        //        throw new SignNowException("CollectedExceptions", snExceptions);
+        //    }
+        //    catch (SignNowException snExc)
+        //    {
+        //        foreach (SignNowException ex in snExc.InnerExceptions)
+        //        {
+        //            Assert.AreEqual(errorMsg, ex.Message);
+        //        }
 
-                var expectedMsg = String.Format("CollectedExceptions ({0}) ({0}) ({0})", errorMsg);
+        //        var expectedMsg = String.Format("CollectedExceptions ({0}) ({0}) ({0})", errorMsg);
 
-                Assert.AreEqual(expectedMsg, snExc.Message);
-            }
-        }
+        //        Assert.AreEqual(expectedMsg, snExc.Message);
+        //    }
+        //}
     }
 }

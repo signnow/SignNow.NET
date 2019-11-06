@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
 {
-    public class ErrorResponse
+    class ErrorResponse
     {
         /// <summary>
         /// Error Message in some response cases

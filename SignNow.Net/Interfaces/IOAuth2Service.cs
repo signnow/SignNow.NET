@@ -48,7 +48,7 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="token">User's access <see cref="Token" /></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns><see cref="Boolean" /></returns>
+        /// <returns>true if token is valid</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="token"/> argument is a null.</exception>
         Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default);
     }

@@ -22,7 +22,5 @@ namespace SignNow.Net
         }
 
         public IDocumentService Documents { get; protected set; }
-
-        public IUserService Users { get; protected set; }
     }
 }
