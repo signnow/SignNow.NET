@@ -78,5 +78,19 @@ namespace SignNow.Net.Service
 
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<Stream> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestedDocument = "/document/" + documentId.ValidateDocumentId() + "/download";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                Token = this.Token
+            };
+
+            return await SignNowClient.RequestAsync<Stream>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
     }
 }
