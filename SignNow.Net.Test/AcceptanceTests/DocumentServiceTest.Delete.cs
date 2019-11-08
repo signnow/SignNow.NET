@@ -18,8 +18,8 @@ namespace AcceptanceTests
             var deleteResponse = docService.DeleteDocumentAsync(testDocumentId);
             Task.WaitAll(deleteResponse);
 
-            Assert.IsTrue(
-                deleteResponse.IsCompletedSuccessfully,
+            Assert.IsFalse(
+                deleteResponse.IsFaulted,
                 "Document Delete result has error, status code is not Successful"
                 );
         }
