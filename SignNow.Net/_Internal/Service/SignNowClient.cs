@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace SignNow.Net.Internal.Service
 {
@@ -53,16 +54,17 @@ namespace SignNow.Net.Internal.Service
         /// <param name="requestOptions"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
-            using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
+                var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
                 await ProcessErrorResponse(response).ConfigureAwait(false);
 
                 return await adapter.Adapt(response.Content).ConfigureAwait(false);

@@ -90,7 +90,7 @@ namespace SignNow.Net.Service
                 Token = this.Token
             };
 
-            return await SignNowClient.RequestAsync<Stream>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }
 }
