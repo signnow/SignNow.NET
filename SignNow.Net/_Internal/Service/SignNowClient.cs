@@ -36,24 +36,13 @@ namespace SignNow.Net.Internal.Service
             this.HttpClient = httpClient ?? new HttpClient();
         }
 
-        /// <summary>
-        /// HTTP requests are being made here
-        /// </summary>
-        /// <typeparam name="TResponse">Type (Model) of the response from the request</typeparam>
-        /// <param name="requestOptions"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
             return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// HTTP requests which returns Stream response
-        /// </summary>
-        /// <param name="requestOptions"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
             return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
