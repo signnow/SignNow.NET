@@ -17,7 +17,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// File length in bytes
         /// </summary>
-        public long Length { get; set; }
+        public long? Length { get; set; }
 
         /// <summary>
         /// File contents.

@@ -39,20 +39,34 @@ namespace SignNow.Net.Internal.Service
         /// <inheritdoc />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task<DownloadDocumentResponse> RequestResourceAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        {
+            return await RequestAsync(requestOptions, new HttpContentToResourceAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Process Request with request options and returns result object.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="requestOptions"></param>
+        /// <param name="adapter"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
             {
-                var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+                var response = await HttpClient.SendAsync(request, completionOption, cancellationToken).ConfigureAwait(false);
 
                 await ProcessErrorResponse(response).ConfigureAwait(false);
 

@@ -23,5 +23,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// HTTP requests which returns Resource response
+        /// </summary>
+        /// <param name="requestOptions"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<DownloadDocumentResponse> RequestResourceAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default);
     }
 }

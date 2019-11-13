@@ -48,7 +48,7 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="documentId">Identity of the document to create signing link for</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns>Operation result object containing URL to sign the document using web browser.</returns>
-        Task<Stream> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default);
+        /// <returns>Operation result object containing File info with Stream file content.</returns>
+        Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }

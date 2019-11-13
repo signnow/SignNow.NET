@@ -12,10 +12,10 @@ namespace AcceptanceTests
 
             var downloadResponse = docService.DownloadDocumentAsync(DocumentId).Result;
 
-            Assert.IsTrue(
-                downloadResponse.CanRead,
-                "Download document result has an error, status code is not Successful"
-                );
+            Assert.AreEqual(downloadResponse.MediaType, "application/pdf", "Media type is not an application/pdf");
+            Assert.IsTrue(downloadResponse.Document.CanRead, "Not readable Document content");
+            Assert.AreEqual(downloadResponse.Filename, "DocumentUpload.pdf", "Wrong Document name");
+            Assert.IsNotNull(downloadResponse.Length, "Document is Empty or not exists");
         }
     }
 }
