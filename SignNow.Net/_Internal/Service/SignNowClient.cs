@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers;
-using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
@@ -60,9 +59,10 @@ namespace SignNow.Net.Internal.Service
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="requestOptions"></param>
         /// <param name="adapter"></param>
+        /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, HttpCompletionOption completionOption, CancellationToken cancellationToken = default)
+        public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter = default, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
             {
@@ -125,7 +125,7 @@ namespace SignNow.Net.Internal.Service
         {
             if (requestOptions.RequestUrl == null)
             {
-                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull); 
+                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull);
             }
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());

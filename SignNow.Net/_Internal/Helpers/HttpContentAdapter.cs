@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Interfaces;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System.IO;
 using System.Net.Http;

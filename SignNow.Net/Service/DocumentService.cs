@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Internal.Requests;
+using SignNow.Net.Internal.Helpers;
+using System.Net.Http;
 
 namespace SignNow.Net.Service
 {
@@ -37,6 +39,7 @@ namespace SignNow.Net.Service
                 Content = new JsonHttpContent(new { document_id = documentId }),
                 Token = this.Token
             };
+
             return await SignNowClient.RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
@@ -90,7 +93,7 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestResourceAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync(requestOptions, new HttpContentToResourceAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         }
     }
 }

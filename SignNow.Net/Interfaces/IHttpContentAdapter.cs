@@ -1,9 +1,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SignNow.Net.Internal.Interfaces
+namespace SignNow.Net.Interfaces
 {
-    interface IHttpContentAdapter<TResult>
+    public interface IHttpContentAdapter<TResult>
     {
         /// <summary>
         /// Convert Http content to corresponding Model.

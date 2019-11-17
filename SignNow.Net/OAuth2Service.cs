@@ -112,7 +112,7 @@ namespace SignNow.Net
             };
             try
             {
-                await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+                await SignNowClient.RequestAsync<Token>(options, cancellationToken).ConfigureAwait(false);
             }
             catch (SignNowException ex) when (ex.Message == "invalid_token")
             {
@@ -133,7 +133,7 @@ namespace SignNow.Net
                 RequestUrl = OAuthRequestUrl
             };
 
-            return await SignNowClient.RequestAsync<Token>(options).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync<Token>(options, default).ConfigureAwait(false);
         }
     }
 }
