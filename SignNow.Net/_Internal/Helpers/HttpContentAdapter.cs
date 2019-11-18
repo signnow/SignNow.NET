@@ -17,7 +17,7 @@ namespace SignNow.Net.Internal.Helpers
         }
 
         /// <inheritdoc />
-        /// <returns><see cref="TObject"/> Models</returns>
+        /// <returns>Models</returns>
         public async Task<TObject> Adapt(HttpContent content)
         {
             var stringContent = await contentToStringAdapter.Adapt(content).ConfigureAwait(false);
@@ -36,7 +36,7 @@ namespace SignNow.Net.Internal.Helpers
         }
     }
 
-    class HttpContentToResourceAdapter : IHttpContentAdapter<DownloadDocumentResponse>
+    class HttpContentToDownloadDocumentResponseAdapter : IHttpContentAdapter<DownloadDocumentResponse>
     {
         public async Task<DownloadDocumentResponse> Adapt(HttpContent content)
         {
@@ -44,9 +44,9 @@ namespace SignNow.Net.Internal.Helpers
 
             var document = new DownloadDocumentResponse
             {
-                Filename = content.Headers.ContentDisposition.FileName.Replace("\"", ""),
+                Filename = content.Headers.ContentDisposition?.FileName?.Replace("\"", ""),
                 Length = content.Headers.ContentLength,
-                MediaType = content.Headers.ContentType.MediaType,
+                MediaType = content.Headers.ContentType?.MediaType,
                 Document = rawStream
             };
 

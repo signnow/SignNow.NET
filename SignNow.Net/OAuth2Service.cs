@@ -69,7 +69,7 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
-            return await ExecuteTokenRequest(body).ConfigureAwait(false);
+            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -82,7 +82,7 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
-            return await ExecuteTokenRequest(body).ConfigureAwait(false);
+            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace SignNow.Net
                 { "refresh_token", token.RefreshToken }
             };
 
-            return await ExecuteTokenRequest(body).ConfigureAwait(false);
+            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -122,7 +122,7 @@ namespace SignNow.Net
             return true;
         }
 
-        async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body)
+        async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body, CancellationToken cancellationToken = default)
         {
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
@@ -133,7 +133,7 @@ namespace SignNow.Net
                 RequestUrl = OAuthRequestUrl
             };
 
-            return await SignNowClient.RequestAsync<Token>(options, default).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync<Token>(options, cancellationToken).ConfigureAwait(false);
         }
     }
 }

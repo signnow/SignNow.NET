@@ -38,19 +38,34 @@ namespace SignNow.Net.Internal.Service
         /// <inheritdoc />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(
+                requestOptions,
+                new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()),
+                HttpCompletionOption.ResponseContentRead,
+                cancellationToken
+                ).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(
+                requestOptions,
+                new HttpContentToStreamAdapter(),
+                HttpCompletionOption.ResponseContentRead,
+                cancellationToken
+                ).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<DownloadDocumentResponse> RequestResourceAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(requestOptions, new HttpContentToResourceAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            return await RequestAsync(
+                requestOptions,
+                new HttpContentToDownloadDocumentResponseAdapter(),
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken
+                ).ConfigureAwait(false);
         }
 
         /// <summary>

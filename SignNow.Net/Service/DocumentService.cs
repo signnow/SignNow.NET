@@ -16,17 +16,14 @@ namespace SignNow.Net.Service
     {
         public DocumentService(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
-
         }
 
         public DocumentService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
         {
-
         }
 
         internal protected DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
-
         }
 
         /// <inheritdoc />
@@ -93,7 +90,7 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync(requestOptions, new HttpContentToResourceAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         }
     }
 }
