@@ -2,10 +2,10 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.0.0-beta</Version>
+        <Version>0.1.0-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
-        <Description>SignNow.Net is a .NET 4.5+ class library for the SignNow API.  (Official Library)
+        <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
 SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.</Description>
         <PackageProjectUrl>https://github.com/signnow/SignNow.NET</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -14,17 +14,8 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <PackageTags>e-signature;pdf;forms;document;saas;REST;eSign;document management;workflow automation</PackageTags>
         <PackageReleaseNotes>Features implemented:
 
-- SignNowException implements AggregateException. If SignNow returns several errors in response, SignNowException contains all the errors as child exceptions.
-
-- SignNowException.Data contains the integer value of a response status code instead of a string one.
-
-- Implemented document ID parameter value validation in DocumentService.DeleteDocumentAsync method.
-
-Bugs fixed:
-
-- Fixed IOException: Authentication failed because the remote party has closed the transport stream in .NET 4.5 project.
-
-- Fixed some code annotations to be visible via IntelliSense.</PackageReleaseNotes>
+- OAuth2Service.RefreshTokenAsync method.
+- OAuth2Service.ValidateTokenAsync method.</PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -35,7 +26,7 @@ Bugs fixed:
       <NoWarn>1591</NoWarn>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="icon.png" Pack="true" PackagePath="\"/>
+        <None Include="icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
