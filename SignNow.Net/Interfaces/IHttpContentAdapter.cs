@@ -6,10 +6,9 @@ namespace SignNow.Net.Interfaces
     public interface IHttpContentAdapter<TResult>
     {
         /// <summary>
-        /// Convert Http content to corresponding Model.
+        /// Converts HTTP content to <typeparamref name="TResult"/>.
         /// </summary>
         /// <param name="content">Http response content</param>
-        /// <returns></returns>
         Task<TResult> Adapt(HttpContent content);
     }
 }
