@@ -15,23 +15,14 @@ namespace AcceptanceTests
             {
                 using (var fileStream = File.OpenRead(PdfFilePath))
                 {
-                    string docId = default;
-                    try
-                    {
-                        var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
-                        docId = uploadResponse.Id;
-                        var signingLinks = docService.CreateSigningLinkAsync(docId).Result;
-                        Assert.IsNotNull(signingLinks.Url);
-                        Assert.IsNotNull(signingLinks.AnonymousUrl);
-                    }
-                    finally
-                    {
-                        DeleteDocument(docId);
-                    }
+                    var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
+                    DocumentId = uploadResponse.Id;
+                    var signingLinks = docService.CreateSigningLinkAsync(DocumentId).Result;
 
+                    Assert.IsNotNull(signingLinks.Url);
+                    Assert.IsNotNull(signingLinks.AnonymousUrl);
                 }
             }
-            
         }
 
         [TestMethod]
@@ -45,7 +36,6 @@ namespace AcceptanceTests
                 }
                 catch (AggregateException ex)
                 {
-
                     Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, ex.InnerException.Message);
                 }
             }

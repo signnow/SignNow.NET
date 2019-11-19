@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
 {
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "The class is used for JSON deserialization")]
     class ErrorResponse
     {
         /// <summary>

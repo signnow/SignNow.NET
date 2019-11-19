@@ -7,6 +7,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Internal.Requests;
+using SignNow.Net.Internal.Helpers;
+using System.Net.Http;
 
 namespace SignNow.Net.Service
 {
@@ -14,17 +16,14 @@ namespace SignNow.Net.Service
     {
         public DocumentService(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
-
         }
 
         public DocumentService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
         {
-
         }
 
         internal protected DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
-
         }
 
         /// <inheritdoc />
@@ -37,6 +36,7 @@ namespace SignNow.Net.Service
                 Content = new JsonHttpContent(new { document_id = documentId }),
                 Token = this.Token
             };
+
             return await SignNowClient.RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
@@ -66,7 +66,7 @@ namespace SignNow.Net.Service
             return await UploadDocumentAsync("/document/fieldextract", documentContent, fileName, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task<UploadDocumentResponse> UploadDocumentAsync (string requestRelativeUrl, Stream documentContent, string fileName, CancellationToken cancellationToken = default)
+        private async Task<UploadDocumentResponse> UploadDocumentAsync(string requestRelativeUrl, Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
             var requestOptions = new PostHttpRequestOptions
@@ -77,6 +77,20 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestedDocument = "/document/" + documentId.ValidateDocumentId() + "/download";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         }
     }
 }
