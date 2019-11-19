@@ -45,8 +45,7 @@ namespace SignNow.Net.Internal.Helpers
             var document = new DownloadDocumentResponse
             {
                 Filename = content.Headers.ContentDisposition?.FileName?.Replace("\"", ""),
-                Length = content.Headers.ContentLength,
-                MediaType = content.Headers.ContentType?.MediaType,
+                Length = content.Headers.ContentLength ?? default,
                 Document = rawStream
             };
 

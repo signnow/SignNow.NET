@@ -10,14 +10,9 @@ namespace SignNow.Net.Model
         public string Filename { get; set; }
 
         /// <summary>
-        /// File content type.
-        /// </summary>
-        public string MediaType { get; set; }
-
-        /// <summary>
         /// File length in bytes
         /// </summary>
-        public long? Length { get; set; }
+        public long Length { get; set; }
 
         /// <summary>
         /// File contents.
