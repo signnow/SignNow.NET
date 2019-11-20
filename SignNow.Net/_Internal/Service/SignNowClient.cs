@@ -57,17 +57,6 @@ namespace SignNow.Net.Internal.Service
                 ).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
-        public async Task<DownloadDocumentResponse> RequestResourceAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
-        {
-            return await RequestAsync(
-                requestOptions,
-                new HttpContentToDownloadDocumentResponseAdapter(),
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken
-                ).ConfigureAwait(false);
-        }
-
         /// <summary>
         /// Process Request with request options and returns result object.
         /// </summary>
