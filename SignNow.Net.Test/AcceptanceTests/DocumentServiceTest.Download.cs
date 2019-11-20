@@ -1,19 +1,25 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model;
 using SignNow.Net.Test;
 
 namespace AcceptanceTests
 {
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
-        [TestMethod]
-        public void DownloadDocumentAsPDF()
+        [DataTestMethod]
+        [DataRow(DownloadType.PdfCollapsed, ".pdf")]
+        [DataRow(DownloadType.PdfWithHistory, ".pdf")]
+        [DataRow(DownloadType.ZipCollapsed, ".zip")]
+        public void DownloadDocumentAsSpecifiedType(DownloadType downloadType, string expectedType)
         {
             DocumentId = UploadTestDocument(PdfFilePath);
 
-            var downloadResponse = docService.DownloadDocumentAsync(DocumentId).Result;
+            var downloadResponse = docService.DownloadDocumentAsync(DocumentId, downloadType).Result;
+
+            StringAssert.Contains(downloadResponse.Filename, "DocumentUpload", "Wrong Document name");
+            StringAssert.Contains(downloadResponse.Filename, expectedType, "Wrong Document type");
 
             Assert.IsTrue(downloadResponse.Document.CanRead, "Not readable Document content");
-            Assert.AreEqual(downloadResponse.Filename, "DocumentUpload.pdf", "Wrong Document name");
             Assert.IsNotNull(downloadResponse.Length, "Document is Empty or not exists");
         }
     }
