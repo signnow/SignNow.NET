@@ -82,7 +82,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default)
         {
-            string query;
+            var query = "";
 
             switch (type)
             {
@@ -94,9 +94,12 @@ namespace SignNow.Net.Service
                     query = "/collapsed?with_history=1";
                     break;
 
+                case DownloadType.PdfOriginal:
+                    break;
+
                 case DownloadType.PdfCollapsed:
                 default:
-                    query = "?type=pdf";
+                    query = "?type=collapsed";
                     break;
             }
 
