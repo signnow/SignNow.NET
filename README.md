@@ -1,6 +1,6 @@
 # SignNow.NET
 
-[![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
 
 ## About SignNow
 
