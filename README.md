@@ -1,5 +1,7 @@
 # SignNow.NET
 
+[![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
+
 ## About SignNow
 
 SignNow.Net is the official .NET 4.5+ class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
@@ -14,8 +16,6 @@ Get your account at https://www.signnow.com/developers
 5. [Documentation](#documentation)
 6. [Features](#features)
     * [Authorization](#authorize)
-    * [Validate token](#validate-token)
-    * [Refresh token](#refresh-token)
     * [Upload a document to SignNow](#upload-document)
     * [Download a document from SignNow](#download-document)
     * [Send a freeform invite to sign a document](#freeform-invite)
@@ -75,28 +75,41 @@ Read about the available SignNow features in [SignNow API Docs](https://github.c
 Get your access token via OAuth 2.0 service.
 
 ```csharp
-var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.Login, apiCreds.Password);
+using System;
+using System.Threading.Tasks;
+using SignNow.Net;
+using SignNow.Net.Model;
+using SignNow.Net.Service;
 
-var Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, Scope.All).Result;
-```
-### <a name="validate-token"></a> Validate token
+namespace AuthorizationExample
+{
+    public static class OAuthServiceExample
+    {
+        public static async Task<Token> GetAccessToken()
+        {
+            Uri ApiBaseUrl = new Uri("https://api.signnow.com");
+            
+            /// Register your account first
+            /// <see cref="https://www.signnow.com/developers">
+            string clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
+            string clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
 
-Check when your token expires: 
-```csharp
-///
-```
-### <a name="reefresh-token"></a> Refresh token
+            string userLogin = "signnow_dotnet_sdk@example.com";
+            string userPassword = "example-user-password";
+            
+            var oauth = new OAuth2Service(ApiBaseUrl, clientId, clientSecret);
 
-Refresh your token when it expired:
-```csharp
-///
+            return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All).ConfigureAwait(false);
+        }
+    }
+}
 ```
 
 ### <a name="upload-document"></a> Upload a document to SignNow
 
 All the features in SignNow require a `document_id`. Once you upload a document to SignNow, you get the `document_id` from a successful response.
 ```csharp
-///
+/// First step: Authorize
 ```
 
 ### <a name="download-document"></a> Download a document from SignNow
