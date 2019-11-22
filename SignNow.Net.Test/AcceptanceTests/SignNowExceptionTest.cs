@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,6 +29,16 @@ namespace AcceptanceTests
 
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
 
+            var expectedHeaders = new List<string>
+            {
+                "Date",
+                "Connection",
+                "Server",
+                "Access-Control-Allow-Headers",
+                "Access-Control-Allow-Origin"
+            };
+
+
             try
             {
                 Task.WaitAll(deleteResponse);
@@ -40,8 +51,16 @@ namespace AcceptanceTests
                     Assert.AreEqual(snEx.HttpStatusCode, HttpStatusCode.NotFound);
 
                     Assert.IsNotNull(snEx.RawHeaders);
-                    Assert.IsTrue(snEx.RawHeaders.Contains("Access-Control-Allow-Headers"));
                     Assert.AreEqual(rawErrorResponse, snEx.RawResponse);
+
+
+                    var actual = snEx.RawHeaders.GetEnumerator();
+                    var expected = expectedHeaders.GetEnumerator();
+
+                    while (actual.MoveNext() && expected.MoveNext())
+                    {
+                        Assert.AreEqual(actual.Current.Key, expected.Current);
+                    }
                 }
             }
         }

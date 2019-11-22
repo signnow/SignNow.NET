@@ -112,7 +112,7 @@ namespace SignNow.Net.Internal.Service
 
                 throw new SignNowException(apiError,snException)
                 {
-                    RawHeaders = response.Headers,
+                    RawHeaders = response.Headers.ToDictionary(a => a.Key, a => a.Value.FirstOrDefault()),
                     RawResponse = response.Content.ReadAsStringAsync().Result,
                     HttpStatusCode = response.StatusCode
                 };
