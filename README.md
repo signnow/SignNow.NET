@@ -18,7 +18,7 @@ Get your account at https://www.signnow.com/developers
     * [Authorization](#authorize)
     * [Upload a document to SignNow](#upload-document)
     * [Download a document from SignNow](#download-document)
-    * [Send a freeform invite to sign a document](#freeform-invite)
+    * [Create Signing link to a document](#create-signing-link)
 7. [Important notes](#important-notes)
 8. [License](#license)
 
@@ -75,33 +75,15 @@ Read about the available SignNow features in [SignNow API Docs](https://github.c
 Get your access token via OAuth 2.0 service.
 
 ```csharp
-using System;
-using System.Threading.Tasks;
-using SignNow.Net;
-using SignNow.Net.Model;
-using SignNow.Net.Service;
+string clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
+string clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
 
-namespace AuthorizationExample
-{
-    public static class OAuthServiceExample
-    {
-        public static async Task<Token> GetAccessToken()
-        {
-            Uri ApiBaseUrl = new Uri("https://api.signnow.com");
-            
-            /// Register your account first
-            /// <see cref="https://www.signnow.com/developers">
-            string clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
-            string clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
+string userLogin = "signnow_dotnet_sdk@example.com";
+string userPassword = "example-user-password";
 
-            string userLogin = "signnow_dotnet_sdk@example.com";
-            string userPassword = "example-user-password";
-            
-            var oauth = new OAuth2Service(ApiBaseUrl, clientId, clientSecret);
+var oauth = new OAuth2Service(clientId, clientSecret);
 
-            return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All).ConfigureAwait(false);
-        }
-    }
+var token = oauth.GetTokenAsync(userLogin, userPassword, Scope.All).Result;
 }
 ```
 
@@ -109,7 +91,20 @@ namespace AuthorizationExample
 
 All the features in SignNow require a `document_id`. Once you upload a document to SignNow, you get the `document_id` from a successful response.
 ```csharp
-/// First step: Authorize
+string documentId = default;
+
+var pdfFilePath = "./file-path/document-example.pdf";
+var pdfFileName = "document-example.pdf";
+
+/// using token from authorization step
+var documentService = new DocumentService(token);
+
+using (var fileStream = File.OpenRead(pdfFilePath))
+{
+    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName, default).Result;
+
+    documentId = uploadResponse.Id;
+}
 ```
 
 ### <a name="download-document"></a> Download a document from SignNow
@@ -121,26 +116,32 @@ Choose the type of download for your document:
 * `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
-///
+/// using `documentId` from upload document step
+
+var downloadPdf = documentService.DownloadDocumentAsync(documentId, downloadType.PdfCollapsed).Result;
+
+Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
 
-### <a name="freeform-invite"></a> Send a freeform invite to sign a document 
-
-**Freeform invite** - an invitation to sign a document which doesn’t contain any fillable fields.
+### <a name="create-signing-link"></a> Create Signing link to a document 
 
 Signers can click anywhere on a document to add their signature.
 
-Steps
+Steps:
 
 ▶ Upload a document or Get the ID of the document you’d like to have signed
 
-▶ Send a freeform invite
+▶ Send a Signing link
 
 
 ```csharp
-///
-```
+/// using `documentId` from upload document step
 
+var signingLinks = documentService.CreateSigningLinkAsync(documentId).Result;
+
+Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
+Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
+```
 
 ## <a name="important-notes"></a>Important notes
 
@@ -157,4 +158,4 @@ Thanks to all contributors who got interested in this project. We're excited to 
 
 ## <a name="license"></a>License
 
-This SDK is distributed under the MIT License,  see [LICENSE.txt](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
+This SDK is distributed under the MIT License,  see [LICENSE](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
