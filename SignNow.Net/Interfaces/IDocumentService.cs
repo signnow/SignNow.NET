@@ -47,8 +47,9 @@ namespace SignNow.Net.Interfaces
         /// Downloads a Collapsed/Zipped Document.
         /// </summary>
         /// <param name="documentId">Identity of the document to create signing link for</param>
+        /// <param name="type">Download document <see cref="DownloadType">type</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
-        Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default);
+        Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
     }
 }

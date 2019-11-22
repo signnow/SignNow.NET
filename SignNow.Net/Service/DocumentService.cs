@@ -34,7 +34,7 @@ namespace SignNow.Net.Service
             {
                 RequestUrl = requestFullUrl,
                 Content = new JsonHttpContent(new { document_id = documentId }),
-                Token = this.Token
+                Token = Token
             };
 
             return await SignNowClient.RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
@@ -48,7 +48,7 @@ namespace SignNow.Net.Service
             var requestOptions = new DeleteHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
-                Token = this.Token
+                Token = Token
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
@@ -73,16 +73,37 @@ namespace SignNow.Net.Service
             {
                 RequestUrl = requestFullUrl,
                 Content = new FileHttpContent(documentContent, fileName),
-                Token = this.Token
+                Token = Token
             };
 
             return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = "/document/" + documentId.ValidateDocumentId() + "/download";
+            var query = "";
+
+            switch (type)
+            {
+                case DownloadType.ZipCollapsed:
+                    query = "?type=zip";
+                    break;
+
+                case DownloadType.PdfWithHistory:
+                    query = "/collapsed?with_history=1";
+                    break;
+
+                case DownloadType.PdfOriginal:
+                    break;
+
+                case DownloadType.PdfCollapsed:
+                default:
+                    query = "?type=collapsed";
+                    break;
+            }
+
+            var requestedDocument = "/document/" + documentId.ValidateDocumentId() + "/download" + query;
 
             var requestOptions = new GetHttpRequestOptions
             {
@@ -90,7 +111,12 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync(
+                requestOptions,
+                new HttpContentToDownloadDocumentResponseAdapter(),
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken
+                ).ConfigureAwait(false);
         }
     }
 }
