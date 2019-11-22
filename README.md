@@ -18,14 +18,14 @@ Get your account at https://www.signnow.com/developers
     * [Authorization](#authorize)
     * [Upload a document to SignNow](#upload-document)
     * [Download a document from SignNow](#download-document)
-    * [Create Signing link to a document](#create-signing-link)
+    * [Create a single-use link to the document for signature](#create-signing-link)
 7. [Important notes](#important-notes)
 8. [License](#license)
 
 
 ## <a name="get-started"></a>Get started
   * Get a SignNow account [here](https://www.signnow.com/developers) 
-  * SignNow uses Authorization: Basic <credentials>, so to get your access token, have your client ID and secret base-64 encoded first
+  * SignNow uses Authorization: Basic <credentials>. To get your access token, have your client ID and secret base-64 encoded first
 
 
 ## <a name="platform-dependencies"></a>Platform Dependencies
@@ -96,7 +96,7 @@ string documentId = default;
 var pdfFilePath = "./file-path/document-example.pdf";
 var pdfFileName = "document-example.pdf";
 
-/// using token from authorization step
+/// using token from the Authorization step
 var documentService = new DocumentService(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
@@ -116,26 +116,26 @@ Choose the type of download for your document:
 * `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
-/// using `documentId` from upload document step
+/// using `documentId` from the Upload document step
 
 var downloadPdf = documentService.DownloadDocumentAsync(documentId, downloadType.PdfCollapsed).Result;
 
 Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
 
-### <a name="create-signing-link"></a> Create Signing link to a document 
+### <a name="create-signing-link"></a> Create a single-use link to the document for signature 
 
-Signers can click anywhere on a document to add their signature.
+You generate a link for sharing the document to be signed. It's called signing link in SignNow. Having followed the link, signers can click anywhere on the document to sign it.
 
 Steps:
 
 ▶ Upload a document or Get the ID of the document you’d like to have signed
 
-▶ Send a Signing link
+▶ Send a signing link
 
 
 ```csharp
-/// using `documentId` from upload document step
+/// using `documentId` from the Upload document step
 
 var signingLinks = documentService.CreateSigningLinkAsync(documentId).Result;
 
