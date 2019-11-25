@@ -31,8 +31,8 @@ namespace AcceptanceTests
 
             var expectedHeaders = new List<string>
             {
-                "Date",
                 "Connection",
+                "Date",
                 "Server",
                 "Access-Control-Allow-Headers",
                 "Access-Control-Allow-Origin"
@@ -53,13 +53,11 @@ namespace AcceptanceTests
                     Assert.IsNotNull(snEx.RawHeaders);
                     Assert.AreEqual(rawErrorResponse, snEx.RawResponse);
 
-
                     var actual = snEx.RawHeaders.GetEnumerator();
-                    var expected = expectedHeaders.GetEnumerator();
 
-                    while (actual.MoveNext() && expected.MoveNext())
+                    while (actual.MoveNext())
                     {
-                        Assert.AreEqual(actual.Current.Key, expected.Current);
+                        Assert.IsTrue(expectedHeaders.Contains(actual.Current.Key));
                     }
                 }
             }
