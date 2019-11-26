@@ -11,13 +11,13 @@ namespace AcceptanceTests
         [TestMethod]
         public void SigningLinkCreatedSuccessfully()
         {
-            foreach (var docService in DocServices)
+            foreach (var docServiceTest in DocServices)
             {
                 using (var fileStream = File.OpenRead(PdfFilePath))
                 {
-                    var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
+                    var uploadResponse = docServiceTest.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
                     DocumentId = uploadResponse.Id;
-                    var signingLinks = docService.CreateSigningLinkAsync(DocumentId).Result;
+                    var signingLinks = docServiceTest.CreateSigningLinkAsync(DocumentId).Result;
 
                     Assert.IsNotNull(signingLinks.Url);
                     Assert.IsNotNull(signingLinks.AnonymousUrl);
@@ -28,11 +28,11 @@ namespace AcceptanceTests
         [TestMethod]
         public void SigningLinkExceptionIsCorrect()
         {
-            foreach (var docService in DocServices)
+            foreach (var docServiceTest in DocServices)
             {
                 try
                 {
-                    var links = docService.CreateSigningLinkAsync("Some Wrong Document Id").Result;
+                    var links = docServiceTest.CreateSigningLinkAsync("Some Wrong Document Id").Result;
                 }
                 catch (AggregateException ex)
                 {
