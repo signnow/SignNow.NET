@@ -1,6 +1,6 @@
 # SignNow.NET
 
-[![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
+[![.NET 4.5 / .Net Core CI](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg ".NET 4.5 / .Net Core CI")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
 
 ## About SignNow
 
@@ -101,7 +101,7 @@ var documentService = new DocumentService(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName, default).Result;
+    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName).Result;
 
     documentId = uploadResponse.Id;
 }
@@ -119,6 +119,11 @@ Choose the type of download for your document:
 /// using `documentId` from the Upload document step
 
 var downloadPdf = documentService.DownloadDocumentAsync(documentId, downloadType.PdfCollapsed).Result;
+
+using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
+{
+  downloadPdf.Document.CopyTo(output);
+}
 
 Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
