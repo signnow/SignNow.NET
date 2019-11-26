@@ -1,0 +1,78 @@
+name: Build and Test
+
+on: [push, pull_request]
+
+# Workflows
+jobs:
+  unix_build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-18.04'
+          - 'macOS-latest'
+          - 'windows-latest'
+        dotnet:
+          - '2.2.402'
+    env:
+      COREHOST_TRACE: false
+      # Disable sending usage data to Microsoft
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      # prevent the caching of the packages on the build machine
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      # prevent the download of the XML documentation for the packages
+      NUGET_XMLDOC_MODE: skip
+
+    name: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup .Net ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
+
+      - name: Setup .Net Tools
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet tool install -g InheritDocTool
+          echo "::add-path::$HOME/.dotnet/tools"
+          # echo ::set-env name=PATH::/home/runner/.dotnet/tools/:$PATH
+
+      - name: Restore Nuget packages
+        run: dotnet restore -v:n
+
+      - name: Configure SignNow account
+        run: |
+          mkdir $HOME/Pass
+          echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
+          echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
+
+      - name: Build SignNow.Net (NetCore 2.2)
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
+
+      - name: Run SignNow.Net Tests (NetCore 2.2)
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
+
+      # Build and test for .Net 4.5 (Windows Only)
+      - name: Build SignNow.Net (.Net 4.5)
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
+        if: (matrix.os == 'windows-latest')
+
+      - name: Run SignNow.Net Tests (.Net 4.5)
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
+        if: (matrix.os == 'windows-latest')
