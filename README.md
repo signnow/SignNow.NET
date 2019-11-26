@@ -25,7 +25,7 @@ Get your account at https://www.signnow.com/developers
 
 ## <a name="get-started"></a>Get started
   * Get a SignNow account [here](https://www.signnow.com/developers) 
-  * SignNow uses Authorization: Basic <credentials>. To get your access token, have your client ID and secret base-64 encoded first
+  * SignNow uses Authorization: Basic <`credentials`>. To get your access token, have your client ID and secret base-64 encoded first
 
 
 ## <a name="platform-dependencies"></a>Platform Dependencies
