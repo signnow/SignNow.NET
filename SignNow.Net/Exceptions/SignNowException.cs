@@ -16,7 +16,7 @@ namespace SignNow.Net.Exceptions
 
         public HttpStatusCode HttpStatusCode
         {
-            get { return httpStatusCode; }
+            get => httpStatusCode;
 
             set
             {
@@ -25,24 +25,18 @@ namespace SignNow.Net.Exceptions
             }
         }
 
-        public HttpResponseHeaders RawHeaders
+        public IEnumerable<KeyValuePair<string, IEnumerable<string>>> RawHeaders
         {
-            get
-            {
-                return Data.Contains("RawHeaders") ? (HttpResponseHeaders)Data["RawHeaders"] : default;
-            }
+            get => Data.Contains("RawHeaders") ? (IEnumerable<KeyValuePair<string, IEnumerable<string>>>)Data["RawHeaders"] : default;
 
-            set { Data["RawHeaders"] = value; }
+            set => Data["RawHeaders"] = value;
         }
 
         public string RawResponse
         {
-            get
-            {
-                return Data.Contains("RawResponse") ? (string)Data["RawResponse"] : String.Empty;
-            }
+            get => Data.Contains("RawResponse") ? (string)Data["RawResponse"] : String.Empty;
 
-            set { Data["RawResponse"] = value;  }
+            set => Data["RawResponse"] = value;
         }
 
         public SignNowException() { }

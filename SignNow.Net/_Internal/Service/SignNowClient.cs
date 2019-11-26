@@ -110,9 +110,9 @@ namespace SignNow.Net.Internal.Service
                 }
 #pragma warning restore CA1031 // Do not catch general exception types
 
-                throw new SignNowException(apiError,snException)
+                throw new SignNowException(apiError, snException)
                 {
-                    RawHeaders = response.Headers,
+                    RawHeaders = response.Headers.ToDictionary(a => a.Key, a => a.Value),
                     RawResponse = response.Content.ReadAsStringAsync().Result,
                     HttpStatusCode = response.StatusCode
                 };

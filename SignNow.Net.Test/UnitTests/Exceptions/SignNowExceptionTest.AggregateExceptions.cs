@@ -35,7 +35,8 @@ namespace UnitTests
         {
             var snExceptions = new List<SignNowException>();
 
-            var snAggregateMsg = new StringBuilder("L1 Ex Message Example");
+            var generalMessage = "L1 Ex Message Example";
+            var snAggregateMsg = new StringBuilder(generalMessage);
 
             for (int i = 0; i < 10; i++)
             {
@@ -43,11 +44,15 @@ namespace UnitTests
                 snAggregateMsg.AppendFormat(" (inner-exception {0})", i);
             }
 
-            var snEx  = new SignNowException("L1 Ex Message Example", snExceptions);
+            var snEx  = new SignNowException(generalMessage, snExceptions);
+            var expectedMessage = snAggregateMsg.ToString();
 
             Assert.AreEqual(10, snEx.InnerExceptions.Count);
-            Assert.AreEqual(snAggregateMsg.ToString(), snEx.Message);
 
+#if NET45
+            expectedMessage = generalMessage;
+#endif
+            Assert.AreEqual(expectedMessage, snEx.Message, "Wrong error Message");
 
             var index = 0;
             foreach (SignNowException innerEx in snEx.InnerExceptions)
@@ -78,7 +83,11 @@ namespace UnitTests
             }
             catch (AggregateException ex)
             {
-                Assert.AreEqual("test-error-message" + aggregateMessage, ex.Message);
+                var expectedMessage = "test-error-message" + aggregateMessage;
+#if NET45
+                expectedMessage = "test-error-message";
+#endif
+                Assert.AreEqual(expectedMessage, ex.Message);
 
                 var msgPrefix = 0;
                 foreach (SignNowException snException in ex.InnerExceptions)
