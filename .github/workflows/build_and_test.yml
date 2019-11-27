@@ -53,16 +53,9 @@ jobs:
           path: .nuget/packages
           key: ${{ runner.os }}-build-${{ hashFiles('**/SignNow*/*.csproj') }}
 
-      - name: Move NuGet cache to common place
-        if: steps.cache-nuget.outputs.cache-hit == 'true'
-        run: mv ./.nuget/packages $HOME/.nuget/packages
-
       - name: Restore Nuget packages
         run: |
-          dotnet restore -v:n
-          # actions/cache@v1 does not support folders outside project...
-          # so... we need to copy .nuget/packages contents to project root for proper cache works
-          ln -sfv $HOME/.nuget .
+          dotnet restore --packages ./.nuget/packages -v:n
 
       - name: Configure SignNow account
         run: |
@@ -70,13 +63,13 @@ jobs:
           echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
-      - name: Build SignNow.Net (NetCore 2.2)
+      - name: Build SignNow.Net for framework for NetCore 2.2
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
 
-      - name: Run SignNow.Net Tests (NetCore 2.2)
+      - name: Run SignNow.Net Tests for NetCore 2.2
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/netcoreapp2.2/SignNow.Net.Test.dll
@@ -88,13 +81,14 @@ jobs:
 
       # Build and test for .Net 4.5 (Windows Only)
       - name: Build SignNow.Net (.Net 4.5)
+        if: (matrix.os == 'windows-latest')
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
-        if: (matrix.os == 'windows-latest')
 
       - name: Run SignNow.Net Tests (.Net 4.5)
+        if: (matrix.os == 'windows-latest')
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
@@ -103,9 +97,9 @@ jobs:
         shell: pwsh
         run: |
           coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
-        if: (matrix.os == 'windows-latest')
 
       - name: Upload code coverage report to Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v1
         with:
           name: codecov-develop-${{ matrix.os }}
