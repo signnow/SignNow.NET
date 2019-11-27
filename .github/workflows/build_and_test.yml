@@ -1,6 +1,10 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
 name: Build and Test
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 # Workflows
 jobs:
@@ -42,8 +46,23 @@ jobs:
           echo "::add-path::$HOME/.dotnet/tools"
           # echo ::set-env name=PATH::/home/runner/.dotnet/tools/:$PATH
 
+      # Restore NuGet cache
+      - uses: actions/cache@v1
+        id: cache-nuget
+        with:
+          path: .nuget/packages
+          key: ${{ runner.os }}-build-${{ hashFiles('**/SignNow*/*.csproj') }}
+
+      - name: Move NuGet cache to common place
+        if: steps.cache-nuget.outputs.cache-hit == 'true'
+        run: mv ./.nuget/packages $HOME/.nuget/packages
+
       - name: Restore Nuget packages
-        run: dotnet restore -v:n
+        run: |
+          dotnet restore -v:n
+          # actions/cache@v1 does not support folders outside project...
+          # so... we need to copy .nuget/packages contents to project root for proper cache works
+          ln -sfv $HOME/.nuget .
 
       - name: Configure SignNow account
         run: |
