@@ -1,6 +1,6 @@
 # SignNow.NET
 
-[![.NET 4.5 / .Net Core CI](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg ".NET 4.5 / .Net Core CI")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
+[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
 
 ## About SignNow
 
