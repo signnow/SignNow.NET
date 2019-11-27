@@ -88,3 +88,13 @@ jobs:
           coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_MERGE_PATH --output=$env:COVERAGE_OUTPUT
           # dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
         if: (matrix.os == 'windows-latest')
+
+      - name: Upload Code Coverage (NetCore + .Net 4.5)
+        env:
+          COVERAGE_XML: ./SignNow.Net.Test/bin/Debug/net45/coverage.opencover.xml
+        run: |
+          curl -s https://codecov.io/bash > codecov
+          chmod +x codecov
+          ./codecov -f $env:COVERAGE_XML -t ${{ secrets.CODECOV_TOKEN }}
+        if: (matrix.os == 'windows-latest')
+
