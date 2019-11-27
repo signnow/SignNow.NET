@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 # Workflows
 jobs:
-  unix_build:
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -89,7 +89,7 @@ jobs:
       - name: Upload code coverage report to Codecov
         uses: codecov/codecov-action@v1
         with:
-          name: ${{ matrix.os }}
+          name: codecov-develop-${{ matrix.os }}
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
 
