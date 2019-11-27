@@ -37,7 +37,8 @@ jobs:
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
-          dotnet tool install -g InheritDocTool
+          dotnet tool install --global InheritDocTool
+          dotnet tool install --global coverlet.console
           echo "::add-path::$HOME/.dotnet/tools"
           # echo ::set-env name=PATH::/home/runner/.dotnet/tools/:$PATH
 
@@ -59,8 +60,13 @@ jobs:
       - name: Run SignNow.Net Tests (NetCore 2.2)
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/netcoreapp2.2/SignNow.Net.Test.dll
+          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework netcoreapp2.2
+          COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug/netcoreapp2.2/
+        shell: pwsh
         run: |
-          dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
+          coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --output=$env:COVERAGE_OUTPUT
+          # dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
 
       # Build and test for .Net 4.5 (Windows Only)
       - name: Build SignNow.Net (.Net 4.5)
@@ -73,6 +79,22 @@ jobs:
       - name: Run SignNow.Net Tests (.Net 4.5)
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
+          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework net45
+          COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug/net45/
+          COVERAGE_MERGE_PATH: ./SignNow.Net.Test/bin/Debug/netcoreapp2.2/
+        shell: pwsh
         run: |
-          dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
+          coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_MERGE_PATH --output=$env:COVERAGE_OUTPUT
+          # dotnet test ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
         if: (matrix.os == 'windows-latest')
+
+      - name: Upload Code Coverage (NetCore + .Net 4.5)
+        env:
+          COVERAGE_XML: ./SignNow.Net.Test/bin/Debug/net45/coverage.opencover.xml
+        run: |
+          curl -s https://codecov.io/bash > codecov
+          chmod +x codecov
+          ./codecov -f $env:COVERAGE_XML -t ${{ secrets.CODECOV_TOKEN }}
+        if: (matrix.os == 'windows-latest')
+
