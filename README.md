@@ -4,50 +4,37 @@
 
 ## About SignNow
 
-SignNow.Net is the official .NET 4.5+ class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
+SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
 
 Get your account at https://www.signnow.com/developers
 
 ## Contents
 1. [Get started](#get-started)
 2. [Platform dependencies](#platform-dependencies)
-3. [XML doc generation](#xml-doc-generation)
 4. [Installation](#installation)
 5. [Documentation](#documentation)
 6. [Features](#features)
-    * [Authorization](#authorize)
+    * [Authorization](#authorization)
     * [Upload a document to SignNow](#upload-document)
     * [Download a document from SignNow](#download-document)
     * [Create a single-use link to the document for signature](#create-signing-link)
-7. [Important notes](#important-notes)
+7. [Contribution guidelines](#contribution-guidelines)
+    * [XML doc generation](#xml-doc-generation)
+    * [Important notes](#important-notes)
 8. [License](#license)
 
 
 ## <a name="get-started"></a>Get started
-  * Get a SignNow account [here](https://www.signnow.com/developers) 
-  * SignNow uses Authorization: Basic <`credentials`>. To get your access token, have your client ID and secret base-64 encoded first
+To start using the API you have to create a SignNow account [here](https://www.signnow.com/developers) 
 
 
 ## <a name="platform-dependencies"></a>Platform Dependencies
 #### Windows
   * .Net Framework 4.5 or newer version should be installed in your system, or
-  * .Net Standard 1.2 or 2.0, or
-  * .Net Core 2.2 and newer
+  * .Net Core 2.0 and newer
 
 #### MacOS and Linux
   * .Net Core 2.2 and newer
-
-
-## <a name="xml-doc-generation"></a>XML doc generation
-
-For XML documentation generation, install InheritDocTool (the project build will fail without it):
-
-```bash
-dotnet tool install -g InheritDocTool
-```
-
-More about the InheritDoc [here](https://www.inheritdoc.io)
-
 
 ## <a name="installation"></a>Installation
 
@@ -84,7 +71,6 @@ string userPassword = "example-user-password";
 var oauth = new OAuth2Service(clientId, clientSecret);
 
 var token = oauth.GetTokenAsync(userLogin, userPassword, Scope.All).Result;
-}
 ```
 
 ### <a name="upload-document"></a> Upload a document to SignNow
@@ -118,7 +104,7 @@ Choose the type of download for your document:
 ```csharp
 /// using `documentId` from the Upload document step
 
-var downloadPdf = documentService.DownloadDocumentAsync(documentId, downloadType.PdfCollapsed).Result;
+var downloadPdf = documentService.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
 
 using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
 {
@@ -147,8 +133,17 @@ var signingLinks = documentService.CreateSigningLinkAsync(documentId).Result;
 Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
 Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
 ```
+## <a name="contribution-guidelines"></a>Contribution guidelines
+### <a name="xml-doc-generation"></a>XML doc generation
 
-## <a name="important-notes"></a>Important notes
+For XML documentation generation, install InheritDocTool (the project build will fail without it):
+
+```bash
+dotnet tool install -g InheritDocTool
+```
+
+More about the InheritDoc [here](https://www.inheritdoc.io)
+### <a name="important-notes"></a>Important notes
 
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
 
