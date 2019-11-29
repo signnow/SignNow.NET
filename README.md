@@ -1,40 +1,68 @@
 # SignNow.NET
 
-[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net) [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square)](LICENSE)
 
 ## About SignNow
 
-SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
+SignNow.Net is the official .NET 4.5+ class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
 
 Get your account at https://www.signnow.com/developers
+
+#### API Contact Information
+If you have questions about the SignNow API, please visit https://help.signnow.com/docs or email api@signnow.com.<br>
+**Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
+**Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit https://www.signnow.com/contact.
+
+#### API and Application
+| Resources | Sandbox | Production |
+| --- | --- | --- |
+| API: | api-eval.signnow.com:443 | api.signnow.com:443 |
+| Application: | https://app-eval.signnow.com | https://app.signnow.com |
+| Entry page: | https://eval.signnow.com |
+
+#### Examples 
+To run the examples you will need an API key. You can get one here https://www.signnow.com/api. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: https://help.signnow.com/docs.
 
 ## Contents
 1. [Get started](#get-started)
 2. [Platform dependencies](#platform-dependencies)
+3. [XML doc generation](#xml-doc-generation)
 4. [Installation](#installation)
 5. [Documentation](#documentation)
 6. [Features](#features)
-    * [Authorization](#authorization)
+    * [Authorization](#authorize)
     * [Upload a document to SignNow](#upload-document)
     * [Download a document from SignNow](#download-document)
     * [Create a single-use link to the document for signature](#create-signing-link)
-7. [Contribution guidelines](#contribution-guidelines)
-    * [XML doc generation](#xml-doc-generation)
-    * [Important notes](#important-notes)
+7. [Important notes](#important-notes)
 8. [License](#license)
 
 
 ## <a name="get-started"></a>Get started
-To start using the API you have to create a SignNow account [here](https://www.signnow.com/developers) 
+  * Get a SignNow account [here](https://www.signnow.com/developers) 
+  * SignNow uses Authorization: Basic `<credentials>`. To get your access token, have your client ID and secret base-64 encoded first
 
 
 ## <a name="platform-dependencies"></a>Platform Dependencies
 #### Windows
   * .Net Framework 4.5 or newer version should be installed in your system, or
-  * .Net Core 2.0 and newer
+  * .Net Standard 1.2 or 2.0, or
+  * .Net Core 2.2 and newer
 
 #### MacOS and Linux
   * .Net Core 2.2 and newer
+
+
+## <a name="xml-doc-generation"></a>XML doc generation
+
+For XML documentation generation, install InheritDocTool (the project build will fail without it):
+
+```bash
+dotnet tool install -g InheritDocTool
+```
+
+More about the InheritDoc [here](https://www.inheritdoc.io)
+
 
 ## <a name="installation"></a>Installation
 
@@ -52,7 +80,7 @@ Install-Package SignNow.Net -Version <package-version>
 
 ## <a name="documentation"></a>Documentation
 
-Read about the available SignNow features in [SignNow API Docs](https://github.com/signnow/SignNow.NET.wiki.git) .
+Read about the available SignNow features in [SignNow API Docs](https://help.signnow.com/).
 
 
 ## <a name="features"></a>Features
@@ -71,6 +99,7 @@ string userPassword = "example-user-password";
 var oauth = new OAuth2Service(clientId, clientSecret);
 
 var token = oauth.GetTokenAsync(userLogin, userPassword, Scope.All).Result;
+}
 ```
 
 ### <a name="upload-document"></a> Upload a document to SignNow
@@ -87,7 +116,7 @@ var documentService = new DocumentService(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName).Result;
+    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName, default).Result;
 
     documentId = uploadResponse.Id;
 }
@@ -104,12 +133,7 @@ Choose the type of download for your document:
 ```csharp
 /// using `documentId` from the Upload document step
 
-var downloadPdf = documentService.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
-
-using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
-{
-  downloadPdf.Document.CopyTo(output);
-}
+var downloadPdf = documentService.DownloadDocumentAsync(documentId, downloadType.PdfCollapsed).Result;
 
 Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
@@ -133,17 +157,8 @@ var signingLinks = documentService.CreateSigningLinkAsync(documentId).Result;
 Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
 Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
 ```
-## <a name="contribution-guidelines"></a>Contribution guidelines
-### <a name="xml-doc-generation"></a>XML doc generation
 
-For XML documentation generation, install InheritDocTool (the project build will fail without it):
-
-```bash
-dotnet tool install -g InheritDocTool
-```
-
-More about the InheritDoc [here](https://www.inheritdoc.io)
-### <a name="important-notes"></a>Important notes
+## <a name="important-notes"></a>Important notes
 
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
 
