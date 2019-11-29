@@ -8,6 +8,21 @@ SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the Si
 
 Get your account at https://www.signnow.com/developers
 
+#### API Contact Information
+If you have questions about the SignNow API, please visit https://help.signnow.com/docs or email api@signnow.com.<br>
+**Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
+**Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit https://www.signnow.com/contact.
+
+#### API and Application
+| Resources | Sandbox | Production |
+| --- | --- | --- |
+| API: | api-eval.signnow.com:443 | api.signnow.com:443 |
+| Application: | https://app-eval.signnow.com | https://app.signnow.com |
+| Entry page: | https://eval.signnow.com |
+
+#### Examples 
+To run the examples you will need an API key. You can get one here https://www.signnow.com/api. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: https://help.signnow.com/docs.
+
 ## Contents
 1. [Get started](#get-started)
 2. [Platform dependencies](#platform-dependencies)
@@ -52,7 +67,7 @@ Install-Package SignNow.Net -Version <package-version>
 
 ## <a name="documentation"></a>Documentation
 
-Read about the available SignNow features in [SignNow API Docs](https://github.com/signnow/SignNow.NET.wiki.git) .
+Read about the available SignNow features in [SignNow API Docs](https://help.signnow.com) .
 
 
 ## <a name="features"></a>Features
