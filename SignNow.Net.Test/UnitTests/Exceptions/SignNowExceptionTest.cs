@@ -51,14 +51,9 @@ namespace UnitTests
 
             var innerEx   = new SignNowException(innerExMessage, HttpStatusCode.Forbidden);
             var exception = new SignNowException(testMessage, innerEx);
-            var expectedMessage = testMessage + $" ({innerExMessage})";
-
-#if NET45
-            expectedMessage = testMessage;
-#endif
 
             Assert.AreEqual(default, exception.HttpStatusCode);
-            Assert.AreEqual(expectedMessage, exception.Message);
+            Assert.AreEqual(testMessage + $" ({innerExMessage})", exception.Message);
             Assert.AreEqual(HttpStatusCode.Forbidden, ((SignNowException)exception.InnerException).HttpStatusCode);
             Assert.AreEqual(innerExMessage, exception.InnerException.Message);
         }

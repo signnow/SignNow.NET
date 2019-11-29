@@ -1,6 +1,8 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Test;
+using System.IO;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
@@ -11,9 +13,9 @@ namespace AcceptanceTests
         [TestMethod]
         public void DocumentDeletingSuccess()
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
+            var testDocumentId = UploadTestDocument(PdfFilePath);
 
-            var deleteResponse = docService.DeleteDocumentAsync(DocumentId);
+            var deleteResponse = docService.DeleteDocumentAsync(testDocumentId);
             Task.WaitAll(deleteResponse);
 
             Assert.IsFalse(
@@ -47,9 +49,29 @@ namespace AcceptanceTests
             {
                 foreach (var exception in ex.InnerExceptions)
                 {
+                    Console.WriteLine(documentId);
                     Assert.AreEqual(message, exception.Message);
+
                 }
             }
+        }
+
+        private string UploadTestDocument(string filePath)
+        {
+            string docId = default;
+
+            using (var fileStream = File.OpenRead(filePath))
+            {
+                var uploadResponse = docService.UploadDocumentAsync(fileStream, pdfFileName).Result;
+                docId = uploadResponse.Id;
+
+                Assert.IsNotNull(
+                    uploadResponse.Id,
+                    "Document Upload result should contain non-null Id property value on successful upload"
+                    );
+            }
+
+            return docId;
         }
     }
 }

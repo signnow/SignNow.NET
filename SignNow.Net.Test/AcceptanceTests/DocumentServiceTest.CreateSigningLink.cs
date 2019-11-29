@@ -11,31 +11,41 @@ namespace AcceptanceTests
         [TestMethod]
         public void SigningLinkCreatedSuccessfully()
         {
-            foreach (var docServiceTest in DocServices)
+            foreach (var docService in DocServices)
             {
                 using (var fileStream = File.OpenRead(PdfFilePath))
                 {
-                    var uploadResponse = docServiceTest.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
-                    DocumentId = uploadResponse.Id;
-                    var signingLinks = docServiceTest.CreateSigningLinkAsync(DocumentId).Result;
+                    string docId = default;
+                    try
+                    {
+                        var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
+                        docId = uploadResponse.Id;
+                        var signingLinks = docService.CreateSigningLinkAsync(docId).Result;
+                        Assert.IsNotNull(signingLinks.Url);
+                        Assert.IsNotNull(signingLinks.AnonymousUrl);
+                    }
+                    finally
+                    {
+                        DeleteDocument(docId);
+                    }
 
-                    Assert.IsNotNull(signingLinks.Url);
-                    Assert.IsNotNull(signingLinks.AnonymousUrl);
                 }
             }
+            
         }
 
         [TestMethod]
         public void SigningLinkExceptionIsCorrect()
         {
-            foreach (var docServiceTest in DocServices)
+            foreach (var docService in DocServices)
             {
                 try
                 {
-                    var links = docServiceTest.CreateSigningLinkAsync("Some Wrong Document Id").Result;
+                    var links = docService.CreateSigningLinkAsync("Some Wrong Document Id").Result;
                 }
                 catch (AggregateException ex)
                 {
+
                     Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, ex.InnerException.Message);
                 }
             }

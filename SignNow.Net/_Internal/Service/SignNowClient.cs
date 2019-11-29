@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Interfaces;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using System;
@@ -12,7 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace SignNow.Net.Internal.Service
 {
@@ -35,43 +35,34 @@ namespace SignNow.Net.Internal.Service
             this.HttpClient = httpClient ?? new HttpClient();
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// HTTP requests are being made here
+        /// </summary>
+        /// <typeparam name="TResponse">Type (Model) of the response from the request</typeparam>
+        /// <param name="requestOptions"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
-            return await RequestAsync(
-                requestOptions,
-                new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()),
-                HttpCompletionOption.ResponseContentRead,
-                cancellationToken
-                ).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
-        {
-            return await RequestAsync(
-                requestOptions,
-                new HttpContentToStreamAdapter(),
-                HttpCompletionOption.ResponseContentRead,
-                cancellationToken
-                ).ConfigureAwait(false);
+            return await RequestAsync(requestOptions, new HttpContentToObjectAdapter<TResponse>(new HttpContentToStringAdapter()), cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Process Request with request options and returns result object.
+        /// HTTP requests which returns Stream response
         /// </summary>
-        /// <typeparam name="TResponse"></typeparam>
         /// <param name="requestOptions"></param>
-        /// <param name="adapter"></param>
-        /// <param name="completionOption"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter = default, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
+        public async Task RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
+        {
+            await RequestAsync(requestOptions, new HttpContentToStreamAdapter(), cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
+            using (var response = await this.HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false))
             {
-                var response = await HttpClient.SendAsync(request, completionOption, cancellationToken).ConfigureAwait(false);
-
                 await ProcessErrorResponse(response).ConfigureAwait(false);
 
                 return await adapter.Adapt(response.Content).ConfigureAwait(false);
@@ -110,9 +101,9 @@ namespace SignNow.Net.Internal.Service
                 }
 #pragma warning restore CA1031 // Do not catch general exception types
 
-                throw new SignNowException(apiError, snException)
+                throw new SignNowException(apiError,snException)
                 {
-                    RawHeaders = response.Headers.ToDictionary(a => a.Key, a => a.Value),
+                    RawHeaders = response.Headers,
                     RawResponse = response.Content.ReadAsStringAsync().Result,
                     HttpStatusCode = response.StatusCode
                 };
@@ -129,7 +120,7 @@ namespace SignNow.Net.Internal.Service
         {
             if (requestOptions.RequestUrl == null)
             {
-                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull);
+                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull); 
             }
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
