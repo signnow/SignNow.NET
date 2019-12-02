@@ -11,7 +11,7 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
-        <PackageTags>e-signature;pdf;forms;document;saas;REST;eSign;document management;workflow automation</PackageTags>
+        <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
         <PackageReleaseNotes>Features implemented:
 
 - OAuth2Service.RefreshTokenAsync method.
