@@ -34,7 +34,10 @@ namespace SignNow.Net.Internal.Helpers
 
         public static string SdkVersion()
         {
-            return "v0.0.1";
+            var assemblyFQN = typeof(UserAgentSdkHeaders).AssemblyQualifiedName.Split(',');
+            var version = assemblyFQN.GetValue(2).ToString().Trim();
+
+            return version.Replace("Version=", "v");
         }
 
         public static string OsDetails()
