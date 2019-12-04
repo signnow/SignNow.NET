@@ -1,5 +1,7 @@
 using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Helpers
 {
 
@@ -10,9 +12,7 @@ namespace SignNow.Net.Internal.Helpers
     using System.Runtime.InteropServices;
 #endif
 
-    // <client name>/<version> (<OS type> <OS release>; <platform>; <arch>) <runtime>/<version>
-    // e.g. SignNow Node.js API Сlient/v1.5.0 (Windows_NT 10.0.14393; win32; ia32) node/v8.16.1
-    public static class UserAgentSdkHeaders
+    internal static class UserAgentSdkHeaders
     {
         /// <summary>
         /// Detect runtime framework
@@ -37,11 +37,14 @@ namespace SignNow.Net.Internal.Helpers
             return "v0.0.1";
         }
 
-        public static string OsType()
+        public static string OsDetails()
         {
             var os = "Unknown";
+            var ver = "0.0.0";
+            var platform = "unknown";
+            var arch = "X86";
 #if NET45
-            os = Environment.OSVersion.Platform.ToString();
+            os = Environment.OSVersion.ToString();
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 os = "Linux";
@@ -49,46 +52,17 @@ namespace SignNow.Net.Internal.Helpers
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 os = "Mac OSX";
 #endif
-            return os;
-        }
-
-        public static string OsRelease()
-        {
-#if NET45
-            return Environment.OSVersion.Version.ToString();
-#else
-            return RuntimeInformation.OSDescription;
-#endif
-        }
-
-
-
-
-        public static string OsDetails()
-        {
-#if NET45
-            return Environment.OSVersion.ToString();
-#else
-            return RuntimeInformation.OSArchitecture.ToString();
-#endif
+            return $"{os} {ver}; {platform}; {arch}";
         }
 
         public static string RuntimeInfo()
         {
 #if NET45
-            return "";
+            return $".NET 4.5+/v{Environment.Version.ToString()}";
 #else
-            return "none";
+            return $".NET Core/v{RuntimeInformation.FrameworkDescription.Replace(".NET Core ", String.Empty)}";
 #endif
         }
 
-        public static string OsInfo()
-        {
-#if NET45
-            return Environment.OSVersion.Platform.ToString();
-#else
-            return RuntimeInformation.OSArchitecture.ToString();
-#endif
-        }
     }
 }
