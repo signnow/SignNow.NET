@@ -21,6 +21,11 @@ namespace SignNow.Net.Internal.Service
         private HttpClient HttpClient { get; }
 
         /// <summary>
+        /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
+        /// </summary>
+        private static string SdkUserAgentString { get; set; }
+
+        /// <summary>
         /// Initialize a new instance of SignNow Client
         /// </summary>
         /// <param name="httpClient">
@@ -33,6 +38,7 @@ namespace SignNow.Net.Internal.Service
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
+            SdkUserAgentString = BuildUserAgentString();
         }
 
         /// <inheritdoc />
@@ -134,6 +140,8 @@ namespace SignNow.Net.Internal.Service
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
+            requestMessage.Headers.Add("User-Agent", SdkUserAgentString);
+
             if (requestOptions.Token != null)
             {
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAuthorizationHeaderValue());
@@ -142,6 +150,15 @@ namespace SignNow.Net.Internal.Service
             requestMessage.Content = requestOptions.Content?.GetHttpContent();
 
             return requestMessage;
+        }
+
+        /// <summary>
+        /// Creates pre-formatted string with SDK, OS, Runtime information
+        /// </summary>
+        /// <returns></returns>
+        private static string BuildUserAgentString()
+        {
+            return $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
         }
     }
 }
