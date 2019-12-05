@@ -82,8 +82,8 @@ namespace SignNow.Net.Internal.Helpers
             string version = String.Empty;
 #if NETSTANDARD
             // Linux 4.4.0 - 43 - Microsoft #1-Microsoft Wed Dec 31 14:42:53 PST 2014
-            // Linux 3.10.0 - 693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018
-            var matched = new Regex(@"(?<kernel>\w+)+\s+(?<version>\d+.?\d+.?\d+.\S+)").Match(kernel.Trim());
+            // Linux 3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018
+            var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)").Match(kernel.Trim());
             version = matched.Groups["version"].Value;
 #endif
             return $"Linux {version}".Trim();
