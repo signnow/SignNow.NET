@@ -13,26 +13,27 @@ namespace UnitTests
         {
             /// SignNow .NET API Сlient/v1.0.0.0 (Windows_NT 10.0.14393; win32; ia32) .NET Core/v4.0.30319.42000
             /// SignNow .NET API Сlient/v1.0.0.0 (Linux 3.10.0; Unix; X64) .NET Core/v4.0.30319.42000
-            /// SignNow .NET API Сlient/v1.0.0.0 (Mac OSX 17.5.0; Unix; X64) .NET Core/v4.0.30319.42000
-            var pattern = "^" +
-                "(?<client>.*)\\/" +
-                "(?<version>v\\d+.\\d+.\\d+.?\\d+)\\s+" +
-                "\\(" +
-                "(?<os>.*);\\s" +
-                "(?<platform>\\w+);\\s" +
-                "(?<arch>\\w+)" +
-                "\\)\\s" +
-                "(?<runtime>.*)" +
-                "\\/" +
-                "(?<runtime_ver>v\\d+.\\d+.?\\d?)";
+            /// SignNow .NET API Сlient/v1.0.0.0 (Mac OSX 18.5.0; Unix; X64) .NET Core/v4.0.30319.42000
+
+            var patternClient = @"(?<client>.*)";
+            var patternSdk = @"(?<version>v\d+.\d+.\d+.?\d+)";
+            var patternOsDetails = @"(?<os>.*);\s(?<platform>\w+);\s(?<arch>\w+)";
+            var patternRuntime = @"(?<runtime>.*)\/(?<runtime_ver>v\d+.\d+(.?\d+)?)";
+
+            var patternUserAgent = patternClient + @"\/" +
+                patternSdk + @"\s+" +
+                @"\(" + patternOsDetails + @"\)\s" +
+                patternRuntime;
 
             var userAgentString = $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
 
-            StringAssert.Contains(UserAgentSdkHeaders.FrameworkVersion(), ".NET");
             StringAssert.Contains(UserAgentSdkHeaders.ClientName(), "SignNow .NET API Client");
-            StringAssert.Matches(UserAgentSdkHeaders.SdkVersion(), new Regex("v\\d+.\\d+.\\d+.?\\d+"));
+            StringAssert.Matches(UserAgentSdkHeaders.ClientName(), new Regex(patternClient));
+            StringAssert.Matches(UserAgentSdkHeaders.SdkVersion(), new Regex(patternSdk));
+            StringAssert.Matches(UserAgentSdkHeaders.OsDetails(), new Regex(patternOsDetails));
+            StringAssert.Matches(UserAgentSdkHeaders.RuntimeInfo(), new Regex(patternRuntime));
 
-            StringAssert.Matches(userAgentString, new Regex(pattern));
+            StringAssert.Matches(userAgentString, new Regex(patternUserAgent), "Format mismatch: <client>/<version> (<os>; <platform>; <arch>) <runtime_sdk>/<runtime_ver>");
         }
     }
 }
