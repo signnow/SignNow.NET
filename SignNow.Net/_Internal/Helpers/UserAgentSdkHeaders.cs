@@ -47,15 +47,15 @@ namespace SignNow.Net.Internal.Helpers
             var arch = "X64";
 #if NET45
             os = Environment.OSVersion.ToString();
-            platform = Environment.Is64BitOperatingSystem() ? "win64" : "win32";
+            platform = Environment.Is64BitOperatingSystem ? "win64" : "win32";
             arch = typeof(UserAgentSdkHeaders).Assembly.GetName().ProcessorArchitecture.ToString();
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                os = "Linux";
+                os = GetLinuxVersion(RuntimeInformation.OSDescription);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                os = GetMacOsVersion();
+                os = GetMacOsVersion(RuntimeInformation.OSDescription);
             }
 
             platform = RuntimeInformation.ProcessArchitecture.ToString();
@@ -77,14 +77,25 @@ namespace SignNow.Net.Internal.Helpers
 #endif
         }
 
-        public static string GetMacOsVersion()
+        public static string GetLinuxVersion(string kernel)
+        {
+            string version = String.Empty;
+#if NETSTANDARD
+            // Linux 4.4.0 - 43 - Microsoft #1-Microsoft Wed Dec 31 14:42:53 PST 2014
+            // Linux 3.10.0 - 693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018
+            var matched = new Regex(@"(?<kernel>\w+)+\s+(?<version>\d+.?\d+.?\d+.\S+)").Match(kernel.Trim());
+            version = matched.Groups["version"].Value;
+#endif
+            return $"Linux {version}".Trim();
+        }
+
+        public static string GetMacOsVersion(string kernel)
         {
             string version = String.Empty;
 
 #if NETSTANDARD
             /* Darwin 17.5.0 Darwin Kernel Version 17.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64 */
-            var macOsKernel = RuntimeInformation.OSDescription;
-            var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<major>\d+).(?<minor>\d+).(?<patch>\d+)?").Match(macOsKernel.Trim());
+            var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<major>\d+).(?<minor>\d+).(?<patch>\d+)?").Match(kernel.Trim());
             var major = int.Parse(matched.Groups["major"].Value);
             var minor = int.Parse(matched.Groups["minor"].Value);
 

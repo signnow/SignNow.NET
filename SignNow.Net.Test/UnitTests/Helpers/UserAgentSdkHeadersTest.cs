@@ -34,6 +34,7 @@ namespace UnitTests
             StringAssert.Matches(UserAgentSdkHeaders.RuntimeInfo(), new Regex(patternRuntime));
 
             StringAssert.Matches(userAgentString, new Regex(patternUserAgent), "Format mismatch: <client>/<version> (<os>; <platform>; <arch>) <runtime_sdk>/<runtime_ver>");
+            Console.WriteLine(userAgentString);
         }
     }
 }
