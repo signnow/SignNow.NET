@@ -186,6 +186,14 @@ namespace SignNow.Net.Internal.Helpers
             MacOsX1014,
             MacOsX1015,
         }
-    }
 
+        /// <summary>
+        /// Creates pre-formatted string with SDK, OS, Runtime information
+        /// </summary>
+        /// <returns></returns>
+        public static string BuildUserAgentString()
+        {
+            return $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
+        }
+    }
 }

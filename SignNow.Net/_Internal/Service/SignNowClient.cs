@@ -18,22 +18,23 @@ namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {
-        private HttpClient HttpClient { get; }
-
         /// <summary>
         /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
         /// </summary>
-        private static string sdkUserAgentString;
+        private static string sdkUserAgentString { get; set; }
 
-        private static string SdkUserAgentString
+        [SuppressMessage("Potential Code Quality Issues", "RECS0029:Warns about property or indexer setters and event adders or removers that do not use the value parameter", Justification = "<Pending>")]
+        public static string SdkUserAgentString
         {
             get { return sdkUserAgentString; }
             set
             {
                 if (sdkUserAgentString == null)
-                    sdkUserAgentString = BuildUserAgentString();
+                    sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
             }
         }
+
+        private HttpClient HttpClient { get; }      
 
         /// <summary>
         /// Initialize a new instance of SignNow Client
@@ -149,7 +150,7 @@ namespace SignNow.Net.Internal.Service
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
-            requestMessage.Headers.Add("User-Agent", sdkUserAgentString);
+            requestMessage.Headers.Add("User-Agent", SignNowClient.SdkUserAgentString);
 
             if (requestOptions.Token != null)
             {
@@ -159,15 +160,6 @@ namespace SignNow.Net.Internal.Service
             requestMessage.Content = requestOptions.Content?.GetHttpContent();
 
             return requestMessage;
-        }
-
-        /// <summary>
-        /// Creates pre-formatted string with SDK, OS, Runtime information
-        /// </summary>
-        /// <returns></returns>
-        private static string BuildUserAgentString()
-        {
-            return $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
         }
     }
 }
