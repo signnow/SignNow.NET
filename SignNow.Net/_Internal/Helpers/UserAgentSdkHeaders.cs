@@ -4,36 +4,18 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Helpers
 {
-
-#if NET45
-    using System.Reflection;
-    using Microsoft.Win32;
-#else
-    using System.Runtime.InteropServices;
-    using System.Text.RegularExpressions;
-#endif
-
+    /// <summary>
+    /// Creates User-Agent string from current runtime info
+    /// </summary>
     internal static class UserAgentSdkHeaders
     {
-        /// <summary>
-        /// Returns SDK client's name
-        /// </summary>
-        /// <returns></returns>
-        public static string ClientName()
-        {
-            return "SignNow .NET API Client";
-        }
-
         /// <summary>
         /// Returns SDK version (e.g: v1.0.0.0)
         /// </summary>
         /// <returns></returns>
         public static string SdkVersion()
         {
-            var assemblyFQN = typeof(UserAgentSdkHeaders).AssemblyQualifiedName.Split(',');
-            var version = assemblyFQN.GetValue(2).ToString().Trim();
-
-            return version.Replace("Version=", "v");
+            return $"v{Infrastructure.SdkRuntime.Version().ToString()}";
         }
 
         /// <summary>
@@ -51,11 +33,7 @@ namespace SignNow.Net.Internal.Helpers
         /// <returns></returns>
         public static string RuntimeInfo()
         {
-#if NET45
-            return $".NET 4.5+/v{Environment.Version.ToString()}";
-#else
-            return $".NET Core/v{RuntimeInformation.FrameworkDescription.Replace(".NET Core ", String.Empty)}";
-#endif
+            return $"{Infrastructure.SdkRuntime.FrameworkName()}/v{Infrastructure.SdkRuntime.FrameworkVersion()}";
         }
 
         /// <summary>
@@ -64,7 +42,7 @@ namespace SignNow.Net.Internal.Helpers
         /// <returns></returns>
         public static string BuildUserAgentString()
         {
-            return $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
+            return $"{Infrastructure.SdkRuntime.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
         }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
 namespace UnitTests
@@ -13,7 +14,7 @@ namespace UnitTests
         {
             /// SignNow .NET API Сlient/v1.0.0.0 (Windows_NT 10.0.14393; win32; ia32) .NET Core/v4.0.30319.42000
             /// SignNow .NET API Сlient/v1.0.0.0 (Linux 3.10.0; Unix; X64) .NET Core/v4.0.30319.42000
-            /// SignNow .NET API Сlient/v1.0.0.0 (Mac OSX 18.5.0; Unix; X64) .NET Core/v4.0.30319.42000
+            /// SignNow .NET API Сlient/v1.0.0.0 (macOs 10.15.0; Unix; X64) .NET Core/v4.0.30319.42000
 
             var patternClient = @"(?<client>.*)";
             var patternSdk = @"(?<version>v\d+.\d+.\d+.?\d+)";
@@ -25,10 +26,10 @@ namespace UnitTests
                 @"\(" + patternOsDetails + @"\)\s" +
                 patternRuntime;
 
-            var userAgentString = $"{UserAgentSdkHeaders.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
+            var userAgentString = $"{SdkRuntime.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
 
-            StringAssert.Contains(UserAgentSdkHeaders.ClientName(), "SignNow .NET API Client");
-            StringAssert.Matches(UserAgentSdkHeaders.ClientName(), new Regex(patternClient));
+            StringAssert.Contains(SdkRuntime.ClientName(), "SignNow .NET API Client");
+            StringAssert.Matches(SdkRuntime.ClientName(), new Regex(patternClient));
             StringAssert.Matches(UserAgentSdkHeaders.SdkVersion(), new Regex(patternSdk));
             StringAssert.Matches(UserAgentSdkHeaders.OsDetails(), new Regex(patternOsDetails));
             StringAssert.Matches(UserAgentSdkHeaders.RuntimeInfo(), new Regex(patternRuntime));

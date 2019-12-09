@@ -21,10 +21,5 @@ namespace SignNow.Net.Internal.Model
         /// OS platform
         /// </summary>
         public string Platform { get; set; }
-
-        /// <summary>
-        /// OS version
-        /// </summary>
-        public Version Version { get; set; }
     }
 }

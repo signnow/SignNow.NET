@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using SignNow.Net.Internal.Model;
 
@@ -119,11 +120,16 @@ namespace SignNow.Net.Internal.Infrastructure
             // Linux 4.4.0 - 43 - Microsoft #1-Microsoft Wed Dec 31 14:42:53 PST 2014
             // Linux 3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018
             var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)").Match(kernel.Trim());
-            version = matched.Groups["version"].Value;
+            version = matched.Groups["version"].Value.Trim();
 #endif
-            return $"Linux {version}".Trim();
+            return version;
         }
 
+        /// <summary>
+        /// Get MacOs version from string with kernel details.
+        /// </summary>
+        /// <param name="kernel"></param>
+        /// <returns></returns>
         public static string GetMacOsVersion(string kernel)
         {
             string version = String.Empty;
@@ -131,8 +137,8 @@ namespace SignNow.Net.Internal.Infrastructure
 #if NETSTANDARD
             /* Darwin 17.5.0 Darwin Kernel Version 17.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64 */
             var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<major>\d+).(?<minor>\d+).(?<patch>\d+)?").Match(kernel.Trim());
-            var major = int.Parse(matched.Groups["major"].Value);
-            var minor = int.Parse(matched.Groups["minor"].Value);
+            int major = int.Parse(matched.Groups["major"].Value, CultureInfo.InvariantCulture);
+            int minor = int.Parse(matched.Groups["minor"].Value, CultureInfo.InvariantCulture);
 
             switch (major)
             {
@@ -200,9 +206,12 @@ namespace SignNow.Net.Internal.Infrastructure
                     break;
             }
 #endif
-            return $"macOs {version}".Trim();
+            return version;
         }
 
+        /// <summary>
+        /// MacOS version based on `Major` octet
+        /// </summary>
         internal enum MacOsVersions
         {
             MacOsX101 = 1,
