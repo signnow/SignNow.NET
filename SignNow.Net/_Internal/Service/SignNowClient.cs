@@ -18,23 +18,23 @@ namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {
+        private static string sdkUserAgentString = String.Empty;
+
         /// <summary>
         /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
         /// </summary>
-        private static string sdkUserAgentString { get; set; }
-
-        [SuppressMessage("Potential Code Quality Issues", "RECS0029:Warns about property or indexer setters and event adders or removers that do not use the value parameter", Justification = "<Pending>")]
         public static string SdkUserAgentString
         {
-            get { return sdkUserAgentString; }
-            set
+            get
             {
-                if (sdkUserAgentString == null)
+                if (SignNowClient.sdkUserAgentString == String.Empty)
                     sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
+
+                return SignNowClient.sdkUserAgentString;
             }
         }
 
-        private HttpClient HttpClient { get; }      
+        private HttpClient HttpClient { get; }
 
         /// <summary>
         /// Initialize a new instance of SignNow Client
@@ -49,6 +49,7 @@ namespace SignNow.Net.Internal.Service
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
+            sdkUserAgentString = SdkUserAgentString;
         }
 
         /// <inheritdoc />
@@ -150,7 +151,7 @@ namespace SignNow.Net.Internal.Service
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
-            requestMessage.Headers.Add("User-Agent", SignNowClient.SdkUserAgentString);
+            requestMessage.Headers.Add("User-Agent", SdkUserAgentString);
 
             if (requestOptions.Token != null)
             {
