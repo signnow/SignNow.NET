@@ -23,7 +23,17 @@ namespace SignNow.Net.Internal.Service
         /// <summary>
         /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
         /// </summary>
-        private static string SdkUserAgentString { get; set; }
+        private static string sdkUserAgentString;
+
+        private static string SdkUserAgentString
+        {
+            get { return sdkUserAgentString; }
+            set
+            {
+                if (sdkUserAgentString == null)
+                    sdkUserAgentString = BuildUserAgentString();
+            }
+        }
 
         /// <summary>
         /// Initialize a new instance of SignNow Client
@@ -38,7 +48,6 @@ namespace SignNow.Net.Internal.Service
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
-            SdkUserAgentString = BuildUserAgentString();
         }
 
         /// <inheritdoc />
@@ -140,7 +149,7 @@ namespace SignNow.Net.Internal.Service
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
-            requestMessage.Headers.Add("User-Agent", SdkUserAgentString);
+            requestMessage.Headers.Add("User-Agent", sdkUserAgentString);
 
             if (requestOptions.Token != null)
             {
