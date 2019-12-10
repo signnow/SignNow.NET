@@ -8,20 +8,6 @@ SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the Si
 
 Get your account at https://www.signnow.com/developers
 
-#### API Contact Information
-If you have questions about the SignNow API, please visit https://help.signnow.com/docs or email api@signnow.com.<br>
-**Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
-**Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit https://www.signnow.com/contact.
-
-#### API and Application
-| Resources | Sandbox | Production |
-| --- | --- | --- |
-| API: | api-eval.signnow.com:443 | api.signnow.com:443 |
-| Application: | https://app-eval.signnow.com | https://app.signnow.com |
-| Entry page: | https://eval.signnow.com |
-
-#### Examples 
-To run the examples you will need an API key. You can get one here https://www.signnow.com/api. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: https://help.signnow.com/docs.
 
 ## Contents
 1. [Get started](#get-started)
@@ -40,7 +26,14 @@ To run the examples you will need an API key. You can get one here https://www.s
 
 
 ## <a name="get-started"></a>Get started
-To start using the API you have to create a SignNow account [here](https://www.signnow.com/developers) 
+To start using the API  you will need an API key. You can get one here https://www.signnow.com/api. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: https://help.signnow.com/reference .
+
+#### API and Application
+| Resources | Sandbox | Production |
+| --- | --- | --- |
+| API: | api-eval.signnow.com:443 | api.signnow.com:443 |
+| Application: | https://app-eval.signnow.com | https://app.signnow.com |
+| Entry page: | https://eval.signnow.com |
 
 
 ## <a name="platform-dependencies"></a>Platform Dependencies
@@ -174,3 +167,10 @@ Thanks to all contributors who got interested in this project. We're excited to 
 ## <a name="license"></a>License
 
 This SDK is distributed under the MIT License,  see [LICENSE](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
+
+#### API Contact Information
+If you have questions about the SignNow API, please visit https://help.signnow.com/docs or email api@signnow.com.<br>
+
+**Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
+
+**Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit https://www.signnow.com/contact.
