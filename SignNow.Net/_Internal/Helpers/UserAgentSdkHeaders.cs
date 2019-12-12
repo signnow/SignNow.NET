@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using SignNow.Net.Internal.Infrastructure;
 
 [assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Helpers
@@ -10,39 +11,15 @@ namespace SignNow.Net.Internal.Helpers
     internal static class UserAgentSdkHeaders
     {
         /// <summary>
-        /// Returns SDK version (e.g: v1.0.0.0)
-        /// </summary>
-        /// <returns></returns>
-        public static string SdkVersion()
-        {
-            return $"v{Infrastructure.SdkRuntime.Version().ToString()}";
-        }
-
-        /// <summary>
-        /// Detect OS name, platform and architecture and returns formatted string representation
-        /// </summary>
-        /// <returns></returns>
-        public static string OsDetails()
-        {
-            return $"{Infrastructure.RuntimeInfo.OsName()}; {Infrastructure.RuntimeInfo.OsPlatform()}; {Infrastructure.RuntimeInfo.OsArch()}";
-        }
-
-        /// <summary>
-        /// Returns runtime framework name and version
-        /// </summary>
-        /// <returns></returns>
-        public static string RuntimeInfo()
-        {
-            return $"{Infrastructure.SdkRuntime.FrameworkName()}/v{Infrastructure.SdkRuntime.FrameworkVersion()}";
-        }
-
-        /// <summary>
         /// Creates pre-formatted string with SDK, OS, Runtime information
+        /// e.g.: client_name>/version (OS_type OS_release; platform; arch) runtime/version
         /// </summary>
         /// <returns></returns>
         public static string BuildUserAgentString()
         {
-            return $"{Infrastructure.SdkRuntime.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
+            return $"{SdkRuntime.ClientName}/v{SdkRuntime.Version.ToString()} " +
+                   $"({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) " +
+                   $"{SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
         }
     }
 }

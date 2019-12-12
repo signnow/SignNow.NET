@@ -26,13 +26,16 @@ namespace UnitTests
                 @"\(" + patternOsDetails + @"\)\s" +
                 patternRuntime;
 
-            var userAgentString = $"{SdkRuntime.ClientName()}/{UserAgentSdkHeaders.SdkVersion()} ({UserAgentSdkHeaders.OsDetails()}) {UserAgentSdkHeaders.RuntimeInfo()}";
+            var osdetails = $"({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch})";
+            var runtimeinfo = $"{SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
 
-            StringAssert.Contains(SdkRuntime.ClientName(), "SignNow .NET API Client");
-            StringAssert.Matches(SdkRuntime.ClientName(), new Regex(patternClient));
-            StringAssert.Matches(UserAgentSdkHeaders.SdkVersion(), new Regex(patternSdk));
-            StringAssert.Matches(UserAgentSdkHeaders.OsDetails(), new Regex(patternOsDetails));
-            StringAssert.Matches(UserAgentSdkHeaders.RuntimeInfo(), new Regex(patternRuntime));
+            var userAgentString = $"{SdkRuntime.ClientName}/v{SdkRuntime.Version.ToString()} ({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) {SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
+
+            StringAssert.Contains(SdkRuntime.ClientName, "SignNow .NET API Client");
+            StringAssert.Matches(SdkRuntime.ClientName, new Regex(patternClient));
+            StringAssert.Matches($"v{SdkRuntime.Version.ToString()}", new Regex(patternSdk));
+            StringAssert.Matches(osdetails, new Regex(patternOsDetails));
+            StringAssert.Matches(runtimeinfo, new Regex(patternRuntime));
 
             StringAssert.Matches(userAgentString, new Regex(patternUserAgent), "Format mismatch: <client>/<version> (<os>; <platform>; <arch>) <runtime_sdk>/<runtime_ver>");
             Console.WriteLine(userAgentString);

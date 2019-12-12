@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using SignNow.Net.Internal.Model;
 
 [assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Infrastructure
@@ -11,33 +10,19 @@ namespace SignNow.Net.Internal.Infrastructure
     /// </summary>
     internal static class SdkRuntime
     {
-        private static SDKInfo SignNowSDK;
-
-        static SdkRuntime()
-        {
-            SignNowSDK = new SDKInfo
-            {
-                ClientName = "SignNow .NET API Client",
-                Version = ParseVersion()
-            };
-        }
-
         /// <summary>
         /// Returns SignNow SDK client name
         /// </summary>
-        /// <returns></returns>
-        public static string ClientName()
-        {
-            return SignNowSDK.ClientName;
-        }
+        public const string ClientName = "SignNow .NET API Client";
 
         /// <summary>
         /// Returns SignNow SDK version.
         /// </summary>
-        /// <returns></returns>
-        public static Version Version()
+        public static Version Version { get; set; }
+
+        static SdkRuntime()
         {
-            return SignNowSDK.Version;
+            SdkRuntime.Version = ParseVersion();
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace SignNow.Net.Internal.Service
         {
             get
             {
-                if (SignNowClient.sdkUserAgentString == String.Empty)
+                if (string.IsNullOrEmpty(SignNowClient.sdkUserAgentString))
                     sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
 
                 return SignNowClient.sdkUserAgentString;

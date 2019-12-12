@@ -11,7 +11,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldReturnProperClientName()
         {
-            Equals(SdkRuntime.ClientName(), "SignNow .NET API Client");
+            Equals(SdkRuntime.ClientName, "SignNow .NET API Client");
         }
 
         [TestMethod]
@@ -19,7 +19,7 @@ namespace UnitTests
         {
             var pattern = new Regex(@"(?<version>\d+.\d+.\d+.\d+)");
 
-            StringAssert.Matches(SdkRuntime.Version().ToString(), pattern);
+            StringAssert.Matches(SdkRuntime.Version.ToString(), pattern);
         }
     }
 }

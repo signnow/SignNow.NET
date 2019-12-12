@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using SignNow.Net.Internal.Model;
 
 [assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Infrastructure
@@ -20,16 +19,26 @@ namespace SignNow.Net.Internal.Infrastructure
     /// </summary>
     internal static class RuntimeInfo
     {
-        private static OsRuntime Runtime;
+        /// <summary>
+        /// Returns OS name (e.g. Linux, macOs, Windows)
+        /// </summary>
+        public static string OsName { get; set; }
+
+        /// <summary>
+        /// Returns OS architecture.
+        /// </summary>
+        public static string Arch { get; set; }
+
+        /// <summary>
+        /// Returns OS platform.
+        /// </summary>
+        public static string Platform { get; set; }
 
         static RuntimeInfo()
         {
-            Runtime = new OsRuntime
-            {
-                Name = GetOSName(),
-                Arch = GetArchitecture(),
-                Platform = GetPlatform()
-            };
+            OsName = GetOSName();
+            Arch = GetArchitecture();
+            Platform = GetPlatform();
         }
 
         /// <summary>
@@ -70,7 +79,7 @@ namespace SignNow.Net.Internal.Infrastructure
         /// Gets OS platform from runtime.
         /// </summary>
         /// <returns></returns>
-        public static string GetPlatform()
+        private static string GetPlatform()
         {
             var platform = "unknown";
 #if NET45
@@ -79,33 +88,6 @@ namespace SignNow.Net.Internal.Infrastructure
             platform = RuntimeInformation.ProcessArchitecture.ToString();
 #endif
             return platform;
-        }
-
-        /// <summary>
-        /// Returns OS name (e.g. Linux, macOs, Windows)
-        /// </summary>
-        /// <returns></returns>
-        public static string OsName()
-        {
-            return Runtime.Name;
-        }
-
-        /// <summary>
-        /// Returns OS architecture.
-        /// </summary>
-        /// <returns></returns>
-        public static string OsArch()
-        {
-            return Runtime.Arch;
-        }
-
-        /// <summary>
-        /// Returns OS platform.
-        /// </summary>
-        /// <returns></returns>
-        public static string OsPlatform()
-        {
-            return Runtime.Platform;
         }
 
         /// <summary>
