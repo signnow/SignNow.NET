@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Infrastructure;
 using SignNow.Net.Internal.Model;
 using System;
+using System.Text.RegularExpressions;
 
 namespace UnitTests
 {
@@ -49,6 +50,14 @@ namespace UnitTests
             var actual = RuntimeInfo.GetMacOsVersion(kernelStr);
 
             Assert.AreEqual(actual, expected);
+        }
+
+        [TestMethod]
+        public void ShouldProperCollectOsInfo()
+        {
+            var patternOsName = @"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)";
+
+            StringAssert.Matches(RuntimeInfo.OsName, new Regex(patternOsName));
         }
     }
 }

@@ -36,7 +36,7 @@ namespace SignNow.Net.Internal.Infrastructure
 
         static RuntimeInfo()
         {
-            OsName = GetOSName();
+            OsName = $"{GetOSName()} {GetOsVersion()}".Trim();
             Arch = GetArchitecture();
             Platform = GetPlatform();
         }
@@ -58,6 +58,30 @@ namespace SignNow.Net.Internal.Infrastructure
                 os = "macOs";
 #endif
             return os;
+        }
+
+        /// <summary>
+        /// Gets OS version from runtime
+        /// </summary>
+        /// <returns></returns>
+        private static string GetOsVersion()
+        {
+            var version = "0.0.0";
+#if NET45
+            // On Windows we already have FQ string, e.g: WINDOWS_NT 10.11
+            version = String.Empty;
+#else
+            // For known Unix-like OS we should parse version from OS description string
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                version = GetLinuxVersion(RuntimeInformation.OSDescription);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                version = GetMacOsVersion(RuntimeInformation.OSDescription);
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                version = string.Empty;
+#endif
+            return version;
         }
 
         /// <summary>
