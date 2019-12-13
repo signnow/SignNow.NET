@@ -25,6 +25,15 @@ namespace SignNow.Net.Internal.Infrastructure
             SdkRuntime.Version = ParseVersion();
         }
 
+        public static string OsDescription()
+        {
+#if NET45
+            return Environment.OSVersion.ToString();
+#else
+            return RuntimeInformation.OSDescription;
+#endif
+        }
+
         /// <summary>
         /// Returns framework name for current runtime
         /// </summary>

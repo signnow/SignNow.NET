@@ -21,5 +21,14 @@ namespace SignNow.Net.Internal.Helpers
                    $"({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) " +
                    $"{SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
         }
+
+        /// <summary>
+        /// Returns RAW runtime information with OS details.
+        /// </summary>
+        /// <returns></returns>
+        public static string RawOsDescription()
+        {
+            return SdkRuntime.OsDescription();
+        }
     }
 }
