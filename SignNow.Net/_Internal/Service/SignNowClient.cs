@@ -18,6 +18,38 @@ namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {
+        private static string sdkUserAgentString = String.Empty;
+
+        private static string xUserAgentString = String.Empty;
+
+        /// <summary>
+        /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
+        /// </summary>
+        public static string SdkUserAgentString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(sdkUserAgentString))
+                    sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
+
+                return sdkUserAgentString;
+            }
+        }
+
+        /// <summary>
+        /// Platform dependent raw os/runtime string
+        /// </summary>
+        public static string XUserAgentString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(xUserAgentString))
+                    xUserAgentString = UserAgentSdkHeaders.RawOsDescription();
+
+                return xUserAgentString;
+            }
+        }
+
         private HttpClient HttpClient { get; }
 
         /// <summary>
@@ -133,6 +165,9 @@ namespace SignNow.Net.Internal.Service
             }
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
+
+            requestMessage.Headers.Add("User-Agent", SdkUserAgentString);
+            requestMessage.Headers.Add("X-User-Agent", XUserAgentString);
 
             if (requestOptions.Token != null)
             {

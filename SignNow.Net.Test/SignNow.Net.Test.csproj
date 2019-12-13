@@ -35,6 +35,8 @@
     <Folder Include="UnitTests\" />
     <Folder Include="UnitTests\Context\" />
     <Folder Include="UnitTests\Exceptions\" />
+    <Folder Include="UnitTests\Helpers\" />
+    <Folder Include="UnitTests\Infrastructure\" />
   </ItemGroup>
 
 </Project>
