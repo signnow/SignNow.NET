@@ -24,6 +24,9 @@ namespace UnitTests
             Assert.AreEqual(actual, expected);
         }
 
+#if NET45
+        [Ignore]
+#endif
         [DataTestMethod]
         [DataRow("Darwin 1.2.0 Darwin Kernel Version 1.2.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.0", DisplayName = "Cheetah")]
         [DataRow("Darwin 1.4.0 Darwin Kernel Version 1.4.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.1", DisplayName = "Puma")]
@@ -42,12 +45,23 @@ namespace UnitTests
         [DataRow("Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.14", DisplayName = "Mojave")]
         [DataRow("Darwin 19.0.0 Darwin Kernel Version 19.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.15", DisplayName = "Catalina")]
         [DataRow("Darwin 99.0.0 Darwin Kernel Version 99.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "", DisplayName = "Unknown")]
-#if NET45
-        [Ignore]
-#endif
         public void ShouldProperParseMacOsDetails(string kernelStr, string expected)
         {
             var actual = RuntimeInfo.GetMacOsVersion(kernelStr);
+
+            Assert.AreEqual(actual, expected);
+        }
+
+#if NET45
+        [Ignore]
+#endif
+        [DataTestMethod]
+        [DataRow("Microsoft Windows 10.0.18363", "10.0.18363", DisplayName = "FQN windows string")]
+        [DataRow("Microsoft Windows 10.0", "10.0", DisplayName = "Only <major>.<minor>")]
+        [DataRow("nonMicrosoft nonWindows no-10.0", "", DisplayName = "Broken string")]
+        public void ShouldProperParseWindowsVersionNetSdandard(string osDetails, string expected)
+        {
+            var actual = RuntimeInfo.GetWindowsVersion(osDetails);
 
             Assert.AreEqual(actual, expected);
         }

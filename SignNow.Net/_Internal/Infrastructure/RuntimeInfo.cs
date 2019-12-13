@@ -56,6 +56,9 @@ namespace SignNow.Net.Internal.Infrastructure
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 os = "macOs";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                os = "Windows";
 #endif
             return os;
         }
@@ -66,10 +69,10 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static string GetOsVersion()
         {
-            var version = "0.0.0";
+            var version = string.Empty;
 #if NET45
             // On Windows we already have FQ string, e.g: WINDOWS_NT 10.11
-            version = String.Empty;
+            return version;
 #else
             // For known Unix-like OS we should parse version from OS description string
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -79,9 +82,9 @@ namespace SignNow.Net.Internal.Infrastructure
                 version = GetMacOsVersion(RuntimeInformation.OSDescription);
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                version = string.Empty;
+                version = GetWindowsVersion(RuntimeInformation.OSDescription);
 #endif
-            return version;
+            return version ?? "0.0.0";
         }
 
         /// <summary>
@@ -112,6 +115,22 @@ namespace SignNow.Net.Internal.Infrastructure
             platform = RuntimeInformation.ProcessArchitecture.ToString();
 #endif
             return platform;
+        }
+
+        /// <summary>
+        /// Get Windows version from string with os details.
+        /// </summary>
+        /// <param name="osDescription"></param>
+        /// <returns></returns>
+        public static string GetWindowsVersion(string osDescription)
+        {
+            string version = String.Empty;
+#if NETSTANDARD
+            // Microsoft Windows 10.0.18363
+            var matched = new Regex(@"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)").Match(osDescription.Trim());
+            version = matched.Groups["version"].Value.Trim();
+#endif
+            return version;
         }
 
         /// <summary>
