@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.1.0-beta</Version>
+        <Version>0.2.0-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
         <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
@@ -14,12 +14,16 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
         <PackageReleaseNotes>Features implemented:
 
-- OAuth2Service.RefreshTokenAsync method.
-- OAuth2Service.ValidateTokenAsync method.</PackageReleaseNotes>
+- DocumentService: Downloads a Collapsed/with History/Zipped Document
+
+Fixed:
+
+- SignNowException serialization for .Net 4.5</PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
+        <ReleaseVersion>0.2.0-beta</ReleaseVersion>
     </PropertyGroup>
 
     <PropertyGroup>
