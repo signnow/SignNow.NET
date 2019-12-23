@@ -28,3 +28,6 @@ comment:
   layout: diff
   behavior: default
   require_changes: false
+
+ignore:
+  - "./SignNow.Net/Exceptions/*.Designer.cs"
