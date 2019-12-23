@@ -3,21 +3,40 @@
 name: Build and Test
 
 on:
-  - push
-  - pull_request
+  push:
+    path-ignore:
+      - 'README.md'
+
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
 
 # Workflows
 jobs:
   build:
+
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
-        os:
-          - 'ubuntu-18.04'
-          - 'macOS-latest'
-          - 'windows-latest'
-        dotnet:
-          - '2.2.402'
+        name:
+          - ubuntu-18.04
+          - macOS-latest
+          - windows-latest
+
+        include:
+          - name: ubuntu-18.04
+            os: ubuntu-18.04
+            dotnet: '2.2.402'
+          - name: macOS-latest
+            os: macOS-latest
+            dotnet: '2.2.402'
+          - name: windows-latest
+            os: windows-latest
+            dotnet: '2.2.402'
+
     env:
       COREHOST_TRACE: false
       # Disable sending usage data to Microsoft
@@ -26,16 +45,16 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
+      CODACY_COVERAGE_VERSION: 1.0.7
 
-    name: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
 
       - name: Setup .Net ${{ matrix.dotnet }}
+        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet }}
-        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
 
       - name: Setup .Net Tools
         env:
@@ -105,4 +124,5 @@ jobs:
           name: codecov-develop-${{ matrix.os }}
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
+          fail_ci_if_error: false
 
