@@ -67,7 +67,6 @@ jobs:
           key: ${{ runner.os }}-dotnet-${{ hashFiles('**/SignNow*/*.csproj') }}
           restore-keys: ${{ runner.os }}-dotnet-
 
-
       - uses: actions/cache@v1
         name: Setup nuget cache
         id: nuget-cache
@@ -96,14 +95,11 @@ jobs:
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
       - name: Build for ${{ matrix.framework }}
-        # env:
-        #   DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework ${{ matrix.framework }}
 
       - name: Run Tests on ${{ matrix.framework }}
         env:
-          # DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/SignNow.Net.Test.dll
           TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework ${{ matrix.framework }}
           COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug
@@ -114,21 +110,33 @@ jobs:
       # Build and test for .Net 4.5 (Windows Only)
       - name: Build for .Net 4.5
         if: runner.os == 'Windows'
-        env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
 
       - name: Run Tests on .Net 4.5
         if: runner.os == 'Windows'
         env:
-          # DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
           TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework net45
           COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug/
         shell: pwsh
         run: |
           coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
+
+      - name: Send coverage to Codacy
+        if: (runner.os == 'macOS' || runner.os == 'Linux')
+        run: |
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            curl -Ls "https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_osx-x64" --output codacy
+          fi
+
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            curl -Ls "https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_linux-x64" --output codacy
+          fi
+
+          chmod +x ./codacy
+          ./codacy -c $GITHUB_SHA -t ${{ secrets.CODACY_PROJECT_TOKEN }} -r ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml -e opencover
+
 
       - name: Upload code coverage report
         continue-on-error: true
