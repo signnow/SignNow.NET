@@ -30,12 +30,15 @@ jobs:
           - name: ubuntu-18.04
             os: ubuntu-18.04
             dotnet: '2.2.402'
+            framework: 'netcoreapp2.2'
           - name: macOS-latest
             os: macOS-latest
             dotnet: '2.2.402'
+            framework: 'netcoreapp2.2'
           - name: windows-latest
             os: windows-latest
             dotnet: '2.2.402'
+            framework: 'netcoreapp2.2'
 
     env:
       COREHOST_TRACE: false
@@ -51,7 +54,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Setup .Net ${{ matrix.dotnet }}
-        if: (matrix.os == 'macOS-latest' || matrix.os == 'ubuntu-latest')
+        if: (runner.os == 'macOS' || runner.os == 'Linux')
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ matrix.dotnet }}
@@ -86,13 +89,13 @@ jobs:
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
-          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework netcoreapp2.2
+          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework ${{ matrix.framework }}
 
       - name: Run SignNow.Net Tests for NetCore 2.2
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
-          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/netcoreapp2.2/SignNow.Net.Test.dll
-          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework netcoreapp2.2
+          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/SignNow.Net.Test.dll
+          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework ${{ matrix.framework }}
           COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug
         shell: pwsh
         run: |
@@ -100,14 +103,14 @@ jobs:
 
       # Build and test for .Net 4.5 (Windows Only)
       - name: Build SignNow.Net (.Net 4.5)
-        if: (matrix.os == 'windows-latest')
+        if: runner.os == 'Windows'
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
 
       - name: Run SignNow.Net Tests (.Net 4.5)
-        if: (matrix.os == 'windows-latest')
+        if: runner.os == 'Windows'
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
@@ -122,7 +125,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           name: codecov-develop-${{ matrix.os }}
-          token: ${{secrets.CODECOV_TOKEN}}
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
           fail_ci_if_error: false
 
