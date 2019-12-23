@@ -28,11 +28,15 @@ namespace AcceptanceTests
 
             Assert.IsNotNull(token, "Token is null");
             if (String.IsNullOrEmpty(token.AccessToken))
+            {
                 Assert.Fail("Access token is empty");
+            }
 
             Assert.IsNotNull(tokenExt, "Token is null");
             if (String.IsNullOrEmpty(tokenExt.AccessToken))
+            {
                 Assert.Fail("Access token is empty");
+            }
         }
 
         [TestMethod]

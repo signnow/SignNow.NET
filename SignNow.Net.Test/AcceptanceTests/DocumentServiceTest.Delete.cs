@@ -30,7 +30,7 @@ namespace AcceptanceTests
         [DataRow("_valid_part_of_document_id_____________!")]
         [DataRow("000000000000000000000000000000000000000 ")]
         [DataTestMethod]
-        public void Cannot_Delete_Document_With_Wrong_ID(string documentId)
+        public void CannotDeleteDocumentWithWrongID(string documentId)
         {
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
 

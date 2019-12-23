@@ -34,7 +34,7 @@ namespace AcceptanceTests
 
         public DocumentServiceTest()
         {
-            docService = new DocumentService(ApiBaseUrl, Token);
+            docService = new DocumentService(Token);
         }
 
         /// <summary>
@@ -67,7 +67,9 @@ namespace AcceptanceTests
         void DeleteDocument(string id)
         {
             if (string.IsNullOrEmpty(id))
+            {
                 return;
+            }
 
             using (var client = new HttpClient())
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{id}"))

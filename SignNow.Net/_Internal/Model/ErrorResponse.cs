@@ -29,10 +29,14 @@ namespace SignNow.Net.Internal.Model
             var message = string.Empty;
 
             if (!string.IsNullOrEmpty(Error))
+            {
                 message = Error;
+            }
 
             if (!string.IsNullOrEmpty(Error404))
+            {
                 message = Error404;
+            }
 
             if (Errors != null)
             {
