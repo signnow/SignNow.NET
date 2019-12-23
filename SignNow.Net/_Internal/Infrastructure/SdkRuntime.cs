@@ -68,7 +68,7 @@ namespace SignNow.Net.Internal.Infrastructure
         {
             var assemblyFQN = typeof(SdkRuntime).AssemblyQualifiedName.Split(',');
 
-            var version = Array.Find<string>(assemblyFQN, (string obj) => obj.Contains("Version=")).Trim();
+            var version = Array.Find(assemblyFQN, (string obj) => obj.Contains("Version=")).Trim();
 
             var parsed = version.Replace("Version=", String.Empty);
 

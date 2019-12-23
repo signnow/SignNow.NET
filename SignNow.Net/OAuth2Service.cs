@@ -47,15 +47,18 @@ namespace SignNow.Net
             var targetHost = host;
 
             if (host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+            {
                 targetHost = "eval.signnow.com";
+            }
             else if (host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+            {
                 targetHost = "signnow.com";
+            }
 
             var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
+
             return new Uri(
-                hostUri, relativeUri: $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
-
-
+                hostUri, $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
         }
 
         /// <inheritdoc />

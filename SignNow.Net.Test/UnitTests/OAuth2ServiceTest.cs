@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
+using SignNow.Net.Model;
 
 namespace UnitTests
 {
@@ -43,6 +44,8 @@ namespace UnitTests
         {
             var OAuth2 = new OAuth2Service("clientId", "clientSecret");
             var error = OAuth2.RefreshTokenAsync(null).Result;
+
+            Assert.IsNotInstanceOfType(error, typeof(Token));
         }
 
         [TestMethod]
@@ -51,6 +54,8 @@ namespace UnitTests
         {
             var OAuth2 = new OAuth2Service("clientId", "clientSecret");
             var error = OAuth2.ValidateTokenAsync(null).Result;
+
+            Assert.IsNotInstanceOfType(error, typeof(Token));
         }
     }
 }

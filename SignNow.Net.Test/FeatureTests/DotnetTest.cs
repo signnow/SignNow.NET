@@ -6,10 +6,9 @@ using System.Net.Http;
 using System.Text;
 
 namespace FeatureTests
-
 {
     [TestClass]
-    public partial class DotnetTest
+    public class DotnetTest
     {
 #pragma warning disable IDE0028 // Simplify collection initialization
 #pragma warning disable CA2000 // Dispose objects before losing scope
@@ -22,12 +21,14 @@ namespace FeatureTests
             var streamContent = new MemoryStream(Encoding.UTF8.GetBytes("Hello world!"));
             var multipartContent = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
             multipartContent.Add(new StreamContent(streamContent), "file", "upload.pdf");
+
             HttpContent content = multipartContent;
             content.Dispose();
+
             try
             {
                 var result = multipartContent.ReadAsStringAsync().Result;
-                Assert.Fail();
+                Assert.Fail(result);
             }
             catch (ObjectDisposedException)
             {
@@ -35,7 +36,7 @@ namespace FeatureTests
             try
             {
                 var result = streamContent.Length;
-                Assert.Fail("Underline stream content is not disposed!");
+                Assert.Fail("Underline stream content is not disposed! Content lenght = " + result.ToString());
             }
             catch (ObjectDisposedException)
             {

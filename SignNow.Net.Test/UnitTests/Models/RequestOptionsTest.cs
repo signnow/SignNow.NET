@@ -22,7 +22,7 @@ namespace UnitTests
             {
                 AccessToken = "12345",
                 RefreshToken = "12345",
-                Scope = Scope.All.ToString(),
+                Scope = Scope.All.ToString()
             };
         }
 
