@@ -34,7 +34,7 @@ namespace AcceptanceTests
 
         public DocumentServiceTest()
         {
-            docService = new DocumentService(ApiBaseUrl, Token);
+            docService = new DocumentService(Token);
         }
 
         /// <summary>
