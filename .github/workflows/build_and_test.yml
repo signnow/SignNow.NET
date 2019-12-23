@@ -59,14 +59,14 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet }}
 
-      - name: Setup .Net Tools
-        env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
-        run: |
-          dotnet tool install --global InheritDocTool
-          dotnet tool install --global coverlet.console
-          echo "::add-path::$HOME/.dotnet/tools"
-          # echo ::set-env name=PATH::/home/runner/.dotnet/tools/:$PATH
+      - uses: actions/cache@v1
+        name: Setup dotnet cache
+        id: dotnet-cache
+        with:
+          path: ~/.dotnet
+          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/SignNow*/*.csproj') }}
+          restore-keys: ${{ runner.os }}-dotnet-
+
 
       - uses: actions/cache@v1
         name: Setup nuget cache
@@ -75,6 +75,15 @@ jobs:
           path: ~/.nuget
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Setup .Net Tools
+        env:
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+        run: |
+          dotnet tool install --global InheritDocTool
+          dotnet tool install --global coverlet.console
+          echo "::add-path::$HOME/.dotnet/tools"
+          # echo ::set-env name=PATH::/home/runner/.dotnet/tools/:$PATH
 
       - name: Restore Nuget packages
         run: |
@@ -86,15 +95,15 @@ jobs:
           echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
-      - name: Build for NetCore ${{ matrix.framework }}
-        env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+      - name: Build for ${{ matrix.framework }}
+        # env:
+        #   DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework ${{ matrix.framework }}
 
-      - name: Run Tests on NetCore ${{ matrix.framework }}
+      - name: Run Tests on ${{ matrix.framework }}
         env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          # DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/SignNow.Net.Test.dll
           TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework ${{ matrix.framework }}
           COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug
@@ -113,7 +122,7 @@ jobs:
       - name: Run Tests on .Net 4.5
         if: runner.os == 'Windows'
         env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          # DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
           TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
           TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework net45
           COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug/
