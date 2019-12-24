@@ -31,17 +31,14 @@ jobs:
             os: ubuntu-18.04
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
-            codacy: 'Codacy.CSharpCoverage_linux-x64'
           - name: macOS-latest
             os: macOS-latest
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
-            codacy: 'Codacy.CSharpCoverage_osx-x64'
           - name: windows-latest
             os: windows-latest
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
-            codacy: 'Codacy.CSharpCoverage_win-x64.exe'
 
     env:
       COREHOST_TRACE: false
@@ -51,7 +48,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
-      CODACY_COVERAGE_VERSION: 1.0.7
+      CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
     steps:
       - uses: actions/checkout@v1
@@ -69,6 +66,13 @@ jobs:
           path: ~/.nuget
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
+
+
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          version: 3.8
+          architecture: x64
 
       - name: Setup dotnet tool
         env:
@@ -117,15 +121,11 @@ jobs:
         run: |
           coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
 
-      - name: Send coverage to Codacy
-        shell: pwsh
+      - name: Submit code coverage to Codacy
         run: |
-          $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_COVERAGE_VERSION/${{ matrix.codacy }}"
-          $Report = './SignNow.Net.Test/bin/Debug/coverage.opencover.xml'
-
-          Invoke-WebRequest -Uri $DownloadUrl -OutFile ./${{ matrix.codacy }}
-          ./${{ matrix.codacy }} --help
-          ./${{ matrix.codacy }} --commit ${{ github.sha }} --token ${{ secrets.CODACY_PROJECT_TOKEN }} --report $Report --engine opencover --partial
+          python -m pip install --upgrade pip
+          pip install codacy-coverage
+          python-codacy-coverage -r ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
 
       - name: Upload code coverage report
         continue-on-error: true
