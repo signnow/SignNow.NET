@@ -21,6 +21,9 @@ jobs:
 
     strategy:
       matrix:
+        framework:
+          - 'netcoreapp2.0'
+          - 'netcoreapp2.2'
         name:
           - ubuntu-18.04
           - macOS-latest
@@ -30,18 +33,19 @@ jobs:
           - name: ubuntu-18.04
             os: ubuntu-18.04
             dotnet: '2.2.402'
-            framework: 'netcoreapp2.2'
             codacy_prefix: 'linux-x64'
           - name: macOS-latest
             os: macOS-latest
             dotnet: '2.2.402'
-            framework: 'netcoreapp2.2'
             codacy_prefix: 'osx-x64'
           - name: windows-latest
             os: windows-latest
             dotnet: '2.2.402'
-            framework: 'netcoreapp2.2'
             codacy_prefix: 'win-x64.exe'
+
+        exclude:
+          - name: windows-latest
+            framework: 'netcoreapp2.0'
 
     env:
       COREHOST_TRACE: false
@@ -51,8 +55,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
-      CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      CODACY_COVERAGE_VERSION: 1.0.7
+      COVERAGE_PATH: ${{ github.workspace }}/SignNow.Net.Test/bin/CoverletOutput
 
     steps:
       - uses: actions/checkout@v1
@@ -89,42 +92,59 @@ jobs:
           echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
-      - name: Build for ${{ matrix.framework }}
-        run: |
-          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework ${{ matrix.framework }}
-
-      - name: Run Tests on ${{ matrix.framework }}
-        env:
-          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/SignNow.Net.Test.dll
-          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework ${{ matrix.framework }}
-          COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug
-        shell: pwsh
-        run: |
-          coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
 
       # Build and test for .Net 4.5 (Windows Only)
       - name: Build for .Net 4.5
         if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          dotnet build ./SignNow.Net.Test/SignNow.Net.Test.csproj --framework net45
+          dotnet build SignNow.Net.Test `
+            --configuration Debug --framework net45
+
+      - name: Build for ${{ matrix.framework }}
+        shell: pwsh
+        run: |
+          dotnet build SignNow.Net.Test `
+            --configuration Debug --framework ${{ matrix.framework }}
+
 
       - name: Run Tests on .Net 4.5
         if: runner.os == 'Windows'
-        env:
-          TEST_ASSEMBLY: ./SignNow.Net.Test/bin/Debug/net45/SignNow.Net.Test.dll
-          TEST_ARGS: test ./SignNow.Net.Test/SignNow.Net.Test.csproj --no-build --framework net45
-          COVERAGE_OUTPUT: ./SignNow.Net.Test/bin/Debug/
         shell: pwsh
         run: |
-          coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
+          dotnet test SignNow.Net.Test `
+            --configuration Debug --no-build --framework net45 `
+            /p:CollectCoverage=true `
+            /p:CoverletOutput="$env:COVERAGE_PATH/" `
+            /p:MergeWith="$env:COVERAGE_PATH/coverage.json" `
+            /p:CoverletOutputFormat="opencover%2cjson" `
+            /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute"
+
+      - name: Run Tests on ${{ matrix.framework }}
+        shell: pwsh
+        run: |
+          dotnet test SignNow.Net.Test `
+            --configuration Debug --no-build --framework ${{ matrix.framework }} `
+            /p:CollectCoverage=true `
+            /p:CoverletOutput="$env:COVERAGE_PATH/" `
+            /p:MergeWith="$env:COVERAGE_PATH/coverage.json" `
+            /p:CoverletOutputFormat="opencover%2cjson" `
+            /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute"
 
       - name: Submit code coverage to Codacy
+        env:
+          CODACY_VERSION: 1.0.7
         shell: pwsh
         run: |
-          $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
+          $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
           Invoke-WebRequest -Uri $DownloadUrl -OutFile ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
           chmod +x ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
-          ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }} --commit ${{ github.sha }} --token ${{ secrets.CODACY_PROJECT_TOKEN }} --report ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml --engine opencover --partial
+          ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }} `
+            --commit ${{ github.sha }} `
+            --token ${{ secrets.CODACY_PROJECT_TOKEN }} `
+            --report $env:COVERAGE_PATH/coverage.opencover.xml `
+            --engine opencover `
+            --partial
 
         # -r ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
       - name: Upload code coverage report
@@ -133,6 +153,6 @@ jobs:
         with:
           name: codecov-develop-${{ matrix.os }}
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
+          file: ./SignNow.Net.Test/bin/CoverletOutput/coverage.opencover.xml
           fail_ci_if_error: false
 
