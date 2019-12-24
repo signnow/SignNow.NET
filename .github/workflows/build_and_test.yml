@@ -31,14 +31,17 @@ jobs:
             os: ubuntu-18.04
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
+            codacy: 'Codacy.CSharpCoverage_linux-x64'
           - name: macOS-latest
             os: macOS-latest
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
+            codacy: 'Codacy.CSharpCoverage_osx-x64'
           - name: windows-latest
             os: windows-latest
             dotnet: '2.2.402'
             framework: 'netcoreapp2.2'
+            codacy: 'Codacy.CSharpCoverage_win-x64.exe'
 
     env:
       COREHOST_TRACE: false
@@ -67,7 +70,7 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Setup .Net Tools
+      - name: Setup dotnet tool
         env:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
@@ -115,19 +118,14 @@ jobs:
           coverlet $env:TEST_ASSEMBLY --target="dotnet" --targetargs="$env:TEST_ARGS" --format=opencover --format=json --merge-with=$env:COVERAGE_OUTPUT/coverage.json --output=$env:COVERAGE_OUTPUT/
 
       - name: Send coverage to Codacy
-        if: (runner.os == 'macOS' || runner.os == 'Linux')
+        shell: pwsh
         run: |
-          if [ "${{ runner.os }}" = "macOS" ]; then
-            curl -Ls "https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_osx-x64" --output codacy
-          fi
+          $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_COVERAGE_VERSION/${{ matrix.codacy }}"
+          $Report = './SignNow.Net.Test/bin/Debug/coverage.opencover.xml'
 
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            curl -Ls "https://github.com/codacy/csharp-codacy-coverage/releases/download/$CODACY_COVERAGE_VERSION/Codacy.CSharpCoverage_linux-x64" --output codacy
-          fi
-
-          chmod +x ./codacy
-          ./codacy -c $GITHUB_SHA -t ${{ secrets.CODACY_PROJECT_TOKEN }} -r ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml -e opencover
-
+          Invoke-WebRequest -Uri $DownloadUrl -OutFile ./${{ matrix.codacy }}
+          ./${{ matrix.codacy }} --help
+          ./${{ matrix.codacy }} --commit ${{ github.sha }} --token ${{ secrets.CODACY_PROJECT_TOKEN }} --report $Report --engine opencover --partial
 
       - name: Upload code coverage report
         continue-on-error: true
