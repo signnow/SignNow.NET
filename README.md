@@ -26,7 +26,7 @@ Get your account at <https://www.signnow.com/developers>
 
 ## <a name="get-started"></a>Get started
 
-To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: <https://docs.signnow.com/reference> .
+To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: <https://docs.signnow.com/reference>.
 
 #### API and Application
 
@@ -63,7 +63,7 @@ Install-Package SignNow.Net -Version <package-version>
 
 ## <a name="documentation"></a>Documentation
 
-Read about the available SignNow features in [SignNow API Docs](https://docs.signnow.com) .
+Read about the available SignNow features in [SignNow API Docs](https://docs.signnow.com).
 
 ## <a name="features"></a>Features
 
@@ -171,11 +171,11 @@ Thanks to all contributors who got interested in this project. We're excited to 
 
 ## <a name="license"></a>License
 
-This SDK is distributed under the MIT License,  see [LICENSE](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
+This SDK is distributed under the MIT License, see [LICENSE](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
 
 #### API Contact Information
 
-If you have questions about the SignNow API, please visit <https://docs.signnow.com/docs> or email api@signnow.com.<br>
+If you have questions about the SignNow API, please visit <https://docs.signnow.com/reference> or email api@signnow.com.<br>
 
 **Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
 
