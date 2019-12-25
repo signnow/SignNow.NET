@@ -16,7 +16,7 @@ on:
 jobs:
   build:
 
-    name: ${{ matrix.os }}
+    name: ${{ matrix.osname }} ${{ matrix.framework }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -24,6 +24,8 @@ jobs:
         framework:
           - 'netcoreapp2.0'
           - 'netcoreapp2.2'
+          - 'net45'
+
         name:
           - ubuntu-18.04
           - macOS-latest
@@ -32,20 +34,28 @@ jobs:
         include:
           - name: ubuntu-18.04
             os: ubuntu-18.04
+            osname: Linux
             dotnet: '2.2.402'
             codacy_prefix: 'linux-x64'
+
           - name: macOS-latest
             os: macOS-latest
+            osname: macOS
             dotnet: '2.2.402'
             codacy_prefix: 'osx-x64'
+
           - name: windows-latest
             os: windows-latest
+            osname: Windows
             dotnet: '2.2.402'
             codacy_prefix: 'win-x64.exe'
 
         exclude:
-          - name: windows-latest
-            framework: 'netcoreapp2.0'
+          - name: ubuntu-18.04
+            framework: 'net45'
+
+          - name: macOS-latest
+            framework: 'net45'
 
     env:
       COREHOST_TRACE: false
@@ -92,39 +102,30 @@ jobs:
           echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
+      - name: Build for .Net Standard 1.2
+        shell: pwsh
+        run: |
+          dotnet build SignNow.Net `
+            --configuration Debug --framework netstandard1.2
 
-      # Build and test for .Net 4.5 (Windows Only)
+      - name: Build for .Net Standard 2.0
+        shell: pwsh
+        run: |
+          dotnet build SignNow.Net `
+            --configuration Debug --framework netstandard2.0
+
       - name: Build for .Net 4.5
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          dotnet build SignNow.Net.Test `
+          dotnet build SignNow.Net `
             --configuration Debug --framework net45
-
-      - name: Build for ${{ matrix.framework }}
-        shell: pwsh
-        run: |
-          dotnet build SignNow.Net.Test `
-            --configuration Debug --framework ${{ matrix.framework }}
-
-
-      - name: Run Tests on .Net 4.5
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          dotnet test SignNow.Net.Test `
-            --configuration Debug --no-build --framework net45 `
-            /p:CollectCoverage=true `
-            /p:CoverletOutput="$env:COVERAGE_PATH/" `
-            /p:MergeWith="$env:COVERAGE_PATH/coverage.json" `
-            /p:CoverletOutputFormat="opencover%2cjson" `
-            /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute"
 
       - name: Run Tests on ${{ matrix.framework }}
         shell: pwsh
         run: |
           dotnet test SignNow.Net.Test `
-            --configuration Debug --no-build --framework ${{ matrix.framework }} `
+            --configuration Debug --framework ${{ matrix.framework }} `
             /p:CollectCoverage=true `
             /p:CoverletOutput="$env:COVERAGE_PATH/" `
             /p:MergeWith="$env:COVERAGE_PATH/coverage.json" `
@@ -146,7 +147,6 @@ jobs:
             --engine opencover `
             --partial
 
-        # -r ./SignNow.Net.Test/bin/Debug/coverage.opencover.xml
       - name: Upload code coverage report
         continue-on-error: true
         uses: codecov/codecov-action@v1
