@@ -21,8 +21,10 @@ jobs:
 
     strategy:
       matrix:
+        dotnet:
+          - '2.2.402'
+
         framework:
-          - 'netcoreapp2.0'
           - 'netcoreapp2.2'
           - 'net45'
 
@@ -35,19 +37,16 @@ jobs:
           - name: ubuntu-18.04
             os: ubuntu-18.04
             osname: Linux
-            dotnet: '2.2.402'
             codacy_prefix: 'linux-x64'
 
           - name: macOS-latest
             os: macOS-latest
             osname: macOS
-            dotnet: '2.2.402'
             codacy_prefix: 'osx-x64'
 
           - name: windows-latest
             os: windows-latest
             osname: Windows
-            dotnet: '2.2.402'
             codacy_prefix: 'win-x64.exe'
 
         exclude:
@@ -155,4 +154,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./SignNow.Net.Test/bin/CoverletOutput/coverage.opencover.xml
           fail_ci_if_error: false
-
