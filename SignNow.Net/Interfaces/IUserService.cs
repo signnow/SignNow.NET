@@ -12,7 +12,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Retrieve current user`s resource
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns></returns>
         Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default);
     }
