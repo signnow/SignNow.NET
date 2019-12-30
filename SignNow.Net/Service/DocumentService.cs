@@ -118,5 +118,22 @@ namespace SignNow.Net.Service
                 cancellationToken
                 ).ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<InviteResponse> CreateInviteAsync(string documentId, ISignInvite invite, CancellationToken cancellationToken = default)
+        {
+            if (null == invite)
+                throw new ArgumentNullException(nameof(invite));
+
+            var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}/invite");
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestFullUrl,
+                Content = invite.InviteContent(),
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
     }
 }
