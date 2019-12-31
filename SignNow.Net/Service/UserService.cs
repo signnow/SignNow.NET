@@ -13,11 +13,11 @@ namespace SignNow.Net.Service
         {
         }
 
-        public UserService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
+        private UserService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
         {
         }
 
-        internal protected UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token,
+        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token,
             client)
         {
         }

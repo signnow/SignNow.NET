@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using SignNow.Net.Model.Converters;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model
 {

@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.Converters
+namespace SignNow.Net.Internal.Helpers.Converters
 {
     internal class StringToBoolJsonConverter : JsonConverter
     {
