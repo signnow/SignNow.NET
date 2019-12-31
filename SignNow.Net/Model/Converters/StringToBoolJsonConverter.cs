@@ -7,6 +7,7 @@ namespace SignNow.Net.Model.Converters
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            throw new NotSupportedException();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,

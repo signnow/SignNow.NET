@@ -25,7 +25,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
         {
-            var requestOptions = new GetHttpRequestOptions()
+            var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
                 Token = Token
