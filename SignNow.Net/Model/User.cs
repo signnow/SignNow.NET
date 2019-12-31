@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SignNow.Net.Model.Converters;
 
 namespace SignNow.Net.Model
 {
@@ -7,7 +8,7 @@ namespace SignNow.Net.Model
     /// </summary>
     public class User
     {
-        [JsonProperty("active")]
+        [JsonProperty("active"), JsonConverter(typeof(StringToBoolJsonConverter))]
         public bool Active { get; set; }
 
         [JsonProperty("first_name")]
@@ -16,7 +17,7 @@ namespace SignNow.Net.Model
         [JsonProperty("last_name")]
         public string LastName { get; set; }
 
-        [JsonProperty("email")]
+        [JsonProperty("primary_email")]
         public string Email { get; set; }
     }
 }
