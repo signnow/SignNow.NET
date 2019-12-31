@@ -12,8 +12,8 @@ coverage:
     project:             # measuring the overall project coverage
       default:
         enabled: yes     # must be yes|true to enable this status
-        target: 80%       # specify the target coverage for each commit status
-        threshold: null  # Allow the coverage to drop by threshold %, and posting a success status.
+        target: 80%      # specify the target coverage for each commit status
+        threshold: 5%    # Allow the coverage to drop by threshold %, and posting a success status.
     patch: false         # https://docs.codecov.io/docs/commit-status#section-patch-status
     changes: false
 
