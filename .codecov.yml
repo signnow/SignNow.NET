@@ -1,7 +1,7 @@
 codecov:
   notify:
     require_ci_to_pass: yes # require the build to pass before submitting notifications
-    after_n_builds: 4    # how many build to wait for before submitting notifications, therefore skipping status checks
+    after_n_builds: 4       # how many build to wait for before submitting notifications, therefore skipping status checks
 
 coverage:
   precision: 2
@@ -12,10 +12,10 @@ coverage:
     project:             # measuring the overall project coverage
       default:
         enabled: yes     # must be yes|true to enable this status
-        target: 80       # specify the target coverage for each commit status
+        target: 80%       # specify the target coverage for each commit status
         threshold: null  # Allow the coverage to drop by threshold %, and posting a success status.
-    patch: off           # https://docs.codecov.io/docs/commit-status#section-patch-status
-    changes: no
+    patch: false         # https://docs.codecov.io/docs/commit-status#section-patch-status
+    changes: false
 
 parsers:
   gcov:
