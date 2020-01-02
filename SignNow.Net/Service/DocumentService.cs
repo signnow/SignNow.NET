@@ -123,7 +123,9 @@ namespace SignNow.Net.Service
         public async Task<InviteResponse> CreateInviteAsync(string documentId, ISignInvite invite, CancellationToken cancellationToken = default)
         {
             if (null == invite)
+            {
                 throw new ArgumentNullException(nameof(invite));
+            }
 
             var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}/invite");
             var requestOptions = new PostHttpRequestOptions
