@@ -6,7 +6,7 @@ namespace SignNow.Net.Model
     public class FreeFormInvite : ISignInvite
     {
         /// <inheritdoc />
-        public string Sender { get; set; }
+        public User Sender { get; set; }
 
         /// <inheritdoc />
         public string Recipient { get; set; }
@@ -16,7 +16,7 @@ namespace SignNow.Net.Model
             return new JsonHttpContent(
                 new
                 {
-                    from = Sender,
+                    from = Sender.Email,
                     to = Recipient
                 }
                 );

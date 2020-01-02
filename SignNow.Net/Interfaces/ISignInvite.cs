@@ -10,7 +10,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// The email of the sender`s.
         /// </summary>
-        string Sender { get; }
+        User Sender { get; }
 
         /// <summary>
         /// An email of signer`s that you would like to send the invite to
