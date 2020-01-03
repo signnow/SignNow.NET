@@ -1,13 +1,16 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
+using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 
 namespace SignNow.Net.Service
 {
-    public class UserService : AuthorizedWebClientBase, IUserService
+    public class UserService : AuthorizedWebClientBase, IUserService, ISignInvite
     {
         public UserService(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
@@ -32,6 +35,43 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient.RequestAsync<User>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
+        {
+            if (null == invite)
+            {
+                throw new ArgumentNullException(nameof(invite));
+            }
+
+            var sender = GetCurrentUserAsync(cancellationToken).Result;
+            var inviteContent = JObject.FromObject(invite);
+                inviteContent.Add("from", sender.Email);
+
+            var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}/invite");
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestFullUrl,
+                Content = new JsonHttpContent(inviteContent),
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestedDocument = $"/document/{documentId.ValidateDocumentId()}/fieldinvitecancel";
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                Token = Token
+            };
+
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
     }
 }
