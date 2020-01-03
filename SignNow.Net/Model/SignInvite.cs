@@ -16,7 +16,7 @@ namespace SignNow.Net.Model
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        internal SignInvite(string message, string subject)
+        protected SignInvite(string message, string subject)
         {
             Message = message;
             Subject = subject;

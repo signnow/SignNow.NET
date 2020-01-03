@@ -8,9 +8,9 @@ namespace AcceptanceTests
     [TestClass]
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
-        readonly IDocumentService docService;
+        private readonly IDocumentService docService;
 
-        private string DocumentId { get; set; }
+        public string DocumentId { get; set; }
 
         [TestCleanup]
         public void TestCleanup()
