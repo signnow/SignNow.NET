@@ -12,6 +12,7 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
     </ItemGroup>
+
     <PropertyGroup Condition="'$(EnableCoverage)' == 'true'">
       <CollectCoverage>true</CollectCoverage>
       <CoverletOutputFormat>opencover,json</CoverletOutputFormat>

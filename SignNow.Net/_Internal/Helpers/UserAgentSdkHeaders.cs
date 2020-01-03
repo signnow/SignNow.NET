@@ -1,8 +1,5 @@
-using System;
-using System.Runtime.CompilerServices;
 using SignNow.Net.Internal.Infrastructure;
 
-[assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Helpers
 {
     /// <summary>

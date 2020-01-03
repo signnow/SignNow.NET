@@ -1,7 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Infrastructure;
-using SignNow.Net.Internal.Model;
-using System;
 using System.Text.RegularExpressions;
 
 namespace UnitTests

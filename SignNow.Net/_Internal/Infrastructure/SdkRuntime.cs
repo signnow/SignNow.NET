@@ -1,8 +1,6 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Infrastructure
 {
     /// <summary>
