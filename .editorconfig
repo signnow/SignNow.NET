@@ -1,26 +1,38 @@
 # EditorConfig is awesome: http://EditorConfig.org
 
 # top-most EditorConfig file
-root                     = true
+root = true
 
 [*]
-charset                  = utf-8
-indent_style             = space
-indent_size              = 4
+charset = utf-8
+indent_style = space
+indent_size = 4
 trim_trailing_whitespace = true
 
 [Makefile]
-indent_style             = tab
-tab_width                = 4
+indent_style = tab
+tab_width = 4
 trim_trailing_whitespace = false
 
 [*.{mk,psm1,sh}]
-indent_style             = tab
-tab_width                = 4
+indent_style = tab
+tab_width = 4
 trim_trailing_whitespace = false
 
+# Code files
+[*.{cs,csx,vb,vbx}]
+insert_final_newline = true
+
+# Xml project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+
+# Xml config files
+[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
+indent_size = 2
+
 [*.{yml,json,xml}]
-indent_size              = 2
+indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
