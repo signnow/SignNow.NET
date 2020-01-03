@@ -51,14 +51,5 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Create an invite to sign a document.
-        /// </summary>
-        /// <param name="documentId">Identity of the document to create signing invite for</param>
-        /// <param name="invite">A simple free form invite or a role-based invite</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns></returns>
-        Task<InviteResponse> CreateInviteAsync(string documentId, ISignInvite invite, CancellationToken cancellationToken = default);
     }
 }

@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using SignNow.Net.Model;
 
 namespace SignNow.Net.Interfaces
@@ -8,19 +10,20 @@ namespace SignNow.Net.Interfaces
     public interface ISignInvite
     {
         /// <summary>
-        /// The email of the sender`s.
+        /// Create an invite to sign a document.
         /// </summary>
-        User Sender { get; }
-
-        /// <summary>
-        /// An email of signer`s that you would like to send the invite to
-        /// </summary>
-        string Recipient { get; }
-
-        /// <summary>
-        /// Returns JSON content for Invite
-        /// </summary>
+        /// <param name="documentId">Identity of the document to create signing invite for</param>
+        /// <param name="invite">A simple free form invite or a role-based invite</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns></returns>
-        IContent InviteContent();
+        Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Cancels an invite to a document.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to cancel signing invite for</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns></returns>
+        Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }
