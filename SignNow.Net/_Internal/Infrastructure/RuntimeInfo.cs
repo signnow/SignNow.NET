@@ -1,8 +1,6 @@
 using System;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SignNow.Net.Test")]
 namespace SignNow.Net.Internal.Infrastructure
 {
 
