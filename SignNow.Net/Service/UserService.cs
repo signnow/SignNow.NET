@@ -61,9 +61,9 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task CancelInviteAsync(string inviteId, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = $"/document/{documentId.ValidateDocumentId()}/fieldinvitecancel";
+            var requestedDocument = $"/invite/{inviteId.ValidateDocumentId()}/cancel";
 
             var requestOptions = new PutHttpRequestOptions
             {

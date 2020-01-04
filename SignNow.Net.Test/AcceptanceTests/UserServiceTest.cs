@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
@@ -46,15 +47,33 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldCreateFreeformSignInvite()
         {
-            var documentService = new DocumentService(Token);
-            documentId = UploadTestDocument(PdfFilePath, documentService);
-
             var invite = new FreeFormInvite("signnow.tutorial+test@gmail.com");
-
-            var inviteResponse = userService.CreateInviteAsync(documentId, invite).Result;
+            var inviteResponse = ProcessCreateInvite(invite);
 
             StringAssert.Matches(invite.Recipient, new Regex(emailPattern));
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
+        }
+
+        [TestMethod]
+        public void ShouldCancelFreeformInvite()
+        {
+            var invite = new FreeFormInvite("signnow.tutorial+test@gmail.com");
+            var inviteResponse = ProcessCreateInvite(invite);
+
+            StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
+
+            var cancelResponse = userService.CancelInviteAsync(inviteResponse.Id);
+            Task.WaitAll(cancelResponse);
+
+            Assert.IsFalse(cancelResponse.IsFaulted);
+        }
+
+        private InviteResponse ProcessCreateInvite(FreeFormInvite invite)
+        {
+            var documentService = new DocumentService(Token);
+            documentId = UploadTestDocument(PdfFilePath, documentService);
+
+            return userService.CreateInviteAsync(documentId, invite).Result;
         }
     }
 }

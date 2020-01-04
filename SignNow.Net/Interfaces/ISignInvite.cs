@@ -19,11 +19,11 @@ namespace SignNow.Net.Interfaces
         Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Cancels an invite to a document.
+        /// Cancels an freeform invite to a document.
         /// </summary>
-        /// <param name="documentId">Identity of the document to cancel signing invite for</param>
+        /// <param name="inviteId">Identity of the invite to cancel signing invite for</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns></returns>
-        Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default);
+        Task CancelInviteAsync(string inviteId, CancellationToken cancellationToken = default);
     }
 }
