@@ -15,7 +15,11 @@ namespace UnitTests
         {
             var recipient = "recipient@signnow.com";
 
-            var invite = new FreeFormInvite(recipient, message, subject);
+            var invite = new FreeFormInvite(recipient)
+            {
+                Message = message,
+                Subject = subject
+            };
 
             var sender = new User
             {

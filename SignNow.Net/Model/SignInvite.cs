@@ -6,20 +6,26 @@ namespace SignNow.Net.Model
     {
         /// <summary>
         /// The subject of the email.
+        /// <remarks>
+        ///     If <see cref="Subject"/> is null - default subject will be used:
+        ///     `sender.email@signnow.com` Needs Your Signature
+        /// </remarks>
         /// </summary>
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
         /// <summary>
         /// The message body of the email invite.
+        /// <remarks>
+        ///     If <see cref="Message"/> is null - default message will be used:
+        ///     `sender.email@signnow.com` invited you to sign `DocumentName`
+        /// </remarks>
         /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        protected SignInvite(string message, string subject)
+        internal SignInvite()
         {
-            Message = message;
-            Subject = subject;
         }
     }
 
@@ -29,15 +35,16 @@ namespace SignNow.Net.Model
     public sealed class FreeFormInvite : SignInvite
     {
         /// <summary>
-        /// An email of signer`s that you would like to send the invite to
+        /// An email of signer`s that you would like to send the invite to.
         /// </summary>
         [JsonProperty("to")]
         public string Recipient { get; private set; }
 
-        /// <param name="to">The email of the invitee</param>
-        /// <param name="message"></param>
-        /// <param name="subject"></param>
-        public FreeFormInvite(string to, string message = null, string subject = null) : base(message, subject)
+        /// <summary>
+        /// Constructs a new <see cref="FreeFormInvite"/>
+        /// </summary>
+        /// <param name="to">The email of the invitee.</param>
+        public FreeFormInvite(string to)
         {
             Recipient = to;
         }
