@@ -5,5 +5,7 @@ namespace SignNow.Net.Interfaces
         IDocumentService Documents { get; }
 
         IUserService User { get; }
+
+        ISignInvite Invite { get; }
     }
 }
