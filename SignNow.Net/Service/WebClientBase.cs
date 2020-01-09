@@ -5,12 +5,12 @@ using System;
 
 namespace SignNow.Net.Service
 {
-    abstract public class WebClientBase
+    public abstract class WebClientBase
     {
         /// <summary>
-        /// SignNow HTTTP Client.
+        /// SignNow HTTP Client.
         /// </summary>
-        /// <value></value>
+        /// <value><see cref="SignNowClient"/></value>
         protected ISignNowClient SignNowClient { get; private set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SignNow.Net.Service
         /// Base Web Client for HTTP calls
         /// </summary>
         /// <param name="apiBaseUrl">Base SignNow api URL</param>
-        /// <param name="signNowClient">SignNow HTTTP Client</param>
+        /// <param name="signNowClient">SignNow HTTP Client</param>
         protected WebClientBase(Uri apiBaseUrl, ISignNowClient signNowClient)
         {
             ApiBaseUrl = apiBaseUrl;

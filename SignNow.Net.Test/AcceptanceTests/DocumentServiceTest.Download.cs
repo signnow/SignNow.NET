@@ -6,7 +6,7 @@ using SignNow.Net.Test;
 
 namespace AcceptanceTests
 {
-    public partial class DocumentServiceTest : AuthorizedApiTestBase
+    public partial class DocumentServiceTest
     {
         [DataTestMethod]
         [DataRow(DownloadType.PdfOriginal, ".pdf")]
@@ -15,7 +15,7 @@ namespace AcceptanceTests
         [DataRow(DownloadType.ZipCollapsed, ".zip")]
         public void DownloadDocumentAsSpecifiedType(DownloadType downloadType, string expectedType)
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
+            DocumentId = UploadTestDocument(PdfFilePath, docService);
 
             var downloadResponse = docService.DownloadDocumentAsync(DocumentId, downloadType).Result;
 

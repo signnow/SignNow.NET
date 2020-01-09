@@ -1,17 +1,16 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Test;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace AcceptanceTests
 {
-    public partial class DocumentServiceTest : AuthorizedApiTestBase
+    public partial class DocumentServiceTest
     {
         [TestMethod]
         public void DocumentDeletingSuccess()
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
+            DocumentId = UploadTestDocument(PdfFilePath, docService);
 
             var deleteResponse = docService.DeleteDocumentAsync(DocumentId);
             Task.WaitAll(deleteResponse);
@@ -30,7 +29,7 @@ namespace AcceptanceTests
         [DataRow("_valid_part_of_document_id_____________!")]
         [DataRow("000000000000000000000000000000000000000 ")]
         [DataTestMethod]
-        public void CannotDeleteDocumentWithWrongID(string documentId)
+        public void CannotDeleteDocumentWithWrongId(string documentId)
         {
             var deleteResponse = docService.DeleteDocumentAsync(documentId);
 

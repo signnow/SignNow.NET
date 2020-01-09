@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace SignNow.Net.Interfaces
 {
+    /// <summary>
+    /// Interface for Authenticated requests.
+    /// </summary>
     public interface IOAuth2Service
     {
         /// <summary>

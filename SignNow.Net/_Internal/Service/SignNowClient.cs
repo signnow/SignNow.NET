@@ -117,7 +117,7 @@ namespace SignNow.Net.Internal.Service
         /// <exception cref="SignNowException">SignNow Exception.</exception>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Performance", "CA1825:Unnecessary zero-length array allocation", Justification = "Solution Array.Empty<>() works only for .NetStandard2.0, no significant memory or performance improvement")]
-        private async static Task ProcessErrorResponse(HttpResponseMessage response)
+        private static async Task ProcessErrorResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {

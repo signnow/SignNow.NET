@@ -22,7 +22,7 @@ namespace SignNow.Net.Service
         {
         }
 
-        internal protected DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
+        protected internal DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
         }
 

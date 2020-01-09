@@ -15,17 +15,37 @@ using System.Threading.Tasks;
 
 namespace SignNow.Net
 {
+    /// <summary>
+    /// OAuth2 implementation of <see cref="IOAuth2Service"/>
+    /// </summary>
     public class OAuth2Service : WebClientBase, IOAuth2Service
     {
+        /// <summary>
+        /// Application client identity.
+        /// </summary>
         private string ClientId { get; set; }
+
+        /// <summary>
+        /// Application client secret.
+        /// </summary>
         private string ClientSecret { get; set; }
 
+        /// <summary>
+        /// SignNow OAuth request <see cref="Uri"/>
+        /// </summary>
         private Uri OAuthRequestUrl { get; set; }
 
+        /// <summary>
+        /// Constructs an <see cref="OAuth2Service"/>
+        /// </summary>
+        /// <param name="clientId">Application <see cref="ClientId"/></param>
+        /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
         public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
         {
         }
 
+        /// <inheritdoc cref="OAuth2Service" />
+        /// <param name="apiBaseUrl">SignNow API <see cref="Uri"/></param>
         public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : this(apiBaseUrl, clientId, clientSecret, null)
         {
         }

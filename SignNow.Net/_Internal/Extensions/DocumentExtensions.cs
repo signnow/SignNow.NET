@@ -6,11 +6,11 @@ namespace SignNow.Net.Internal.Extensions
     static class DocumentExtensions
     {
         /// <summary>
-        /// Pattern for Document Identyty
+        /// Pattern for Document Identity
         /// Allowed format must be: 40-chars
-        /// Allowed chars: digist, symbols a-z A-Z, underscore
+        /// Allowed chars: digits, symbols a-z A-Z, underscore
         /// </summary>
-        private const string documentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
+        private const string DocumentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
         /// <summary>
         /// Validates Document ID
@@ -18,7 +18,7 @@ namespace SignNow.Net.Internal.Extensions
         /// <param name="documentId">Identity of the document</param>
         public static string ValidateDocumentId(this string documentId)
         {
-            var regex = new Regex(documentIdPattern);
+            var regex = new Regex(DocumentIdPattern);
 
             if (!regex.IsMatch(documentId))
             {
