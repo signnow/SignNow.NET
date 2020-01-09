@@ -3,7 +3,7 @@ using SignNow.Net;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
-using SignNow.Net.Test.SignNow;
+using SignNow.Net.Test.Constants;
 using System;
 using System.Collections.Generic;
 using System.IO;

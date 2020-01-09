@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
-using SignNow.Net.Test.SignNow;
+using SignNow.Net.Test.Constants;
 using System.Threading.Tasks;
 
 namespace AcceptanceTests

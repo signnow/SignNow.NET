@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Test;
-using SignNow.Net.Test.SignNow;
+using SignNow.Net.Test.Constants;
 using System;
 using System.IO;
 
