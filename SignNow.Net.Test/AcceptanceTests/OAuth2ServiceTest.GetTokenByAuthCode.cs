@@ -10,13 +10,13 @@ namespace AcceptanceTests
     public partial class OAuth2ServiceTest : ApiTestBase
     {
         /// <summary>
-        /// TO DO:  use GetAuthorizationUrlTest to retrieve authorization URL and get AUTH. CODE from HTTP-GET Responce
+        /// TO DO:  use GetAuthorizationUrlTest to retrieve authorization URL and get AUTH. CODE from HTTP-GET Response
         /// on this URL and use this code in current test
         /// Make Positive Test
         /// </summary>
 
 #pragma warning disable CA1031 // Do not catch general exception types
-            
+
         [TestMethod]
         public void GetToken_Fail_WrongAuthCode()
         {
@@ -26,8 +26,8 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Received Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"internal api error\" with wrong authorization code. Received Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
@@ -47,8 +47,8 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Received Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Received Exception: {tokenTaskExt.Exception}");
             }
             catch
             {

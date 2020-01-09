@@ -20,8 +20,8 @@ namespace AcceptanceTests
 
             Task.WaitAll(tokenTask, tokenTaskExt);
 
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-            Assert.IsFalse(tokenTaskExt.IsFaulted, $"Token retreiving error: {tokenTaskExt.Exception}");
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retrieving error: {tokenTask.Exception}");
+            Assert.IsFalse(tokenTaskExt.IsFaulted, $"Token retrieving error: {tokenTaskExt.Exception}");
 
             var token = tokenTask.Result;
             var tokenExt = tokenTaskExt.Result;
@@ -47,8 +47,8 @@ namespace AcceptanceTests
 
             Task.WaitAll(tokenTask, tokenTaskExt);
 
-            Assert.IsFalse(tokenTask.IsFaulted, $"Token retreiving error: {tokenTask.Exception}");
-            Assert.IsFalse(tokenTaskExt.IsFaulted, $"Token retreiving error: {tokenTaskExt.Exception}");
+            Assert.IsFalse(tokenTask.IsFaulted, $"Token retrieving error: {tokenTask.Exception}");
+            Assert.IsFalse(tokenTaskExt.IsFaulted, $"Token retrieving error: {tokenTaskExt.Exception}");
 
             var token = tokenTask.Result;
             var tokenExt = tokenTaskExt.Result;
@@ -71,8 +71,8 @@ namespace AcceptanceTests
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"Invalid credentials.\" with wrong user password. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"Invalid credentials.\" with wrong user password. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"Invalid credentials.\" with wrong user password. Received Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"Invalid credentials.\" with wrong user password. Received Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
@@ -86,14 +86,14 @@ namespace AcceptanceTests
         {
             authObjectParam2 = new OAuth2Service(clientInfo.Login, "client_secret_wrong");
             authObjectParam3 = new OAuth2Service(ApiBaseUrl, clientInfo.Login, "client_secret_wrong");
-            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);            
+            var tokenTask = authObjectParam2.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
             var tokenTaskExt = authObjectParam3.GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All);
 
             try
             {
                 Task.WaitAll(tokenTask, tokenTaskExt);
-                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTask.Exception}");
-                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Recieved Exception: {tokenTaskExt.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Received Exception: {tokenTask.Exception}");
+                Assert.Fail($"Expected error \"invalid_client\" with wrong user's client secret. Received Exception: {tokenTaskExt.Exception}");
             }
             catch
             {
