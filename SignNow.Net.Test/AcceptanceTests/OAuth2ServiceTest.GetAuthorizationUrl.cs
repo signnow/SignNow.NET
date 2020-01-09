@@ -11,11 +11,11 @@ namespace AcceptanceTests
         public void GetAuthorizationUrl_UrlValidated()
         {
             var clientId = clientInfo.Login;
-            var clientSecter = clientInfo.Password;
+            var clientSecret = clientInfo.Password;
 
             var redirectUrl = new Uri("https://localhost?param=5");
-          
-            var authObject = new OAuth2Service(ApiBaseUrl, clientId, clientSecter);
+
+            var authObject = new OAuth2Service(ApiBaseUrl, clientId, clientSecret);
             var uri = authObject.GetAuthorizationUrl(redirectUrl);
 
             if (String.IsNullOrEmpty(uri.ToString()))

@@ -8,9 +8,9 @@ namespace SignNow.Net
 {
     public class SignNowContext : AuthorizedWebClientBase, ISignNowContext
     {
-        public IUserService User { get; protected set; }
+        public IUserService Users { get; protected set; }
 
-        public ISignInvite Invite { get; protected set; }
+        public ISignInvite Invites { get; protected set; }
 
         public IDocumentService Documents { get; protected set; }
 
@@ -24,8 +24,8 @@ namespace SignNow.Net
 
         protected SignNowContext(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
-            User = new UserService(baseApiUrl, token, signNowClient);
-            Invite = (ISignInvite) User;
+            Users = new UserService(baseApiUrl, token, signNowClient);
+            Invites = (ISignInvite) Users;
             Documents = new DocumentService(baseApiUrl, token, signNowClient);
         }
     }

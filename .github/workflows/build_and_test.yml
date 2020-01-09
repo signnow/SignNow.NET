@@ -25,6 +25,7 @@ jobs:
           - '2.2.402'
 
         framework:
+          - 'netcoreapp2.0'
           - 'netcoreapp2.2'
           - 'net45'
 
@@ -64,7 +65,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
-      COVERAGE_PATH: ${{ github.workspace }}/SignNow.Net.Test/bin/CoverletOutput
+      COVERAGE_PATH: ${{ github.workspace }}/SignNow.Net.Test/bin/Debug
 
     steps:
       - uses: actions/checkout@v1
@@ -125,11 +126,7 @@ jobs:
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
-            /p:CollectCoverage=true `
-            /p:CoverletOutput="$env:COVERAGE_PATH/" `
-            /p:MergeWith="$env:COVERAGE_PATH/coverage.json" `
-            /p:CoverletOutputFormat="opencover%2cjson" `
-            /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute"
+            /p:EnableCoverage=true
 
       - name: Submit code coverage to Codacy
         env:
@@ -142,7 +139,7 @@ jobs:
           ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }} `
             --commit ${{ github.sha }} `
             --token ${{ secrets.CODACY_PROJECT_TOKEN }} `
-            --report $env:COVERAGE_PATH/coverage.opencover.xml `
+            --report $env:COVERAGE_PATH/${{ matrix.framework }}/coverage.opencover.xml `
             --engine opencover
 
       - name: Upload code coverage report
@@ -151,6 +148,6 @@ jobs:
         with:
           name: codecov-develop-${{ matrix.os }}
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./SignNow.Net.Test/bin/CoverletOutput/coverage.opencover.xml
+          file: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }} /coverage.opencover.xml
           yml: ./codecov.yml
           fail_ci_if_error: false

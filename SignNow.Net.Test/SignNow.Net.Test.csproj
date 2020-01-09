@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\netfx.props" />
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.0;netcoreapp2.2;net45</TargetFrameworks>
@@ -25,12 +26,12 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard1.2" />
   </ItemGroup>
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
-        <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard2.0" />
-    </ItemGroup>
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-        <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=net45" />
-    </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2' ">
+      <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard2.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+      <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=net45" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="FeatureTests\" />

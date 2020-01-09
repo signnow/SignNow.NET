@@ -1,5 +1,5 @@
 
-namespace SignNow.Net.Test.SignNow
+namespace SignNow.Net.Test.Constants
 {
     static class ErrorMessages
     {
