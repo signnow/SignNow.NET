@@ -45,7 +45,7 @@ To start using the API  you will need an API key. You can get one here <https://
 
 #### MacOS and Linux
 
--   .Net Core 2.2 and newer
+-   .Net Core 2.0 and newer
 
 ## <a name="installation"></a>Installation
 
