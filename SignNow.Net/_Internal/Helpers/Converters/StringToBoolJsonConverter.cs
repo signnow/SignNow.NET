@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Helpers.Converters
@@ -9,13 +8,13 @@ namespace SignNow.Net.Internal.Helpers.Converters
     /// </summary>
     internal class StringToBoolJsonConverter : JsonConverter
     {
-        /// <inheritdoc cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)" />
+        /// <inheritdoc cref="JsonConverter.WriteJson" />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotSupportedException();
+            writer.WriteValue((bool)value);
         }
 
-        /// <inheritdoc cref="JsonConverter.ReadJson(JsonReader, Type, object, JsonSerializer)" />>
+        /// <inheritdoc cref="JsonConverter.ReadJson" />>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
@@ -32,7 +31,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
             }
         }
 
-        /// <inheritdoc cref="JsonConverter.CanConvert(Type)" />
+        /// <inheritdoc cref="JsonConverter.CanConvert" />
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(bool);
