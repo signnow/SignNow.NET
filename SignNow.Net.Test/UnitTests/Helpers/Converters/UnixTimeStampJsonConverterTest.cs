@@ -19,13 +19,7 @@ namespace UnitTests
             var objUtc = JsonConvert.DeserializeObject<GetDocumentResponse>(jsonUtc);
             var expectedUtc = DateTime.ParseExact("05/11/2019 15:44:11", _dtFormat, null);
 
-            // Should deserialize from null as default DateTime
-            var jsonNull = $"{{\"created\":null}}";
-            var objNull = JsonConvert.DeserializeObject<GetDocumentResponse>(jsonNull);
-            var expectedNull = new DateTime();
-
             Assert.AreEqual(expectedUtc, objUtc.Created);
-            Assert.AreEqual(expectedNull, objNull.Created);
         }
 
         [TestMethod]
