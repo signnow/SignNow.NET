@@ -27,6 +27,19 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        public async Task<GetDocumentResponse> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}");
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync<GetDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestFullUrl = new Uri(ApiBaseUrl, "/link");
