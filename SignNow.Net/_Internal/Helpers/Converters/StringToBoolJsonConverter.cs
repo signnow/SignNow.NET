@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Helpers.Converters
@@ -27,7 +28,10 @@ namespace SignNow.Net.Internal.Helpers.Converters
                 case "0":
                     return false;
                 default:
-                    return new JsonSerializer().Deserialize(reader, objectType);
+                    throw new JsonSerializationException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "Unexpected value when converting to Bool. Expected \"true\", \"false\", got '{0}'.",
+                        reader.Value.ToString()));
             }
         }
 

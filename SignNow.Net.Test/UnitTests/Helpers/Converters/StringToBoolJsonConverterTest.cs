@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
 namespace UnitTests
@@ -23,6 +24,14 @@ namespace UnitTests
             Assert.AreEqual(expected, obj.Active);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(JsonSerializationException))]
+        public void ThrowsExceptionOnWrongValue()
+        {
+            var json = $"{{\"active\": \"error\"}}";
+            JsonConvert.DeserializeObject<User>(json);
+        }
+
         [DataTestMethod]
         [DataRow(true, DisplayName = "Boolean true")]
         [DataRow(false, DisplayName = "Boolean false")]
@@ -37,6 +46,13 @@ namespace UnitTests
             var expected = $"\"active\":{param.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}";
 
             StringAssert.Contains(actual, expected);
+        }
+
+        [TestMethod]
+        public void CanConvertDateTimeType()
+        {
+            var converter = new StringToBoolJsonConverter();
+            Assert.IsTrue(converter.CanConvert(typeof(bool)));
         }
     }
 }
