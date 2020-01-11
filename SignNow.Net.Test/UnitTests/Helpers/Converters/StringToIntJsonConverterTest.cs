@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
@@ -22,7 +23,9 @@ namespace UnitTests
         {
             var obj = new GetDocumentResponse
             {
-                PageCount = 100
+                PageCount = 100,
+                Created = DateTime.Now,
+                Updated = DateTime.Now
             };
 
             var actual = JsonConvert.SerializeObject(obj);

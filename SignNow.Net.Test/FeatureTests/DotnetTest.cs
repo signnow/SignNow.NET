@@ -17,7 +17,7 @@ namespace FeatureTests
         [TestMethod]
         public void StreamContentIsDisposedInMultipartFormDataContent()
         {
-            
+
             var streamContent = new MemoryStream(Encoding.UTF8.GetBytes("Hello world!"));
             var multipartContent = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
             multipartContent.Add(new StreamContent(streamContent), "file", "upload.pdf");
@@ -36,7 +36,7 @@ namespace FeatureTests
             try
             {
                 var result = streamContent.Length;
-                Assert.Fail("Underline stream content is not disposed! Content lenght = " + result.ToString());
+                Assert.Fail("Underline stream content is not disposed! Content lenght = " + result.ToString(CultureInfo.InvariantCulture));
             }
             catch (ObjectDisposedException)
             {
