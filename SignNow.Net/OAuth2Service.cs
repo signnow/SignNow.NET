@@ -35,21 +35,23 @@ namespace SignNow.Net
         /// </summary>
         private Uri OAuthRequestUrl { get; set; }
 
-        /// <summary>
-        /// Constructs an <see cref="OAuth2Service"/>
-        /// </summary>
-        /// <param name="clientId">Application <see cref="ClientId"/></param>
-        /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
+        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
         public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
         {
         }
 
-        /// <inheritdoc cref="OAuth2Service" />
-        /// <param name="apiBaseUrl">SignNow API <see cref="Uri"/></param>
+        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
         public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : this(apiBaseUrl, clientId, clientSecret, null)
         {
         }
 
+        /// <summary>
+        /// Constructs an <see cref="OAuth2Service"/>
+        /// </summary>
+        /// <param name="apiBaseUrl">SignNow API <see cref="WebClientBase.ApiBaseUrl"/></param>
+        /// <param name="clientId">Application <see cref="ClientId"/></param>
+        /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
+        /// <param name="signNowClient">Http Client</param>
         protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
         {
             ClientId = clientId;
