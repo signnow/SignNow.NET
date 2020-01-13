@@ -20,11 +20,6 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.ReadJson" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.Value == null)
-            {
-                return null;
-            }
-
             return reader.TokenType == JsonToken.String
                 ? FromUnixTimestamp(long.Parse(reader.Value.ToString(), NumberStyles.None,  NumberFormatInfo.InvariantInfo))
                 : DateTime.Parse(reader.Value.ToString().Trim(), NumberFormatInfo.InvariantInfo, DateTimeStyles.None);
