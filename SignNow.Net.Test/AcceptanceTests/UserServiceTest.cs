@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -74,6 +75,18 @@ namespace AcceptanceTests
             documentId = UploadTestDocument(PdfFilePath, documentService);
 
             return userService.CreateInviteAsync(documentId, invite).Result;
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionForNullableInvite()
+        {
+            var expected = Assert.ThrowsException<AggregateException>(
+                () => userService.CreateInviteAsync("", null).Result);
+
+            if (expected.InnerException != null)
+            {
+                Assert.AreEqual($"Value cannot be null.\nParameter name: invite", expected.InnerException.Message);
+            }
         }
     }
 }
