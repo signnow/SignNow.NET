@@ -80,12 +80,16 @@ namespace AcceptanceTests
         [TestMethod]
         public void ThrowsExceptionForNullableInvite()
         {
-            var expected = Assert.ThrowsException<AggregateException>(
+            var actual = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateInviteAsync("", null).Result);
 
-            if (expected.InnerException != null)
+            var expected = "Value cannot be null."
+                           + Environment.NewLine
+                           + "Parameter name: invite";
+
+            if (actual.InnerException != null)
             {
-                Assert.AreEqual($"Value cannot be null.\nParameter name: invite", expected.InnerException.Message);
+                Assert.AreEqual(expected, actual.InnerException.Message);
             }
         }
     }
