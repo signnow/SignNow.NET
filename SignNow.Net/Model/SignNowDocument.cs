@@ -4,7 +4,18 @@ using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model
 {
-    public class GetDocumentResponse
+    /// <summary>
+    /// Represents SignNow document object.
+    /// <remarks>
+    /// Document is the fundamental unit of every e-Signature operation. It contains:
+    ///     Metadata: file name, size, extension, ID;
+    ///     Fields, elements (texts, checks and signatures),
+    ///     Invites, status of the invites,
+    ///     <see cref="SignNow.Net.Internal.Model.Role" />,
+    ///     Timestamps (date created, date updated)
+    /// </remarks>
+    /// </summary>
+    public class SignNowDocument
     {
         /// <summary>
         /// Identity of specific document.

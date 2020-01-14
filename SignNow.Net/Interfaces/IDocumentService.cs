@@ -13,7 +13,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be viewed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<GetDocumentResponse> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
+        Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Uploads a file to the SignNow account and creates a document. This method accepts .doc, .docx, .pdf, and .png file types.
