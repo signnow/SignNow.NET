@@ -5,6 +5,19 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
 {
+    public class ErrorResponseContext
+    {
+        /// <summary>
+        /// Error Message
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Error Code
+        /// </summary>
+        public int Code { get; set; }
+    }
+
     [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "The class is used for JSON deserialization")]
     class ErrorResponse
     {
@@ -43,7 +56,7 @@ namespace SignNow.Net.Internal.Model
                 if (Errors.Count == 1)
                     message = Errors[0].Message;
 
-                // Aggergate all Messages
+                // Aggregate all Messages
                 if (Errors.Count > 1)
                 {
                     var strBuilder = new StringBuilder();
@@ -55,21 +68,8 @@ namespace SignNow.Net.Internal.Model
                     message = strBuilder.ToString();
                 }
             }
-           
+
             return message;
         }
-    }
-
-    public class ErrorResponseContext
-    {
-        /// <summary>
-        /// Error Message
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Error Code
-        /// </summary>
-        public int Code { get; set; }
     }
 }
