@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {
@@ -85,5 +87,11 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("template")]
         public bool IsTemplate { get; set; }
+
+        /// <summary>
+        /// The Document signer roles.
+        /// </summary>
+        [JsonProperty("roles")]
+        public List<Role> Roles { get; private set; }
     }
 }

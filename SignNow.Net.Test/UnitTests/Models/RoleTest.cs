@@ -10,11 +10,11 @@ namespace UnitTests
         [TestMethod]
         public void ShouldDeserializeFromJson()
         {
-            var json = "{" +
-                       "\"unique_id\": \"485a05488fb971644978d3ec943ff6c719bda83a\"," +
-                       "\"signing_order\": \"1\"," +
-                       "\"name\": \"Signer 1\"" +
-                       "}";
+            var json = @"{
+                    'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
+                    'signing_order': '1',
+                    'name': 'Signer 1'
+                }";
 
             var role = JsonConvert.DeserializeObject<Role>(json);
 
