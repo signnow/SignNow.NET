@@ -148,6 +148,6 @@ jobs:
         with:
           name: codecov-develop-${{ matrix.os }}
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }} /coverage.opencover.xml
+          file: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
           yml: ./codecov.yml
           fail_ci_if_error: false
