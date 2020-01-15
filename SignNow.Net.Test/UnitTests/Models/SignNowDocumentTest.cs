@@ -30,7 +30,8 @@ namespace UnitTests
                         'signing_order': '1',
                         'name': 'Signer 1'
                     }
-                ]
+                ],
+                'requests': []
             }";
 
             var document = JsonConvert.DeserializeObject<SignNowDocument>(json);
@@ -49,6 +50,7 @@ namespace UnitTests
             Assert.AreEqual(1, document.Roles.Count);
             CollectionAssert.AllItemsAreInstancesOfType(document.Roles, typeof(Role));
             Assert.AreEqual("Signer 1", document.Roles[0].Name);
+            Assert.AreEqual(0, document.InviteRequests.Count);
         }
     }
 }
