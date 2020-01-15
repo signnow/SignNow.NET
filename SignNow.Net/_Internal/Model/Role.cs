@@ -6,7 +6,7 @@ namespace SignNow.Net.Internal.Model
     /// <summary>
     /// Represent document signer roles.
     /// </summary>
-    public class Role
+    internal class Role
     {
         /// <summary>
         /// Role unique id.

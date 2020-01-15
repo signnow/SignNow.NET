@@ -92,6 +92,12 @@ namespace SignNow.Net.Model
         /// The Document signer roles.
         /// </summary>
         [JsonProperty("roles")]
-        public List<Role> Roles { get; private set; }
+        internal List<Role> Roles { get; private set; }
+
+        /// <summary>
+        /// The document freeform invite requests.
+        /// </summary>
+        [JsonProperty("requests")]
+        internal List<FreeFormInviteRequest> InviteRequests { get; private set; }
     }
 }
