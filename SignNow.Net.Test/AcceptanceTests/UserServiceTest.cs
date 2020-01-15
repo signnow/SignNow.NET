@@ -24,13 +24,13 @@ namespace AcceptanceTests
         private readonly string inviteIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
             userService = new UserService(Token);
         }
 
         [TestCleanup]
-        public void TestCleanup()
+        public void TearDown()
         {
             DeleteDocument(documentId);
         }

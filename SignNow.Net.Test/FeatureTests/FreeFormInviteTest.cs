@@ -16,7 +16,7 @@ namespace FeatureTests
         private string DocumentId { get; set; }
 
         [TestCleanup]
-        public void TestCleanup()
+        public void TearDown()
         {
             DeleteDocument(DocumentId);
         }

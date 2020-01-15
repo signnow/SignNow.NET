@@ -10,7 +10,7 @@ namespace AcceptanceTests
         private Token TestToken { get; set; }
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
             TestToken = authObjectParam2.
                 GetTokenAsync(userCredentials.Login, userCredentials.Password, Scope.All).

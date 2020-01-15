@@ -14,7 +14,7 @@ namespace UnitTests
         private Token token;
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
             content = new JsonHttpContent(new { document_id = "test" });
             requestUrl = new Uri($"https://signnow.com");
