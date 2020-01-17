@@ -142,6 +142,7 @@ jobs:
         run: |
           if (!(Test-Path "./Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}")) {
             $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
+            if (!(Test-Path "./Codacy")) { New-Item -ItemType Directory -Path "./Codacy" }
             Invoke-WebRequest -Uri $DownloadUrl -OutFile ${{ github.workspace }}/Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
             chmod +x ./Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
           }
