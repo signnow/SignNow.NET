@@ -76,8 +76,8 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet }}
 
-      - uses: actions/cache@v1
-        name: Setup nuget cache
+      - name: Setup nuget cache
+        uses: actions/cache@v1
         id: nuget-cache
         with:
           path: ~/.nuget
@@ -128,14 +128,23 @@ jobs:
             --configuration Debug --framework ${{ matrix.framework }} `
             /p:EnableCoverage=true
 
+      - name: Setup Codacy report sender Cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
+          key: ${{ runner.os }}-codacy-${{ hashFiles('**/.github/workflows/build_and_test.yml') }}
+          restore-keys: ${{ runner.os }}-codacy-
+
       - name: Submit code coverage to Codacy
         env:
           CODACY_VERSION: 1.0.7
         shell: pwsh
         run: |
-          $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
-          Invoke-WebRequest -Uri $DownloadUrl -OutFile ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
-          chmod +x ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
+          if (!(Test-Path "${{ github.workspace }}/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}")) {
+            $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
+            Invoke-WebRequest -Uri $DownloadUrl -OutFile ${{ github.workspace }}/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
+          }
+          chmod +x ${{ github.workspace }}/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
           ./Codacy.CSharpCoverage_${{ matrix.codacy_prefix }} `
             --commit ${{ github.sha }} `
             --token ${{ secrets.CODACY_PROJECT_TOKEN }} `
