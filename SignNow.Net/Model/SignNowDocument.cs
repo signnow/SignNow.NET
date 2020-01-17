@@ -13,7 +13,7 @@ namespace SignNow.Net.Model
     ///     Metadata: file name, size, extension, ID;
     ///     Fields, elements (texts, checks and signatures),
     ///     Invites, status of the invites,
-    ///     <see cref="SignNow.Net.Internal.Model.Role" />,
+    ///     <see cref="Role" />,
     ///     Timestamps (date created, date updated)
     /// </remarks>
     /// </summary>

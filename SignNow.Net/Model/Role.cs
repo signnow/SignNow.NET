@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Internal.Model
+namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represent document signer roles.
     /// </summary>
-    internal class Role
+    public class Role
     {
         /// <summary>
         /// Role unique id.
