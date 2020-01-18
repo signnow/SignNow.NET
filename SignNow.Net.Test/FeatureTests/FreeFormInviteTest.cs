@@ -10,17 +10,6 @@ namespace FeatureTests
     [TestClass]
     public class FreeFormInviteTest : AuthorizedApiTestBase
     {
-        /// <summary>
-        /// Uploaded test document identity which will be deleted after run TestCase.
-        /// </summary>
-        private string DocumentId { get; set; }
-
-        [TestCleanup]
-        public void TearDown()
-        {
-            DeleteDocument(DocumentId);
-        }
-
         [TestMethod]
         public void DocumentOwnerCanSendFreeFormInviteToUser()
         {

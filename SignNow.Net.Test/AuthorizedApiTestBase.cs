@@ -7,9 +7,21 @@ using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Test
 {
+    [TestClass]
     public class AuthorizedApiTestBase : ApiTestBase
     {
         protected Token Token { get; private set; }
+
+        /// <summary>
+        /// Uploaded test document identity which will be deleted after run TestCase.
+        /// </summary>
+        protected string DocumentId { get; set; }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            DeleteDocument(DocumentId);
+        }
 
         protected AuthorizedApiTestBase()
         {
