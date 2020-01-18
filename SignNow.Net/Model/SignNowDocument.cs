@@ -1,10 +1,23 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {
-    public class GetDocumentResponse
+    /// <summary>
+    /// Represents SignNow document object.
+    /// <remarks>
+    /// Document is the fundamental unit of every e-Signature operation. It contains:
+    ///     Metadata: file name, size, extension, ID;
+    ///     Fields, elements (texts, checks and signatures),
+    ///     Invites, status of the invites,
+    ///     <see cref="Role" />,
+    ///     Timestamps (date created, date updated)
+    /// </remarks>
+    /// </summary>
+    public class SignNowDocument
     {
         /// <summary>
         /// Identity of specific document.
@@ -74,5 +87,17 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("template")]
         public bool IsTemplate { get; set; }
+
+        /// <summary>
+        /// The Document signer roles.
+        /// </summary>
+        [JsonProperty("roles")]
+        internal List<Role> Roles { get; private set; }
+
+        /// <summary>
+        /// The document freeform invite requests.
+        /// </summary>
+        [JsonProperty("requests")]
+        internal List<FreeformInvite> InviteRequests { get; private set; }
     }
 }

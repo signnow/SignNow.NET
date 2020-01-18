@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Model
 {
@@ -48,5 +51,101 @@ namespace SignNow.Net.Model
         {
             Recipient = to;
         }
+    }
+
+    /// <summary>
+    /// Role-based invite - an invitation to sign a document
+    /// which contains at least one fillable field assigned to one role.
+    /// </summary>
+    public sealed class RoleBasedInvite : SignInvite
+    {
+        /// <summary>
+        /// Represent recipients for which an invitation to sign should be sent.
+        /// </summary>
+        [JsonProperty("to")]
+        private List<RoleContent> RecipientList { get; set; } = new List<RoleContent>();
+
+        private List<Role> ExistingDocumentRoles { get; set; }
+
+        /// <summary>
+        /// Construct Role-based invite.
+        /// </summary>
+        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     <see cref="SignNowDocument"/> cannot be null.
+        /// </exception>
+        public RoleBasedInvite(SignNowDocument document)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            ExistingDocumentRoles = document.Roles;
+        }
+
+        /// <summary>
+        /// Return Roles read only collection for current document.
+        /// </summary>
+        /// <returns></returns>
+        public IReadOnlyCollection<Role> DocumentRoles()
+        {
+            return ExistingDocumentRoles;
+        }
+
+        /// <summary>
+        /// Add User by email to chosen Role.
+        /// </summary>
+        /// <param name="email">Email of the User to whom the Role-based invitation to sign is sent.</param>
+        /// <param name="role">The document signer role.</param>
+        /// <exception cref="ArgumentNullException"><see cref="Role"/> cannot be null.</exception>
+        /// <exception cref="SignNowException">Allowed only <see cref="Role"/> which is exists in current Document</exception>
+        public void AddRoleBasedInvite(string email, Role role)
+        {
+            if (null == role)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
+
+            var originalRole = ExistingDocumentRoles.Find(p => p.Name == role.Name);
+
+            if (null == originalRole)
+            {
+                throw new SignNowException($"Cannot add role to User. Document doesn't have role with name `{role.Name}`");
+            }
+
+            var content = new RoleContent
+            {
+                Email = email,
+                RoleName = originalRole.Name,
+                RoleId = originalRole.Id,
+                SigningOrder = originalRole.SigningOrder
+            };
+
+            var uniqueContent = RecipientList.TrueForAll(item => item.RoleName != content.RoleName);
+
+            if (uniqueContent)
+            {
+                RecipientList.Add(content);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Represents JSON content for Role-based invite intermediate object
+    /// </summary>
+    internal class RoleContent
+    {
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("role")]
+        public string RoleName { get; set; }
+
+        [JsonProperty("role_id")]
+        public string RoleId { get; set; }
+
+        [JsonProperty("order")]
+        public int SigningOrder { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<GetDocumentResponse> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}");
             var requestOptions = new GetHttpRequestOptions
@@ -36,7 +36,7 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync<GetDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient.RequestAsync<SignNowDocument>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

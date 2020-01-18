@@ -38,6 +38,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentNullException"><see cref="SignInvite"/> cannot be null.</exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
         {
             if (null == invite)

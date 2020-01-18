@@ -36,7 +36,7 @@ namespace FeatureTests
             try
             {
                 var result = streamContent.Length;
-                Assert.Fail("Underline stream content is not disposed! Content lenght = " + result.ToString(CultureInfo.InvariantCulture));
+                Assert.Fail("Underline stream content is not disposed! Content length = " + result.ToString(CultureInfo.InvariantCulture));
             }
             catch (ObjectDisposedException)
             {

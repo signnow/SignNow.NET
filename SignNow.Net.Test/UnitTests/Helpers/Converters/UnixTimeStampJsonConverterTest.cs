@@ -16,7 +16,7 @@ namespace UnitTests
         {
             // Should deserialize from string UTC format
             var jsonUtc = $"{{\"created\":\"1572968651\"}}";
-            var objUtc = JsonConvert.DeserializeObject<GetDocumentResponse>(jsonUtc);
+            var objUtc = JsonConvert.DeserializeObject<SignNowDocument>(jsonUtc);
             var expectedUtc = DateTime.ParseExact("05/11/2019 15:44:11", _dtFormat, null);
 
             Assert.AreEqual(expectedUtc, objUtc.Created);
@@ -27,7 +27,7 @@ namespace UnitTests
         {
             var testDate = new DateTime(2019, 11, 5, 15, 44, 11, DateTimeKind.Utc);
 
-            var obj = new GetDocumentResponse
+            var obj = new SignNowDocument
             {
                 Created = testDate,
                 Updated = testDate
@@ -44,7 +44,7 @@ namespace UnitTests
         public void ThrowsExceptionOnUnixIncompatibleDate()
         {
             // Cannot convert date value that is before Unix epoch of 00:00:00 UTC on 1 January 1970
-            var obj = new GetDocumentResponse
+            var obj = new SignNowDocument
             {
                 Created = default,
                 Updated = new DateTime()
