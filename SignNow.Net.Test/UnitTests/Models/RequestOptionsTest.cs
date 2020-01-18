@@ -17,7 +17,7 @@ namespace UnitTests
         public void Setup()
         {
             content = new JsonHttpContent(new { document_id = "test" });
-            requestUrl = new Uri($"https://signnow.com");
+            requestUrl = new Uri("https://signnow.com");
             token = new Token
             {
                 AccessToken = "12345",

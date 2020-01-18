@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Model
 {
@@ -98,6 +99,7 @@ namespace SignNow.Net.Model
         /// <param name="email">Email of the User to whom the Role-based invitation to sign is sent.</param>
         /// <param name="role">The document signer role.</param>
         /// <exception cref="ArgumentNullException"><see cref="Role"/> cannot be null.</exception>
+        /// <exception cref="SignNowException">Allowed only <see cref="Role"/> which is exists in current Document</exception>
         public void AddRoleBasedInvite(string email, Role role)
         {
             if (null == role)
@@ -107,6 +109,11 @@ namespace SignNow.Net.Model
 
             var originalRole = ExistingDocumentRoles.Find(p => p.Name == role.Name);
 
+            if (null == originalRole)
+            {
+                throw new SignNowException($"Cannot add role to User. Document doesn't have role with name `{role.Name}`");
+            }
+
             var content = new RoleContent
             {
                 Email = email,
@@ -115,7 +122,12 @@ namespace SignNow.Net.Model
                 SigningOrder = originalRole.SigningOrder
             };
 
-            RecipientList.Add(content);
+            var uniqueContent = RecipientList.TrueForAll(item => item.RoleName != content.RoleName);
+
+            if (uniqueContent)
+            {
+                RecipientList.Add(content);
+            }
         }
     }
 

@@ -98,6 +98,6 @@ namespace SignNow.Net.Model
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]
-        internal List<FreeFormInviteRequest> InviteRequests { get; private set; }
+        internal List<FreeformInvite> InviteRequests { get; private set; }
     }
 }

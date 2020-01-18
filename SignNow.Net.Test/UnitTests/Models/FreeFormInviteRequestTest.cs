@@ -23,7 +23,7 @@ namespace UnitTests
                 }
             ";
 
-            var response = JsonConvert.DeserializeObject<FreeFormInviteRequest>(json);
+            var response = JsonConvert.DeserializeObject<FreeformInvite>(json);
 
             Assert.AreEqual("827a6dc8a83805f5961234304d2166b75ba19cf3", response.UID);
             Assert.AreEqual("40204b3344984768bb16d61f8550f8b5edfd719a", response.UserId);

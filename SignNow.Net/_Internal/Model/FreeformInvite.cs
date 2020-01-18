@@ -7,7 +7,7 @@ namespace SignNow.Net.Internal.Model
     /// <summary>
     /// Represents sign invite request properties.
     /// </summary>
-    internal class FreeFormInviteRequest
+    internal class FreeformInvite
     {
         /// <summary>
         /// Sign invite unique id.
