@@ -99,5 +99,11 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("requests")]
         internal List<FreeformInvite> InviteRequests { get; private set; }
+
+        /// <summary>
+        /// The document field invite requests.
+        /// </summary>
+        [JsonProperty("field_invites")]
+        public IReadOnlyCollection<FieldInvites> FieldInvites { get; private set; }
     }
 }
