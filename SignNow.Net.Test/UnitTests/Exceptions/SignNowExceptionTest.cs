@@ -55,7 +55,7 @@ namespace UnitTests
             var expectedMessage = TestMessage + $" ({innerExMessage})";
 
 #if NET45
-            expectedMessage = testMessage;
+            expectedMessage = TestMessage;
 #endif
 
             Assert.AreEqual(default, exception.HttpStatusCode);
