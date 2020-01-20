@@ -84,11 +84,17 @@ namespace UnitTests
             }";
 
             var snExFromJson = JsonConvert.DeserializeObject<SignNowException>(asJson);
+            var serialized = JsonConvert.SerializeObject(new SignNowException());
 
-            StringAssert.Contains(JsonConvert.SerializeObject(new SignNowException()),
-                "SignNow.Net.Exceptions.SignNowException");
-            Assert.AreEqual(JsonConvert.SerializeObject(snExFromJson),
-                JsonConvert.SerializeObject(new SignNowException()));
+            StringAssert.Contains(serialized, "One or more errors occurred.");
+            StringAssert.Contains(serialized, "InnerExceptions");
+            StringAssert.Contains(serialized, "HttpStatusCode");
+            StringAssert.Contains(serialized, "RawHeaders");
+            StringAssert.Contains(serialized, "RawResponse");
+            StringAssert.Contains(serialized, "Message");
+            StringAssert.Contains(serialized, "Data");
+
+            Assert.AreEqual(JsonConvert.SerializeObject(snExFromJson), serialized);
         }
     }
 }
