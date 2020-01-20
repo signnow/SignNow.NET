@@ -61,6 +61,7 @@ namespace SignNow.Net.Internal.Infrastructure
             return os;
         }
 
+#pragma warning disable CS0162 // Unreachable code detected
         /// <summary>
         /// Gets OS version from runtime
         /// </summary>
@@ -84,6 +85,7 @@ namespace SignNow.Net.Internal.Infrastructure
 #endif
             return version ?? "0.0.0";
         }
+#pragma warning restore CS0162 // Unreachable code detected
 
         /// <summary>
         /// Gets OS architecture from runtime
@@ -115,6 +117,7 @@ namespace SignNow.Net.Internal.Infrastructure
             return platform;
         }
 
+#pragma warning disable CA1801 // Parameter kernel of method GetMacOsVersion is never used. Remove the parameter or use it in the method body.
         /// <summary>
         /// Get Windows version from string with os details.
         /// </summary>
@@ -231,6 +234,7 @@ namespace SignNow.Net.Internal.Infrastructure
 #endif
             return version;
         }
+#pragma warning restore CA1801 // Parameter kernel of method GetMacOsVersion is never used. Remove the parameter or use it in the method body.
 
         /// <summary>
         /// MacOS version based on `Major` octet

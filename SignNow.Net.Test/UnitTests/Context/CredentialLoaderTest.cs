@@ -21,7 +21,7 @@ namespace UnitTests
         private string testCredentialPath;
 
         [TestInitialize]
-        public void TestInitialize()
+        public void Setup()
         {
             this.testCredentialPath = Path.Combine(this.usrHomeDir, CredentialLoader.credentialsDirectory);
             this.testCredentialFile = Path.Combine(this.testCredentialPath, "api.signnow.test.json");
@@ -42,7 +42,7 @@ namespace UnitTests
         }
 
         [TestCleanup]
-        public void TestCleanup()
+        public void TearDown()
         {
             // cleanup test file
             if (File.Exists(this.testCredentialFile))

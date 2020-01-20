@@ -14,7 +14,7 @@ namespace AcceptanceTests
         public string DocumentId { get; set; }
 
         [TestCleanup]
-        public void TestCleanup()
+        public void TearDown()
         {
             DeleteDocument(DocumentId);
         }
@@ -39,7 +39,7 @@ namespace AcceptanceTests
             Assert.IsNotNull(response.Created);
             Assert.IsNotNull(response.Updated);
 
-            Assert.IsNull(response.OriginalId);
+            Assert.IsNull(response.OriginDocumentId);
             Assert.IsNull(response.OriginUserId);
 
             Assert.IsFalse(response.IsTemplate);

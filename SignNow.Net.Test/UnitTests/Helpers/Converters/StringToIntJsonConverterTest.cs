@@ -13,7 +13,7 @@ namespace UnitTests
         public void ShouldDeserializeAsInt()
         {
             var json = $"{{\"page_count\": \"100\"}}";
-            var obj = JsonConvert.DeserializeObject<GetDocumentResponse>(json);
+            var obj = JsonConvert.DeserializeObject<SignNowDocument>(json);
 
             Assert.AreEqual(100, obj.PageCount);
         }
@@ -21,7 +21,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldSerializeIntegerNative()
         {
-            var obj = new GetDocumentResponse
+            var obj = new SignNowDocument
             {
                 PageCount = 100,
                 Created = DateTime.Now,

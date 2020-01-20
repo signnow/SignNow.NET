@@ -29,7 +29,7 @@ namespace UnitTests
         [DataRow("Darwin 1.2.0 Darwin Kernel Version 1.2.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.0", DisplayName = "Cheetah")]
         [DataRow("Darwin 1.4.0 Darwin Kernel Version 1.4.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.1", DisplayName = "Puma")]
         [DataRow("Darwin 6.5.0 Darwin Kernel Version 6.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.2", DisplayName = "Jaguar")]
-        [DataRow("Darwin 7.5.0 Darwin Kernel Version 7.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.3", DisplayName = "Panter")]
+        [DataRow("Darwin 7.5.0 Darwin Kernel Version 7.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.3", DisplayName = "Panther")]
         [DataRow("Darwin 8.5.0 Darwin Kernel Version 8.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.4", DisplayName = "Tiger")]
         [DataRow("Darwin 9.5.0 Darwin Kernel Version 9.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.5", DisplayName = "Leopard")]
         [DataRow("Darwin 10.5.0 Darwin Kernel Version 10.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.6", DisplayName = "Snow Leopard")]
@@ -57,7 +57,7 @@ namespace UnitTests
         [DataRow("Microsoft Windows 10.0.18363", "10.0.18363", DisplayName = "FQN windows string")]
         [DataRow("Microsoft Windows 10.0", "10.0", DisplayName = "Only <major>.<minor>")]
         [DataRow("nonMicrosoft nonWindows no-10.0", "", DisplayName = "Broken string")]
-        public void ShouldProperParseWindowsVersionNetSdandard(string osDetails, string expected)
+        public void ShouldProperParseWindowsVersionNetStandard(string osDetails, string expected)
         {
             var actual = RuntimeInfo.GetWindowsVersion(osDetails);
 
