@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 
@@ -111,7 +112,7 @@ namespace SignNow.Net.Model
 
             if (null == originalRole)
             {
-                throw new SignNowException($"Cannot add role to User. Document doesn't have role with name `{role.Name}`");
+                throw new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, role.Name));
             }
 
             var content = new RoleContent
