@@ -104,6 +104,6 @@ namespace SignNow.Net.Model
         /// The document field invite requests.
         /// </summary>
         [JsonProperty("field_invites")]
-        public IReadOnlyCollection<FieldInvites> FieldInvites { get; private set; }
+        public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
     }
 }

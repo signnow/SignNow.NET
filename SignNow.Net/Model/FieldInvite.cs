@@ -7,7 +7,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents details of the field invite for the Document.
     /// </summary>
-    public class FieldInvites
+    public class FieldInvite
     {
         /// <summary>
         /// Unique identifier of field invite.
@@ -58,6 +58,6 @@ namespace SignNow.Net.Model
 
     public enum FieldInvitesStatus
     {
-        All, Pending, Declined, Fulfilled, Created, Skipped
+        Pending, Declined, Fulfilled, Created, Skipped
     }
 }

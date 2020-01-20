@@ -10,7 +10,6 @@ namespace UnitTests
     public class FieldInvitesTest
     {
         [DataTestMethod]
-        [DataRow("all", FieldInvitesStatus.All, DisplayName = "Status: all")]
         [DataRow("created", FieldInvitesStatus.Created, DisplayName = "Status: created")]
         [DataRow("declined", FieldInvitesStatus.Declined, DisplayName = "Status: declined")]
         [DataRow("fulfilled", FieldInvitesStatus.Fulfilled, DisplayName = "Status: fulfilled")]
@@ -28,7 +27,7 @@ namespace UnitTests
                 'expiration_time': '1582043165'
             }}";
 
-            var fieldInvite = JsonConvert.DeserializeObject<FieldInvites>(json);
+            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(json);
 
             Assert.AreEqual("a09b26test07ce70228afe6290f4445700b6f349", fieldInvite.Id);
             Assert.AreEqual(expected, fieldInvite.Status);
