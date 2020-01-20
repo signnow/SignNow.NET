@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 
 namespace UnitTests
@@ -160,6 +161,48 @@ namespace UnitTests
             var actual = JsonConvert.SerializeObject(requestInvite, Formatting.None);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.None), actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(SignNowException))]
+        public void ThrowsExceptionForNonExistingRole()
+        {
+            var testDocJson = @"{
+                'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
+                'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
+                'document_name': 'pdf-test',
+                'page_count': '1',
+                'created': '1565787561',
+                'updated': '1565858757',
+                'original_filename': 'pdf-test.pdf',
+                'origin_user_id': null,
+                'origin_document_id': null,
+                'owner': 'test.dotnet@signnow.com',
+                'template': false,
+                'roles': [
+                    {
+                        'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
+                        'signing_order': '1',
+                        'name': 'Signer 1'
+                    },
+                    {
+                        'unique_id': '585a05488fb971644978d3ec943ff6c719bda83a',
+                        'signing_order': '2',
+                        'name': 'Signer 2'
+                    }
+                ],
+                'requests': []
+            }";
+
+            var roleInvite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var fakeRole = new Role
+                {
+                    Id = "1234567890",
+                    Name = "CEO",
+                    SigningOrder = 42
+                };
+
+            roleInvite.AddRoleBasedInvite("ceo.test@signnow.com", fakeRole);
         }
     }
 }

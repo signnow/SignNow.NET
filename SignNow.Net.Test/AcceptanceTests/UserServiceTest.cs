@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,11 +18,6 @@ namespace AcceptanceTests
         /// </summary>
         private UserService userService;
 
-        /// <summary>
-        /// Test Document
-        /// </summary>
-        private string documentId;
-
         private readonly string emailPattern = @"(?<userid>\S+)@(?<domain>\w+.\w+)";
         private readonly string inviteIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
@@ -33,21 +29,15 @@ namespace AcceptanceTests
         private InviteResponse ProcessCreateInvite(FreeFormInvite invite)
         {
             var documentService = new DocumentService(Token);
-            documentId = UploadTestDocument(PdfFilePath, documentService);
+            DocumentId = UploadTestDocument(PdfFilePath, documentService);
 
-            return userService.CreateInviteAsync(documentId, invite).Result;
+            return userService.CreateInviteAsync(DocumentId, invite).Result;
         }
 
         [TestInitialize]
         public void Setup()
         {
             userService = new UserService(Token);
-        }
-
-        [TestCleanup]
-        public void TearDown()
-        {
-            DeleteDocument(documentId);
         }
 
         [TestMethod]
@@ -122,6 +112,22 @@ namespace AcceptanceTests
             var expectedInvite = $"{{\"to\":[{invitee}],\"subject\":null,\"message\":null}}";
 
             Assert.AreEqual(expectedInvite, JsonConvert.SerializeObject(invite));
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionForNullableInvite()
+        {
+            var actual = Assert.ThrowsException<AggregateException>(
+                () => userService.CreateInviteAsync("", null).Result);
+
+            var expected = "Value cannot be null."
+                           + Environment.NewLine
+                           + "Parameter name: invite";
+
+            if (actual.InnerException != null)
+            {
+                Assert.AreEqual(expected, actual.InnerException.Message);
+            }
         }
     }
 }

@@ -4,9 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Internal.Model;
 
 namespace UnitTests
 {
@@ -14,16 +12,16 @@ namespace UnitTests
     public partial class SignNowExceptionTest
     {
         [TestMethod]
-        public void Exception_Has_Proper_Data_Context()
+        public void ExceptionShouldHaveProperDataContext()
         {
-            var testException = new SignNowException(testMessage)
+            var testException = new SignNowException(TestMessage)
             {
                 HttpStatusCode = HttpStatusCode.BadRequest
             };
             testException.Data["HttpStatusCode"] = (int)HttpStatusCode.BadRequest;
             testException.Data["Request"] = "Test Request Body";
 
-            Assert.AreEqual(testMessage, testException.Message);
+            Assert.AreEqual(TestMessage, testException.Message);
             Assert.AreEqual(HttpStatusCode.BadRequest, testException.HttpStatusCode);
             Assert.AreEqual((int)HttpStatusCode.BadRequest, testException.Data["HttpStatusCode"]);
             Assert.AreEqual("Test Request Body", testException.Data["Request"]);
@@ -31,7 +29,7 @@ namespace UnitTests
 
         [TestMethod]
         [SuppressMessage("Microsoft.Globalization", "CA1305:StringBuilder.AppendFormat could vary based on locale", Justification = "Locale is not used for this test")]
-        public void Exception_Contains_Exceptions_List()
+        public void ExceptionShouldContainsExceptionsList()
         {
             var snExceptions = new List<SignNowException>();
 
@@ -64,7 +62,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void Exception_Handled_As_Aggregation()
+        public void ExceptionCanHandledAsAggregation()
         {
             var snExceptions = new List<SignNowException>();
             var aggregateMessage = string.Empty;
