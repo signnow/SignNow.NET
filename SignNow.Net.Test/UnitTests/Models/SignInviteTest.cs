@@ -73,28 +73,6 @@ namespace UnitTests
         [TestMethod]
         public void ShouldSerializeRoleBasedInvite()
         {
-            var testDocJson = @"{
-                'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
-                'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
-                'document_name': 'pdf-test',
-                'page_count': '1',
-                'created': '1565787561',
-                'updated': '1565858757',
-                'original_filename': 'pdf-test.pdf',
-                'origin_user_id': null,
-                'origin_document_id': null,
-                'owner': 'test.dotnet@signnow.com',
-                'template': false,
-                'roles': [
-                    {
-                        'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
-                        'signing_order': '1',
-                        'name': 'Signer 1'
-                    }
-                ],
-                'requests': []
-            }";
-
             var expectedJson = @"{
                 'to':[],
                 'subject':null,
