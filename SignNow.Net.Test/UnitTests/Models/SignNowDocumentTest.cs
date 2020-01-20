@@ -38,7 +38,7 @@ namespace UnitTests
 
             Assert.AreEqual("a09b26feeba7ce70228afe6290f4445700b6f349", document.Id);
             Assert.AreEqual("890d13607d89a7b3f6e67a14757d02ec00cf5eae", document.UserId);
-            Assert.IsNull(document.OriginalId);
+            Assert.IsNull(document.OriginDocumentId);
             Assert.IsNull(document.OriginUserId);
             Assert.AreEqual("pdf-test", document.Name);
             Assert.AreEqual("pdf-test.pdf", document.OriginalName);

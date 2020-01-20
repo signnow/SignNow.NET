@@ -29,7 +29,7 @@ namespace SignNow.Net.Model
         /// An id of original document (if document is a copy).
         /// </summary>
         [JsonProperty("origin_document_id")]
-        public string OriginalId { get; set; }
+        public string OriginDocumentId { get; set; }
 
         /// <summary>
         /// Identity of user that uploaded document.
