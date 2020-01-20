@@ -88,9 +88,6 @@ namespace UnitTests
 
             StringAssert.Contains(serialized, "One or more errors occurred.");
             StringAssert.Contains(serialized, "InnerExceptions");
-            StringAssert.Contains(serialized, "HttpStatusCode");
-            StringAssert.Contains(serialized, "RawHeaders");
-            StringAssert.Contains(serialized, "RawResponse");
             StringAssert.Contains(serialized, "Message");
             StringAssert.Contains(serialized, "Data");
 
