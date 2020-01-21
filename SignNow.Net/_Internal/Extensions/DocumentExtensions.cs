@@ -13,9 +13,10 @@ namespace SignNow.Net.Internal.Extensions
         private const string DocumentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
         /// <summary>
-        /// Validates Document ID
+        /// Validates Document ID.
         /// </summary>
-        /// <param name="documentId">Identity of the document</param>
+        /// <param name="documentId">Identity of the document.</param>
+        /// <exception cref="ArgumentException">Invalid format of ID.</exception>
         public static string ValidateDocumentId(this string documentId)
         {
             var regex = new Regex(DocumentIdPattern);

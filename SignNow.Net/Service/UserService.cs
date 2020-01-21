@@ -20,12 +20,11 @@ namespace SignNow.Net.Service
         {
         }
 
-        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token,
-            client)
+        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token, client)
         {
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IUserService.GetCurrentUserAsync" />
         public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
         {
             var requestOptions = new GetHttpRequestOptions
@@ -37,7 +36,7 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<User>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />
         /// <exception cref="ArgumentNullException"><see cref="SignInvite"/> cannot be null.</exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
         {
@@ -61,7 +60,8 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync" />
+        /// <exception cref="ArgumentException">Invalid format of ID.</exception>
         public async Task CancelInviteAsync(string inviteId, CancellationToken cancellationToken = default)
         {
             var requestedDocument = $"/invite/{inviteId.ValidateDocumentId()}/cancel";
