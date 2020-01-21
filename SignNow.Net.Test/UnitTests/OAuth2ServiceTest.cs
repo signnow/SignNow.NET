@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
+using SignNow.Net.Internal.Constants;
 using SignNow.Net.Model;
 
 namespace UnitTests
@@ -26,6 +27,8 @@ namespace UnitTests
         public void ShouldProperConstructAuthUrl(string testUrl, string expectedHost)
         {
             var apiUrl = new Uri($"https://{testUrl}");
+            ApiUrl.ApiBaseUrl = apiUrl;
+
             var redirect = new Uri(RedirectUrl);
             var expectedUrl = $"https://{expectedHost}{RelativeAuthUrl}?client_id=clientId&response_type=code&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}";
 
@@ -33,9 +36,9 @@ namespace UnitTests
 
             var actual = OAuth2.GetAuthorizationUrl(redirect);
 
-            Equals(RelativeAuthUrl, actual.AbsolutePath);
-            Equals(expectedUrl, actual.AbsoluteUri);
-            Equals(expectedHost, actual.Host);
+            Assert.AreEqual(RelativeAuthUrl, actual.AbsolutePath);
+            Assert.AreEqual(expectedUrl, actual.AbsoluteUri);
+            Assert.AreEqual(expectedHost, actual.Host);
         }
 
         [TestMethod]
