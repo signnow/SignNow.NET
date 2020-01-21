@@ -13,7 +13,7 @@ namespace SignNow.Net.Internal.Model
         /// Sign invite unique id.
         /// </summary>
         [JsonProperty("unique_id")]
-        public string UID { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Identity of user who invited to sign the document.
