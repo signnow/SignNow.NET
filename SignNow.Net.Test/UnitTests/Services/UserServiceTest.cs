@@ -14,17 +14,7 @@ namespace UnitTests
             var response = service.CancelInviteAsync(null as FreeformInvite).Exception;
 
             Assert.IsNotNull(response);
-            StringAssert.Contains(response.InnerException.Message, "Parameter name: invite");
-        }
-
-        [TestMethod]
-        public void ThrowsExceptionOnDocumentIsNull()
-        {
-            var service = new UserService(new Token());
-            var response = service.CancelInviteAsync(null as SignNowDocument).Exception;
-
-            Assert.IsNotNull(response);
-            StringAssert.Contains(response.InnerException.Message, "Parameter name: document");
+            StringAssert.Contains(response.InnerException?.Message, "Parameter name: invite");
         }
     }
 }

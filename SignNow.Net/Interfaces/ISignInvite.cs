@@ -29,9 +29,9 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Cancels an field invite (role-based invite) to a document.
         /// </summary>
-        /// <param name="document">The Document to cancel an fields invitation.</param>
+        /// <param name="documentId">The Document identity to cancel an fields invitation.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task CancelInviteAsync(SignNowDocument document, CancellationToken cancellationToken = default);
+        Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }

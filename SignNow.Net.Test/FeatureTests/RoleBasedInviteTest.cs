@@ -58,7 +58,6 @@ namespace FeatureTests
         [TestMethod]
         public void DocumentOwnerShouldCancelFieldInvite()
         {
-            // Upload document and extract fields
             var document = SignNow.Documents.GetDocumentAsync(DocumentId).Result;
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
@@ -75,7 +74,7 @@ namespace FeatureTests
             Assert.AreEqual("Pending", fieldInvites.Status.ToString());
 
             // Cancel role-based invite for the document
-            var cancelResponse = SignNow.Invites.CancelInviteAsync(document);
+            var cancelResponse = SignNow.Invites.CancelInviteAsync(DocumentId);
             Task.WaitAll(cancelResponse);
 
             var documentCanceled = SignNow.Documents.GetDocumentAsync(DocumentId).Result;

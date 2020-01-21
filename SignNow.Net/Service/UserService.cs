@@ -72,16 +72,11 @@ namespace SignNow.Net.Service
             await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(SignNowDocument, CancellationToken)" />
-        /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
-        public async Task CancelInviteAsync(SignNowDocument document, CancellationToken cancellationToken = default)
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(string, CancellationToken)" />
+        /// <exception cref="ArgumentException">Invalid format of Document Id.</exception>
+        public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            if (null == document)
-            {
-                throw new ArgumentNullException(nameof(document));
-            }
-
-            await ProcessCancelInviteAsync($"/document/{document.Id}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
+            await ProcessCancelInviteAsync($"/document/{documentId.ValidateDocumentId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
