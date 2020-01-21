@@ -69,15 +69,7 @@ namespace SignNow.Net.Service
                 throw new ArgumentNullException(nameof(invite));
             }
 
-            var requestedDocument = $"/invite/{invite.Id}/cancel";
-
-            var requestOptions = new PutHttpRequestOptions
-            {
-                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
-                Token = Token
-            };
-
-            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+            await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(SignNowDocument, CancellationToken)" />
@@ -89,8 +81,17 @@ namespace SignNow.Net.Service
                 throw new ArgumentNullException(nameof(document));
             }
 
-            var requestedDocument = $"/document/{document.Id}/fieldinvitecancel";
+            await ProcessCancelInviteAsync($"/document/{document.Id}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
+        }
 
+        /// <summary>
+        /// Process Cancel invite request.
+        /// </summary>
+        /// <param name="requestedDocument">Relative Url to process request.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        private async Task ProcessCancelInviteAsync(string requestedDocument, CancellationToken cancellationToken)
+        {
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
