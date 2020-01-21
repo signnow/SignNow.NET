@@ -60,11 +60,16 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ISignInvite.CancelInviteAsync" />
-        /// <exception cref="ArgumentException">Invalid format of ID.</exception>
-        public async Task CancelInviteAsync(string inviteId, CancellationToken cancellationToken = default)
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(FreeformInvite, CancellationToken)" />
+        /// <exception cref="ArgumentNullException"><see cref="FreeformInvite"/> cannot be null.</exception>
+        public async Task CancelInviteAsync(FreeformInvite invite, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = $"/invite/{inviteId.ValidateDocumentId()}/cancel";
+            if (null == invite)
+            {
+                throw new ArgumentNullException(nameof(invite));
+            }
+
+            var requestedDocument = $"/invite/{invite.Id}/cancel";
 
             var requestOptions = new PutHttpRequestOptions
             {
@@ -75,16 +80,16 @@ namespace SignNow.Net.Service
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ISignInvite.CancelDocumentInviteAsync" />
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(SignNowDocument, CancellationToken)" />
         /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
-        public async Task CancelDocumentInviteAsync(SignNowDocument document, CancellationToken cancellationToken = default)
+        public async Task CancelInviteAsync(SignNowDocument document, CancellationToken cancellationToken = default)
         {
             if (null == document)
             {
                 throw new ArgumentNullException(nameof(document));
             }
 
-            var requestedDocument = $"/document/{document.Id.ValidateDocumentId()}/fieldinvitecancel";
+            var requestedDocument = $"/document/{document.Id}/fieldinvitecancel";
 
             var requestOptions = new PutHttpRequestOptions
             {

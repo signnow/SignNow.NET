@@ -67,7 +67,12 @@ namespace AcceptanceTests
 
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
 
-            var cancelResponse = userService.CancelInviteAsync(inviteResponse.Id);
+            var freeformInvite = new FreeformInvite
+            {
+                Id = inviteResponse.Id
+            };
+
+            var cancelResponse = userService.CancelInviteAsync(freeformInvite);
             Task.WaitAll(cancelResponse);
 
             Assert.IsFalse(cancelResponse.IsFaulted);

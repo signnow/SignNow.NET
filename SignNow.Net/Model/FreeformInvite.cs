@@ -2,12 +2,12 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Internal.Model
+namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents sign invite request properties.
     /// </summary>
-    internal class FreeformInvite
+    public class FreeformInvite
     {
         /// <summary>
         /// Sign invite unique id.

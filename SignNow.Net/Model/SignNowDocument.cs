@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
-using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {

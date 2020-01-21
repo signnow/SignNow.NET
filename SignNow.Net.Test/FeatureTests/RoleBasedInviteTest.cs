@@ -75,7 +75,7 @@ namespace FeatureTests
             Assert.AreEqual("Pending", fieldInvites.Status.ToString());
 
             // Cancel role-based invite for the document
-            var cancelResponse = SignNow.Invites.CancelDocumentInviteAsync(document);
+            var cancelResponse = SignNow.Invites.CancelInviteAsync(document);
             Task.WaitAll(cancelResponse);
 
             var documentCanceled = SignNow.Documents.GetDocumentAsync(DocumentId).Result;
