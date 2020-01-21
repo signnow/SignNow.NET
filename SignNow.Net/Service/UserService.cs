@@ -74,5 +74,25 @@ namespace SignNow.Net.Service
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
+
+        /// <inheritdoc cref="ISignInvite.CancelDocumentInviteAsync" />
+        /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
+        public async Task CancelDocumentInviteAsync(SignNowDocument document, CancellationToken cancellationToken = default)
+        {
+            if (null == document)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            var requestedDocument = $"/document/{document.Id.ValidateDocumentId()}/fieldinvitecancel";
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                Token = Token
+            };
+
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
     }
 }
