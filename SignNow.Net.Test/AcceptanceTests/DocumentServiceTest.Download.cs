@@ -2,7 +2,6 @@ using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 
 namespace AcceptanceTests
 {

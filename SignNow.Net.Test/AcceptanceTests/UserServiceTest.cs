@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test;
+using SignNow.Net.Test.Constants;
 
 namespace AcceptanceTests
 {
@@ -127,14 +129,9 @@ namespace AcceptanceTests
             var actual = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateInviteAsync("", null).Result);
 
-            var expected = "Value cannot be null."
-                           + Environment.NewLine
-                           + "Parameter name: invite";
-
-            if (actual.InnerException != null)
-            {
-                Assert.AreEqual(expected, actual.InnerException.Message);
-            }
+            Assert.AreEqual(
+                    string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "invite"),
+                    actual.InnerException?.Message);
         }
     }
 }

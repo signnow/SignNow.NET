@@ -11,14 +11,6 @@ namespace AcceptanceTests
     {
         private IDocumentService docService;
 
-        private string DocumentId { get; set; }
-
-        [TestCleanup]
-        public void TearDown()
-        {
-            DeleteDocument(DocumentId);
-        }
-
         [TestInitialize]
         public void Setup()
         {

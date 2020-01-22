@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
@@ -12,9 +11,9 @@ namespace UnitTests
         [TestMethod]
         public void UserAgentStringIsCorrect()
         {
-            /// SignNow .NET API Сlient/v1.0.0.0 (Windows_NT 10.0.14393; win32; ia32) .NET Core/v4.0.30319.42000
-            /// SignNow .NET API Сlient/v1.0.0.0 (Linux 3.10.0; Unix; X64) .NET Core/v4.0.30319.42000
-            /// SignNow .NET API Сlient/v1.0.0.0 (macOs 10.15.0; Unix; X64) .NET Core/v4.0.30319.42000
+            // SignNow .NET API Сlient/v1.0.0.0 (Windows_NT 10.0.14393; win32; ia32) .NET Core/v4.0.30319.42000
+            // SignNow .NET API Сlient/v1.0.0.0 (Linux 3.10.0; Unix; X64) .NET Core/v4.0.30319.42000
+            // SignNow .NET API Сlient/v1.0.0.0 (macOs 10.15.0; Unix; X64) .NET Core/v4.0.30319.42000
 
             var patternClient = @"(?<client>.*)";
             var patternSdk = @"(?<version>v\d+.\d+.\d+.?\d+)";

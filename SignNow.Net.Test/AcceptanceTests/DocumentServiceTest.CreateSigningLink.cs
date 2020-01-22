@@ -24,14 +24,11 @@ namespace AcceptanceTests
         [TestMethod]
         public void SigningLinkExceptionIsCorrect()
         {
-            try
-            {
-                var links = docService.CreateSigningLinkAsync("Some Wrong Document Id").Result;
-            }
-            catch (AggregateException ex)
-            {
-                Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, ex.InnerException.Message);
-            }
+            var exception = Assert
+                .ThrowsException<AggregateException>(
+                    () => docService.CreateSigningLinkAsync("Some Wrong Document Id").Result);
+
+            Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, exception.InnerException?.Message);
         }
     }
 }

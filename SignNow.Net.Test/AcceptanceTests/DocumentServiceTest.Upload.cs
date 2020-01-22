@@ -46,15 +46,11 @@ namespace AcceptanceTests
         {
             using (var fileStream = File.OpenRead(TxtFilePath))
             {
-                try
-                {
-                    var uploadResponse = docService.UploadDocumentAsync(fileStream, txtFileName).Result;
-                    DocumentId = uploadResponse.Id;
-                }
-                catch (AggregateException ex)
-                {
-                    Assert.AreEqual(ErrorMessages.InvalidFileType, ex.InnerException.Message);
-                }
+                var exception = Assert
+                    .ThrowsException<AggregateException>(
+                        () => docService.UploadDocumentAsync(fileStream, txtFileName).Result);
+
+                Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
             }
         }
 
@@ -63,15 +59,11 @@ namespace AcceptanceTests
         {
             using (var fileStream = File.OpenRead(TxtFilePath))
             {
-                try
-                {
-                    var uploadExtractResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, txtFileName).Result;
-                    DocumentId = uploadExtractResponse.Id;
-                }
-                catch (AggregateException ex)
-                {
-                    Assert.AreEqual(ErrorMessages.InvalidFileType, ex.InnerException.Message);
-                }
+                var exception = Assert
+                    .ThrowsException<AggregateException>(
+                        () => docService.UploadDocumentWithFieldExtractAsync(fileStream, txtFileName).Result);
+
+                Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
             }
         }
     }
