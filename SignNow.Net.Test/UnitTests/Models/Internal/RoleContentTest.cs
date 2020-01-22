@@ -23,7 +23,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldCreateRoleContentWithPasswordAccess()
         {
-            var content = new SignerOptions(role, "test@email.com")
+            var content = new SignerOptions("test@email.com", role)
                 {
                     ExpirationDays = 14,
                     RemindAfterDays = 7
@@ -50,7 +50,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldCreateRoleContentWithPhoneAccess()
         {
-            var content = new SignerOptions(role, "test@email.com")
+            var content = new SignerOptions("test@email.com", role)
                 {
                     ExpirationDays = 7
                 }
@@ -75,7 +75,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldCreateRoleContentWithSmsAccess()
         {
-            var content = new SignerOptions(role, "test@email.com")
+            var content = new SignerOptions("test@email.com", role)
                 {
                     RemindAfterDays = 1
                 }
@@ -100,7 +100,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldSetOnlyOneProtection()
         {
-            var content = new SignerOptions(role, "test@email.com")
+            var content = new SignerOptions("test@email.com", role)
                 {
                     ExpirationDays = 5,
                     RemindAfterDays = 1

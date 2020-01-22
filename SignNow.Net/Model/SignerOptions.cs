@@ -66,11 +66,11 @@ namespace SignNow.Net.Model
         [JsonProperty("reminder",NullValueHandling = NullValueHandling.Ignore)]
         public int? RemindAfterDays { get; set; }
 
-        public SignerOptions(Role role, string email)
+        public SignerOptions(string email, Role role)
         {
             Guard.ArgumentNotNull(role, nameof(role));
-            SignerRole = role;
             Email = email;
+            SignerRole = role;
         }
 
         /// <summary>

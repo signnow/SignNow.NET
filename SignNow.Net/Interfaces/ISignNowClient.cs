@@ -14,7 +14,7 @@ namespace SignNow.Net.Interfaces
         /// <typeparam name="TResponse">Type (Model) of the response from the request</typeparam>
         /// <param name="requestOptions"><see cref="RequestOptions"/></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns><see cref="TResponse"/></returns>
+        /// <returns></returns>
         Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default);
 
         /// <inheritdoc cref="ISignNowClient.RequestAsync{TResponse}(RequestOptions, CancellationToken)"/>
@@ -23,7 +23,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="adapter"><see cref="IHttpContentAdapter{TResponse}"/></param>
         /// <param name="completionOption"><see cref="HttpCompletionOption"/></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
-        /// <returns><see cref="TResponse"/></returns>
+        /// <returns></returns>
         Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter = default, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default);
 
         /// <summary>

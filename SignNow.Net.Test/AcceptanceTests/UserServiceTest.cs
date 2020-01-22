@@ -111,7 +111,9 @@ namespace AcceptanceTests
 
             Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
 
-            invite.AddRoleBasedInvite("signer1@signnow.com", invite.DocumentRoles().First());
+            invite.AddRoleBasedInvite(
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
+            );
 
             var invitee = $"{{\"email\":\"signer1@signnow.com\",\"role\":\"Signer 1\",\"role_id\":\"485a05488fb971644978d3ec943ff6c719bda83a\",\"order\":1}}";
             var expectedInvite = $"{{\"to\":[{invitee}],\"subject\":null,\"message\":null}}";

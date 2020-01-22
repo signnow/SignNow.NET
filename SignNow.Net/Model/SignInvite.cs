@@ -65,7 +65,7 @@ namespace SignNow.Net.Model
         /// Represent recipients for which an invitation to sign should be sent.
         /// </summary>
         [JsonProperty("to")]
-        private List<RoleContent> RecipientList { get; set; } = new List<RoleContent>();
+        private List<SignerOptions> RecipientList { get; set; } = new List<SignerOptions>();
 
         private List<Role> ExistingDocumentRoles { get; set; }
 
@@ -92,55 +92,28 @@ namespace SignNow.Net.Model
         }
 
         /// <summary>
-        /// Add User by email to chosen Role.
+        /// Add user role with options to Role-based invite.
         /// </summary>
-        /// <param name="email">Email of the User to whom the Role-based invitation to sign is sent.</param>
-        /// <param name="role">The document signer role.</param>
+        /// <param name="options">Role <see cref="SignerOptions"/></param>
         /// <exception cref="ArgumentNullException"><see cref="Role"/> cannot be null.</exception>
         /// <exception cref="SignNowException">Allowed only <see cref="Role"/> which is exists in current Document</exception>
-        public void AddRoleBasedInvite(string email, Role role)
+        public void AddRoleBasedInvite(SignerOptions options)
         {
-            Guard.ArgumentNotNull(role, nameof(role));
+            Guard.ArgumentNotNull(options, nameof(options));
 
-            var originalRole = ExistingDocumentRoles.Find(p => p.Name == role.Name);
+            var originalRole = ExistingDocumentRoles.Find(p => p.Name == options.RoleName);
 
             if (null == originalRole)
             {
-                throw new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, role.Name));
+                throw new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, options.RoleName));
             }
 
-            var content = new RoleContent
-            {
-                Email = email,
-                RoleName = originalRole.Name,
-                RoleId = originalRole.Id,
-                SigningOrder = originalRole.SigningOrder
-            };
-
-            var uniqueContent = RecipientList.TrueForAll(item => item.RoleName != content.RoleName);
+            var uniqueContent = RecipientList.TrueForAll(item => item.RoleName != options.RoleName);
 
             if (uniqueContent)
             {
-                RecipientList.Add(content);
+                RecipientList.Add(options);
             }
         }
-    }
-
-    /// <summary>
-    /// Represents JSON content for Role-based invite intermediate object
-    /// </summary>
-    internal class RoleContent
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("role")]
-        public string RoleName { get; set; }
-
-        [JsonProperty("role_id")]
-        public string RoleId { get; set; }
-
-        [JsonProperty("order")]
-        public int SigningOrder { get; set; }
     }
 }
