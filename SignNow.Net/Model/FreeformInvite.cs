@@ -2,18 +2,18 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Internal.Model
+namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents sign invite request properties.
     /// </summary>
-    internal class FreeformInvite
+    public class FreeformInvite
     {
         /// <summary>
         /// Sign invite unique id.
         /// </summary>
         [JsonProperty("unique_id")]
-        public string UID { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Identity of user who invited to sign the document.

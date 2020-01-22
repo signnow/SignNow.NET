@@ -39,11 +39,11 @@ namespace FeatureTests
 
             // Check if invite was successful and the document contains invite request data
             var documentInfo = signNow.Documents.GetDocumentAsync(DocumentId).Result;
-            var inviteIdx = documentInfo.InviteRequests.FindIndex(request => request.UID == inviteResponse.Id);
+            var inviteIdx = documentInfo.InviteRequests.FindIndex(request => request.Id == inviteResponse.Id);
             var documentInviteRequest = documentInfo.InviteRequests[inviteIdx];
 
             Assert.AreEqual(DocumentId, documentInfo.Id, "You should get proper document details.");
-            Assert.AreEqual(inviteResponse.Id, documentInviteRequest.UID, "Document should contains freeform invite ID after invite has been sent.");
+            Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
             Assert.AreEqual(invitee.Email, documentInviteRequest.Signer, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
         }

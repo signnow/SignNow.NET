@@ -20,12 +20,11 @@ namespace SignNow.Net.Service
         {
         }
 
-        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token,
-            client)
+        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token, client)
         {
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IUserService.GetCurrentUserAsync" />
         public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
         {
             var requestOptions = new GetHttpRequestOptions
@@ -37,7 +36,7 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<User>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />
         /// <exception cref="ArgumentNullException"><see cref="SignInvite"/> cannot be null.</exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
         {
@@ -61,11 +60,33 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
-        public async Task CancelInviteAsync(string inviteId, CancellationToken cancellationToken = default)
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(FreeformInvite, CancellationToken)" />
+        /// <exception cref="ArgumentNullException"><see cref="FreeformInvite"/> cannot be null.</exception>
+        public async Task CancelInviteAsync(FreeformInvite invite, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = $"/invite/{inviteId.ValidateDocumentId()}/cancel";
+            if (null == invite)
+            {
+                throw new ArgumentNullException(nameof(invite));
+            }
 
+            await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.CancelInviteAsync(string, CancellationToken)" />
+        /// <exception cref="ArgumentException">Invalid format of Document Id.</exception>
+        public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            await ProcessCancelInviteAsync($"/document/{documentId.ValidateDocumentId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Process Cancel invite request.
+        /// </summary>
+        /// <param name="requestedDocument">Relative Url to process request.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        private async Task ProcessCancelInviteAsync(string requestedDocument, CancellationToken cancellationToken)
+        {
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
