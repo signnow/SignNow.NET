@@ -23,5 +23,19 @@ namespace SignNow.Net.Internal.Helpers
                 throw new ArgumentNullException(argumentName);
             }
         }
+
+        /// <summary>
+        /// Ensures that the specified object property is not null.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        /// <param name="message">Error message.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public static void PropertyNotNull(object property, string message)
+        {
+            if (null == property)
+            {
+                throw new ArgumentException(message);
+            }
+        }
     }
 }
