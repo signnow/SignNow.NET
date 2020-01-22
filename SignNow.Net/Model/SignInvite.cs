@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
+using SignNow.Net.Internal.Helpers;
 
 namespace SignNow.Net.Model
 {
@@ -77,11 +78,7 @@ namespace SignNow.Net.Model
         /// </exception>
         public RoleBasedInvite(SignNowDocument document)
         {
-            if (document == null)
-            {
-                throw new ArgumentNullException(nameof(document));
-            }
-
+            Guard.ArgumentNotNull(document, nameof(document));
             ExistingDocumentRoles = document.Roles;
         }
 
@@ -103,10 +100,7 @@ namespace SignNow.Net.Model
         /// <exception cref="SignNowException">Allowed only <see cref="Role"/> which is exists in current Document</exception>
         public void AddRoleBasedInvite(string email, Role role)
         {
-            if (null == role)
-            {
-                throw new ArgumentNullException(nameof(role));
-            }
+            Guard.ArgumentNotNull(role, nameof(role));
 
             var originalRole = ExistingDocumentRoles.Find(p => p.Name == role.Name);
 

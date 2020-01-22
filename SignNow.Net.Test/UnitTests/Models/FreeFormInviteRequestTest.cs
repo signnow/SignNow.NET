@@ -20,8 +20,7 @@ namespace UnitTests
                     'originator_email': 'owner@signnow.com',
                     'signer_email': 'signer@signnow.com',
                     'canceled': null
-                }
-            ";
+                }";
 
             var response = JsonConvert.DeserializeObject<FreeformInvite>(json);
 

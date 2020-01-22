@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 
@@ -40,10 +41,7 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentNullException"><see cref="SignInvite"/> cannot be null.</exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
         {
-            if (null == invite)
-            {
-                throw new ArgumentNullException(nameof(invite));
-            }
+            Guard.ArgumentNotNull(invite, nameof(invite));
 
             var sender = GetCurrentUserAsync(cancellationToken).Result;
             var inviteContent = JObject.FromObject(invite);
@@ -64,10 +62,7 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentNullException"><see cref="FreeformInvite"/> cannot be null.</exception>
         public async Task CancelInviteAsync(FreeformInvite invite, CancellationToken cancellationToken = default)
         {
-            if (null == invite)
-            {
-                throw new ArgumentNullException(nameof(invite));
-            }
+            Guard.ArgumentNotNull(invite, nameof(invite));
 
             await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken).ConfigureAwait(false);
         }
