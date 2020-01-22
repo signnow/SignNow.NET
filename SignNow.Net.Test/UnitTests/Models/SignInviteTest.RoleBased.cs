@@ -1,50 +1,18 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
+using SignNow.Net.Test.Constants;
 
 namespace UnitTests
 {
     public partial class SignInviteTest
     {
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsExceptionOnDocumentIsNull()
-        {
-            var invite = new RoleBasedInvite(null);
-            Assert.IsNull(invite);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ThrowsExceptionOnRoleIsNull()
-        {
-            var invite = new RoleBasedInvite(new SignNowDocument());
-            invite.AddRoleBasedInvite(null as SignerOptions);
-            Assert.IsNotNull(invite);
-        }
-
-        [TestMethod]
-        public void ShouldSerializeRoleBasedInvite()
-        {
-            var expectedJson = @"{
-                'to':[],
-                'subject':null,
-                'message':null
-            }";
-
-            var expected = JsonConvert.DeserializeObject(expectedJson);
-            var roleBasedInvite = new RoleBasedInvite(new SignNowDocument());
-
-            Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(roleBasedInvite));
-        }
-
-        [TestMethod]
-        public void ShouldCreateRoleBasedInviteContent()
-        {
-            var testDocJson = @"{
+        private string testDocJson = @"{
                 'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
                 'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
                 'document_name': 'pdf-test',
@@ -71,6 +39,24 @@ namespace UnitTests
                 'requests': []
             }";
 
+        [TestMethod]
+        public void ShouldSerializeRoleBasedInvite()
+        {
+            var expectedJson = @"{
+                'to':[],
+                'subject':null,
+                'message':null
+            }";
+
+            var expected = JsonConvert.DeserializeObject(expectedJson);
+            var roleBasedInvite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+
+            Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(roleBasedInvite));
+        }
+
+        [TestMethod]
+        public void ShouldCreateRoleBasedInviteContent()
+        {
             var sender = new User
             {
                 Active = true,
@@ -126,6 +112,64 @@ namespace UnitTests
             var actual = JsonConvert.SerializeObject(requestInvite, Formatting.None);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.None), actual);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionForMissingRoleInDocument()
+        {
+            var fakeRole = new Role
+            {
+                Id = "1",
+                Name = "CEO",
+                SigningOrder = 1
+            };
+
+            var invite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var exception = Assert
+                .ThrowsException<SignNowException>(
+                    () => invite.AddRoleBasedInvite(
+                        new SignerOptions("test@email.com", fakeRole)));
+
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture,  ExceptionMessages.CannotAddRole, fakeRole.Name),
+                exception.Message);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionForDocumentWithoutRoles()
+        {
+            var exception = Assert
+                .ThrowsException<ArgumentException>(
+                    () => new RoleBasedInvite(new SignNowDocument()));
+
+            Assert.AreEqual(ExceptionMessages.NoFillableFieldsWithRole, exception.Message);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionOnDocumentIsNull()
+        {
+            var exception = Assert
+                .ThrowsException<ArgumentNullException>(
+                    () => new RoleBasedInvite(null));
+
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "document"),
+                exception.Message);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionOnRoleIsNull()
+        {
+            var invite = new RoleBasedInvite(
+                JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+
+            var exception = Assert
+                .ThrowsException<ArgumentNullException>(
+                    () => invite.AddRoleBasedInvite(null));
+
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "options"),
+                exception.Message);
         }
     }
 }
