@@ -47,7 +47,7 @@ namespace SignNow.Net.Service
             var inviteContent = JObject.FromObject(invite);
                 inviteContent.Add("from", sender.Email);
 
-            var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}/invite");
+            var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/invite");
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestFullUrl,
@@ -71,7 +71,7 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentException">Invalid format of Document Id.</exception>
         public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            await ProcessCancelInviteAsync($"/document/{documentId.ValidateDocumentId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
+            await ProcessCancelInviteAsync($"/document/{documentId.ValidateId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

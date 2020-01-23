@@ -6,34 +6,31 @@ namespace SignNow.Net.Internal.Extensions
     static class ValidatorExtensions
     {
         /// <summary>
-        /// Pattern for Document Identity
+        /// Pattern for SignNow identity (Document, invite...)
         /// The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.
         /// </summary>
-        private const string DocumentIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
+        private const string IdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
         /// <summary>
         /// Pattern for Email address validation
         /// The required valid email address: e.g john+1@gmail.com or john123@gmail.com
         /// </summary>
-        private const string EmailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
+        private const string EmailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
 
         /// <summary>
-        /// Validates Document ID.
+        /// Validates SignNow ID for documents, invites, etc...
         /// </summary>
-        /// <param name="documentId">Identity of the document.</param>
+        /// <param name="id">Identity of the document or invite.</param>
         /// <exception cref="ArgumentException">Invalid format of ID.</exception>
-        public static string ValidateDocumentId(this string documentId)
+        public static string ValidateId(this string id)
         {
-            var regex = new Regex(DocumentIdPattern);
+            var regex = new Regex(IdPattern);
 
-            if (regex.IsMatch(documentId)) return documentId;
+            if (regex.IsMatch(id) && !string.IsNullOrWhiteSpace(id)) return id;
 
             throw new ArgumentException(
-                "Invalid format of Document Id <" + documentId + ">. " +
-                "The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed."
-                );
-
-
+                "Invalid format of ID <" + id + ">. " +
+                "The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.");
         }
 
         /// <summary>
@@ -44,14 +41,13 @@ namespace SignNow.Net.Internal.Extensions
         /// <exception cref="ArgumentException">if email address is not valid.</exception>
         public static string ValidateEmail(this string email)
         {
-            var regex = new Regex(EmailPattern);
+            var regex = new Regex(EmailPattern, RegexOptions.IgnoreCase);
 
-            if (regex.IsMatch(email)) return email;
+            if (regex.IsMatch(email) && !string.IsNullOrWhiteSpace(email)) return email;
 
             throw new ArgumentException(
                 "Invalid format of email <" + email + ">. " +
-                "The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com)."
-            );
+                "The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).");
         }
     }
 }

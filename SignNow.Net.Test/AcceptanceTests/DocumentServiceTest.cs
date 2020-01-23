@@ -28,7 +28,7 @@ namespace AcceptanceTests
             Assert.AreEqual(pdfFileName, response.OriginalName);
             Assert.AreEqual("DocumentUpload", response.Name);
 
-            Assert.IsNotNull(response.UserId.ValidateDocumentId());
+            Assert.IsNotNull(response.UserId.ValidateId());
             Assert.IsNotNull(response.Created);
             Assert.IsNotNull(response.Updated);
 

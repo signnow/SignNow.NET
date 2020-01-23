@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Model;
 
@@ -81,10 +82,11 @@ namespace SignNow.Net.Model
         /// <param name="email"><see cref="Email"/> address of the signer.</param>
         /// <param name="role"><see cref="Role"/> of the signer which will be required to fulfill.</param>
         /// <exception cref="System.ArgumentNullException">if <see cref="Role"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">if email is not valid.</exception>
         public SignerOptions(string email, Role role)
         {
             Guard.ArgumentNotNull(role, nameof(role));
-            Email = email;
+            Email = email.ValidateEmail();
             SignerRole = role;
         }
 

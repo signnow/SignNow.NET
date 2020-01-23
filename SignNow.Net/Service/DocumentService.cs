@@ -29,7 +29,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateDocumentId()}");
+            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}");
             var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = requestUrl,
@@ -56,7 +56,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = "/document/" + documentId.ValidateDocumentId();
+            var requestedDocument = "/document/" + documentId.ValidateId();
 
             var requestOptions = new DeleteHttpRequestOptions
             {
@@ -116,7 +116,7 @@ namespace SignNow.Net.Service
                     break;
             }
 
-            var requestedDocument = "/document/" + documentId.ValidateDocumentId() + "/download" + query;
+            var requestedDocument = "/document/" + documentId.ValidateId() + "/download" + query;
 
             var requestOptions = new GetHttpRequestOptions
             {

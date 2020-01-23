@@ -13,10 +13,16 @@ namespace SignNow.Net.Test.Constants
         public const string BadRequest = "Bad Request";
 
         /// <summary>
-        /// Invalid format of Document Id {0}...
+        /// Invalid format of ID {param}...
         /// </summary>
-        public const string InvalidDocumentId =
-            "Invalid format of Document Id <{0}>. The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.";
+        public const string InvalidFormatOfId =
+            "Invalid format of ID <{0}>. The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.";
+
+        /// <summary>
+        /// Invalid format of email {param}...
+        /// </summary>
+        public const string InvalidFormatOfEmail =
+            "Invalid format of email <{0}>. The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).";
 
         /// <summary>
         /// Value cannot be null. Parameter name: {0}
