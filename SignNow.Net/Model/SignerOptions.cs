@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {
@@ -8,8 +9,13 @@ namespace SignNow.Net.Model
     /// </summary>
     public class SignerOptions
     {
-        private string AuthType { get; set; }
+        /// <summary>
+        /// <see cref="SignerAuthorization"/> options for Role-based Invite.
+        /// </summary>
+        [JsonIgnore]
+        public SignerAuthorization SignerAuth { get; set; }
 
+        [JsonIgnore]
         private Role SignerRole { get; set; }
 
         /// <summary>
@@ -43,16 +49,19 @@ namespace SignNow.Net.Model
         /// Authentication type for case, when password used to open the Document.
         /// </summary>
         [JsonProperty("authentication_type", NullValueHandling = NullValueHandling.Ignore)]
-        public string AuthenticationType => AuthType;
+        private string AuthenticationType => SignerAuth?.AuthenticationType;
 
         /// <summary>
         /// Password will be required from signers when they open the document.
         /// </summary>
         [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
-        public string Password { get; private set; }
+        private string Password => SignerAuth?.Password;
 
+        /// <summary>
+        /// Phone number to authorize signers when they open the document via phone call or sms code.
+        /// </summary>
         [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
-        public string Phone { get; private set; }
+        private string Phone => SignerAuth?.Phone;
 
         /// <summary>
         /// In how many days this invite expires.
@@ -63,9 +72,15 @@ namespace SignNow.Net.Model
         /// <summary>
         /// In how many days will another email be sent to remind of a signature invite.
         /// </summary>
-        [JsonProperty("reminder",NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("reminder", NullValueHandling = NullValueHandling.Ignore)]
         public int? RemindAfterDays { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignerOptions"/> class.
+        /// </summary>
+        /// <param name="email"><see cref="Email"/> address of the signer.</param>
+        /// <param name="role"><see cref="Role"/> of the signer which will be required to fulfill.</param>
+        /// <exception cref="System.ArgumentNullException">if <see cref="Role"/> is null.</exception>
         public SignerOptions(string email, Role role)
         {
             Guard.ArgumentNotNull(role, nameof(role));
@@ -80,12 +95,9 @@ namespace SignNow.Net.Model
         /// <returns><see cref="SignerOptions"/></returns>
         public SignerOptions SetProtectionByPassword(string password)
         {
-            if (!string.IsNullOrEmpty(password))
-            {
-                Password = password;
-                Phone = null;
-                AuthType = "password";
-            }
+            if (string.IsNullOrEmpty(password)) return this;
+
+            SignerAuth = new PasswordAuthorization(password);
 
             return this;
         }
@@ -97,12 +109,9 @@ namespace SignNow.Net.Model
         /// <returns><see cref="SignerOptions"/></returns>
         public SignerOptions SetProtectionByPhoneCall(string phone)
         {
-            if (!string.IsNullOrEmpty(phone))
-            {
-                Password = null;
-                Phone = phone;
-                AuthType = "phone_call";
-            }
+            if (string.IsNullOrEmpty(phone)) return this;
+
+            SignerAuth = new PhoneCallAuthorization(phone);
 
             return this;
         }
@@ -114,12 +123,9 @@ namespace SignNow.Net.Model
         /// <returns><see cref="SignerOptions"/></returns>
         public SignerOptions SetProtectionBySms(string phone)
         {
-            if (!string.IsNullOrEmpty(phone))
-            {
-                Password = null;
-                Phone = phone;
-                AuthType = "sms";
-            }
+            if (string.IsNullOrEmpty(phone)) return this;
+
+            SignerAuth = new SmsAuthorization(phone);
 
             return this;
         }
@@ -130,9 +136,7 @@ namespace SignNow.Net.Model
         /// <returns></returns>
         public SignerOptions ClearSignerAccessProtection()
         {
-            AuthType = null;
-            Password = null;
-            Phone = null;
+            SignerAuth = null;
 
             return this;
         }

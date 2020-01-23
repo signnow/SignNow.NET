@@ -107,24 +107,24 @@ namespace UnitTests
                 };
 
             content.SetProtectionBySms("800 831-2050");
-            Assert.AreEqual("800 831-2050", content.Phone);
-            Assert.AreEqual("sms", content.AuthenticationType);
-            Assert.IsNull(content.Password);
+            Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
+            Assert.AreEqual("sms", content.SignerAuth.AuthenticationType);
+            Assert.IsNull(content.SignerAuth.Password);
 
             content.SetProtectionByPassword("secret");
-            Assert.AreEqual("password", content.AuthenticationType);
-            Assert.AreEqual("secret", content.Password);
-            Assert.IsNull(content.Phone);
+            Assert.AreEqual("password", content.SignerAuth.AuthenticationType);
+            Assert.AreEqual("secret", content.SignerAuth.Password);
+            Assert.IsNull(content.SignerAuth.Phone);
 
             content.SetProtectionByPhoneCall("800 831-2050");
-            Assert.AreEqual("800 831-2050", content.Phone);
-            Assert.AreEqual("phone_call", content.AuthenticationType);
-            Assert.IsNull(content.Password);
+            Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
+            Assert.AreEqual("phone_call", content.SignerAuth.AuthenticationType);
+            Assert.IsNull(content.SignerAuth.Password);
 
             content.ClearSignerAccessProtection();
-            Assert.IsNull(content.Password);
-            Assert.IsNull(content.Phone);
-            Assert.IsNull(content.AuthenticationType);
+            Assert.IsNull(content.SignerAuth?.Password);
+            Assert.IsNull(content.SignerAuth?.Phone);
+            Assert.IsNull(content.SignerAuth?.AuthenticationType);
         }
     }
 }
