@@ -9,7 +9,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents optional properties for Signer.
     /// </summary>
-    public class SignerOptions
+    public sealed class SignerOptions
     {
         /// <summary>
         /// <see cref="SignerAuthorization"/> options for Role-based Invite.
