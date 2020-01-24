@@ -11,14 +11,6 @@ namespace AcceptanceTests
     {
         private IDocumentService docService;
 
-        private string DocumentId { get; set; }
-
-        [TestCleanup]
-        public void TearDown()
-        {
-            DeleteDocument(DocumentId);
-        }
-
         [TestInitialize]
         public void Setup()
         {
@@ -36,7 +28,7 @@ namespace AcceptanceTests
             Assert.AreEqual(pdfFileName, response.OriginalName);
             Assert.AreEqual("DocumentUpload", response.Name);
 
-            Assert.IsNotNull(response.UserId.ValidateDocumentId());
+            Assert.IsNotNull(response.UserId.ValidateId());
             Assert.IsNotNull(response.Created);
             Assert.IsNotNull(response.Updated);
 

@@ -21,14 +21,13 @@ namespace SignNow.Net.Internal.Requests
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose HttpContent object before losing scope", Justification = "It should be disposed via HttpContent.Dispose()")]
-        [SuppressMessage("Microsoft.Globalization", "CA1305:ToString('N') could vary depend on locale settings", Justification = "Currently IFormatProvider is reserved and does not contribute to method execution")]
         public HttpContent GetHttpContent()
         {
-            //return CreateStreamContent(this.streamContent);
-            var content = new MultipartFormDataContent($"----{Guid.NewGuid().ToString("N")}-----")
+            var content = new MultipartFormDataContent($"----{Guid.NewGuid():N}-----")
             {
                 { new StreamContent(streamContent), "file", fileName }
             };
+
             return content;
         }
     }

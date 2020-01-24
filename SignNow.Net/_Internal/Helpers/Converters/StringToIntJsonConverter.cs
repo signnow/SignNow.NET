@@ -19,7 +19,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            return int.Parse(reader.Value.ToString().Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture);
+            return int.Parse(reader.Value.ToString().Trim(), CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc cref="JsonConverter.CanConvert" />

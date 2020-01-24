@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test;
+using SignNow.Net.Test.Constants;
 
 namespace AcceptanceTests
 {
@@ -111,7 +113,9 @@ namespace AcceptanceTests
 
             Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
 
-            invite.AddRoleBasedInvite("signer1@signnow.com", invite.DocumentRoles().First());
+            invite.AddRoleBasedInvite(
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
+            );
 
             var invitee = $"{{\"email\":\"signer1@signnow.com\",\"role\":\"Signer 1\",\"role_id\":\"485a05488fb971644978d3ec943ff6c719bda83a\",\"order\":1}}";
             var expectedInvite = $"{{\"to\":[{invitee}],\"subject\":null,\"message\":null}}";
@@ -125,14 +129,9 @@ namespace AcceptanceTests
             var actual = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateInviteAsync("", null).Result);
 
-            var expected = "Value cannot be null."
-                           + Environment.NewLine
-                           + "Parameter name: invite";
-
-            if (actual.InnerException != null)
-            {
-                Assert.AreEqual(expected, actual.InnerException.Message);
-            }
+            Assert.AreEqual(
+                    string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "invite"),
+                    actual.InnerException?.Message);
         }
     }
 }

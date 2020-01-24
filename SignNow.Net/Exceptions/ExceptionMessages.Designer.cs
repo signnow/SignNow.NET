@@ -78,5 +78,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("CannotAddRole", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Document must have fillable fields.
+        /// </summary>
+        internal static string NoFillableFieldsWithRole {
+            get {
+                return ResourceManager.GetString("NoFillableFieldsWithRole", resourceCulture);
+            }
+        }
     }
 }

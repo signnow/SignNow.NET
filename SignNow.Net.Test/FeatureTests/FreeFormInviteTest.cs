@@ -35,7 +35,7 @@ namespace FeatureTests
 
             Assert.IsFalse(inviteResponseTask.IsFaulted, "Invite request should be created.");
             Assert.AreEqual(invite.Recipient, invitee.Email, "Freeform invite request should contains proper user email.");
-            Assert.AreEqual(inviteResponse.Id, inviteResponse.Id.ValidateDocumentId(), "Successful invite response should contains valid Invite ID.");
+            Assert.AreEqual(inviteResponse.Id, inviteResponse.Id.ValidateId(), "Successful invite response should contains valid Invite ID.");
 
             // Check if invite was successful and the document contains invite request data
             var documentInfo = signNow.Documents.GetDocumentAsync(DocumentId).Result;

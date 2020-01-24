@@ -40,7 +40,9 @@ namespace FeatureTests
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name, "Signer role name mismatch.");
 
             // Attach signer email to existing role in the document
-            invite.AddRoleBasedInvite("signer1@signnow.com", invite.DocumentRoles().First());
+            invite.AddRoleBasedInvite(
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
+                );
 
             // Send invite request
             var inviteResponse = SignNow.Invites.CreateInviteAsync(DocumentId, invite).Result;
@@ -62,7 +64,9 @@ namespace FeatureTests
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
             // Attach signer email to existing role in the document
-            invite.AddRoleBasedInvite("signer1@signnow.com", invite.DocumentRoles().First());
+            invite.AddRoleBasedInvite(
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
+            );
             // Send invite request
             var inviteResponse = SignNow.Invites.CreateInviteAsync(DocumentId, invite).Result;
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");

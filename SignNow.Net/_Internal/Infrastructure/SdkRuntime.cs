@@ -64,10 +64,11 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static Version ParseVersion()
         {
-            var assemblyFQN = typeof(SdkRuntime).AssemblyQualifiedName.Split(',');
+            var assemblyFqn =
+                typeof(SdkRuntime).AssemblyQualifiedName?.Split(',')
+                ?? new[] {"Version=0.0.0.0"};
 
-            var version = Array.Find(assemblyFQN, (string obj) => obj.Contains("Version=")).Trim();
-
+            var version = Array.Find(assemblyFqn, obj => obj.Contains("Version=")).Trim();
             var parsed = version.Replace("Version=", String.Empty);
 
             return new Version(parsed);

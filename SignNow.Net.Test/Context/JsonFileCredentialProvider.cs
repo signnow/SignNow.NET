@@ -32,7 +32,7 @@ namespace SignNow.Net.Test.Context
             }
         }
 
-        private string GetUsageHint(string filePath)
+        private static string GetUsageHint(string filePath)
         {
             return $"To use this class you have to create JSON file {filePath} with single object {{'login':'login string','password':'password string'}}";
         }

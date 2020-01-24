@@ -67,7 +67,7 @@ namespace SignNow.Net.Internal.Service
             this.HttpClient = httpClient ?? new HttpClient();
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ISignNowClient.RequestAsync{TResponse}(RequestOptions, CancellationToken)" />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
             return await RequestAsync(
@@ -78,7 +78,7 @@ namespace SignNow.Net.Internal.Service
                 ).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ISignNowClient.RequestAsync{Stream}(RequestOptions, CancellationToken)" />
         public async Task<Stream> RequestAsync(RequestOptions requestOptions, CancellationToken cancellationToken = default)
         {
             return await RequestAsync(
@@ -89,15 +89,7 @@ namespace SignNow.Net.Internal.Service
                 ).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Process Request with request options and returns result object.
-        /// </summary>
-        /// <typeparam name="TResponse"></typeparam>
-        /// <param name="requestOptions"></param>
-        /// <param name="adapter"></param>
-        /// <param name="completionOption"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <inheritdoc cref="ISignNowClient.RequestAsync{TResponse}(RequestOptions, IHttpContentAdapter{TResponse}, HttpCompletionOption, CancellationToken)" />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter = default, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
         {
             using (var request = CreateHttpRequest(requestOptions))
@@ -113,7 +105,7 @@ namespace SignNow.Net.Internal.Service
         /// <summary>
         /// Process Error Response to prepare SignNow Exception
         /// </summary>
-        /// <param name="response"></param>
+        /// <param name="response"><see cref="HttpResponseMessage"/></param>
         /// <exception cref="SignNowException">SignNow Exception.</exception>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Performance", "CA1825:Unnecessary zero-length array allocation", Justification = "Solution Array.Empty<>() works only for .NetStandard2.0, no significant memory or performance improvement")]
@@ -154,22 +146,19 @@ namespace SignNow.Net.Internal.Service
         /// <summary>
         /// Creates Http Request from <see cref="SignNow.Net.Model.RequestOptions"/> class.
         /// </summary>
-        /// <param name="requestOptions"></param>
+        /// <param name="requestOptions"><see cref="RequestOptions"/></param>
         /// <exception cref="ArgumentException">The <paramref name="requestOptions">RequestUrl</paramref> argument is a null.</exception>
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private static HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
-            if (requestOptions.RequestUrl == null)
-            {
-                throw new ArgumentException(ExceptionMessages.RequestUrlIsNull);
-            }
+            Guard.PropertyNotNull(requestOptions.RequestUrl, ExceptionMessages.RequestUrlIsNull);
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 
             requestMessage.Headers.Add("User-Agent", SdkUserAgentString);
             requestMessage.Headers.Add("X-User-Agent", XUserAgentString);
 
-            if (requestOptions.Token != null)
+            if (null != requestOptions.Token)
             {
                 requestMessage.Headers.Add("Authorization", requestOptions.Token.GetAuthorizationHeaderValue());
             }

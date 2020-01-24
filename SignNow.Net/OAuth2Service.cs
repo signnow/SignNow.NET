@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using SignNow.Net.Internal.Helpers;
 
 namespace SignNow.Net
 {
@@ -62,8 +63,7 @@ namespace SignNow.Net
         /// <inheritdoc />
         public Uri GetAuthorizationUrl(Uri redirectUrl)
         {
-            if (redirectUrl == null)
-                throw new ArgumentNullException(nameof(redirectUrl));
+            Guard.ArgumentNotNull(redirectUrl, nameof(redirectUrl));
 
             var host = ApiUrl.ApiBaseUrl.Host;
             var targetHost = host;
@@ -113,8 +113,7 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
-            if (token == null)
-                throw new ArgumentNullException(nameof(token));
+            Guard.ArgumentNotNull(token, nameof(token));
 
             var body = new Dictionary<string, string>
             {
@@ -128,13 +127,14 @@ namespace SignNow.Net
         /// <inheritdoc />
         public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
-            if (token == null)
-                throw new ArgumentNullException(nameof(token));
+            Guard.ArgumentNotNull(token, nameof(token));
+
             var options = new GetHttpRequestOptions
             {
                 Token = new Token { AccessToken = token.AccessToken, TokenType = TokenType.Bearer },
                 RequestUrl = OAuthRequestUrl
             };
+
             try
             {
                 await SignNowClient.RequestAsync<Token>(options, cancellationToken).ConfigureAwait(false);

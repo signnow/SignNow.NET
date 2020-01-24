@@ -125,4 +125,8 @@
     <value>Cannot assign the `{0}` role to the user. The document must contain fields with the `{0}` role before assigning it to users.</value>
     <comment>Looks up a localized string similar to Cannot assign role to user.</comment>
   </data>
+  <data name="NoFillableFieldsWithRole" xml:space="preserve">
+    <value>Document must contains at least one fillable field assigned to one role.</value>
+    <comment>Looks up a localized string similar to Document must have fillable fields.</comment>
+  </data>
 </root>
