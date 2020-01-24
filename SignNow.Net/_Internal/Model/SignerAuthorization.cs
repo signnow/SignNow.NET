@@ -8,7 +8,7 @@ namespace SignNow.Net.Internal.Model
         /// <summary>
         /// Authentication type for case, when password, phone call or sms code used to open the Document.
         /// </summary>
-        public string AuthenticationType { get; protected set; }
+        public abstract string AuthenticationType { get; }
 
         /// <summary>
         /// Password will be required from signers when they open the document.
@@ -28,13 +28,15 @@ namespace SignNow.Net.Internal.Model
     /// </summary>
     internal sealed class PasswordAuthorization : SignerAuthorization
     {
+        /// <inheritdoc cref="SignerAuthorization"/>
+        public override string AuthenticationType => "password";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PasswordAuthorization"/> class.
         /// </summary>
         /// <param name="password">Password for signer to open the document.</param>
         public PasswordAuthorization(string password)
         {
-            AuthenticationType = "password";
             Password = password;
         }
     }
@@ -44,13 +46,15 @@ namespace SignNow.Net.Internal.Model
     /// </summary>
     internal sealed class PhoneCallAuthorization : SignerAuthorization
     {
+        /// <inheritdoc cref="SignerAuthorization"/>
+        public override string AuthenticationType => "phone_call";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PhoneCallAuthorization"/> class.
         /// </summary>
         /// <param name="phone">Phone number.</param>
         public PhoneCallAuthorization(string phone)
         {
-            AuthenticationType = "phone_call";
             Phone = phone;
         }
     }
@@ -60,13 +64,15 @@ namespace SignNow.Net.Internal.Model
     /// </summary>
     internal sealed class SmsAuthorization : SignerAuthorization
     {
+        /// <inheritdoc cref="SignerAuthorization"/>
+        public override string AuthenticationType => "sms";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SmsAuthorization"/> class.
         /// </summary>
         /// <param name="phone">Phone number.</param>
         public SmsAuthorization(string phone)
         {
-            AuthenticationType = "sms";
             Phone = phone;
         }
     }
