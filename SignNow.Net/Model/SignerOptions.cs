@@ -17,7 +17,7 @@ namespace SignNow.Net.Model
         public SignerAuthorization SignerAuth { get; set; }
 
         [JsonIgnore]
-        private Role SignerRole { get; set; }
+        public Role SignerRole { get; }
 
         /// <summary>
         /// Represents the email address of the signer.
@@ -29,14 +29,14 @@ namespace SignNow.Net.Model
         /// Represents the name of the role the signer will be required to fulfill.
         /// </summary>
         [JsonProperty("role")]
-        public string RoleName => SignerRole.Name;
+        private string RoleName => SignerRole.Name;
 
         /// <summary>
         /// Leave empty state “” for a document with one role,
         /// or get all role IDs from Document and assign a signer to the specific `role_id`
         /// </summary>
         [JsonProperty("role_id")]
-        public string RoleId => SignerRole.Id;
+        private string RoleId => SignerRole.Id;
 
         /// <summary>
         /// The order of signing, or Signing step. When there are multiple signers,
@@ -95,7 +95,7 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="password">Password for signer to open the document.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetProtectionByPassword(string password)
+        public SignerOptions SetAuthenticationByPassword(string password)
         {
             if (string.IsNullOrEmpty(password)) return this;
 
@@ -109,7 +109,7 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="phone">Phone number.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetProtectionByPhoneCall(string phone)
+        public SignerOptions SetAuthenticationByPhoneCall(string phone)
         {
             if (string.IsNullOrEmpty(phone)) return this;
 
@@ -123,7 +123,7 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="phone">Phone number.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetProtectionBySms(string phone)
+        public SignerOptions SetAuthenticationBySms(string phone)
         {
             if (string.IsNullOrEmpty(phone)) return this;
 
@@ -133,10 +133,10 @@ namespace SignNow.Net.Model
         }
 
         /// <summary>
-        /// Clear Signer access protection options.
+        /// Clear Signer authentication options.
         /// </summary>
         /// <returns></returns>
-        public SignerOptions ClearSignerAccessProtection()
+        public SignerOptions ClearSignerAuthentication()
         {
             SignerAuth = null;
 

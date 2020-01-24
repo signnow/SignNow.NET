@@ -102,14 +102,14 @@ namespace SignNow.Net.Model
         {
             Guard.ArgumentNotNull(options, nameof(options));
 
-            var originalRole = ExistingDocumentRoles.Find(p => p.Name == options.RoleName);
+            var originalRole = ExistingDocumentRoles.Find(p => p.Name == options.SignerRole.Name);
 
             if (null == originalRole)
             {
-                throw new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, options.RoleName));
+                throw new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, options.SignerRole.Name));
             }
 
-            var uniqueContent = RecipientList.TrueForAll(item => item.RoleName != options.RoleName);
+            var uniqueContent = RecipientList.TrueForAll(item => item.SignerRole.Name != options.SignerRole.Name);
 
             if (uniqueContent)
             {

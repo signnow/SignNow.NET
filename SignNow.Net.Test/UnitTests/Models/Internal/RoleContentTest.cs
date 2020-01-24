@@ -28,7 +28,7 @@ namespace UnitTests
                     ExpirationDays = 14,
                     RemindAfterDays = 7
                 }
-                .SetProtectionByPassword("***secret***");
+                .SetAuthenticationByPassword("***secret***");
 
             var json = JsonConvert.DeserializeObject(@"{
                 'email': 'test@email.com',
@@ -54,7 +54,7 @@ namespace UnitTests
                 {
                     ExpirationDays = 7
                 }
-                .SetProtectionByPhoneCall("800 831-2050");
+                .SetAuthenticationByPhoneCall("800 831-2050");
 
             var json = JsonConvert.DeserializeObject(@"{
                 'email': 'test@email.com',
@@ -79,7 +79,7 @@ namespace UnitTests
                 {
                     RemindAfterDays = 1
                 }
-                .SetProtectionBySms("800 831-2050");
+                .SetAuthenticationBySms("800 831-2050");
 
             var json = JsonConvert.DeserializeObject(@"{
                 'email': 'test@email.com',
@@ -106,22 +106,22 @@ namespace UnitTests
                     RemindAfterDays = 1
                 };
 
-            content.SetProtectionBySms("800 831-2050");
+            content.SetAuthenticationBySms("800 831-2050");
             Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
             Assert.AreEqual("sms", content.SignerAuth.AuthenticationType);
             Assert.IsNull(content.SignerAuth.Password);
 
-            content.SetProtectionByPassword("secret");
+            content.SetAuthenticationByPassword("secret");
             Assert.AreEqual("password", content.SignerAuth.AuthenticationType);
             Assert.AreEqual("secret", content.SignerAuth.Password);
             Assert.IsNull(content.SignerAuth.Phone);
 
-            content.SetProtectionByPhoneCall("800 831-2050");
+            content.SetAuthenticationByPhoneCall("800 831-2050");
             Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
             Assert.AreEqual("phone_call", content.SignerAuth.AuthenticationType);
             Assert.IsNull(content.SignerAuth.Password);
 
-            content.ClearSignerAccessProtection();
+            content.ClearSignerAuthentication();
             Assert.IsNull(content.SignerAuth?.Password);
             Assert.IsNull(content.SignerAuth?.Phone);
             Assert.IsNull(content.SignerAuth?.AuthenticationType);

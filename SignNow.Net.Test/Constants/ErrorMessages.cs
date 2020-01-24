@@ -27,6 +27,6 @@ namespace SignNow.Net.Test.Constants
         /// <summary>
         /// Value cannot be null. Parameter name: {0}
         /// </summary>
-        public static string ValueCannotBeNull = "Value cannot be null." + Environment.NewLine + "Parameter name: {0}";
+        public static readonly string ValueCannotBeNull = "Value cannot be null." + Environment.NewLine + "Parameter name: {0}";
     }
 }

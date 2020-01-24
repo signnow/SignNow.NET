@@ -12,7 +12,7 @@ namespace UnitTests
 {
     public partial class SignInviteTest
     {
-        private string testDocJson = @"{
+        private readonly string testDocJson = @"{
                 'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
                 'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
                 'document_name': 'pdf-test',
@@ -76,7 +76,7 @@ namespace UnitTests
                 {
                     ExpirationDays = 15
                 }
-                .SetProtectionByPassword("12345abc");
+                .SetAuthenticationByPassword("12345abc");
 
             roleBasedInvite.AddRoleBasedInvite(signer1Options);
             roleBasedInvite.AddRoleBasedInvite(signer2Options);
