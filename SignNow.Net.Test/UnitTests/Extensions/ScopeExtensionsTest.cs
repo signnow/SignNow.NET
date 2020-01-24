@@ -16,12 +16,15 @@ namespace UnitTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
         public void ThrowsExceptionForWrongScopeConverting()
         {
-            var brokenScope = Scope.User;
-            var x = ++brokenScope;
-            brokenScope.AsString();
+            Assert.ThrowsException<NotImplementedException>(
+                () =>
+                {
+                    var userScope = Scope.User;
+                    var brokenScope = ++userScope;
+                    brokenScope.AsString();
+                });
         }
     }
 }

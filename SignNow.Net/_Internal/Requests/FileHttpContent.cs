@@ -24,11 +24,11 @@ namespace SignNow.Net.Internal.Requests
         [SuppressMessage("Microsoft.Globalization", "CA1305:ToString('N') could vary depend on locale settings", Justification = "Currently IFormatProvider is reserved and does not contribute to method execution")]
         public HttpContent GetHttpContent()
         {
-            //return CreateStreamContent(this.streamContent);
             var content = new MultipartFormDataContent($"----{Guid.NewGuid().ToString("N")}-----")
             {
                 { new StreamContent(streamContent), "file", fileName }
             };
+
             return content;
         }
     }

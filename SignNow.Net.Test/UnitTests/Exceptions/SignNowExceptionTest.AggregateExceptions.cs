@@ -36,7 +36,7 @@ namespace UnitTests
             var generalMessage = "L1 Ex Message Example";
             var snAggregateMsg = new StringBuilder(generalMessage);
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 snExceptions.Add(new SignNowException($"inner-exception {i}"));
                 snAggregateMsg.AppendFormat(" (inner-exception {0})", i);
@@ -53,9 +53,10 @@ namespace UnitTests
             Assert.AreEqual(expectedMessage, snEx.Message, "Wrong error Message");
 
             var index = 0;
-            foreach (SignNowException innerEx in snEx.InnerExceptions)
+            foreach (var exception in snEx.InnerExceptions)
             {
-                var innerExMsg = String.Format("inner-exception {0}", index++);
+                var innerEx = (SignNowException) exception;
+                var innerExMsg = $"inner-exception {index++}";
 
                 Assert.AreEqual(innerExMsg, innerEx.Message);
             }
@@ -65,14 +66,14 @@ namespace UnitTests
         public void ExceptionCanHandledAsAggregation()
         {
             var snExceptions = new List<SignNowException>();
-            var aggregateMessage = string.Empty;
+            var aggregateMessage = new StringBuilder();
 
             for (var i = 0; i < 5; i++)
             {
                 snExceptions.Add(
                     new SignNowException("message_" + i, HttpStatusCode.BadRequest));
 
-                aggregateMessage += " (message_" + i + ")";
+                aggregateMessage.Append($" (message_{i})");
             }
 
             try
@@ -88,8 +89,9 @@ namespace UnitTests
                 Assert.AreEqual(expectedMessage, ex.Message);
 
                 var msgPrefix = 0;
-                foreach (SignNowException snException in ex.InnerExceptions)
+                foreach (var exception in ex.InnerExceptions)
                 {
+                    var snException = (SignNowException) exception;
                     Assert.AreEqual("message_" + msgPrefix, snException.Message);
                     Assert.AreEqual((int)HttpStatusCode.BadRequest, snException.Data["HttpStatusCode"]);
                     msgPrefix++;
