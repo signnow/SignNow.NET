@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.2.0-beta</Version>
+        <Version>0.3.0-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
         <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
@@ -14,16 +14,21 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <RepositoryType>Git</RepositoryType>
         <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
         <PackageReleaseNotes>Features implemented:
+- IUserService.GetCurrentUserAsync method which allows developers to retrieve the User resource.
+- IUserService.CreateInviteAsync method for creating freeform or role-based invites.
+- IUserService.CancelInviteAsync method for canceling a freeform invite using the invite ID or canceling a role-based invite using the document ID.
+- Model.FreeFormInvite which allows developers to create freeform invites to sign the document.
+- Model.RoleBasedInvite which allows developers to create role-based invites to sign the document (with options on how to verify the signer's identity: by password protection, a phone call, or sms)
 
-- DocumentService.DownloadDocumentAsync method which allows to download a document by ID in either Collapsed/With History/Zipped mode.
-
-Fixed:
-- "Argument passed in is not serializable" error on any SignNowException in .NET 4.5</PackageReleaseNotes>
+Changed:
+- IDocumentService returns SignNowDocument model instead of DocumentResponse
+- IDocumentService.GetDocumentAsync method can now be used to retrieve document roles, invite requests, timestamps, pages count, etc..</PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <ReleaseVersion>0.2.0-beta</ReleaseVersion>
+        <ReleaseVersion>0.3.0-beta</ReleaseVersion>
+        <PackageVersion>0.3.0-beta</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>

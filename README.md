@@ -93,12 +93,12 @@ string documentId = default;
 var pdfFilePath = "./file-path/document-example.pdf";
 var pdfFileName = "document-example.pdf";
 
-/// using token from the Authorization step
-var documentService = new DocumentService(token);
+// using token from the Authorization step
+var SignNow = new SignNowContext(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var uploadResponse = documentService.UploadDocumentAsync(fileStream, pdfFileName).Result;
+    var uploadResponse = SignNow.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
 
     documentId = uploadResponse.Id;
 }
@@ -114,9 +114,8 @@ Choose the type of download for your document:
 -   `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
-/// using `documentId` from the Upload document step
-
-var downloadPdf = documentService.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
+// using `documentId` from the Upload document step
+var downloadPdf = SignNow.Documents.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
 
 using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
 {
@@ -137,9 +136,8 @@ Steps:
 ▶ Send a signing link
 
 ```csharp
-/// using `documentId` from the Upload document step
-
-var signingLinks = documentService.CreateSigningLinkAsync(documentId).Result;
+// using `documentId` from the Upload document step
+var signingLinks = SignNow.Documents.CreateSigningLinkAsync(documentId).Result;
 
 Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
 Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
