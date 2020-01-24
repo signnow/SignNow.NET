@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
@@ -95,39 +96,36 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="password">Password for signer to open the document.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetAuthenticationByPassword(string password)
-        {
-            if (string.IsNullOrEmpty(password)) return this;
-
-            SignerAuth = new PasswordAuthorization(password);
-
-            return this;
-        }
+        public SignerOptions SetAuthenticationByPassword(string password) =>
+            ProcessSetAuthentication(authParam => new PasswordAuthorization(authParam), password);
 
         /// <summary>
         /// Set <see cref="Phone"/> number to authorize signer when they open the document via phone call.
         /// </summary>
         /// <param name="phone">Phone number.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetAuthenticationByPhoneCall(string phone)
-        {
-            if (string.IsNullOrEmpty(phone)) return this;
-
-            SignerAuth = new PhoneCallAuthorization(phone);
-
-            return this;
-        }
+        public SignerOptions SetAuthenticationByPhoneCall(string phone) =>
+            ProcessSetAuthentication(authParam => new PhoneCallAuthorization(authParam), phone);
 
         /// <summary>
         /// Set <see cref="Phone"/> number to authorize signer when they open the document via sms code.
         /// </summary>
         /// <param name="phone">Phone number.</param>
         /// <returns><see cref="SignerOptions"/></returns>
-        public SignerOptions SetAuthenticationBySms(string phone)
-        {
-            if (string.IsNullOrEmpty(phone)) return this;
+        public SignerOptions SetAuthenticationBySms(string phone) =>
+            ProcessSetAuthentication(authParam => new SmsAuthorization(authParam), phone);
 
-            SignerAuth = new SmsAuthorization(phone);
+        /// <summary>
+        /// Delegate which create corresponding signer auth class and set this class as property.
+        /// </summary>
+        /// <param name="action">delegate function</param>
+        /// <param name="authParam">delegate auth param required for construct auth class.</param>
+        /// <returns></returns>
+        SignerOptions ProcessSetAuthentication(Func<string, SignerAuthorization> action, string authParam)
+        {
+            if (string.IsNullOrEmpty(authParam)) return this;
+
+            SignerAuth = action(authParam);
 
             return this;
         }
