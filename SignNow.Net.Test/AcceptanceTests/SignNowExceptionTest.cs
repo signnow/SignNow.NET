@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Interfaces;
-using SignNow.Net.Service;
 using SignNow.Net.Test;
 
 namespace AcceptanceTests
@@ -13,53 +12,30 @@ namespace AcceptanceTests
     [TestClass]
     public class SignNowExceptionTest : AuthorizedApiTestBase
     {
-        readonly IDocumentService docService;
-
-        public SignNowExceptionTest()
-        {
-            docService = new DocumentService(ApiBaseUrl, Token);
-        }
-
         [TestMethod]
         public void ExceptionHandlingTest()
         {
+            var docService = new SignNowContext(Token).Documents;
+
             var documentId = "mstestSignNowDotNetSDK000000000000000000";
             var errorMessage = "Unable to find a route to match the URI: document/" + documentId;
             var rawErrorResponse = "{\"404\":\"Unable to find a route to match the URI: document\\/" + documentId + "\"}";
 
-            var deleteResponse = docService.DeleteDocumentAsync(documentId);
+            var exception = Assert.ThrowsException<AggregateException>(
+                () => Task.WaitAll(docService.DeleteDocumentAsync(documentId)));
 
-            var expectedHeaders = new List<string>
+            Assert.AreEqual(errorMessage, exception.InnerException?.Message);
+            Assert.AreEqual(1, exception.InnerExceptions.Count);
+
+            foreach (var ex in exception.InnerExceptions)
             {
-                "Connection",
-                "Date",
-                "Server",
-                "Access-Control-Allow-Headers",
-                "Access-Control-Allow-Origin"
-            };
-
-
-            try
-            {
-                Task.WaitAll(deleteResponse);
-            }
-            catch (AggregateException ex)
-            {
-                foreach (SignNowException snEx in ex.InnerExceptions)
-                {
-                    Assert.AreEqual(snEx.Message, errorMessage);
-                    Assert.AreEqual(snEx.HttpStatusCode, HttpStatusCode.NotFound);
-
-                    Assert.IsNotNull(snEx.RawHeaders);
-                    Assert.AreEqual(rawErrorResponse, snEx.RawResponse);
-
-                    var actual = snEx.RawHeaders.GetEnumerator();
-
-                    while (actual.MoveNext())
-                    {
-                        Assert.IsTrue(expectedHeaders.Contains(actual.Current.Key));
-                    }
-                }
+                var snException = (SignNowException) ex;
+                Assert.AreEqual(errorMessage, snException.Message);
+                Assert.AreEqual(HttpStatusCode.NotFound, snException.HttpStatusCode);
+                Assert.AreEqual(rawErrorResponse, snException.RawResponse);
+                Assert.IsTrue(snException.RawHeaders
+                    .ToDictionary(x => x.Key, x => x.Value)
+                    .ContainsKey("Connection"));
             }
         }
     }

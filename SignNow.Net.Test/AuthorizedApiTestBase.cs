@@ -46,11 +46,11 @@ namespace SignNow.Net.Test
 
             using (var fileStream = File.OpenRead(filePath))
             {
-                var uploadResponse = docService.UploadDocumentAsync(fileStream, pdfFileName).Result;
-                docId = uploadResponse.Id;
+                var uploadResponse = docService?.UploadDocumentAsync(fileStream, pdfFileName).Result;
+                docId = uploadResponse?.Id;
 
                 Assert.IsNotNull(
-                    uploadResponse.Id,
+                    uploadResponse?.Id,
                     "Document Upload result should contain non-null Id property value on successful upload"
                 );
             }

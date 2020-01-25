@@ -1,24 +1,25 @@
 using System;
+using System.Globalization;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
 using SignNow.Net.Internal.Constants;
-using SignNow.Net.Model;
+using SignNow.Net.Test.Constants;
 
 namespace UnitTests
 {
     [TestClass]
     public class OAuth2ServiceTest
     {
-        private readonly string RedirectUrl = $"https://github.com/signnow/SignNow.NET";
-        private readonly string RelativeAuthUrl = $"/proxy/index.php/authorize";
+        private readonly string RedirectUrl = "https://github.com/signnow/SignNow.NET";
+        private readonly string RelativeAuthUrl = "/proxy/index.php/authorize";
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CannotGetAuthUrlWithoutRedirectUrl()
+        private OAuth2Service OAuth2 { get; set; }
+
+        [TestInitialize]
+        public void SetUp()
         {
-            var OAuth2 = new OAuth2Service("clientId", "clientSecret");
-            OAuth2.GetAuthorizationUrl(null);
+            OAuth2 = new OAuth2Service("clientId", "clientSecret");
         }
 
         [DataTestMethod]
@@ -32,33 +33,47 @@ namespace UnitTests
             var redirect = new Uri(RedirectUrl);
             var expectedUrl = $"https://{expectedHost}{RelativeAuthUrl}?client_id=clientId&response_type=code&redirect_uri={WebUtility.UrlEncode(RedirectUrl)}";
 
-            var OAuth2 = new OAuth2Service(apiUrl, "clientId", "clientSectet");
-
             var actual = OAuth2.GetAuthorizationUrl(redirect);
 
-            Assert.AreEqual(RelativeAuthUrl, actual.AbsolutePath);
-            Assert.AreEqual(expectedUrl, actual.AbsoluteUri);
+            Assert.AreEqual("https", actual.Scheme);
             Assert.AreEqual(expectedHost, actual.Host);
+            Assert.AreEqual(expectedUrl, actual.AbsoluteUri);
+            Assert.AreEqual(RelativeAuthUrl, actual.AbsolutePath);
+            Assert.AreEqual("?client_id=clientId&response_type=code&redirect_uri=https%3A%2F%2Fgithub.com%2Fsignnow%2FSignNow.NET", actual.Query);
+            Assert.AreEqual(RelativeAuthUrl, actual.LocalPath);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
+        public void CannotGetAuthUrlWithoutRedirectUrl()
+        {
+            var exception = Assert.ThrowsException<ArgumentNullException>(
+                () => OAuth2.GetAuthorizationUrl(null));
+
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "redirectUrl"),
+                exception.Message);
+        }
+
+        [TestMethod]
         public void CannotRefreshEmptyToken()
         {
-            var OAuth2 = new OAuth2Service("clientId", "clientSecret");
-            var error = OAuth2.RefreshTokenAsync(null).Result;
+            var exception = Assert.ThrowsException<AggregateException>(
+                () => OAuth2.RefreshTokenAsync(null).Result);
 
-            Assert.IsNotInstanceOfType(error, typeof(Token));
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "token"),
+                exception.InnerException?.Message);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
         public void CannotValidateEmptyToken()
         {
-            var OAuth2 = new OAuth2Service("clientId", "clientSecret");
-            var error = OAuth2.ValidateTokenAsync(null).Result;
+            var exception = Assert.ThrowsException<AggregateException>(
+                () => OAuth2.ValidateTokenAsync(null).Result);
 
-            Assert.IsNotInstanceOfType(error, typeof(Token));
+            Assert.AreEqual(
+                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "token"),
+                exception.InnerException?.Message);
         }
     }
 }
