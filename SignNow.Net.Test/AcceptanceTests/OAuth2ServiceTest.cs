@@ -50,8 +50,11 @@ namespace AcceptanceTests
         {
             var exception = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync("wrong_auth_code", Scope.All).Result);
-
+#if NET45
+            Assert.AreEqual("One or more errors occurred.", exception.Message);
+#else
             Assert.AreEqual("One or more errors occurred. (internal api error)", exception.Message);
+#endif
             Assert.AreEqual("internal api error", exception.InnerException?.Message);
         }
 
@@ -61,8 +64,11 @@ namespace AcceptanceTests
             oAuthTest = new OAuth2Service(_clientInfo.Login, "wrong_client_secret");
             var exception = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, Scope.All).Result);
-
+#if NET45
+            Assert.AreEqual("One or more errors occurred.", exception.Message);
+#else
             Assert.AreEqual("One or more errors occurred. (invalid_client)", exception.Message);
+#endif
             Assert.AreEqual("invalid_client", exception.InnerException?.Message);
         }
 
@@ -72,8 +78,11 @@ namespace AcceptanceTests
         {
             var exceptionLogin = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync(login,pass, scope).Result);
-
+#if NET45
+            Assert.AreEqual($"One or more errors occurred.", exceptionLogin.Message);
+#else
             Assert.AreEqual($"One or more errors occurred. ({expected})", exceptionLogin.Message);
+#endif
             Assert.AreEqual(expected, exceptionLogin.InnerException?.Message);
         }
 
