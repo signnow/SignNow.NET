@@ -7,7 +7,6 @@ using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -60,30 +59,28 @@ namespace SignNow.Net
             OAuthRequestUrl = new Uri(ApiBaseUrl, "oauth2/token");
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IOAuth2Service.GetAuthorizationUrl" />
         public Uri GetAuthorizationUrl(Uri redirectUrl)
         {
             Guard.ArgumentNotNull(redirectUrl, nameof(redirectUrl));
 
-            var host = ApiUrl.ApiBaseUrl.Host;
-            var targetHost = host;
+            var targetHost = ApiUrl.ApiBaseUrl.Host;
 
-            if (host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+            if (ApiUrl.ApiBaseUrl.Host.Equals("api-eval.signnow.com", StringComparison.CurrentCultureIgnoreCase))
             {
                 targetHost = "eval.signnow.com";
             }
-            else if (host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
+            else if (ApiUrl.ApiBaseUrl.Host.Equals("api.signnow.com", StringComparison.CurrentCultureIgnoreCase))
             {
                 targetHost = "signnow.com";
             }
 
-            var hostUri = new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}");
-
             return new Uri(
-                hostUri, $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
+                new Uri($"{ApiUrl.ApiBaseUrl.Scheme}://{targetHost}"),
+                $"proxy/index.php/authorize?client_id={WebUtility.UrlEncode(ClientId)}&response_type=code&redirect_uri={WebUtility.UrlEncode(redirectUrl.ToString())}");
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IOAuth2Service.GetTokenAsync(string, string, Scope, CancellationToken)" />
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
             var body = new Dictionary<string, string>
@@ -97,7 +94,7 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IOAuth2Service.GetTokenAsync(string, Scope, CancellationToken)" />
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
         {
             var body = new Dictionary<string, string>
@@ -110,7 +107,7 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IOAuth2Service.RefreshTokenAsync" />
         public async Task<Token> RefreshTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(token, nameof(token));
@@ -124,7 +121,7 @@ namespace SignNow.Net
             return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IOAuth2Service.ValidateTokenAsync" />
         public async Task<bool> ValidateTokenAsync(Token token, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(token, nameof(token));
@@ -147,7 +144,13 @@ namespace SignNow.Net
             return true;
         }
 
-        async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Processing Http request for Token issue.
+        /// </summary>
+        /// <param name="body">Dictionary with requested params.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns><see cref="Token"/> response</returns>
+        private async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body, CancellationToken cancellationToken = default)
         {
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
