@@ -22,6 +22,12 @@ namespace SignNow.Net.Model
         public string UserId { get; set; }
 
         /// <summary>
+        /// Identity of the signers' signature
+        /// </summary>
+        [JsonProperty("signature_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string SignatureId { get; set; }
+
+        /// <summary>
         /// Timestamp sign invite was created.
         /// </summary>
         [JsonProperty("created")]
