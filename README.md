@@ -127,9 +127,10 @@ using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename
 Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
 
-### <a name="create-signing-link"></a> Create a single-use link to the document for signature
+### <a name="create-signing-link"></a> Create a signing link to the document for signature
 
-You generate a link for sharing the document to be signed. It's called signing link in SignNow. Having followed the link, signers can click anywhere on the document to sign it.
+Signing link - a single-use link to a document that requires a signature. When the document is signed (or the signer declines to sign it), the link is no longer valid.
+Having followed the link, signers can click anywhere on the document to sign it.
 
 Steps:
 
@@ -147,8 +148,14 @@ Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
 
 ### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
 
-You can generate signer personalized email message with link for sharing the document to be signed. Signers can click anywhere on a document to add their signature. It's called freeform invite in SignNow.
-> Remember: freeform invites only work for documents with no fillable fields.
+*Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
+
+Simply upload a document and send it for signature right away. No need for adding fields and configuring roles. 
+Just add the signer's email address and customize the message in your email. 
+The document will be available for signing via a button in the email. 
+Clicking the button opens a document in SignNow editor. Signers can click anywhere on a document to add their signature.
+
+Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
 
 ```csharp
 var invite = new FreeFormInvite("signer@signnow.com");
@@ -163,7 +170,16 @@ var inviteId = inviteResponse.Id; // "a09b26feeba7ce70228afe6290f4445700b6f349"
 
 ### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
 
-You can generate signer personalized email messages with link for sharing the document to be signed. It's called role-based invite in SignNow. You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
+*Role-based invite* - an invitation to sign a document which contains at least one fillable field assigned to one role.
+
+Role-based invites allow you to build e-signature workflows. The document can be signed by multiple signers: each with individual access settings, all arranged in a specific order.
+
+Upload a document or create one from a template. 
+
+The document will be available for signing via a button in the email. You can customize email messages for every signer.
+Clicking the button opens a document in SignNow editor. Signers can sign only the fields designated for their role.
+
+You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
 
 ```csharp
 // For example, let use document with only two fillable fields
