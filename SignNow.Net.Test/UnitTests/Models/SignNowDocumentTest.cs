@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -17,17 +16,19 @@ namespace UnitTests
         [TestMethod]
         public void ShouldDeserializeFromJson()
         {
-            var injectedRoles = @"
-            {
-                'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
-                'signing_order': '1',
-                'name': 'Signer 1'
-            }";
-
-            // use document template and inject roles
             var documentJson = JsonFixtures.DocumentTemplate.AsJsonObject();
+
+            // inject one role
             var roles = (JArray)documentJson["roles"];
             roles.Add(JsonFixtures.RoleTemplate.AsJsonObject());
+
+            // inject one signature
+            var signature = (JArray)documentJson["signatures"];
+            signature.Add(JsonFixtures.SignatureTemplate.AsJsonObject());
+
+            // inject one freeform invite
+            var freeformInvite = (JArray)documentJson["requests"];
+            freeformInvite.Add(JsonFixtures.FreeFormInviteTemplate.AsJsonObject());
 
             var document = JsonConvert.DeserializeObject<SignNowDocument>(documentJson.ToString());
 
@@ -50,7 +51,26 @@ namespace UnitTests
             Assert.AreEqual("roleUniqueId0000000000000000000000000000", document.Roles[0].Id);
             Assert.AreEqual(1, document.Roles[0].SigningOrder);
             Assert.AreEqual("Signer 1", document.Roles[0].Name);
-            Assert.AreEqual(0, document.InviteRequests.Count);
+
+            // Signature assertions
+            Assert.AreEqual(1, document.Signatures.Count);
+            CollectionAssert.AllItemsAreInstancesOfType(document.Signatures, typeof(Signature));
+            Assert.AreEqual("signatureId00000000000000000000000000000", document.Signatures[0].Id);
+            Assert.AreEqual("userId0000000000000000000000000000000000", document.Signatures[0].UserId);
+            Assert.AreEqual("signatureRequestId0000000000000000000000", document.Signatures[0].SignatureRequestId);
+            Assert.AreEqual("signer@signnow.com", document.Signatures[0].Email);
+            Assert.AreEqual("2020-01-27 11:49:09Z", document.Signatures[0].Created.ToString("u", CultureInfo.CurrentCulture));
+
+            // Freeform invite assertions
+            Assert.AreEqual(1, document.InviteRequests.Count);
+            CollectionAssert.AllItemsAreInstancesOfType(document.InviteRequests, typeof(FreeformInvite));
+            Assert.AreEqual("freeformInviteId000000000000000000000000", document.InviteRequests[0].Id);
+            Assert.AreEqual("userId0000000000000000000000000000000000", document.InviteRequests[0].UserId);
+            Assert.AreEqual("signatureId00000000000000000000000000000", document.InviteRequests[0].SignatureId);
+            Assert.AreEqual("2020-01-15 12:09:38Z", document.InviteRequests[0].Created.ToString("u", CultureInfo.CurrentCulture));
+            Assert.AreEqual("test.user@signnow.com", document.InviteRequests[0].Owner);
+            Assert.AreEqual("signer@signnow.com", document.InviteRequests[0].Signer);
+            Assert.IsNull(document.InviteRequests[0].IsCanceled);
         }
     }
 }

@@ -14,14 +14,26 @@ namespace SignNow.Net.Test.Constants
         private static readonly string FixturePath = "../../../TestData/Fixtures".Replace('/', Path.DirectorySeparatorChar);
 
         /// <summary>
-        /// Document base template.
+        /// <see cref="SignNow.Net.Model.SignNowDocument" /> base template.
         /// </summary>
         public static readonly string DocumentTemplate = $"{FixturePath}/Document/DocumentResponseTemplate.json";
 
         /// <summary>
-        /// Role base template.
+        /// <see cref="SignNow.Net.Model.Role" /> base template.
         /// </summary>
         /// <value></value>
         public static readonly string RoleTemplate = $"{FixturePath}/Role/RoleTemplate.json";
+
+        /// <summary>
+        /// <see cref="SignNow.Net.Model.Signature" /> base template.
+        /// </summary>
+        /// <value></value>
+        public static readonly string SignatureTemplate = $"{FixturePath}/Signature/SignatureTemplate.json";
+
+        /// <summary>
+        /// <see cref="SignNow.Net.Model.FreeformInvite" /> base template.
+        /// </summary>
+        /// <value></value>
+        public static readonly string FreeFormInviteTemplate = $"{FixturePath}/Invite/FreeFormInviteTemplate.json";
     }
 }
