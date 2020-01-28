@@ -1,5 +1,6 @@
 # SignNow.NET
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24)](https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard)
 [![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
 
 ## About SignNow
