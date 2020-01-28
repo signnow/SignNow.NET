@@ -1,8 +1,13 @@
+using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
+using SignNow.Net.Test;
+using SignNow.Net.Test.Constants;
+using SignNow.Net.Test.Extensions;
 
 namespace UnitTests
 {
@@ -12,32 +17,23 @@ namespace UnitTests
         [TestMethod]
         public void ShouldDeserializeFromJson()
         {
-            var json = @"{
-                'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
-                'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
-                'document_name': 'pdf-test',
-                'page_count': '1',
-                'created': '1565787561',
-                'updated': '1565858757',
-                'original_filename': 'pdf-test.pdf',
-                'origin_user_id': null,
-                'origin_document_id': null,
-                'owner': 'test.dotnet@signnow.com',
-                'template': false,
-                'roles': [
-                    {
-                        'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
-                        'signing_order': '1',
-                        'name': 'Signer 1'
-                    }
-                ],
-                'requests': []
+            var injectedRoles = @"
+            {
+                'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
+                'signing_order': '1',
+                'name': 'Signer 1'
             }";
 
-            var document = JsonConvert.DeserializeObject<SignNowDocument>(json);
+            // use document template and inject roles
+            var documentJson = JsonFixtures.DocumentTemplate.AsJsonObject();
+            var roles = (JArray)documentJson["roles"];
+            roles.Add(JsonFixtures.RoleTemplate.AsJsonObject());
 
-            Assert.AreEqual("a09b26feeba7ce70228afe6290f4445700b6f349", document.Id);
-            Assert.AreEqual("890d13607d89a7b3f6e67a14757d02ec00cf5eae", document.UserId);
+            var document = JsonConvert.DeserializeObject<SignNowDocument>(documentJson.ToString());
+
+            // Document assertions
+            Assert.AreEqual("documentId000000000000000000000000000000", document.Id);
+            Assert.AreEqual("userId0000000000000000000000000000000000", document.UserId);
             Assert.IsNull(document.OriginDocumentId);
             Assert.IsNull(document.OriginUserId);
             Assert.AreEqual("pdf-test", document.Name);
@@ -45,10 +41,14 @@ namespace UnitTests
             Assert.AreEqual(1, document.PageCount);
             Assert.AreEqual("2019-08-14 12:59:21Z", document.Created.ToString("u", CultureInfo.CurrentCulture));
             Assert.AreEqual("2019-08-15 08:45:57Z", document.Updated.ToString("u", CultureInfo.CurrentCulture));
-            Assert.AreEqual("test.dotnet@signnow.com", document.Owner);
+            Assert.AreEqual("test.user@signnow.com", document.Owner);
             Assert.IsFalse(document.IsTemplate);
+
+            // Roles assertions
             Assert.AreEqual(1, document.Roles.Count);
             CollectionAssert.AllItemsAreInstancesOfType(document.Roles, typeof(Role));
+            Assert.AreEqual("roleUniqueId0000000000000000000000000000", document.Roles[0].Id);
+            Assert.AreEqual(1, document.Roles[0].SigningOrder);
             Assert.AreEqual("Signer 1", document.Roles[0].Name);
             Assert.AreEqual(0, document.InviteRequests.Count);
         }
