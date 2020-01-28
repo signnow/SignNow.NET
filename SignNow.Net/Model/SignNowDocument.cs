@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
@@ -111,5 +112,21 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("field_invites")]
         public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
+
+        /// <summary>
+        /// Check if freeform invite was signed.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsFreeformInviteSigned()
+        {
+            if (InviteRequests.Count != Signatures.Count || Signatures.Count == 0) return false;
+
+            var signed = (from invite in InviteRequests
+                join signature in Signatures on invite.Id equals signature.SignatureRequestId
+                select invite).Count();
+
+            return signed == InviteRequests.Count
+                   && signed == Signatures.Count;
+        }
     }
 }
