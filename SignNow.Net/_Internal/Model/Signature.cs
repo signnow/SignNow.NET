@@ -28,7 +28,7 @@ namespace SignNow.Net.Internal.Model
         public string SignatureRequestId { get; set; }
 
         /// <summary>
-        /// <see cref="User"/> email who was signed the document.
+        /// <see cref="SignNow.Net.Model.User"/> email who was signed the document.
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {
@@ -88,10 +89,16 @@ namespace SignNow.Net.Model
         public bool IsTemplate { get; set; }
 
         /// <summary>
-        /// The Document signer roles.
+        /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
         internal List<Role> Roles { get; private set; }
+
+        /// <summary>
+        /// The document <see cref="Signature"/>
+        /// </summary>
+        [JsonProperty("signatures")]
+        internal List<Signature> Signatures { get; private set; }
 
         /// <summary>
         /// The document freeform invite requests.
