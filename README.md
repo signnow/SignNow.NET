@@ -1,6 +1,6 @@
 # SignNow.NET
 
-[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
+[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24)](https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
 
 ## About SignNow
 
@@ -96,11 +96,11 @@ var pdfFilePath = "./file-path/document-example.pdf";
 var pdfFileName = "document-example.pdf";
 
 // using token from the Authorization step
-var SignNow = new SignNowContext(token);
+var signNowContext = new SignNowContext(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var uploadResponse = SignNow.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
+    var uploadResponse = signNowContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
 
     documentId = uploadResponse.Id;
 }
@@ -140,7 +140,7 @@ Steps:
 
 ```csharp
 // using `documentId` from the Upload document step
-var signingLinks = SignNow.Documents.CreateSigningLinkAsync(documentId).Result;
+var signingLinks = signNowContext.Documents.CreateSigningLinkAsync(documentId).Result;
 
 Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
 Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
@@ -162,10 +162,7 @@ var invite = new FreeFormInvite("signer@signnow.com");
 
 // using `documentId` from the Upload document step
 // creating Invite request
-var inviteResponse = SignNow.Invites.CreateInviteAsync(documentId, invite).Result;
-
-// Check if invite was successful
-var inviteId = inviteResponse.Id; // "a09b26feeba7ce70228afe6290f4445700b6f349"
+var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
 ```
 
 ### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
@@ -188,11 +185,11 @@ var pdfFilePath = "./file-path/document-with-fields.pdf";
 // Upload document with fillable fields and extract fields
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var DocumentId = SignNow.Documents.UploadDocumentWithFieldExtractAsync(fileStream, "DocumentWithFields.pdf").Result.Id;
+    var documentId = signNowContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, "DocumentWithFields.pdf").Result.Id;
 }
 
-// Get the SignNow document instance by uploaded DocumentId
-var document = SignNow.Documents.GetDocumentAsync(DocumentId).Result;
+// Get the SignNow document instance by uploaded documentId
+var document = signNowContext.Documents.GetDocumentAsync(documentId).Result;
 
 // Create role-based invite using document with fillable fields
 var roleBasedInvite = new RoleBasedInvite(document);
@@ -214,10 +211,10 @@ roleBasedInvite.AddRoleBasedInvite(signer1);
 roleBasedInvite.AddRoleBasedInvite(signer2);
 
 // Send invite request for sharing the document to be signed
-var inviteResponse = SignNow.Invites.CreateInviteAsync(DocumentId, invite).Result;
+var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
 
 // Finaly - check if document has invite request
-var documentUpdated = SignNow.Documents.GetDocumentAsync(DocumentId).Result;
+var documentUpdated = signNowContext.Documents.GetDocumentAsync(documentId).Result;
 var fieldInvites = documentUpdated.FieldInvites.First();
 
 // Get field invite request status for the first signer
