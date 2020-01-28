@@ -7,7 +7,7 @@ using SignNow.Net.Model;
 namespace UnitTests
 {
     [TestClass]
-    public class SignNowDocumentTest
+    public class SignNowDocumentTest : SignNowTestBase
     {
         [TestMethod]
         public void ShouldDeserializeFromJson()
