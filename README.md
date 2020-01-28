@@ -1,6 +1,6 @@
 # SignNow.NET
 
-[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
+[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24)](https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
 
 ## About SignNow
 
@@ -19,6 +19,8 @@ Get your account at <https://www.signnow.com/developers>
     -   [Upload a document to SignNow](#upload-document)
     -   [Download a document from SignNow](#download-document)
     -   [Create a single-use link to the document for signature](#create-signing-link)
+    -   [Create a freeform invite to the document for signature](#create-freeform-invite)
+    -   [Create a role-based invite to the document for signature](#create-role-based-invite)
 6.  [Contribution guidelines](#contribution-guidelines)
     -   [XML doc generation](#xml-doc-generation)
     -   [Important notes](#important-notes)
@@ -94,11 +96,11 @@ var pdfFilePath = "./file-path/document-example.pdf";
 var pdfFileName = "document-example.pdf";
 
 // using token from the Authorization step
-var SignNow = new SignNowContext(token);
+var signNowContext = new SignNowContext(token);
 
 using (var fileStream = File.OpenRead(pdfFilePath))
 {
-    var uploadResponse = SignNow.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
+    var uploadResponse = signNowContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
 
     documentId = uploadResponse.Id;
 }
@@ -125,9 +127,10 @@ using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename
 Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
 
-### <a name="create-signing-link"></a> Create a single-use link to the document for signature
+### <a name="create-signing-link"></a> Create a signing link to the document for signature
 
-You generate a link for sharing the document to be signed. It's called signing link in SignNow. Having followed the link, signers can click anywhere on the document to sign it.
+Signing link - a single-use link to a document that requires a signature. When the document is signed (or the signer declines to sign it), the link is no longer valid.
+Having followed the link, signers can click anywhere on the document to sign it.
 
 Steps:
 
@@ -137,10 +140,87 @@ Steps:
 
 ```csharp
 // using `documentId` from the Upload document step
-var signingLinks = SignNow.Documents.CreateSigningLinkAsync(documentId).Result;
+var signingLinks = signNowContext.Documents.CreateSigningLinkAsync(documentId).Result;
 
 Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
 Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
+```
+
+### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
+
+*Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
+
+Simply upload a document and send it for signature right away. No need for adding fields and configuring roles. 
+Just add the signer's email address and customize the message in your email. 
+The document will be available for signing via a button in the email. 
+Clicking the button opens a document in SignNow editor. Signers can click anywhere on a document to add their signature.
+
+Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
+
+```csharp
+var invite = new FreeFormInvite("signer@signnow.com");
+
+// using `documentId` from the Upload document step
+// creating Invite request
+var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
+```
+
+### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
+
+*Role-based invite* - an invitation to sign a document which contains at least one fillable field assigned to one role.
+
+Role-based invites allow you to build e-signature workflows. The document can be signed by multiple signers: each with individual access settings, all arranged in a specific order.
+
+Upload a document or create one from a template. 
+
+The document will be available for signing via a button in the email. You can customize email messages for every signer.
+Clicking the button opens a document in SignNow editor. Signers can sign only the fields designated for their role.
+
+You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
+
+```csharp
+// For example, let use document with only two fillable fields
+var pdfFilePath = "./file-path/document-with-fields.pdf";
+
+// Upload document with fillable fields and extract fields
+using (var fileStream = File.OpenRead(pdfFilePath))
+{
+    var documentId = signNowContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, "DocumentWithFields.pdf").Result.Id;
+}
+
+// Get the SignNow document instance by uploaded documentId
+var document = signNowContext.Documents.GetDocumentAsync(documentId).Result;
+
+// Create role-based invite using document with fillable fields
+var roleBasedInvite = new RoleBasedInvite(document);
+
+// Get all document signer roles
+var roles = roleBasedInvite.DocumentRoles();
+
+// Creates options for signers
+var signer1 = new SignerOptions("signer1@signnow.com", roles.First());
+var signer2 = new SignerOptions("signer2@signnow.com", roles.Last())
+    {
+        ExpirationDays = 15,
+        RemindAfterDays = 7
+    }
+    .SetAuthenticationByPassword("***secret***");
+
+// Attach signers to existing roles in the document
+roleBasedInvite.AddRoleBasedInvite(signer1);
+roleBasedInvite.AddRoleBasedInvite(signer2);
+
+// Send invite request for sharing the document to be signed
+var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
+
+// Finaly - check if document has invite request
+var documentUpdated = signNowContext.Documents.GetDocumentAsync(documentId).Result;
+var fieldInvites = documentUpdated.FieldInvites.First();
+
+// Get field invite request status for the first signer
+var status = fieldInvites.Status.ToString(); // "Pending"
+var roleName = fieldInvites.RoleName; // "Signer 1"
+var signer1email = fieldInvites.Email; // "signer1@signnow.com"
 ```
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
