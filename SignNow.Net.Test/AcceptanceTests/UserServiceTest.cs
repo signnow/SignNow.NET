@@ -28,7 +28,7 @@ namespace AcceptanceTests
         /// </summary>
         /// <param name="invite">FreeForm invite object.</param>
         /// <returns>InviteResponse</returns>
-        private InviteResponse ProcessCreateInvite(FreeFormInvite invite)
+        private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
             var documentService = new DocumentService(Token);
             DocumentId = UploadTestDocument(PdfFilePath, documentService);
@@ -54,7 +54,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldCreateFreeformSignInvite()
         {
-            var invite = new FreeFormInvite("signnow.tutorial+test@gmail.com");
+            var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com");
             var inviteResponse = ProcessCreateInvite(invite);
 
             StringAssert.Matches(invite.Recipient, new Regex(emailPattern));
@@ -64,7 +64,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldCancelFreeformInvite()
         {
-            var invite = new FreeFormInvite("signnow.tutorial+test@gmail.com");
+            var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com");
             var inviteResponse = ProcessCreateInvite(invite);
 
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));

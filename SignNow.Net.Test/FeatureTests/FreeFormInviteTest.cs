@@ -27,7 +27,7 @@ namespace FeatureTests
                 LastName = "Dou",
                 Active = true
             };
-            var invite = new FreeFormInvite(invitee.Email);
+            var invite = new FreeFormSignInvite(invitee.Email);
 
             DocumentId = UploadTestDocument(PdfFilePath, signNow.Documents);
 

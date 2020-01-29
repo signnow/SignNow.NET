@@ -16,7 +16,7 @@ namespace UnitTests
         [DataRow(default, default, DisplayName = "without message and subject")]
         public void ShouldCreateFreeformInviteContent(string message, string subject)
         {
-            var invite = new FreeFormInvite(recipientEmail)
+            var invite = new FreeFormSignInvite(recipientEmail)
             {
                 Message = message,
                 Subject = subject
@@ -45,7 +45,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldSerializeFreeFormInvite()
         {
-            var ffInvite = new FreeFormInvite(recipientEmail);
+            var ffInvite = new FreeFormSignInvite(recipientEmail);
             var expected = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null}}";
 
             Assert.AreEqual(expected, JsonConvert.SerializeObject(ffInvite));

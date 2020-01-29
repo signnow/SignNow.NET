@@ -37,7 +37,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Freeform invite - an invitation to sign a document which doesn't contain any fillable fields.
     /// </summary>
-    public sealed class FreeFormInvite : SignInvite
+    public sealed class FreeFormSignInvite : SignInvite
     {
         /// <summary>
         /// An email of signer`s that you would like to send the invite to.
@@ -46,10 +46,10 @@ namespace SignNow.Net.Model
         public string Recipient { get; private set; }
 
         /// <summary>
-        /// Constructs a new <see cref="FreeFormInvite"/>
+        /// Constructs a new <see cref="FreeFormSignInvite"/>
         /// </summary>
         /// <param name="to">The email of the invitee.</param>
-        public FreeFormInvite(string to)
+        public FreeFormSignInvite(string to)
         {
             Recipient = to;
         }
