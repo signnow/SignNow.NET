@@ -54,7 +54,11 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldCreateFreeformSignInvite()
         {
-            var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com");
+            var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com")
+            {
+                Message = $"SignNow.Net SDK invited you to sign the {pdfFileName}",
+                Subject = "SignNow.Net SDK Needs Your Signature"
+            };
             var inviteResponse = ProcessCreateInvite(invite);
 
             StringAssert.Matches(invite.Recipient, new Regex(emailPattern));

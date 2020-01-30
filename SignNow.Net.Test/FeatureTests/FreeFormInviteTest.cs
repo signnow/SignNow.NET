@@ -50,6 +50,7 @@ namespace FeatureTests
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
             Assert.AreEqual(invitee.Email, documentInviteRequest.Signer, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
+            Assert.IsFalse(documentInfo.IsFreeformInviteSigned());
         }
 
         [TestMethod]
@@ -70,6 +71,7 @@ namespace FeatureTests
             Assert.AreEqual("signer@signnow.com", documentWithRequest.InviteRequests[0].Signer);
             Assert.IsNull(documentWithRequest.InviteRequests[0].SignatureId);
             Assert.IsFalse(documentWithRequest.IsFreeformInviteSigned());
+            Assert.IsFalse(documentWithRequest.IsDocumentSigned);
 
             // Add signature by signing the document
             inviteRequests.RemoveAll();
@@ -92,6 +94,9 @@ namespace FeatureTests
             Assert.AreEqual(actualSignature.SignatureRequestId, actualInvite.Id);
             Assert.AreEqual(actualSignature.Email, actualInvite.Signer);
             Assert.IsTrue(documentSigned.IsFreeformInviteSigned());
+            Assert.IsTrue(documentSigned.IsDocumentSigned);
+
+            //
         }
     }
 }

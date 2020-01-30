@@ -114,9 +114,18 @@ namespace SignNow.Net.Model
         public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
 
         /// <summary>
-        /// Check if freeform invite was signed.
+        /// Is document was signed or not.
         /// </summary>
-        /// <returns></returns>
+        [JsonIgnore]
+        public bool IsDocumentSigned
+        {
+            get { return IsFreeformInviteSigned() || IsFieldInviteSigned(); }
+        }
+
+        /// <summary>
+        /// Check if <see cref="FreeformInvite"/> was signed.
+        /// </summary>
+        /// <returns>True if document was signed via freeform sign request.</returns>
         public bool IsFreeformInviteSigned()
         {
             if (InviteRequests.Count != Signatures.Count || Signatures.Count == 0) return false;
@@ -127,6 +136,16 @@ namespace SignNow.Net.Model
 
             return signed == InviteRequests.Count
                    && signed == Signatures.Count;
+        }
+
+        /// <summary>
+        /// Check if <see cref="FieldInvite" /> was signed.
+        /// </summary>
+        /// <returns>True if document was signed via field (role-based) sign request.</returns>/
+        public bool IsFieldInviteSigned()
+        {
+            // @TODO: Implement sign check for role-based invite
+            return false;
         }
     }
 }
