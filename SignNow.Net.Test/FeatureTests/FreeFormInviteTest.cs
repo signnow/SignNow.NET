@@ -50,13 +50,15 @@ namespace FeatureTests
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
             Assert.AreEqual(invitee.Email, documentInviteRequest.Signer, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
-            Assert.IsFalse(documentInfo.IsFreeformInviteSigned());
+            Assert.AreEqual(SignStatus.Pending, documentInfo.Status);
         }
 
         [TestMethod]
         public void ShouldGetDocumentSignedStatusForFreeFormInvite()
         {
             var mockDocument = JsonFixtures.DocumentTemplate.AsJsonObject();
+
+            Assert.AreEqual(SignStatus.None, new SignNowDocument().Status);
 
             // successful freeform invite should have invite request inside the document
             var inviteRequests = (JArray)mockDocument["requests"];
@@ -71,8 +73,7 @@ namespace FeatureTests
             Assert.AreEqual("test.user@signnow.com", documentWithRequest.InviteRequests[0].Owner);
             Assert.AreEqual("signer@signnow.com", documentWithRequest.InviteRequests[0].Signer);
             Assert.IsNull(documentWithRequest.InviteRequests[0].SignatureId);
-            Assert.IsFalse(documentWithRequest.IsFreeformInviteSigned());
-            Assert.IsFalse(documentWithRequest.IsDocumentSigned);
+            Assert.AreEqual(SignStatus.Pending, documentWithRequest.Status);
 
             // Add signature by signing the document
             var signatures = (JArray)mockDocument["signatures"];
@@ -92,8 +93,7 @@ namespace FeatureTests
             Assert.AreEqual(actualSignature.UserId, actualInvite.UserId);
             Assert.AreEqual(actualSignature.SignatureRequestId, actualInvite.Id);
             Assert.AreEqual(actualSignature.Email, actualInvite.Signer);
-            Assert.IsTrue(documentSigned.IsFreeformInviteSigned());
-            Assert.IsTrue(documentSigned.IsDocumentSigned);
+            Assert.AreEqual(SignStatus.Completed, documentSigned.Status);
 
             // add second freeform invite to the document
             inviteRequests.Add(
@@ -117,8 +117,7 @@ namespace FeatureTests
             Assert.IsTrue(documentWithTwoRequests.InviteRequests.TrueForAll(itm => itm.Owner == "test.user@signnow.com"));
             Assert.IsNotNull(documentWithTwoRequests.InviteRequests[0].SignatureId);
             Assert.IsNull(documentWithTwoRequests.InviteRequests[1].SignatureId);
-            Assert.IsFalse(documentWithTwoRequests.IsFreeformInviteSigned());
-            Assert.IsFalse(documentWithTwoRequests.IsDocumentSigned);
+            Assert.AreEqual(SignStatus.Pending, documentWithTwoRequests.Status);
 
             // sign second freeform invite and complete the document signing
             signatures.Add(JsonFixtures.SignatureTemplate.AsJsonObject());
@@ -130,8 +129,7 @@ namespace FeatureTests
 
             // check if document fullfilled
             Assert.AreEqual(2, documentWithTwoRequestsSigned.Signatures.Count);
-            Assert.IsTrue(documentWithTwoRequestsSigned.IsFreeformInviteSigned());
-            Assert.IsTrue(documentWithTwoRequestsSigned.IsDocumentSigned);
+            Assert.AreEqual(SignStatus.Completed, documentWithTwoRequestsSigned.Status);
         }
     }
 }

@@ -113,22 +113,43 @@ namespace SignNow.Net.Model
         [JsonProperty("field_invites")]
         public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
 
+
         /// <summary>
-        /// Is document was signed or not.
+        /// The document sign status.
         /// </summary>
         [JsonIgnore]
-        public bool IsDocumentSigned
+        public SignStatus Status
         {
-            get { return IsFreeformInviteSigned() || IsFieldInviteSigned(); }
+            get
+            {
+                if (IsFreeformInviteSigned() || IsFieldInviteSigned() ) return SignStatus.Completed;
+
+                if (HasFreeformInviteRequests()) return SignStatus.Pending;
+
+                return SignStatus.None;
+            }
+        }
+
+        private bool HasFreeformInviteRequests()
+        {
+            if (null == InviteRequests && null == Signatures)
+            {
+                return false;
+            }
+
+            return InviteRequests.Count > 0 && Signatures.Count < InviteRequests.Count;
         }
 
         /// <summary>
         /// Check if <see cref="FreeformInvite"/> was signed.
         /// </summary>
         /// <returns>True if document was signed via freeform sign request.</returns>
-        public bool IsFreeformInviteSigned()
+        private bool IsFreeformInviteSigned()
         {
-            if (InviteRequests.Count != Signatures.Count || Signatures.Count == 0) return false;
+            if (null == InviteRequests || InviteRequests.Count != Signatures.Count || Signatures.Count == 0)
+            {
+                return false;
+            }
 
             var signed = (from invite in InviteRequests
                 join signature in Signatures on invite.Id equals signature.SignatureRequestId
@@ -142,7 +163,7 @@ namespace SignNow.Net.Model
         /// Check if <see cref="FieldInvite" /> was signed.
         /// </summary>
         /// <returns>True if document was signed via field (role-based) sign request.</returns>/
-        public bool IsFieldInviteSigned()
+        private bool IsFieldInviteSigned()
         {
             // @TODO: Implement sign check for role-based invite
             return false;
