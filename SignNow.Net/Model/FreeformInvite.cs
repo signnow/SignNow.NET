@@ -52,5 +52,11 @@ namespace SignNow.Net.Model
         [JsonProperty("canceled", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringToBoolJsonConverter))]
         public bool? IsCanceled { get; set; }
+
+        /// <summary>
+        /// <see cref="FreeformInvite"/> sign status of current <see cref="Signer"/>
+        /// </summary>
+        [JsonIgnore]
+        public SignStatus Status => SignatureId == null ? SignStatus.Pending : SignStatus.Completed;
     }
 }
