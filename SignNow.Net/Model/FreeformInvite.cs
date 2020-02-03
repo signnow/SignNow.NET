@@ -22,6 +22,12 @@ namespace SignNow.Net.Model
         public string UserId { get; set; }
 
         /// <summary>
+        /// Identity of the signers' signature
+        /// </summary>
+        [JsonProperty("signature_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string SignatureId { get; set; }
+
+        /// <summary>
         /// Timestamp sign invite was created.
         /// </summary>
         [JsonProperty("created")]
@@ -46,5 +52,11 @@ namespace SignNow.Net.Model
         [JsonProperty("canceled", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringToBoolJsonConverter))]
         public bool? IsCanceled { get; set; }
+
+        /// <summary>
+        /// <see cref="FreeformInvite"/> sign status of current <see cref="Signer"/>
+        /// </summary>
+        [JsonIgnore]
+        public SignStatus Status => SignatureId == null ? SignStatus.Pending : SignStatus.Completed;
     }
 }

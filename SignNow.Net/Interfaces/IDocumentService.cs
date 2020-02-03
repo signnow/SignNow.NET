@@ -19,8 +19,8 @@ namespace SignNow.Net.Interfaces
         /// Uploads a file to the SignNow account and creates a document. This method accepts .doc, .docx, .pdf, and .png file types.
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <param name="fileName">Uploaded document file name</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
         Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
@@ -30,8 +30,8 @@ namespace SignNow.Net.Interfaces
         /// See <a href="https://campus.barracuda.com/product/signnow/doc/41113461/rest-endpoints-api">REST API Endpoints</a>
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <param name="fileName">Uploaded document file name</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
         Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 

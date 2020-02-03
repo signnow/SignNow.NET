@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
 {
@@ -88,21 +90,79 @@ namespace SignNow.Net.Model
         public bool IsTemplate { get; set; }
 
         /// <summary>
-        /// The Document signer roles.
+        /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
-        internal List<Role> Roles { get; private set; }
+        internal List<Role> Roles { get; private set; } = new List<Role>();
+
+        /// <summary>
+        /// The document <see cref="Signature"/>
+        /// </summary>
+        [JsonProperty("signatures")]
+        internal List<Signature> Signatures { get; private set; } = new List<Signature>();
 
         /// <summary>
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]
-        internal List<FreeformInvite> InviteRequests { get; private set; }
+        internal List<FreeformInvite> InviteRequests { get; private set; } = new List<FreeformInvite>();
 
         /// <summary>
         /// The document field invite requests.
         /// </summary>
         [JsonProperty("field_invites")]
-        public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
+        public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; } = new List<FieldInvite>();
+
+
+        /// <summary>
+        /// The document sign status.
+        /// </summary>
+        [JsonIgnore]
+        public SignStatus Status
+        {
+            get
+            {
+                if (IsFreeformInviteSigned() || IsFieldInviteSigned() ) return SignStatus.Completed;
+
+                if (HasFreeformInviteRequests()) return SignStatus.Pending;
+
+                return SignStatus.None;
+            }
+        }
+
+        private bool HasFreeformInviteRequests()
+        {
+            return InviteRequests.Count > 0
+                && Signatures.Count < InviteRequests.Count;
+        }
+
+        /// <summary>
+        /// Check if <see cref="FreeformInvite"/> was signed.
+        /// </summary>
+        /// <returns>True if document was signed via freeform sign request.</returns>
+        private bool IsFreeformInviteSigned()
+        {
+            if (Signatures.Count == 0 || InviteRequests.Count != Signatures.Count)
+            {
+                return false;
+            }
+
+            var signed = (from invite in InviteRequests
+                join signature in Signatures on invite.Id equals signature.SignatureRequestId
+                select invite).Count();
+
+            return signed == InviteRequests.Count
+                   && signed == Signatures.Count;
+        }
+
+        /// <summary>
+        /// Check if <see cref="FieldInvite" /> was signed.
+        /// </summary>
+        /// <returns>True if document was signed via field (role-based) sign request.</returns>/
+        private bool IsFieldInviteSigned()
+        {
+            // @TODO: Implement sign check for role-based invite
+            return false;
+        }
     }
 }

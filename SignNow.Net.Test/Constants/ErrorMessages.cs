@@ -5,7 +5,7 @@ namespace SignNow.Net.Test.Constants
     /// <summary>
     /// String constants and error messages for unit-tests.
     /// </summary>
-    static class ErrorMessages
+    public static class ErrorMessages
     {
         public const string InvalidFileType = "Invalid file type.";
         public const string CannotCreateSigningLinksOnDocumentsWithNoFields = "Cannot create signing links on documents with no fields";

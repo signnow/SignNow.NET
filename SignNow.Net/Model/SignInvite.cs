@@ -37,7 +37,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Freeform invite - an invitation to sign a document which doesn't contain any fillable fields.
     /// </summary>
-    public sealed class FreeFormInvite : SignInvite
+    public sealed class FreeFormSignInvite : SignInvite
     {
         /// <summary>
         /// An email of signer`s that you would like to send the invite to.
@@ -46,10 +46,10 @@ namespace SignNow.Net.Model
         public string Recipient { get; private set; }
 
         /// <summary>
-        /// Constructs a new <see cref="FreeFormInvite"/>
+        /// Constructs a new <see cref="FreeFormSignInvite"/>
         /// </summary>
         /// <param name="to">The email of the invitee.</param>
-        public FreeFormInvite(string to)
+        public FreeFormSignInvite(string to)
         {
             Recipient = to;
         }
@@ -74,11 +74,15 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
         /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
-        /// <exception cref="ArgumentException">Document <see cref="SignNowDocument.Roles"/> cannot be null.</exception>
+        /// <exception cref="ArgumentException">Document <see cref="SignNowDocument.Roles"/> cannot be empty.</exception>
         public RoleBasedInvite(SignNowDocument document)
         {
             Guard.ArgumentNotNull(document, nameof(document));
-            Guard.PropertyNotNull(document.Roles, ExceptionMessages.NoFillableFieldsWithRole);
+
+            if (document.Roles.Count == 0)
+            {
+                throw new ArgumentException(ExceptionMessages.NoFillableFieldsWithRole);
+            }
 
             ExistingDocumentRoles = document.Roles;
         }

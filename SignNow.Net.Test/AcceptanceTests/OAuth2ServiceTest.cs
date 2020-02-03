@@ -12,7 +12,7 @@ using SignNow.Net.Test.Context;
 namespace AcceptanceTests
 {
     [TestClass]
-    public sealed class OAuth2ServiceTest : ApiTestBase
+    public sealed class OAuth2ServiceTest : SignNowTestBase
     {
         private static CredentialModel _clientInfo, _userCredentials;
         private OAuth2Service oAuthTest;

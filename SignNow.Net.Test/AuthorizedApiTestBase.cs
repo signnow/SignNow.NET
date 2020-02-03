@@ -8,7 +8,7 @@ using SignNow.Net.Test.Context;
 namespace SignNow.Net.Test
 {
     [TestClass]
-    public class AuthorizedApiTestBase : ApiTestBase
+    public class AuthorizedApiTestBase : SignNowTestBase
     {
         protected Token Token { get; private set; }
 
