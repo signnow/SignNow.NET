@@ -74,11 +74,15 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
         /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
-        /// <exception cref="ArgumentException">Document <see cref="SignNowDocument.Roles"/> cannot be null.</exception>
+        /// <exception cref="ArgumentException">Document <see cref="SignNowDocument.Roles"/> cannot be empty.</exception>
         public RoleBasedInvite(SignNowDocument document)
         {
             Guard.ArgumentNotNull(document, nameof(document));
-            Guard.PropertyNotNull(document.Roles, ExceptionMessages.NoFillableFieldsWithRole);
+
+            if (document.Roles.Count == 0)
+            {
+                throw new ArgumentException(ExceptionMessages.NoFillableFieldsWithRole);
+            }
 
             ExistingDocumentRoles = document.Roles;
         }

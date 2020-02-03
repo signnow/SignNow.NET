@@ -93,25 +93,25 @@ namespace SignNow.Net.Model
         /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
-        internal List<Role> Roles { get; private set; }
+        internal List<Role> Roles { get; private set; } = new List<Role>();
 
         /// <summary>
         /// The document <see cref="Signature"/>
         /// </summary>
         [JsonProperty("signatures")]
-        internal List<Signature> Signatures { get; private set; }
+        internal List<Signature> Signatures { get; private set; } = new List<Signature>();
 
         /// <summary>
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]
-        internal List<FreeformInvite> InviteRequests { get; private set; }
+        internal List<FreeformInvite> InviteRequests { get; private set; } = new List<FreeformInvite>();
 
         /// <summary>
         /// The document field invite requests.
         /// </summary>
         [JsonProperty("field_invites")]
-        public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; }
+        public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; } = new List<FieldInvite>();
 
 
         /// <summary>
@@ -132,12 +132,8 @@ namespace SignNow.Net.Model
 
         private bool HasFreeformInviteRequests()
         {
-            if (null == InviteRequests && null == Signatures)
-            {
-                return false;
-            }
-
-            return InviteRequests.Count > 0 && Signatures.Count < InviteRequests.Count;
+            return InviteRequests.Count > 0
+                && Signatures.Count < InviteRequests.Count;
         }
 
         /// <summary>
@@ -146,7 +142,7 @@ namespace SignNow.Net.Model
         /// <returns>True if document was signed via freeform sign request.</returns>
         private bool IsFreeformInviteSigned()
         {
-            if (null == InviteRequests || InviteRequests.Count != Signatures.Count || Signatures.Count == 0)
+            if (Signatures.Count == 0 || InviteRequests.Count != Signatures.Count)
             {
                 return false;
             }
