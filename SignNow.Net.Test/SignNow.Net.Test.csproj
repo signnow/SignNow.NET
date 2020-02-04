@@ -43,8 +43,6 @@
     <Folder Include="UnitTests\Helpers\" />
     <Folder Include="UnitTests\Infrastructure\" />
     <Folder Include="UnitTests\Models\" />
-    <Folder Include="TestData\Fixtures\" />
-    <Folder Include="TestData\Fixtures\Document\" />
     <Folder Include="TestData\FakeModels\" />
   </ItemGroup>
 
