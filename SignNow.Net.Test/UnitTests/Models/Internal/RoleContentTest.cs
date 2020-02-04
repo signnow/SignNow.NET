@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Model;
+using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
@@ -12,12 +13,7 @@ namespace UnitTests
         [TestInitialize]
         public void Setup()
         {
-            role = new Role
-            {
-                Id = "12345abc",
-                Name = "Signer 1",
-                SigningOrder = 1
-            };
+            role = new RoleFaker().Generate();
         }
 
         [TestMethod]
@@ -30,16 +26,16 @@ namespace UnitTests
                 }
                 .SetAuthenticationByPassword("***secret***");
 
-            var json = JsonConvert.DeserializeObject(@"{
+            var json = JsonConvert.DeserializeObject($@"{{
                 'email': 'test@email.com',
-                'role': 'Signer 1',
-                'role_id': '12345abc',
-                'order': 1,
+                'role': '{role.Name}',
+                'role_id': '{role.Id}',
+                'order': {role.SigningOrder},
                 'authentication_type': 'password',
                 'password': '***secret***',
                 'expiration_days': 14,
                 'reminder': 7
-            }");
+            }}");
 
             var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
             var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
@@ -56,15 +52,15 @@ namespace UnitTests
                 }
                 .SetAuthenticationByPhoneCall("800 831-2050");
 
-            var json = JsonConvert.DeserializeObject(@"{
+            var json = JsonConvert.DeserializeObject($@"{{
                 'email': 'test@email.com',
-                'role': 'Signer 1',
-                'role_id': '12345abc',
-                'order': 1,
+                'role': '{role.Name}',
+                'role_id': '{role.Id}',
+                'order': {role.SigningOrder},
                 'authentication_type': 'phone_call',
                 'phone': '800 831-2050',
                 'expiration_days': 7
-            }");
+            }}");
 
             var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
             var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
@@ -81,15 +77,15 @@ namespace UnitTests
                 }
                 .SetAuthenticationBySms("800 831-2050");
 
-            var json = JsonConvert.DeserializeObject(@"{
+            var json = JsonConvert.DeserializeObject($@"{{
                 'email': 'test@email.com',
-                'role': 'Signer 1',
-                'role_id': '12345abc',
-                'order': 1,
+                'role': '{role.Name}',
+                'role_id': '{role.Id}',
+                'order': {role.SigningOrder},
                 'authentication_type': 'sms',
                 'phone': '800 831-2050',
                 'reminder': 1
-            }");
+            }}");
 
             var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
             var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
