@@ -4,12 +4,12 @@ using SignNow.Net.Model;
 namespace SignNow.Net.Test.FakeModels
 {
     /// <summary>
-    /// Faker <see cref="Role">
+    /// Faker <see cref="Role"/>
     /// </summary>
     public class RoleFaker : Faker<Role>
     {
         /// <summary>
-        /// Creates new instance of <see cref="Role"> fake object.
+        /// Creates new instance of <see cref="Role"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.

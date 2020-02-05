@@ -102,6 +102,12 @@ namespace SignNow.Net.Model
         internal List<Signature> Signatures { get; private set; } = new List<Signature>();
 
         /// <summary>
+        /// The document <see cref="Field"/>
+        /// </summary>
+        [JsonProperty("fields")]
+        internal List<Field> Fields { get; private set; } = new List<Field>();
+
+        /// <summary>
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]

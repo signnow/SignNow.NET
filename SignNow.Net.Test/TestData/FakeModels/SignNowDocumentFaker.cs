@@ -25,6 +25,7 @@ namespace SignNow.Net.Test.FakeModels
         ///      "template": true,
         ///      "roles": [],
         ///      "signatures": [],
+        ///      "fields": [],
         ///      "requests": [],
         ///      "field_invites": []
         ///  }
@@ -76,6 +77,15 @@ namespace SignNow.Net.Test.FakeModels
         ///        }
         ///      ],
         ///      "signatures": [],
+        ///      "fields": [
+        ///        {
+        ///          "id": "c376990ca7e1e84ea7f6e252144e435f314bb63b",
+        ///          "role_id": "cd3421c6f5cecb68b826d63d749f87c35e915fe3",
+        ///          "role": "Signer 1",
+        ///          "originator": "Richie.Dickens60@gmail.com,
+        ///          "fulfiller": "signer1@gmail.com"
+        ///        }
+        ///      ],
         ///      "requests": [],
         ///      "field_invites": []
         ///  }
@@ -83,7 +93,21 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public SignNowDocumentWithFieldsFaker()
         {
-            RuleFor(obj => obj.Roles, new RoleFaker().Generate(1));
+            var roleId = FakerHub.Random.Hash(40);
+            var owner = FakerHub.Internet.Email();
+
+            RuleFor(obj => obj.Owner, owner);
+            RuleFor(
+                obj => obj.Roles,
+                new RoleFaker()
+                    .RuleFor(rls => rls.Id, roleId)
+                    .Generate(1));
+            RuleFor(
+                obj => obj.Fields,
+                new FieldFaker()
+                    .RuleFor(fld => fld.Id, roleId)
+                    .RuleFor(fld => fld.Owner, owner)
+                    .Generate(1));
         }
     }
 }
