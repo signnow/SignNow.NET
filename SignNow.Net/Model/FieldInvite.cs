@@ -29,6 +29,12 @@ namespace SignNow.Net.Model
         public string RoleName { get; set; }
 
         /// <summary>
+        /// Signer role identity.
+        /// </summary>
+        [JsonProperty("role_id")]
+        public string RoleId { get; set; }
+
+        /// <summary>
         /// Signer email.
         /// </summary>
         [JsonProperty("email")]
