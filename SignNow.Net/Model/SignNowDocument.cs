@@ -130,16 +130,16 @@ namespace SignNow.Net.Model
             {
                 if (IsFreeformInviteSigned() || IsFieldInviteSigned() ) return SignStatus.Completed;
 
-                if (HasFreeformInviteRequests()) return SignStatus.Pending;
+                if (HasPendingInviteRequests()) return SignStatus.Pending;
 
                 return SignStatus.None;
             }
         }
 
-        private bool HasFreeformInviteRequests()
+        private bool HasPendingInviteRequests()
         {
-            return InviteRequests.Count > 0
-                && Signatures.Count < InviteRequests.Count;
+            return (InviteRequests.Count > 0 && Signatures.Count < InviteRequests.Count)
+                || (FieldInvites.Count > 0 && Signatures.Count < FieldInvites.Count);
         }
 
         /// <summary>
@@ -167,8 +167,19 @@ namespace SignNow.Net.Model
         /// <returns>True if document was signed via field (role-based) sign request.</returns>/
         private bool IsFieldInviteSigned()
         {
-            // @TODO: Implement sign check for role-based invite
-            return false;
+            if (Signatures.Count == 0 || FieldInvites.Count != Signatures.Count)
+            {
+                return false;
+            }
+
+            var signed = (
+                from invite in FieldInvites
+                join signature in Signatures on invite.Id equals signature.SignatureRequestId
+                select invite
+            ).Count();
+
+            return signed == FieldInvites.Count
+                && signed == Signatures.Count;
         }
     }
 }

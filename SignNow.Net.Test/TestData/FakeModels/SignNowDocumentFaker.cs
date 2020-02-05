@@ -105,7 +105,7 @@ namespace SignNow.Net.Test.FakeModels
             RuleFor(
                 obj => obj.Fields,
                 new FieldFaker()
-                    .RuleFor(fld => fld.Id, roleId)
+                    .RuleFor(fld => fld.RoleId, roleId)
                     .RuleFor(fld => fld.Owner, owner)
                     .Generate(1));
         }
