@@ -128,9 +128,9 @@ namespace SignNow.Net.Model
         {
             get
             {
-                if (IsFreeformInviteSigned() || IsFieldInviteSigned() ) return SignStatus.Completed;
-
                 if (HasPendingInviteRequests()) return SignStatus.Pending;
+
+                if (IsFreeformInviteSigned() || IsFieldInviteSigned()) return SignStatus.Completed;
 
                 return SignStatus.None;
             }
@@ -139,7 +139,7 @@ namespace SignNow.Net.Model
         private bool HasPendingInviteRequests()
         {
             return (InviteRequests.Count > 0 && Signatures.Count < InviteRequests.Count)
-                || (FieldInvites.Count > 0 && Signatures.Count < FieldInvites.Count);
+                || (FieldInvites.Count > 0 && FieldInvites.Any(i => i.Status == FieldInvitesStatus.Pending));
         }
 
         /// <summary>
@@ -164,22 +164,11 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Check if <see cref="FieldInvite" /> was signed.
         /// </summary>
-        /// <returns>True if document was signed via field (role-based) sign request.</returns>/
+        /// <returns>True if document was signed (fulfilled) via field (role-based) sign request.</returns>/
         private bool IsFieldInviteSigned()
         {
-            if (Signatures.Count == 0 || FieldInvites.Count != Signatures.Count)
-            {
-                return false;
-            }
-
-            var signed = (
-                from invite in FieldInvites
-                join signature in Signatures on invite.Id equals signature.SignatureRequestId
-                select invite
-            ).Count();
-
-            return signed == FieldInvites.Count
-                && signed == Signatures.Count;
+            return FieldInvites.Count > 0
+                && FieldInvites.All(i => i.Status == FieldInvitesStatus.Fulfilled);
         }
     }
 }
