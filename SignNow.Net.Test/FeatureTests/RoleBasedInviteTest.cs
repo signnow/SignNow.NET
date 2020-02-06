@@ -55,7 +55,7 @@ namespace FeatureTests
 
             Assert.AreEqual("Pending", fieldInvites.Status.ToString(), "Newly created Invite must have status: pending.");
             Assert.AreEqual("Signer 1", fieldInvites.RoleName, "Signer role mismatch.");
-            Assert.AreEqual("signer1@signnow.com", fieldInvites.Email, "Signer email mismatch.");
+            Assert.AreEqual("signer1@signnow.com", fieldInvites.SignerEmail, "Signer email mismatch.");
         }
 
         [TestMethod]
@@ -110,8 +110,8 @@ namespace FeatureTests
                 .RuleFor(
                     d => d.FieldInvites,
                     f => new FieldInviteFaker()
-                        .RuleFor(inv => inv.Status, FieldInvitesStatus.Pending)
-                        .RuleFor(inv => inv.Email, signer1)
+                        .RuleFor(inv => inv.Status, SignStatus.Pending)
+                        .RuleFor(inv => inv.SignerEmail, signer1)
                         .RuleFor(inv => inv.RoleId, document.Roles.First().Id)
                         .Generate(1))
                 .RuleFor(
@@ -125,11 +125,11 @@ namespace FeatureTests
 
             var fieldInvite = documentWithOneInvite.FieldInvites.First();
 
-            Assert.AreEqual(FieldInvitesStatus.Pending, fieldInvite.Status);
+            Assert.AreEqual(SignStatus.Pending, fieldInvite.Status);
             Assert.AreEqual(documentWithOneInvite.Roles.First().Name, fieldInvite.RoleName);
             Assert.AreEqual(documentWithOneInvite.Roles.First().Id, fieldInvite.RoleId);
-            Assert.AreEqual(signer1, fieldInvite.Email);
-            Assert.AreEqual(FieldInvitesStatus.Pending, fieldInvite.Status);
+            Assert.AreEqual(signer1, fieldInvite.SignerEmail);
+            Assert.AreEqual(SignStatus.Pending, fieldInvite.Status);
             Assert.AreEqual(SignStatus.Pending, documentWithOneInvite.Status);
 
             // sign the document and check the document status
@@ -144,8 +144,8 @@ namespace FeatureTests
                     d => d.FieldInvites,
                     f => new FieldInviteFaker()
                         .RuleFor(inv => inv.Id, documentWithOneInvite.FieldInvites.First().Id)
-                        .RuleFor(inv => inv.Status, FieldInvitesStatus.Fulfilled)
-                        .RuleFor(inv => inv.Email, signer1)
+                        .RuleFor(inv => inv.Status, SignStatus.Fulfilled)
+                        .RuleFor(inv => inv.SignerEmail, signer1)
                         .RuleFor(inv => inv.RoleId, documentWithOneInvite.Roles.First().Id)
                         .Generate(1))
                 .RuleFor(
@@ -157,7 +157,7 @@ namespace FeatureTests
                         .Generate(1))
                 .Generate();
 
-            Assert.AreEqual(FieldInvitesStatus.Fulfilled, documentSigned.FieldInvites.First().Status);
+            Assert.AreEqual(SignStatus.Fulfilled, documentSigned.FieldInvites.First().Status);
             Assert.AreEqual(SignStatus.Completed, documentSigned.Status);
         }
     }

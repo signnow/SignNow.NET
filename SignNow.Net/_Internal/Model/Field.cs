@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
 {
-    public class Field
+    internal class Field
     {
         /// <summary>
         /// Unique identifier of field.

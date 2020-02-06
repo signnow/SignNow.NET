@@ -18,6 +18,11 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Status for case when the document have one or many sign requests which are all signed.
         /// </summary>
-        Completed
+        Completed,
+
+        Declined,
+        Fulfilled,
+        Created,
+        Skipped
     }
 }

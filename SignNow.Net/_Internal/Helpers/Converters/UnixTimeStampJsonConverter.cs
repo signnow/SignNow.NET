@@ -25,7 +25,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.WriteJson" />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue($"{ToUnixTimestamp((DateTime)value)}");
+            writer.WriteValue(ToUnixTimestamp((DateTime)value).ToString(CultureInfo.InvariantCulture));
         }
 
         /// <inheritdoc cref="JsonConverter.ReadJson" />

@@ -12,7 +12,7 @@ namespace SignNow.Net.Test.FakeModels
             RuleFor(obj => obj.SignatureId, f => f.Random.Hash(40));
             RuleFor(obj => obj.Created, f => f.Date.Recent().ToUniversalTime());
             RuleFor(obj => obj.Owner, f => f.Internet.Email());
-            RuleFor(obj => obj.Signer, f => f.Internet.Email());
+            RuleFor(obj => obj.SignerEmail, f => f.Internet.Email());
             RuleFor(obj => obj.IsCanceled, f => f.Random.Bool());
         }
     }

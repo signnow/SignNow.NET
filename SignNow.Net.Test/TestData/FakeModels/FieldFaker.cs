@@ -6,7 +6,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker <see cref="Field"/>
     /// </summary>
-    public class FieldFaker : Faker<Field>
+    internal class FieldFaker : Faker<Field>
     {
         /// <summary>
         /// Creates new instance of <see cref="Field"/> fake object.

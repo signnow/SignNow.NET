@@ -46,7 +46,7 @@ namespace FeatureTests
 
             Assert.AreEqual(DocumentId, documentInfo.Id, "You should get proper document details.");
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
-            Assert.AreEqual(invitee.Email, documentInviteRequest.Signer, "Invite should contains user email whom was sent invite request.");
+            Assert.AreEqual(invitee.Email, documentInviteRequest.SignerEmail, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
             Assert.AreEqual(SignStatus.Pending, documentInviteRequest.Status);
             Assert.AreEqual(SignStatus.Pending, documentInfo.Status);
@@ -88,7 +88,7 @@ namespace FeatureTests
                         .RuleFor(inv => inv.Id, inviteRequestId)
                         .RuleFor(inv => inv.SignatureId, signatureId)
                         .RuleFor(inv => inv.UserId, signerId)
-                        .RuleFor(inv => inv.Signer, signerEmail)
+                        .RuleFor(inv => inv.SignerEmail, signerEmail)
                         .RuleFor(inv => inv.Owner, ownerEmail)
                         .Generate(1))
                 .RuleFor(
@@ -110,7 +110,7 @@ namespace FeatureTests
             Assert.AreEqual(actualDocumentSignature.Id, actualDocumentInvite.SignatureId);
             Assert.AreEqual(actualDocumentSignature.UserId, actualDocumentInvite.UserId);
             Assert.AreEqual(actualDocumentSignature.SignatureRequestId, actualDocumentInvite.Id);
-            Assert.AreEqual(actualDocumentSignature.Email, actualDocumentInvite.Signer);
+            Assert.AreEqual(actualDocumentSignature.Email, actualDocumentInvite.SignerEmail);
             Assert.AreEqual(SignStatus.Completed, actualDocumentInvite.Status);
             Assert.AreEqual(SignStatus.Completed, documentWithOneSign.Status);
 

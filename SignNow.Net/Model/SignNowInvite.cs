@@ -1,0 +1,135 @@
+using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SignNow.Net.Internal.Helpers.Converters;
+
+namespace SignNow.Net.Model
+{
+    /// <summary>
+    /// Represents common (freeform or role-based) details of invite.
+    /// </summary>
+    public abstract class SignNowInvite
+    {
+        /// <summary>
+        /// Unique identifier of invite.
+        /// </summary>
+        public virtual string Id { get; set; }
+
+        /// <summary>
+        /// Signer email.
+        /// </summary>
+        public virtual string SignerEmail { get; set; }
+
+        /// <summary>
+        /// Status of the invite sign request.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public virtual SignStatus Status { get; set; }
+
+        /// <summary>
+        /// Timestamp invite was created.
+        /// </summary>
+        [JsonProperty("created")]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime Created { get; set; }
+
+        internal SignNowInvite() { }
+    }
+
+    /// <summary>
+    /// Represents details of the field invite for the Document.
+    /// </summary>
+    public sealed class FieldInvite : SignNowInvite
+    {
+        /// <summary>
+        /// Unique identifier of field invite.
+        /// </summary>
+        [JsonProperty("id")]
+        public override string Id { get; set; }
+
+        /// <inheritdoc cref="SignNowInvite"/>
+        [JsonProperty("email")]
+        public override string SignerEmail { get; set; }
+
+        /// <summary>
+        /// Status of the field invite sign request.
+        /// </summary>
+        [JsonProperty("status")]
+        public override SignStatus Status { get; set; }
+
+        /// <summary>
+        /// Signer role name.
+        /// </summary>
+        [JsonProperty("role")]
+        public string RoleName { get; set; }
+
+        /// <summary>
+        /// Signer role identity.
+        /// </summary>
+        [JsonProperty("role_id")]
+        public string RoleId { get; set; }
+
+        /// <summary>
+        /// Timestamp document was updated.
+        /// </summary>
+        [JsonProperty("updated")]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime Updated { get; set; }
+
+        /// <summary>
+        /// Date and time of invite expiration.
+        /// </summary>
+        [JsonProperty("expiration_time")]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime ExpiredOn { get; set; }
+    }
+
+    /// <summary>
+    /// Represents details of freeform invite for the document.
+    /// </summary>
+    public sealed class FreeformInvite : SignNowInvite
+    {
+        /// <summary>
+        /// Sign invite unique id.
+        /// </summary>
+        [JsonProperty("unique_id")]
+        public override string Id { get; set; }
+
+        /// <summary>
+        /// Email of user who invited to sign the document.
+        /// </summary>
+        [JsonProperty("signer_email")]
+        public override string SignerEmail { get; set; }
+
+        /// <summary>
+        /// <see cref="FreeformInvite"/> sign status of current signer.
+        /// </summary>
+        [JsonIgnore]
+        public override SignStatus Status => SignatureId == null ? SignStatus.Pending : SignStatus.Completed;
+
+        /// <summary>
+        /// Identity of user who invited to sign the document.
+        /// </summary>
+        [JsonProperty("user_id")]
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// Identity of the signers' signature
+        /// </summary>
+        [JsonProperty("signature_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string SignatureId { get; set; }
+
+        /// <summary>
+        /// Email of document owner.
+        /// </summary>
+        [JsonProperty("originator_email")]
+        public string Owner { get; set; }
+
+        /// <summary>
+        /// Is freeform sign invite canceled or not.
+        /// </summary>
+        [JsonProperty("canceled", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(StringToBoolJsonConverter))]
+        public bool? IsCanceled { get; set; }
+    }
+}

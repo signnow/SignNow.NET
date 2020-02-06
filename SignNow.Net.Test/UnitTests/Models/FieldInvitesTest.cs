@@ -10,11 +10,11 @@ namespace UnitTests
     public class FieldInvitesTest
     {
         [DataTestMethod]
-        [DataRow("created", FieldInvitesStatus.Created, DisplayName = "Status: created")]
-        [DataRow("declined", FieldInvitesStatus.Declined, DisplayName = "Status: declined")]
-        [DataRow("fulfilled", FieldInvitesStatus.Fulfilled, DisplayName = "Status: fulfilled")]
-        [DataRow("pending", FieldInvitesStatus.Pending, DisplayName = "Status: pending")]
-        [DataRow("skipped", FieldInvitesStatus.Skipped, DisplayName = "Status: skipped")]
+        [DataRow("created", SignStatus.Created, DisplayName = "Status: created")]
+        [DataRow("declined", SignStatus.Declined, DisplayName = "Status: declined")]
+        [DataRow("fulfilled", SignStatus.Fulfilled, DisplayName = "Status: fulfilled")]
+        [DataRow("pending", SignStatus.Pending, DisplayName = "Status: pending")]
+        [DataRow("skipped", SignStatus.Skipped, DisplayName = "Status: skipped")]
         public void ShouldDeserializeFromJson(string status, Enum expected)
         {
             var json = $@"{{
@@ -32,7 +32,7 @@ namespace UnitTests
             Assert.AreEqual("a09b26test07ce70228afe6290f4445700b6f349", fieldInvite.Id);
             Assert.AreEqual(expected, fieldInvite.Status);
             Assert.AreEqual("Signer 1", fieldInvite.RoleName);
-            Assert.AreEqual("signer1@signnow.com", fieldInvite.Email);
+            Assert.AreEqual("signer1@signnow.com", fieldInvite.SignerEmail);
             Assert.AreEqual("2020-01-19 16:26:05Z", fieldInvite.Created.ToString("u", CultureInfo.CurrentCulture));
             Assert.AreEqual("2020-01-19 16:26:05Z", fieldInvite.Updated.ToString("u", CultureInfo.CurrentCulture));
             Assert.AreEqual("2020-02-18 16:26:05Z", fieldInvite.ExpiredOn.ToString("u", CultureInfo.CurrentCulture));
