@@ -1,6 +1,11 @@
 # SignNow.NET
 
-[![Build status](https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status")](https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22) [![codecov](https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report")](https://codecov.io/gh/signnow/SignNow.NET) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24)](https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard) [![NuGet](https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version")](https://www.nuget.org/packages/SignNow.Net) [![NuGet Downloads](https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square)](https://www.nuget.org/packages/SignNow.Net "NuGet Downloads") [![License](https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License")](LICENSE)
+[![Build status][actions build badge]][actions build link]
+[![Codecov][codecov badge]][codecov link]
+[![Codacy][codacy badge]][codacy link]
+[![NuGet Version][nuget badge]][nuget link]
+[![NuGet Downloads][nuget downloads badge]][nuget downloads link]
+[![License][license badge]](LICENSE)
 
 ## About SignNow
 
@@ -65,7 +70,7 @@ Install-Package SignNow.Net -Version <package-version>
 
 ## <a name="documentation"></a>Documentation
 
-Read about the available SignNow features in [SignNow API Docs](https://docs.signnow.com).
+Read about the available SignNow features in [SignNow API Docs][api docs link].
 
 ## <a name="features"></a>Features
 
@@ -249,7 +254,7 @@ Thanks to all contributors who got interested in this project. We're excited to 
 
 ## <a name="license"></a>License
 
-This SDK is distributed under the MIT License, see [LICENSE](https://github.com/signnow/SignNow.NET/blob/develop/LICENSE) for more information.
+This SDK is distributed under the MIT License, see [LICENSE][license link] for more information.
 
 #### API Contact Information
 
@@ -258,3 +263,19 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 **Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
 
 **Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit <https://www.signnow.com/contact>.
+
+
+<!-- Aliases for URLs: please place here any long urls to keep clean markdown markup -->
+[actions build badge]: https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status"
+[actions build link]: https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22
+[codecov badge]: https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report"
+[codecov link]: https://codecov.io/gh/signnow/SignNow.NET
+[codacy badge]: https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24 "Codacy Repository certification"
+[codacy link]: https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard
+[nuget badge]: https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version"
+[nuget link]: https://www.nuget.org/packages/SignNow.Net
+[nuget downloads badge]: https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square
+[nuget downloads link]: https://www.nuget.org/packages/SignNow.Net "NuGet Downloads"
+[license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License"
+[license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
+[api docs link]: https://docs.signnow.com
