@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model
@@ -8,30 +9,21 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents common (freeform or role-based) details of invite.
     /// </summary>
-    public abstract class SignNowInvite
+    public abstract class SignNowInvite : ISignNowInviteStatus
     {
-        /// <summary>
-        /// Unique identifier of invite.
-        /// </summary>
-        public virtual string Id { get; set; }
+        /// <inheritdoc cref="ISignNowInviteStatus"/>
+        public virtual string Id { get; internal set; }
 
-        /// <summary>
-        /// Signer email.
-        /// </summary>
-        public virtual string SignerEmail { get; set; }
+        /// <inheritdoc cref="ISignNowInviteStatus"/>
+        public virtual string SignerEmail { get; internal set; }
 
-        /// <summary>
-        /// Status of the invite sign request.
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public virtual SignStatus Status { get; set; }
+        /// <inheritdoc cref="ISignNowInviteStatus"/>
+        public virtual SignStatus Status { get; internal set; }
 
-        /// <summary>
-        /// Timestamp invite was created.
-        /// </summary>
+        /// <inheritdoc />
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime Created { get; set; }
+        public DateTime Created { get; internal set; }
 
         internal SignNowInvite() { }
     }
@@ -45,43 +37,44 @@ namespace SignNow.Net.Model
         /// Unique identifier of field invite.
         /// </summary>
         [JsonProperty("id")]
-        public override string Id { get; set; }
+        public override string Id { get; internal set; }
 
         /// <inheritdoc cref="SignNowInvite"/>
         [JsonProperty("email")]
-        public override string SignerEmail { get; set; }
+        public override string SignerEmail { get; internal set; }
 
         /// <summary>
         /// Status of the field invite sign request.
         /// </summary>
         [JsonProperty("status")]
-        public override SignStatus Status { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public override SignStatus Status { get; internal set; }
 
         /// <summary>
         /// Signer role name.
         /// </summary>
         [JsonProperty("role")]
-        public string RoleName { get; set; }
+        public string RoleName { get; internal set; }
 
         /// <summary>
         /// Signer role identity.
         /// </summary>
         [JsonProperty("role_id")]
-        public string RoleId { get; set; }
+        public string RoleId { get; internal set; }
 
         /// <summary>
         /// Timestamp document was updated.
         /// </summary>
         [JsonProperty("updated")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime Updated { get; set; }
+        public DateTime Updated { get; internal set; }
 
         /// <summary>
         /// Date and time of invite expiration.
         /// </summary>
         [JsonProperty("expiration_time")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
-        public DateTime ExpiredOn { get; set; }
+        public DateTime ExpiredOn { get; internal set; }
     }
 
     /// <summary>
@@ -93,13 +86,13 @@ namespace SignNow.Net.Model
         /// Sign invite unique id.
         /// </summary>
         [JsonProperty("unique_id")]
-        public override string Id { get; set; }
+        public override string Id { get; internal set; }
 
         /// <summary>
         /// Email of user who invited to sign the document.
         /// </summary>
         [JsonProperty("signer_email")]
-        public override string SignerEmail { get; set; }
+        public override string SignerEmail { get; internal set; }
 
         /// <summary>
         /// <see cref="FreeformInvite"/> sign status of current signer.
@@ -111,25 +104,25 @@ namespace SignNow.Net.Model
         /// Identity of user who invited to sign the document.
         /// </summary>
         [JsonProperty("user_id")]
-        public string UserId { get; set; }
+        public string UserId { get; internal set; }
 
         /// <summary>
         /// Identity of the signers' signature
         /// </summary>
         [JsonProperty("signature_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string SignatureId { get; set; }
+        public string SignatureId { get; internal set; }
 
         /// <summary>
         /// Email of document owner.
         /// </summary>
         [JsonProperty("originator_email")]
-        public string Owner { get; set; }
+        public string Owner { get; internal set; }
 
         /// <summary>
         /// Is freeform sign invite canceled or not.
         /// </summary>
         [JsonProperty("canceled", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringToBoolJsonConverter))]
-        public bool? IsCanceled { get; set; }
+        internal bool? IsCanceled { get; set; }
     }
 }

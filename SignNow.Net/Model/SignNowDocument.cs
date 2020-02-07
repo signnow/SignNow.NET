@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
 
@@ -123,14 +124,14 @@ namespace SignNow.Net.Model
         /// Provides common details of any kind of invites (freeform or role-based)
         /// </summary>
         [JsonIgnore]
-        public IReadOnlyCollection<SignNowInvite> InviteStatus
+        public IReadOnlyCollection<ISignNowInviteStatus> InviteStatus
         {
             get
             {
                 if (InviteRequests.Count > 0) return InviteRequests;
                 if (FieldInvites.Count > 0) return FieldInvites;
 
-                return new List<SignNowInvite>();
+                return _emptyInvites;
             }
         }
 
@@ -155,5 +156,7 @@ namespace SignNow.Net.Model
                 return SignStatus.None;
             }
         }
+
+        private readonly List<SignNowInvite> _emptyInvites = new List<SignNowInvite>();
     }
 }

@@ -13,6 +13,7 @@ namespace SignNow.Net.Internal.Model
         /// <summary>
         /// <see cref="SignNow.Net.Model.Role"/> identity.
         /// </summary>
+        /// TODO: Use Role model instead of RoleId + RoleName
         [JsonProperty("role_id")]
         public string RoleId { get; set; }
 
