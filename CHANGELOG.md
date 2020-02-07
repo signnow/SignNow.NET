@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Added code samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
 - Sign status for the document - `Models.SignNowDocument.Status`
 - Freeform invite sign status for current signer - `Models.FreeformInvite.Status`
+- Field invite status for current signer - `Models.FieldInvite.Status`
+- `ISignNowInviteStatus` interface for role-based or freeform invites status retrieval
 
 ### Changed
 - Removed redundant tests, changed duplicated tests to parametrized tests.
