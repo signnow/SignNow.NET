@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-## [0.4.0-beta] - 2020-02-03
+
+## [0.4.0-beta] - 2020-02-18
 ### Added
 - Added code samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
 - Sign status for the document - `Models.SignNowDocument.Status`
