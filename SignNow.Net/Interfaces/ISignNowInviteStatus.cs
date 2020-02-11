@@ -18,7 +18,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Status of the invite sign request.
         /// </summary>
-        SignStatus Status { get; }
+        InviteStatus Status { get; }
 
         /// <summary>
         /// Timestamp invite was created.

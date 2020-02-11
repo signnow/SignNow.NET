@@ -29,7 +29,7 @@ namespace SignNow.Net.Test.FakeModels
         public FieldInviteFaker()
         {
             RuleFor(obj => obj.Id, f => f.Random.Hash(40));
-            RuleFor(obj => obj.Status, f => f.PickRandom<SignStatus>());
+            RuleFor(obj => obj.Status, f => f.PickRandom<InviteStatus>());
             RuleFor(obj => obj.RoleName, f => $"Signer {f.IndexFaker + 1}");
             RuleFor(obj => obj.RoleId, f => f.Random.Hash(40));
             RuleFor(obj => obj.SignerEmail, f => f.Internet.Email());

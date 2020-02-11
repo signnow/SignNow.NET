@@ -18,7 +18,7 @@ namespace SignNow.Net.Model
         public virtual string SignerEmail { get; internal set; }
 
         /// <inheritdoc cref="ISignNowInviteStatus"/>
-        public virtual SignStatus Status { get; internal set; }
+        public virtual InviteStatus Status { get; internal set; }
 
         /// <inheritdoc />
         [JsonProperty("created")]
@@ -48,7 +48,7 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public override SignStatus Status { get; internal set; }
+        public override InviteStatus Status { get; internal set; }
 
         /// <summary>
         /// Signer role name.
@@ -98,7 +98,7 @@ namespace SignNow.Net.Model
         /// <see cref="FreeformInvite"/> sign status of current signer.
         /// </summary>
         [JsonIgnore]
-        public override SignStatus Status => SignatureId == null ? SignStatus.Pending : SignStatus.Completed;
+        public override InviteStatus Status => SignatureId == null ? InviteStatus.Pending : InviteStatus.Fulfilled;
 
         /// <summary>
         /// Identity of user who invited to sign the document.

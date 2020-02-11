@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Model
 {
+    /// <summary>
+    /// SignNow fields metadata.
+    /// </summary>
     internal class Field
     {
         /// <summary>

@@ -124,7 +124,7 @@ namespace SignNow.Net.Model
         /// Provides common details of any kind of invites (freeform or role-based)
         /// </summary>
         [JsonIgnore]
-        public IReadOnlyCollection<ISignNowInviteStatus> InviteStatus
+        public IReadOnlyCollection<ISignNowInviteStatus> InvitesStatus
         {
             get
             {
@@ -139,21 +139,21 @@ namespace SignNow.Net.Model
         /// The document sign status.
         /// </summary>
         [JsonIgnore]
-        public SignStatus Status
+        public DocumentStatus Status
         {
             get
             {
-                if (InviteStatus.Any(i => i.Status == SignStatus.Pending))
+                if (InvitesStatus.Any(i => i.Status == InviteStatus.Pending))
                 {
-                    return SignStatus.Pending;
+                    return DocumentStatus.Pending;
                 }
 
-                if (InviteStatus.Count > 0 && InviteStatus.All(i => i.Status == SignStatus.Completed || i.Status == SignStatus.Fulfilled))
+                if (InvitesStatus.Count > 0 && InvitesStatus.All(i => i.Status == InviteStatus.Fulfilled))
                 {
-                    return SignStatus.Completed;
+                    return DocumentStatus.Completed;
                 }
 
-                return SignStatus.None;
+                return DocumentStatus.NoInvite;
             }
         }
 

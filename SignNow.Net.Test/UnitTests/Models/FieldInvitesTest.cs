@@ -10,11 +10,10 @@ namespace UnitTests
     public class FieldInvitesTest
     {
         [DataTestMethod]
-        [DataRow("created", SignStatus.Created, DisplayName = "Status: created")]
-        [DataRow("declined", SignStatus.Declined, DisplayName = "Status: declined")]
-        [DataRow("fulfilled", SignStatus.Fulfilled, DisplayName = "Status: fulfilled")]
-        [DataRow("pending", SignStatus.Pending, DisplayName = "Status: pending")]
-        [DataRow("skipped", SignStatus.Skipped, DisplayName = "Status: skipped")]
+        [DataRow("created", InviteStatus.Created, DisplayName = "Status: created")]
+        [DataRow("pending", InviteStatus.Pending, DisplayName = "Status: pending")]
+        [DataRow("fulfilled", InviteStatus.Fulfilled, DisplayName = "Status: fulfilled")]
+        [DataRow("skipped", InviteStatus.Skipped, DisplayName = "Status: skipped")]
         public void ShouldDeserializeFromJson(string status, Enum expected)
         {
             var json = $@"{{
