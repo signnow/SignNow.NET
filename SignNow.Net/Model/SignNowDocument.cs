@@ -157,6 +157,6 @@ namespace SignNow.Net.Model
             }
         }
 
-        private readonly List<SignNowInvite> _emptyInvites = new List<SignNowInvite>();
+        private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
     }
 }
