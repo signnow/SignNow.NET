@@ -143,20 +143,42 @@ namespace SignNow.Net.Model
         {
             get
             {
-                if (InvitesStatus.Any(i => i.Status == InviteStatus.Pending))
+                if (_status == null)
                 {
-                    return DocumentStatus.Pending;
+                    _status = CheckDocumentStatus();
                 }
 
-                if (InvitesStatus.Count > 0 && InvitesStatus.All(i => i.Status == InviteStatus.Fulfilled))
-                {
-                    return DocumentStatus.Completed;
-                }
-
-                return DocumentStatus.NoInvite;
+                return (DocumentStatus)_status;
             }
         }
 
+        /// <summary>
+        /// Detect the document status corresponding to summary states of invites statuses
+        /// </summary>
+        /// <returns>One of the <see cref="DocumentStatus"/></returns>
+        private DocumentStatus CheckDocumentStatus()
+        {
+            if (InvitesStatus.Any(i => i.Status == InviteStatus.Pending))
+            {
+                return DocumentStatus.Pending;
+            }
+
+            if (InvitesStatus.Count > 0 && InvitesStatus.All(i => i.Status == InviteStatus.Fulfilled))
+            {
+                return DocumentStatus.Completed;
+            }
+
+            return DocumentStatus.NoInvite;
+        }
+
+        /// <summary>
+        /// Cache document status
+        /// </summary>
+        private DocumentStatus? _status { get; set; } = null;
+
+        /// <summary>
+        /// Default empty Invites collection for case when document haven't any invites
+        /// </summary>
         private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
     }
 }
