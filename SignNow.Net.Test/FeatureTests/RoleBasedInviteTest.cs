@@ -96,9 +96,10 @@ namespace FeatureTests
         public void ShouldGetDocumentSignedStatusForRoleBasedInvite()
         {
             var signer1 = "signer1@email.com";
-            var baseDocument = new SignNowDocumentWithFieldsFaker();
-            var document = baseDocument.Generate();
+            var baseDocument = new SignNowDocumentFaker()
+                .RuleFor(d => d.Roles, f => new RoleFaker().Generate(1));
 
+            var document = baseDocument.Generate();
             var inviteFirst = new RoleBasedInvite(document);
             inviteFirst.AddRoleBasedInvite(new SignerOptions(signer1, inviteFirst.DocumentRoles().First()));
 
@@ -107,20 +108,26 @@ namespace FeatureTests
 
             // create document with one role and one role invite and check the document status
             var documentWithOneInvite = baseDocument
-                .RuleFor(
-                    d => d.FieldInvites,
-                    f => new FieldInviteFaker()
-                        .RuleFor(inv => inv.Status, InviteStatus.Pending)
-                        .RuleFor(inv => inv.SignerEmail, signer1)
-                        .RuleFor(inv => inv.RoleId, document.Roles.First().Id)
-                        .Generate(1))
-                .RuleFor(
-                    d => d.Fields,
-                    f => new FieldFaker()
-                        .RuleFor(fld => fld.Signer, signer1)
-                        .RuleFor(fld => fld.Owner, document.Owner)
-                        .RuleFor(fld => fld.RoleId, document.Roles.First().Id)
-                        .Generate(1))
+                .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
+                .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
+                .FinishWith((f, obj) => {
+                    var role = obj.Roles.GetEnumerator();
+                    var invite = obj.FieldInvites.GetEnumerator();
+
+                    foreach(var field in obj.Fields)
+                    {
+                        role.MoveNext();
+                        invite.MoveNext();
+
+                        field.RoleName = role.Current.Name;
+                        field.RoleId = role.Current.Id;
+                        field.Owner = obj.Owner;
+                        field.Signer = signer1;
+                        invite.Current.RoleId = role.Current.Id;
+                        invite.Current.SignerEmail = signer1;
+                        invite.Current.Status = InviteStatus.Pending;
+                    }
+                })
                 .Generate();
 
             var fieldInvite = documentWithOneInvite.FieldInvites.First();
@@ -134,27 +141,31 @@ namespace FeatureTests
 
             // sign the document and check the document status
             var documentSigned = baseDocument
-                .RuleFor(
-                    d => d.Signatures,
-                    new SignatureFaker()
-                        .RuleFor(s => s.Email, signer1)
-                        .RuleFor(s => s.SignatureRequestId, documentWithOneInvite.FieldInvites.First().Id)
-                        .Generate(1))
-                .RuleFor(
-                    d => d.FieldInvites,
-                    f => new FieldInviteFaker()
-                        .RuleFor(inv => inv.Id, documentWithOneInvite.FieldInvites.First().Id)
-                        .RuleFor(inv => inv.Status, InviteStatus.Fulfilled)
-                        .RuleFor(inv => inv.SignerEmail, signer1)
-                        .RuleFor(inv => inv.RoleId, documentWithOneInvite.Roles.First().Id)
-                        .Generate(1))
-                .RuleFor(
-                    d => d.Fields,
-                    f => new FieldFaker()
-                        .RuleFor(fld => fld.Signer, signer1)
-                        .RuleFor(fld => fld.Owner, documentWithOneInvite.Owner)
-                        .RuleFor(fld => fld.RoleId, documentWithOneInvite.Roles.First().Id)
-                        .Generate(1))
+                .RuleFor(d => d.Signatures, new SignatureFaker().Generate(1))
+                .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
+                .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
+                .FinishWith((f, obj) => {
+                    var role = obj.Roles.GetEnumerator();
+                    var invite = obj.FieldInvites.GetEnumerator();
+                    var sign = obj.Signatures.GetEnumerator();
+
+                    foreach (var field in obj.Fields)
+                    {
+                        role.MoveNext();
+                        invite.MoveNext();
+                        sign.MoveNext();
+
+                        field.RoleName = role.Current.Name;
+                        field.RoleId = role.Current.Id;
+                        field.Owner = obj.Owner;
+                        field.Signer = signer1;
+                        invite.Current.RoleId = role.Current.Id;
+                        invite.Current.SignerEmail = signer1;
+                        invite.Current.Status = InviteStatus.Fulfilled;
+                        sign.Current.Email = signer1;
+                        sign.Current.SignatureRequestId = invite.Current.Id;
+                    }
+                })
                 .Generate();
 
             Assert.AreEqual(InviteStatus.Fulfilled, documentSigned.FieldInvites.First().Status);

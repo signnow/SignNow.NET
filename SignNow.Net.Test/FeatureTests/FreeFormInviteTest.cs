@@ -75,34 +75,30 @@ namespace FeatureTests
 
 
             // create free form invite request and sign the document
-            var inviteRequestId = Guid.NewGuid().ToString();
-            var signatureId = Guid.NewGuid().ToString();
-            var signerId = Guid.NewGuid().ToString();
             var signerEmail = "signer@email.com";
-            var ownerEmail = "owner@email.com";
 
             var documentWithOneSignedRequest = baseDocument
-                .RuleFor(
-                    doc => doc.InviteRequests,
-                    f => new FreeformInviteFaker()
-                        .RuleFor(inv => inv.Id, inviteRequestId)
-                        .RuleFor(inv => inv.SignatureId, signatureId)
-                        .RuleFor(inv => inv.UserId, signerId)
-                        .RuleFor(inv => inv.SignerEmail, signerEmail)
-                        .RuleFor(inv => inv.Owner, ownerEmail)
-                        .Generate(1))
-                .RuleFor(
-                    doc => doc.Signatures,
-                    f => new SignatureFaker()
-                        .RuleFor(sig => sig.Id, signatureId)
-                        .RuleFor(sig => sig.UserId, signerId)
-                        .RuleFor(sig => sig.SignatureRequestId, inviteRequestId)
-                        .RuleFor(sig => sig.Email, signerEmail)
-                        .Generate(1));
+                .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(1))
+                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(1))
+                .FinishWith((f, obj) => {
+                    var invite = obj.InviteRequests.GetEnumerator();
+                    var sign = obj.Signatures.GetEnumerator();
+
+                    while (invite.MoveNext() && sign.MoveNext())
+                    {
+                        invite.Current.SignatureId = sign.Current.Id;
+                        invite.Current.SignerEmail = signerEmail;
+                        invite.Current.Owner = obj.Owner;
+                        sign.Current.Email = signerEmail;
+                        sign.Current.UserId = invite.Current.UserId;
+                        sign.Current.SignatureRequestId = invite.Current.Id;
+                    }
+                });
 
             var documentWithOneSign = documentWithOneSignedRequest.Generate();
             var actualDocumentSignature = documentWithOneSign.Signatures[0];
             var actualDocumentInvite = documentWithOneSign.InviteRequests[0];
+
 
             // asserts for document signed with only one freeform invite
             Assert.AreEqual(1, documentWithOneSign.InviteRequests.Count);
@@ -118,7 +114,7 @@ namespace FeatureTests
             // create free form invite requests (one - signed, second - not signed yet)
             var documentWithTwoRequests = documentWithOneSignedRequest.Generate();
             var signer2Invite = new FreeformInviteFaker()
-                    .RuleFor(inv => inv.Owner, ownerEmail)
+                    .RuleFor(inv => inv.Owner, documentWithTwoRequests.Owner)
                     .RuleFor(inv => inv.SignatureId, f => null)
                     .Generate();
 
@@ -127,7 +123,7 @@ namespace FeatureTests
             // asserts for document with two freeform invites (one - signed, second - not signed yet)
             Assert.AreEqual(2, documentWithTwoRequests.InviteRequests.Count);
             Assert.AreEqual(1, documentWithTwoRequests.Signatures.Count);
-            Assert.IsTrue(documentWithTwoRequests.InviteRequests.TrueForAll(itm => itm.Owner == "owner@email.com"));
+            Assert.IsTrue(documentWithTwoRequests.InviteRequests.TrueForAll(itm => itm.Owner == documentWithTwoRequests.Owner));
             Assert.IsNotNull(documentWithTwoRequests.InviteRequests[0].SignatureId);
             Assert.IsNull(documentWithTwoRequests.InviteRequests[1].SignatureId);
             Assert.AreEqual(InviteStatus.Fulfilled, documentWithTwoRequests.InviteRequests[0].Status);
@@ -135,13 +131,23 @@ namespace FeatureTests
             Assert.AreEqual(DocumentStatus.Pending, documentWithTwoRequests.Status);
 
             // sign second freeform invite and complete the document signing
-            var documentWithTwoRequestsSigned = documentWithTwoRequests;
+            var documentWithTwoRequestsSigned = baseDocument
+                .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(2))
+                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(2))
+                .FinishWith((f, obj) => {
+                    var sig = obj.Signatures.GetEnumerator();
 
-            documentWithTwoRequestsSigned.Signatures.Add(
-                new SignatureFaker()
-                .RuleFor(sig => sig.SignatureRequestId, signer2Invite.Id)
-                .Generate());
-            documentWithTwoRequestsSigned.InviteRequests[1].SignatureId = documentWithTwoRequestsSigned.Signatures[1].Id;
+                    foreach (var inv in obj.InviteRequests)
+                    {
+                        sig.MoveNext();
+                        inv.SignatureId = sig.Current.Id;
+                        inv.UserId = sig.Current.UserId;
+                        inv.SignerEmail = sig.Current.Email;
+                        inv.Owner = obj.Owner;
+                        inv.IsCanceled = false;
+                    }
+                })
+                .Generate();
 
             // check if document fullfilled
             Assert.AreEqual(2, documentWithTwoRequestsSigned.Signatures.Count);
