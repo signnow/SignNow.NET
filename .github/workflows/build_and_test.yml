@@ -138,6 +138,7 @@ jobs:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
           bash <(curl -sSL https://coverage.codacy.com/get.sh) report \
+            --codacy-api-base-url https://api.codacy.com \
             --commit-uuid ${{ github.sha }} \
             --force-language csharp \
             -r ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
