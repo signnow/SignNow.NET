@@ -16,7 +16,7 @@ namespace UnitTests
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => Guard.ArgumentNotNull(nullableObj, nameof(nullableObj)));
 
-            Assert.AreEqual($"Value cannot be null.\nParameter name: nullableObj", exception.Message);
+            Assert.AreEqual($"Value cannot be null.{Environment.NewLine}Parameter name: nullableObj", exception.Message);
         }
 
         [TestMethod]
