@@ -1,13 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SignNow.Net;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
-using SignNow.Net.Test.Constants;
-using SignNow.Net.Test.Extensions;
+using SignNow.Net.Test.FakeModels;
 
 namespace FeatureTests
 {
@@ -48,94 +46,113 @@ namespace FeatureTests
 
             Assert.AreEqual(DocumentId, documentInfo.Id, "You should get proper document details.");
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
-            Assert.AreEqual(invitee.Email, documentInviteRequest.Signer, "Invite should contains user email whom was sent invite request.");
+            Assert.AreEqual(invitee.Email, documentInviteRequest.SignerEmail, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
-            Assert.AreEqual(SignStatus.Pending, documentInviteRequest.Status);
-            Assert.AreEqual(SignStatus.Pending, documentInfo.Status);
+            Assert.AreEqual(InviteStatus.Pending, documentInviteRequest.Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentInfo.Status);
         }
 
         [TestMethod]
         public void ShouldGetDocumentSignedStatusForFreeFormInvite()
         {
-            var mockDocument = JsonFixtures.DocumentTemplate.AsJsonObject();
+            var baseDocument = new SignNowDocumentFaker();
 
-            Assert.AreEqual(SignStatus.None, new SignNowDocument().Status);
+            Assert.AreEqual(DocumentStatus.NoInvite, new SignNowDocument().Status);
+            Assert.AreEqual(DocumentStatus.NoInvite, baseDocument.Generate().Status);
 
-            // successful freeform invite should have invite request inside the document
-            var inviteRequests = (JArray)mockDocument["requests"];
-            // add freeform invite for single signer to document from json template
-            inviteRequests.Add(JsonFixtures.FreeFormInviteTemplate.AsJsonObject());
-            inviteRequests[0]["signature_id"] = null;
-
-            var documentWithRequest = JsonConvert.DeserializeObject<SignNowDocument>(mockDocument.ToString());
+            // create free form invite request
+            var documentWithOneRequest = baseDocument
+                .RuleFor(
+                    prop => prop.InviteRequests,
+                    new FreeformInviteFaker().RuleFor(inv => inv.SignatureId, f => null).Generate(1))
+                .Generate();
 
             // Freeform invite created assertions
-            Assert.AreEqual(1, documentWithRequest.InviteRequests.Count);
-            Assert.AreEqual("test.user@signnow.com", documentWithRequest.InviteRequests[0].Owner);
-            Assert.AreEqual("signer@signnow.com", documentWithRequest.InviteRequests[0].Signer);
-            Assert.IsNull(documentWithRequest.InviteRequests[0].SignatureId);
-            Assert.AreEqual(SignStatus.Pending, documentWithRequest.InviteRequests[0].Status);
-            Assert.AreEqual(SignStatus.Pending, documentWithRequest.Status);
+            Assert.AreEqual(1, documentWithOneRequest.InviteRequests.Count);
+            Assert.IsNull(documentWithOneRequest.InviteRequests[0].SignatureId, "Signature Id should be null for not signed document");
+            Assert.AreEqual(InviteStatus.Pending, documentWithOneRequest.InviteRequests[0].Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentWithOneRequest.Status);
 
-            // Add signature by signing the document
-            var signatures = (JArray)mockDocument["signatures"];
-            inviteRequests[0]["signature_id"] = "signatureId00000000000000000000000SIGNED";
-            signatures.Add(JsonFixtures.SignatureTemplate.AsJsonObject());
-            signatures[0]["id"] = inviteRequests[0]["signature_id"];
-            signatures[0]["signature_request_id"] = inviteRequests[0]["unique_id"];
 
-            var documentSigned = JsonConvert.DeserializeObject<SignNowDocument>(mockDocument.ToString());
-            var actualSignature = documentSigned.Signatures[0];
-            var actualInvite = documentSigned.InviteRequests[0];
+            // create free form invite request and sign the document
+            var signerEmail = "signer@email.com";
+
+            var documentWithOneSignedRequest = baseDocument
+                .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(1))
+                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(1))
+                .FinishWith((f, obj) => {
+                    var invite = obj.InviteRequests.GetEnumerator();
+                    var sign = obj.Signatures.GetEnumerator();
+
+                    while (invite.MoveNext() && sign.MoveNext())
+                    {
+                        invite.Current.SignatureId = sign.Current.Id;
+                        invite.Current.SignerEmail = signerEmail;
+                        invite.Current.Owner = obj.Owner;
+                        sign.Current.Email = signerEmail;
+                        sign.Current.UserId = invite.Current.UserId;
+                        sign.Current.SignatureRequestId = invite.Current.Id;
+                    }
+                });
+
+            var documentWithOneSign = documentWithOneSignedRequest.Generate();
+            var actualDocumentSignature = documentWithOneSign.Signatures[0];
+            var actualDocumentInvite = documentWithOneSign.InviteRequests[0];
+
 
             // asserts for document signed with only one freeform invite
-            Assert.AreEqual(1, documentSigned.InviteRequests.Count);
-            Assert.AreEqual(1, documentSigned.Signatures.Count);
-            Assert.AreEqual(actualSignature.Id, actualInvite.SignatureId);
-            Assert.AreEqual(actualSignature.UserId, actualInvite.UserId);
-            Assert.AreEqual(actualSignature.SignatureRequestId, actualInvite.Id);
-            Assert.AreEqual(actualSignature.Email, actualInvite.Signer);
-            Assert.AreEqual(SignStatus.Completed, documentSigned.InviteRequests[0].Status);
-            Assert.AreEqual(SignStatus.Completed, documentSigned.Status);
+            Assert.AreEqual(1, documentWithOneSign.InviteRequests.Count);
+            Assert.AreEqual(1, documentWithOneSign.Signatures.Count);
+            Assert.AreEqual(actualDocumentSignature.Id, actualDocumentInvite.SignatureId);
+            Assert.AreEqual(actualDocumentSignature.UserId, actualDocumentInvite.UserId);
+            Assert.AreEqual(actualDocumentSignature.SignatureRequestId, actualDocumentInvite.Id);
+            Assert.AreEqual(actualDocumentSignature.Email, actualDocumentInvite.SignerEmail);
+            Assert.AreEqual(InviteStatus.Fulfilled, actualDocumentInvite.Status);
+            Assert.AreEqual(DocumentStatus.Completed, documentWithOneSign.Status);
 
-            // add second freeform invite to the document
-            inviteRequests.Add(
-                JsonConvert.DeserializeObject(@"{
-                    'unique_id': 'freeformInviteId000000000000000000000001',
-                    'id': 'freeformInviteId000000000000000000000001',
-                    'user_id': 'userId0000000000000000000000000000000001',
-                    'created': '1579090178',
-                    'originator_email': 'test.user@signnow.com',
-                    'signer_email': 'signer1@signnow.com',
-                    'canceled': null,
-                    'redirect_uri': null
-                }")
-            );
 
-            var documentWithTwoRequests = JsonConvert.DeserializeObject<SignNowDocument>(mockDocument.ToString());
+            // create free form invite requests (one - signed, second - not signed yet)
+            var documentWithTwoRequests = documentWithOneSignedRequest.Generate();
+            var signer2Invite = new FreeformInviteFaker()
+                    .RuleFor(inv => inv.Owner, documentWithTwoRequests.Owner)
+                    .RuleFor(inv => inv.SignatureId, f => null)
+                    .Generate();
+
+            documentWithTwoRequests.InviteRequests.Add(signer2Invite);
 
             // asserts for document with two freeform invites (one - signed, second - not signed yet)
             Assert.AreEqual(2, documentWithTwoRequests.InviteRequests.Count);
             Assert.AreEqual(1, documentWithTwoRequests.Signatures.Count);
-            Assert.IsTrue(documentWithTwoRequests.InviteRequests.TrueForAll(itm => itm.Owner == "test.user@signnow.com"));
+            Assert.IsTrue(documentWithTwoRequests.InviteRequests.TrueForAll(itm => itm.Owner == documentWithTwoRequests.Owner));
             Assert.IsNotNull(documentWithTwoRequests.InviteRequests[0].SignatureId);
             Assert.IsNull(documentWithTwoRequests.InviteRequests[1].SignatureId);
-            Assert.AreEqual(SignStatus.Completed, documentWithTwoRequests.InviteRequests[0].Status);
-            Assert.AreEqual(SignStatus.Pending, documentWithTwoRequests.InviteRequests[1].Status);
-            Assert.AreEqual(SignStatus.Pending, documentWithTwoRequests.Status);
+            Assert.AreEqual(InviteStatus.Fulfilled, documentWithTwoRequests.InviteRequests[0].Status);
+            Assert.AreEqual(InviteStatus.Pending, documentWithTwoRequests.InviteRequests[1].Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentWithTwoRequests.Status);
 
             // sign second freeform invite and complete the document signing
-            signatures.Add(JsonFixtures.SignatureTemplate.AsJsonObject());
-            inviteRequests[1]["signature_id"] = "signatureId10000000000000000000000SIGNED";
-            signatures[1]["id"] = inviteRequests[1]["signature_id"];
-            signatures[1]["signature_request_id"] = inviteRequests[1]["unique_id"];
+            var documentWithTwoRequestsSigned = baseDocument
+                .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(2))
+                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(2))
+                .FinishWith((f, obj) => {
+                    var sig = obj.Signatures.GetEnumerator();
 
-            var documentWithTwoRequestsSigned = JsonConvert.DeserializeObject<SignNowDocument>(mockDocument.ToString());
+                    foreach (var inv in obj.InviteRequests)
+                    {
+                        sig.MoveNext();
+                        inv.SignatureId = sig.Current.Id;
+                        inv.UserId = sig.Current.UserId;
+                        inv.SignerEmail = sig.Current.Email;
+                        inv.Owner = obj.Owner;
+                        inv.IsCanceled = false;
+                    }
+                })
+                .Generate();
 
             // check if document fullfilled
             Assert.AreEqual(2, documentWithTwoRequestsSigned.Signatures.Count);
-            Assert.IsTrue(documentWithTwoRequestsSigned.InviteRequests.TrueForAll(req => req.Status == SignStatus.Completed));
-            Assert.AreEqual(SignStatus.Completed, documentWithTwoRequestsSigned.Status);
+            Assert.IsTrue(documentWithTwoRequestsSigned.InviteRequests.TrueForAll(req => req.Status == InviteStatus.Fulfilled), "Invite requests should have a signature");
+            Assert.AreEqual(DocumentStatus.Completed, documentWithTwoRequestsSigned.Status);
         }
     }
 }

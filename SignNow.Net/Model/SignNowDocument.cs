@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
 
@@ -102,6 +103,12 @@ namespace SignNow.Net.Model
         internal List<Signature> Signatures { get; private set; } = new List<Signature>();
 
         /// <summary>
+        /// The document <see cref="Field"/>
+        /// </summary>
+        [JsonProperty("fields")]
+        internal List<Field> Fields { get; private set; } = new List<Field>();
+
+        /// <summary>
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]
@@ -113,56 +120,65 @@ namespace SignNow.Net.Model
         [JsonProperty("field_invites")]
         public IReadOnlyCollection<FieldInvite> FieldInvites { get; private set; } = new List<FieldInvite>();
 
+        /// <summary>
+        /// Provides common details of any kind of invites (freeform or role-based)
+        /// </summary>
+        [JsonIgnore]
+        public IReadOnlyCollection<ISignNowInviteStatus> InvitesStatus
+        {
+            get
+            {
+                if (InviteRequests.Count > 0) return InviteRequests;
+                if (FieldInvites.Count > 0) return FieldInvites;
+
+                return _emptyInvites;
+            }
+        }
 
         /// <summary>
         /// The document sign status.
         /// </summary>
         [JsonIgnore]
-        public SignStatus Status
+        public DocumentStatus Status
         {
             get
             {
-                if (IsFreeformInviteSigned() || IsFieldInviteSigned() ) return SignStatus.Completed;
+                if (_status == null)
+                {
+                    _status = CheckDocumentStatus();
+                }
 
-                if (HasFreeformInviteRequests()) return SignStatus.Pending;
-
-                return SignStatus.None;
+                return (DocumentStatus)_status;
             }
         }
 
-        private bool HasFreeformInviteRequests()
-        {
-            return InviteRequests.Count > 0
-                && Signatures.Count < InviteRequests.Count;
-        }
-
         /// <summary>
-        /// Check if <see cref="FreeformInvite"/> was signed.
+        /// Detect the document status corresponding to summary states of invites statuses
         /// </summary>
-        /// <returns>True if document was signed via freeform sign request.</returns>
-        private bool IsFreeformInviteSigned()
+        /// <returns>One of the <see cref="DocumentStatus"/></returns>
+        private DocumentStatus CheckDocumentStatus()
         {
-            if (Signatures.Count == 0 || InviteRequests.Count != Signatures.Count)
+            if (InvitesStatus.Any(i => i.Status == InviteStatus.Pending))
             {
-                return false;
+                return DocumentStatus.Pending;
             }
 
-            var signed = (from invite in InviteRequests
-                join signature in Signatures on invite.Id equals signature.SignatureRequestId
-                select invite).Count();
+            if (InvitesStatus.Count > 0 && InvitesStatus.All(i => i.Status == InviteStatus.Fulfilled))
+            {
+                return DocumentStatus.Completed;
+            }
 
-            return signed == InviteRequests.Count
-                   && signed == Signatures.Count;
+            return DocumentStatus.NoInvite;
         }
 
         /// <summary>
-        /// Check if <see cref="FieldInvite" /> was signed.
+        /// Cache document status
         /// </summary>
-        /// <returns>True if document was signed via field (role-based) sign request.</returns>/
-        private bool IsFieldInviteSigned()
-        {
-            // @TODO: Implement sign check for role-based invite
-            return false;
-        }
+        private DocumentStatus? _status { get; set; } = null;
+
+        /// <summary>
+        /// Default empty Invites collection for case when document haven't any invites
+        /// </summary>
+        private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
     }
 }

@@ -17,6 +17,17 @@ namespace SignNow.Net.Internal.Helpers.Converters
             return UnixEpoch.AddSeconds(unixTime);
         }
 
+        private static long ToUnixTimestamp(DateTime current)
+        {
+            return (long)(current - UnixEpoch).TotalSeconds;
+        }
+
+        /// <inheritdoc cref="JsonConverter.WriteJson" />
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            writer.WriteValue(ToUnixTimestamp((DateTime)value).ToString(CultureInfo.InvariantCulture));
+        }
+
         /// <inheritdoc cref="JsonConverter.ReadJson" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {

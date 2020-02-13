@@ -30,7 +30,7 @@ namespace UnitTests
             Assert.AreEqual("5abc19d0e5b0e77b78fef3202000220f01fea3cf", response.SignatureId);
             Assert.AreEqual("2020-01-15 12:09:38Z", response.Created.ToString("u", CultureInfo.CurrentCulture));
             Assert.AreEqual("owner@signnow.com", response.Owner);
-            Assert.AreEqual("signer@signnow.com", response.Signer);
+            Assert.AreEqual("signer@signnow.com", response.SignerEmail);
             Assert.IsNull(response.IsCanceled);
         }
     }

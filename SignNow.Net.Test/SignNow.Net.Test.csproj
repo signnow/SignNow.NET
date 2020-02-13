@@ -5,7 +5,7 @@
     <TargetFrameworks>netcoreapp2.0;netcoreapp2.2;net45</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
-    <ReleaseVersion>0.2.0-beta</ReleaseVersion>
+    <ReleaseVersion>0.3.0-beta</ReleaseVersion>
   </PropertyGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
         <Reference Include="System.Net.Http" />
@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    <PackageReference Include="Bogus" Version="28.4.4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
@@ -42,8 +43,7 @@
     <Folder Include="UnitTests\Helpers\" />
     <Folder Include="UnitTests\Infrastructure\" />
     <Folder Include="UnitTests\Models\" />
-    <Folder Include="TestData\Fixtures\" />
-    <Folder Include="TestData\Fixtures\Document\" />
+    <Folder Include="TestData\FakeModels\" />
   </ItemGroup>
 
 </Project>
