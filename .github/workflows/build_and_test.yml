@@ -39,17 +39,14 @@ jobs:
           - name: ubuntu-18.04
             os: ubuntu-18.04
             osname: Linux
-            codacy_prefix: 'linux-x64'
 
           - name: macOS-latest
             os: macOS-latest
             osname: macOS
-            codacy_prefix: 'osx-x64'
 
           - name: windows-latest
             os: windows-latest
             osname: Windows
-            codacy_prefix: 'win-x64.exe'
 
         exclude:
           - name: ubuntu-18.04
@@ -127,38 +124,30 @@ jobs:
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
+            --no-build `
             /p:EnableCoverage=true
 
       - name: Setup Codacy report sender Cache
         uses: actions/cache@v1
         with:
-          path: ${{ github.workspace }}/Codacy
+          path: ${{ github.workspace }}/.codacy-coverage
           key: ${{ runner.os }}-codacy-${{ hashFiles('**/.github/workflows/build_and_test.yml') }}
           restore-keys: ${{ runner.os }}-codacy-
 
-      - name: Submit code coverage to Codacy
+      - name: Upload Code Coverage Report (Codacy)
         env:
-          CODACY_VERSION: 1.0.7
-        shell: pwsh
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: |
-          if (!(Test-Path "./Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}")) {
-            $DownloadUrl = "https://github.com/codacy/csharp-codacy-coverage/releases/download/$env:CODACY_VERSION/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}"
-            if (!(Test-Path "./Codacy")) { New-Item -ItemType Directory -Path "./Codacy" }
-            Invoke-WebRequest -Uri $DownloadUrl -OutFile ${{ github.workspace }}/Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
-            chmod +x ./Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }}
-          }
+          bash <(curl -sSL https://coverage.codacy.com/get.sh) report \
+            --commit-uuid ${{ github.sha }} \
+            --force-language csharp \
+            -r ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
 
-          ./Codacy/Codacy.CSharpCoverage_${{ matrix.codacy_prefix }} `
-            --commit ${{ github.sha }} `
-            --token ${{ secrets.CODACY_PROJECT_TOKEN }} `
-            --report $env:COVERAGE_PATH/${{ matrix.framework }}/coverage.opencover.xml `
-            --engine opencover
-
-      - name: Upload code coverage report
+      - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
         uses: codecov/codecov-action@v1
         with:
-          name: codecov-develop-${{ matrix.os }}
+          name: ${{ runner.os }}-codecov-${{ matrix.framework }}
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
           yml: ./codecov.yml
