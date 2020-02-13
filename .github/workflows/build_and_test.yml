@@ -126,22 +126,22 @@ jobs:
             --configuration Debug --framework ${{ matrix.framework }} `
             /p:EnableCoverage=true
 
-      - name: Setup Codacy report sender Cache
-        uses: actions/cache@v1
-        with:
-          path: ${{ github.workspace }}/.codacy-coverage
-          key: ${{ runner.os }}-codacy-${{ hashFiles('**/.github/workflows/build_and_test.yml') }}
-          restore-keys: ${{ runner.os }}-codacy-
+      # - name: Setup Codacy report sender Cache
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ${{ github.workspace }}/.codacy-coverage
+      #     key: ${{ runner.os }}-codacy-${{ hashFiles('**/.github/workflows/build_and_test.yml') }}
+      #     restore-keys: ${{ runner.os }}-codacy-
 
-      - name: Upload Code Coverage Report (Codacy)
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          bash <(curl -sSL https://coverage.codacy.com/get.sh) report \
-            --codacy-api-base-url https://api.codacy.com \
-            --commit-uuid ${{ github.sha }} \
-            --force-language csharp \
-            -r ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
+      # - name: Upload Code Coverage Report (Codacy)
+      #   env:
+      #     CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      #   run: |
+      #     bash <(curl -sSL https://coverage.codacy.com/get.sh) report \
+      #       --codacy-api-base-url https://api.codacy.com \
+      #       --commit-uuid ${{ github.sha }} \
+      #       --force-language csharp \
+      #       -r ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
 
       - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
