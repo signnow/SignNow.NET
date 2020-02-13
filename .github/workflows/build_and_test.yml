@@ -124,7 +124,6 @@ jobs:
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
-            --no-build `
             /p:EnableCoverage=true
 
       - name: Setup Codacy report sender Cache
