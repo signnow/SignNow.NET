@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
+using SignNow.Net.Internal.Model.FieldTypes;
 
 namespace SignNow.Net.Model
 {
@@ -12,14 +14,14 @@ namespace SignNow.Net.Model
     /// Represents SignNow document object.
     /// <remarks>
     /// Document is the fundamental unit of every e-Signature operation. It contains:
-    ///     Metadata: file name, size, extension, ID;
-    ///     Fields, elements (texts, checks and signatures),
-    ///     Invites, status of the invites,
-    ///     <see cref="Role" />,
-    ///     Timestamps (date created, date updated)
+    ///     <para>Metadata: file name, size, extension, ID;</para>
+    ///     <para>Fields, elements (texts, checks, signatures, etc...);</para>
+    ///     <para>Invites, statuses of the invites;</para>
+    ///     <para>Document <see cref="Role"/>;</para>
+    ///     <para>Timestamps (date created, date updated);</para>
     /// </remarks>
     /// </summary>
-    public class SignNowDocument
+    public partial class SignNowDocument
     {
         /// <summary>
         /// Identity of specific document.
@@ -106,7 +108,13 @@ namespace SignNow.Net.Model
         /// The document <see cref="Field"/>
         /// </summary>
         [JsonProperty("fields")]
-        internal List<Field> Fields { get; private set; } = new List<Field>();
+        public IReadOnlyCollection<Field> Fields { get; private set; } = new List<Field>();
+
+        /// <summary>
+        /// The document text fields.
+        /// </summary>
+        [JsonProperty("texts")]
+        internal List<TextField> Texts { get; private set; } = new List<TextField>();
 
         /// <summary>
         /// The document freeform invite requests.
@@ -180,5 +188,31 @@ namespace SignNow.Net.Model
         /// Default empty Invites collection for case when document haven't any invites
         /// </summary>
         private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
+    }
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// This part contains related to Fields and Fields value retieval methods only.
+    /// </remarks>
+    public partial class SignNowDocument
+    {
+        /// <summary>
+        /// Find Field value by <see cref="Field"/> metadata.
+        /// </summary>
+        /// <param name="fieldMeta">Field metadata.</param>
+        /// <returns><see cref="object"/> with that represents state for <see cref="Field.Type"/></returns>
+        public object GetFieldValue(Field fieldMeta)
+        {
+            Guard.PropertyNotNull(fieldMeta?.ElementId, "");
+
+            switch (fieldMeta.Type)
+            {
+                case FieldType.Text:
+                    return Texts.Find(txt => txt.Id == fieldMeta.ElementId);
+
+                default:
+                    return default;
+            }
+        }
     }
 }
