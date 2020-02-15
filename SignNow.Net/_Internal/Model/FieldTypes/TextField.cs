@@ -20,7 +20,7 @@ namespace SignNow.Net.Internal.Model.FieldTypes
         public string Data { get; set; }
 
         /// <summary>
-        /// Returns field value of <see cref="Data"/>
+        /// Returns text value of <see cref="Data"/> field.
         /// </summary>
         public override string ToString() => Data;
     }

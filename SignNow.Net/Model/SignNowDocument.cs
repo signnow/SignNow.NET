@@ -203,12 +203,15 @@ namespace SignNow.Net.Model
         /// <returns><see cref="object"/> with that represents state for <see cref="Field.Type"/></returns>
         public object GetFieldValue(Field fieldMeta)
         {
-            Guard.PropertyNotNull(fieldMeta?.ElementId, "");
+            Guard.PropertyNotNull(fieldMeta?.ElementId, "Cannot get field value without ElementId");
 
             switch (fieldMeta.Type)
             {
                 case FieldType.Text:
                     return Texts.Find(txt => txt.Id == fieldMeta.ElementId);
+
+                case FieldType.Signature:
+                    return Signatures.Find(sig => sig.Id == fieldMeta.ElementId);
 
                 default:
                     return default;

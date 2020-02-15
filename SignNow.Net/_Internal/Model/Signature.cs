@@ -1,11 +1,12 @@
 using System;
+using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Internal.Model
 {
     /// <summary>
-    /// Represents SignNow signature object.
+    /// Represents SignNow field types: `Signature`, `Initials fields`.
     /// </summary>
     internal class Signature
     {
@@ -39,5 +40,20 @@ namespace SignNow.Net.Internal.Model
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Raw text value of the field.
+        /// </summary>
+        [JsonProperty("data")]
+        [JsonConverter(typeof(Base64StringJsonConverter))]
+        public byte[] Data { get; set; }
+
+        /// <summary>
+        /// Returns Signature content as base64 string.
+        /// </summary>
+        public override string ToString()
+        {
+            return Convert.ToBase64String(Data ?? default);
+        }
     }
 }
