@@ -81,6 +81,11 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Document's attachment which can be downloaded by URL.
         /// </summary>
-        Attachment
+        Attachment,
+
+        /// <summary>
+        /// Hyperlink field with Url and label.
+        /// </summary>
+        Hyperlink
     }
 }

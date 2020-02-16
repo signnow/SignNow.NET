@@ -1,9 +1,9 @@
 using System;
 namespace SignNow.Net.Test.UnitTests.Helpers.Converters
 {
-    public class Base64ToStringJsonConverter
+    public class StringToUrlJsonConverterTest
     {
-        public Base64ToStringJsonConverter()
+        public StringToUrlJsonConverterTest()
         {
         }
     }

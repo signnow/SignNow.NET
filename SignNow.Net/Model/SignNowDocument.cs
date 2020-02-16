@@ -196,6 +196,9 @@ namespace SignNow.Net.Model
     /// </remarks>
     public partial class SignNowDocument
     {
+        [JsonProperty("hyperlinks")]
+        internal IReadOnlyCollection<HyperlinkField> Hyperlinks { get; private set; } = new List<HyperlinkField>();
+
         /// <summary>
         /// Find Field value by <see cref="Field"/> metadata.
         /// </summary>
@@ -212,6 +215,9 @@ namespace SignNow.Net.Model
 
                 case FieldType.Signature:
                     return Signatures.Find(sig => sig.Id == fieldMeta.ElementId);
+
+                case FieldType.Hyperlink:
+                    return Hyperlinks.First(lnk => lnk.Id == fieldMeta.ElementId);
 
                 default:
                     return default;
