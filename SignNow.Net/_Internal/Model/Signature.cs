@@ -45,7 +45,7 @@ namespace SignNow.Net.Internal.Model
         /// Raw text value of the field.
         /// </summary>
         [JsonProperty("data")]
-        [JsonConverter(typeof(Base64StringJsonConverter))]
+        [JsonConverter(typeof(StringBase64ToByteArrayJsonConverter))]
         public byte[] Data { get; set; }
 
         /// <summary>
