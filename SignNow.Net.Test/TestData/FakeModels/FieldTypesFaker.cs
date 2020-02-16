@@ -31,4 +31,35 @@ namespace SignNow.Net.Test.FakeModels
             RuleFor(obj => obj.Data, f => f.Lorem.Word());
         }
     }
+
+    /// <summary>
+    /// Faker for <see cref="HyperlinkField"/>
+    /// </summary>
+    internal class HyperlinkFieldFaker : Faker<HyperlinkField>
+    {
+        /// <summary>
+        /// Creates new instance of <see cref="HyperlinkField"/> fake object.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "id": "2ad6dd38b401bb4fad31858174e75642679a5bbd",
+        ///   "user_id": "9640e7a2c6d2fca9282a6e24e3b5319a07718b34",
+        ///   "email": "Bernadine46@yahoo.com",
+        ///   "data": "http:\/\/signnow.com",
+        ///   "label": "Signnow",
+        ///   "created": "1581630901"
+        /// }
+        /// </code>
+        /// </example>
+        public HyperlinkFieldFaker()
+        {
+            RuleFor(obj => obj.Id, f => f.Random.Hash(40));
+            RuleFor(obj => obj.UserId, f => f.Random.Hash(40));
+            RuleFor(obj => obj.Email, f => f.Internet.Email());
+            RuleFor(obj => obj.Data, f => new Uri(f.Internet.Url()));
+            RuleFor(obj => obj.Label, f => f.Internet.DomainWord());
+        }
+    }
 }
