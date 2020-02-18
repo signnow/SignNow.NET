@@ -32,30 +32,37 @@ namespace UnitTests
         [DataRow(FieldType.Text, DisplayName = "Get values for TextFields")]
         [DataRow(FieldType.Signature, DisplayName = "Get values for Signature Fields")]
         [DataRow(FieldType.Hyperlink, DisplayName = "Get values for Hyperlink Fields")]
+        [DataRow(FieldType.Checkbox, DisplayName = "Get values for Checkbox Fields")]
         public void ShouldGetFieldValuesForDocument(object testType)
         {
             var testObjQty = 3;
 
             var docWithFields = new SignNowDocumentFaker()
                 .RuleFor(obj => obj.Roles, new RoleFaker().Generate(testObjQty))
-                .RuleFor(
-                    obj => obj.Fields,
-                    new FieldFaker().RuleFor(obj => obj.ElementId, f => f.Random.Hash(40)).Generate(testObjQty))
+                .RuleFor(obj => obj.Fields,
+                    new FieldFaker()
+                        .RuleFor(obj => obj.Type, testType)
+                        .RuleFor(obj => obj.ElementId, f => f.Random.Hash(40))
+                        .Generate(testObjQty))
                 .RuleFor(obj => obj.Texts, new TextFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Hyperlinks, new HyperlinkFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Signatures, new SignatureFaker().Generate(testObjQty))
+                .RuleFor(obj => obj.Checkboxes, new CheckboxFieldFaker().Generate(testObjQty))
                 .FinishWith((f, obj) => {
                     var role = obj.Roles.GetEnumerator();
                     var field = obj.Fields.GetEnumerator();
                     var text = obj.Texts.GetEnumerator();
                     var link = obj.Hyperlinks.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
+                    var checkbox = obj.Checkboxes.GetEnumerator();
 
-                    while (role.MoveNext() && field.MoveNext() && text.MoveNext() && sign.MoveNext() && link.MoveNext())
+                    while (role.MoveNext() && field.MoveNext() && text.MoveNext()
+                        && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext())
                     {
                         field.Current.RoleId = role.Current.Id;
                         field.Current.Owner = obj.Owner;
-                        field.Current.Type = (FieldType)testType;
+                        field.Current.JsonAttributes.Name = ((FieldType)testType).ToString() + "Name";
+                        field.Current.JsonAttributes.Label = ((FieldType)testType).ToString() + "LabelName";
 
                         text.Current.Id = field.Current.ElementId;
                         text.Current.Email = field.Current.Signer;
@@ -70,6 +77,8 @@ namespace UnitTests
                         sign.Current.Email = field.Current.Signer;
                         sign.Current.UserId = text.Current.UserId;
                         sign.Current.Data = Encoding.UTF8.GetBytes("this is test signature field value");
+
+                        checkbox.Current.Id = field.Current.ElementId;
                     }
                 })
                 .Generate();
@@ -82,24 +91,31 @@ namespace UnitTests
                 {
                     case FieldType.Text:
                         var textValue = fieldValue as TextField;
-                        Assert.AreEqual(docWithFields.Owner, field.Owner);
+                        Assert.AreEqual(docWithFields.Owner, field.Owner, "Wrong field Owner");
                         Assert.AreEqual("this is test text field value", textValue?.Data);
                         Assert.AreEqual("this is test text field value", textValue?.ToString());
                         break;
 
                     case FieldType.Signature:
                         var signValue = fieldValue as Signature;
-                        Assert.AreEqual(field.ElementId, signValue.Id);
+                        Assert.AreEqual(field.ElementId, signValue.Id, "Wrong signature ID");
                         Assert.AreEqual("this is test signature field value", Encoding.UTF8.GetString(signValue.Data));
                         Assert.AreEqual("dGhpcyBpcyB0ZXN0IHNpZ25hdHVyZSBmaWVsZCB2YWx1ZQ==", signValue?.ToString());
                         break;
 
                     case FieldType.Hyperlink:
                         var linkValue = fieldValue as HyperlinkField;
-                        Assert.AreEqual(field.ElementId, linkValue.Id);
+                        Assert.AreEqual(field.ElementId, linkValue.Id, "Wrong hyperlink ID");
                         Assert.AreEqual($"label for {linkValue.UserId}", linkValue.Label);
                         Assert.AreEqual($"https://signnow.com/{linkValue.UserId}", linkValue?.Data.OriginalString);
                         Assert.AreEqual($"https://signnow.com/{linkValue.UserId}", linkValue?.ToString());
+                        break;
+
+                    case FieldType.Checkbox:
+                        var checkboxValue = fieldValue as CheckboxField;
+                        Assert.AreEqual(field.ElementId, checkboxValue.Id, "Wrong checkbox ID");
+                        Assert.AreEqual(field.JsonAttributes.PrefilledText == "1", checkboxValue.Data);
+                        Assert.AreEqual(field.JsonAttributes.PrefilledText, checkboxValue?.ToString());
                         break;
 
                     default:

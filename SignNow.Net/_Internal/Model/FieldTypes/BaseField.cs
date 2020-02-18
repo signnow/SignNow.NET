@@ -18,5 +18,11 @@ namespace SignNow.Net.Internal.Model.FieldTypes
         /// </summary>
         [JsonProperty("user_id")]
         public string UserId { get; set; }
+
+        /// <summary>
+        /// Email of user who fulfilled the field.
+        /// </summary>
+        [JsonProperty("email")]
+        public string Email { get; set; }
     }
 }

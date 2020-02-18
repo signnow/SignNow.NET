@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
-using SignNow.Net.Internal.Model.FieldTypes;
 
 namespace SignNow.Net.Model
 {
@@ -111,12 +109,6 @@ namespace SignNow.Net.Model
         public IReadOnlyCollection<Field> Fields { get; private set; } = new List<Field>();
 
         /// <summary>
-        /// The document text fields.
-        /// </summary>
-        [JsonProperty("texts")]
-        internal List<TextField> Texts { get; private set; } = new List<TextField>();
-
-        /// <summary>
         /// The document freeform invite requests.
         /// </summary>
         [JsonProperty("requests")]
@@ -188,40 +180,5 @@ namespace SignNow.Net.Model
         /// Default empty Invites collection for case when document haven't any invites
         /// </summary>
         private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
-    }
-
-    /// <inheritdoc />
-    /// <remarks>
-    /// This part contains related to Fields and Fields value retieval methods only.
-    /// </remarks>
-    public partial class SignNowDocument
-    {
-        [JsonProperty("hyperlinks")]
-        internal IReadOnlyCollection<HyperlinkField> Hyperlinks { get; private set; } = new List<HyperlinkField>();
-
-        /// <summary>
-        /// Find Field value by <see cref="Field"/> metadata.
-        /// </summary>
-        /// <param name="fieldMeta">Field metadata.</param>
-        /// <returns><see cref="object"/> with that represents state for <see cref="Field.Type"/></returns>
-        public object GetFieldValue(Field fieldMeta)
-        {
-            Guard.PropertyNotNull(fieldMeta?.ElementId, "Cannot get field value without ElementId");
-
-            switch (fieldMeta.Type)
-            {
-                case FieldType.Text:
-                    return Texts.Find(txt => txt.Id == fieldMeta.ElementId);
-
-                case FieldType.Signature:
-                    return Signatures.Find(sig => sig.Id == fieldMeta.ElementId);
-
-                case FieldType.Hyperlink:
-                    return Hyperlinks.First(lnk => lnk.Id == fieldMeta.ElementId);
-
-                default:
-                    return default;
-            }
-        }
     }
 }

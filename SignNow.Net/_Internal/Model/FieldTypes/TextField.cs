@@ -8,12 +8,6 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     internal class TextField : BaseField
     {
         /// <summary>
-        /// Email of user who fulfilled the field.
-        /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        /// <summary>
         /// Raw text value of the field.
         /// </summary>
         [JsonProperty("data")]

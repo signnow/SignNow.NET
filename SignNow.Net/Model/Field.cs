@@ -35,6 +35,12 @@ namespace SignNow.Net.Model
         public string RoleName { get; set; }
 
         /// <summary>
+        /// Field attributes: name, label, x/y coordinates, width, heigth...
+        /// </summary>
+        [JsonProperty("json_attributes")]
+        public FieldJsonAttributes JsonAttributes { get; set; }
+
+        /// <summary>
         /// Document owner email.
         /// </summary>
         [JsonProperty("originator")]
