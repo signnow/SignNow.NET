@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.3.0-beta</Version>
+        <Version>0.4.0-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
         <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
@@ -13,22 +13,21 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
-        <PackageReleaseNotes>Features implemented:
-- IUserService.GetCurrentUserAsync method which allows developers to retrieve the User resource.
-- IUserService.CreateInviteAsync method for creating freeform or role-based invites.
-- IUserService.CancelInviteAsync method for canceling a freeform invite using the invite ID or canceling a role-based invite using the document ID.
-- Model.FreeFormInvite which allows developers to create freeform invites to sign the document.
-- Model.RoleBasedInvite which allows developers to create role-based invites to sign the document (with options on how to verify the signer's identity: by password protection, a phone call, or sms)
-
-Changed:
-- IDocumentService returns SignNowDocument model instead of DocumentResponse
-- IDocumentService.GetDocumentAsync method can now be used to retrieve document roles, invite requests, timestamps, pages count, etc..</PackageReleaseNotes>
+        <PackageReleaseNotes>Added:
+- Сode samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
+- Signature status property for the document - `Models.SignNowDocument.Status`; can be `NoInvite`, `Pending`, `Complete`
+- Signature status for the specified signer of a Freeform invite - `Models.FreeformInvite.Status`
+- Signature status for the specified signer of a field invite - `Models.FieldInvite.Status`
+- `ISignNowInviteStatus` interface for role-based or freeform invites status retrieval
+- `Model.DocumentStatus` with all statuses for the document
+- `Model.InviteStatus` with all statuses for the Freeform and Field (role-based) invites
+</PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <ReleaseVersion>0.3.0-beta</ReleaseVersion>
-        <PackageVersion>0.3.0-beta</PackageVersion>
+        <ReleaseVersion>0.4.0-beta</ReleaseVersion>
+        <PackageVersion>0.4.0-beta</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>
