@@ -7,12 +7,6 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     /// </summary>
     internal class CheckboxField : BaseField
     {
-        // <summary>
-        /// The page number of the document.
-        /// </summary>
-        [JsonProperty("page_number")]
-        public int PageNumber { get; set; }
-
         /// <summary>
         /// Checkbox value (checked or unchecked).
         /// </summary>

@@ -24,5 +24,11 @@ namespace SignNow.Net.Internal.Model.FieldTypes
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        /// <summary>
+        /// The page number of the document.
+        /// </summary>
+        [JsonProperty("page_number")]
+        public int PageNumber { get; set; }
     }
 }

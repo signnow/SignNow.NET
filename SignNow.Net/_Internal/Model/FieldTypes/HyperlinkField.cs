@@ -10,17 +10,17 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     internal class HyperlinkField : BaseField
     {
         /// <summary>
+        /// Hyperlink label.
+        /// </summary>
+        [JsonProperty("label")]
+        public string Label {get; set; }
+
+        /// <summary>
         /// Hyperlink field value <see cref="Uri"/>
         /// </summary>
         [JsonProperty("data")]
         [JsonConverter(typeof(StringToUriJsonConverter))]
         public Uri Data { get; set; }
-
-        /// <summary>
-        /// Hyperlink label.
-        /// </summary>
-        [JsonProperty("label")]
-        public string Label {get; set; }
 
         /// <summary>
         /// Returns Hyperlink content as <see cref="Uri"/> string.
