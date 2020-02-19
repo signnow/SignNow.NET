@@ -58,8 +58,13 @@ namespace SignNow.Net.Model
                     return Hyperlinks.FirstOrDefault(lnk => lnk.Id == fieldMeta.ElementId);
 
                 case FieldType.Checkbox:
-                    return Checkboxes.FirstOrDefault(cbox => cbox.Id == fieldMeta.ElementId)
-                        .Data = fieldMeta.JsonAttributes.PrefilledText == "1";
+                    var checkbox = Checkboxes.FirstOrDefault(cbox => cbox.Id == fieldMeta.ElementId);
+                    if (!string.IsNullOrEmpty(checkbox?.Id))
+                    {
+                        checkbox.Data = fieldMeta.JsonAttributes.PrefilledText == "1";
+                    }
+
+                    return checkbox;
 
                 case FieldType.Attachment:
                     return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.ElementId);
