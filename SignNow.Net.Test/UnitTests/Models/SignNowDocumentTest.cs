@@ -31,6 +31,7 @@ namespace UnitTests
         [DataTestMethod]
         [DataRow(FieldType.Text, DisplayName = "Get values for TextFields")]
         [DataRow(FieldType.Signature, DisplayName = "Get values for Signature Fields")]
+        [DataRow(FieldType.Initial, DisplayName = "Get values for Initial Fields")]
         [DataRow(FieldType.Hyperlink, DisplayName = "Get values for Hyperlink Fields")]
         [DataRow(FieldType.Checkbox, DisplayName = "Get values for Checkbox Fields")]
         [DataRow(FieldType.Attachment, DisplayName = "Get values for Attachment Fields")]
@@ -104,6 +105,7 @@ namespace UnitTests
                         break;
 
                     case FieldType.Signature:
+                    case FieldType.Initial:
                         var signValue = fieldValue as Signature;
                         Assert.AreEqual(field.ElementId, signValue.Id, "Wrong signature ID");
                         Assert.AreEqual("this is test signature field value", Encoding.UTF8.GetString(signValue.Data));

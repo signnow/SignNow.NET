@@ -70,9 +70,14 @@ namespace SignNow.Net.Model
         Text,
 
         /// <summary>
-        /// Signature, Initials fields.
+        /// Signature fields.
         /// </summary>
         Signature,
+
+        /// <summary>
+        /// Initials fields.
+        /// </summary>
+        Initial,
 
         /// <summary>
         /// Check box.
