@@ -20,12 +20,6 @@ namespace SignNow.Net.Internal.Model.FieldTypes
         public string UserId { get; set; }
 
         /// <summary>
-        /// Email of user who fulfilled the field.
-        /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        /// <summary>
         /// The page number of the document.
         /// </summary>
         [JsonProperty("page_number")]

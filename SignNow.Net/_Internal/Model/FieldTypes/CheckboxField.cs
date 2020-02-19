@@ -8,6 +8,12 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     internal class CheckboxField : BaseField
     {
         /// <summary>
+        /// Email of user who fulfilled the field.
+        /// </summary>
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        /// <summary>
         /// Checkbox value (checked or unchecked).
         /// </summary>
         [JsonIgnore]

@@ -10,6 +10,12 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     internal class HyperlinkField : BaseField
     {
         /// <summary>
+        /// Email of user who fulfilled the field.
+        /// </summary>
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        /// <summary>
         /// Hyperlink label.
         /// </summary>
         [JsonProperty("label")]
