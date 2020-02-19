@@ -33,6 +33,7 @@ namespace UnitTests
         [DataRow(FieldType.Signature, DisplayName = "Get values for Signature Fields")]
         [DataRow(FieldType.Hyperlink, DisplayName = "Get values for Hyperlink Fields")]
         [DataRow(FieldType.Checkbox, DisplayName = "Get values for Checkbox Fields")]
+        [DataRow(FieldType.Attachment, DisplayName = "Get values for Attachment Fields")]
         public void ShouldGetFieldValuesForDocument(object testType)
         {
             var testObjQty = 3;
@@ -48,6 +49,7 @@ namespace UnitTests
                 .RuleFor(obj => obj.Hyperlinks, new HyperlinkFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Signatures, new SignatureFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Checkboxes, new CheckboxFieldFaker().Generate(testObjQty))
+                .RuleFor(obj => obj.Attachments, new AttachmentFieldFaker().Generate(testObjQty))
                 .FinishWith((f, obj) => {
                     var role = obj.Roles.GetEnumerator();
                     var field = obj.Fields.GetEnumerator();
@@ -55,9 +57,11 @@ namespace UnitTests
                     var link = obj.Hyperlinks.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
                     var checkbox = obj.Checkboxes.GetEnumerator();
+                    var attach = obj.Attachments.GetEnumerator();
 
                     while (role.MoveNext() && field.MoveNext() && text.MoveNext()
-                        && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext())
+                        && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext()
+                        && attach.MoveNext())
                     {
                         field.Current.RoleId = role.Current.Id;
                         field.Current.Owner = obj.Owner;
@@ -79,6 +83,9 @@ namespace UnitTests
                         sign.Current.Data = Encoding.UTF8.GetBytes("this is test signature field value");
 
                         checkbox.Current.Id = field.Current.ElementId;
+
+                        attach.Current.Id = field.Current.ElementId;
+                        attach.Current.OriginalName = "TestFileName.pdf";
                     }
                 })
                 .Generate();
@@ -116,6 +123,12 @@ namespace UnitTests
                         Assert.AreEqual(field.ElementId, checkboxValue.Id, "Wrong checkbox ID");
                         Assert.AreEqual(field.JsonAttributes.PrefilledText == "1", checkboxValue.Data);
                         Assert.AreEqual(field.JsonAttributes.PrefilledText, checkboxValue?.ToString());
+                        break;
+
+                    case FieldType.Attachment:
+                        var attachmentValue = fieldValue as AttachmentField;
+                        Assert.AreEqual(field.ElementId, attachmentValue?.Id, "Wrong attachment ID");
+                        Assert.AreEqual("TestFileName.pdf", attachmentValue.OriginalName);
                         break;
 
                     default:

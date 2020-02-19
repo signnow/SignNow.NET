@@ -32,6 +32,12 @@ namespace SignNow.Net.Model
         internal IReadOnlyCollection<CheckboxField> Checkboxes { get; private set; } = new List<CheckboxField>();
 
         /// <summary>
+        /// All the documents <see cref="AttachmentField"/> fields.
+        /// </summary>
+        [JsonProperty("attachments")]
+        internal IReadOnlyCollection<AttachmentField> Attachments { get; private set; } = new List<AttachmentField>();
+
+        /// <summary>
         /// Find Field value by <see cref="Field"/> metadata.
         /// </summary>
         /// <param name="fieldMeta">Field metadata.</param>
@@ -43,34 +49,23 @@ namespace SignNow.Net.Model
             switch (fieldMeta.Type)
             {
                 case FieldType.Text:
-                    return Texts.First(txt => txt.Id == fieldMeta.ElementId);
+                    return Texts.FirstOrDefault(txt => txt.Id == fieldMeta.ElementId);
 
                 case FieldType.Signature:
-                    return Signatures.Find(sig => sig.Id == fieldMeta.ElementId);
+                    return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.ElementId);
 
                 case FieldType.Hyperlink:
-                    return Hyperlinks.First(lnk => lnk.Id == fieldMeta.ElementId);
+                    return Hyperlinks.FirstOrDefault(lnk => lnk.Id == fieldMeta.ElementId);
 
                 case FieldType.Checkbox:
-                    return GetCheckboxItem(fieldMeta);
+                    return Checkboxes.FirstOrDefault(cbox => cbox.Id == fieldMeta.ElementId)
+                        .Data = fieldMeta.JsonAttributes.PrefilledText == "1";
+
+                case FieldType.Attachment:
+                    return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.ElementId);
 
                 default:
                     return default;
-            }
-        }
-
-        private object GetCheckboxItem(Field fieldMeta)
-        {
-            try
-            {
-                var checkbox = Checkboxes.First(cbox => cbox.Id == fieldMeta.ElementId);
-                checkbox.Data = fieldMeta.JsonAttributes.PrefilledText == "1";
-
-                return checkbox;
-            }
-            catch (InvalidOperationException ex)
-            {
-                return (object)(new CheckboxField());
             }
         }
     }
