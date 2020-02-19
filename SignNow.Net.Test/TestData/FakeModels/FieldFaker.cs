@@ -95,9 +95,9 @@ namespace SignNow.Net.Test.FakeModels
                 .RuleFor(fld => fld.Width, f => f.Random.Int(0, 1024))
                 .RuleFor(fld => fld.Height, f => f.Random.Int(0, 1024))
                 .RuleFor(fld => fld.Required, f => f.Random.Bool())
+                .RuleFor(fld => fld.PrefilledText, f => f.Lorem.Word())
                 .RuleFor(fld => fld.Name, f => $"{f.PickRandom<FieldType>().ToString()}Name")
-                .RuleFor(fld => fld.Label, (f, fld) => $"{fld.Name}Label")
-                .RuleFor(fld => fld.PrefilledText, f => f.Lorem.Word());
+                .RuleFor(fld => fld.Label, (f, fld) => $"{fld.Name}Label");
         }
     }
 }

@@ -19,6 +19,7 @@ namespace SignNow.Net.Test.FakeModels
         ///  "id": "a77b550226c6f41ab9677f0d7b24ac70aea9c47a",
         ///  "user_id": "068d235caa6a4a3c75fcb0a7d71c78c13abbbd93"
         ///  "email": "Judson63@yahoo.com",
+        ///  "page_number": "1",
         ///  "data": "test text value"
         /// }
         /// </code>
@@ -29,6 +30,7 @@ namespace SignNow.Net.Test.FakeModels
                 .RuleFor(obj => obj.Id, f => f.Random.Hash(40))
                 .RuleFor(obj => obj.UserId, f => f.Random.Hash(40))
                 .RuleFor(obj => obj.Email, f => f.Internet.Email())
+                .RuleFor(obj => obj.PageNumber, f => f.IndexFaker + 1)
                 .RuleFor(obj => obj.Data, f => f.Lorem.Word());
         }
     }
@@ -48,9 +50,9 @@ namespace SignNow.Net.Test.FakeModels
         ///   "id": "2ad6dd38b401bb4fad31858174e75642679a5bbd",
         ///   "user_id": "9640e7a2c6d2fca9282a6e24e3b5319a07718b34",
         ///   "email": "Bernadine46@yahoo.com",
-        ///   "data": "http:\/\/signnow.com",
+        ///   "page_number": "2",
         ///   "label": "Signnow",
-        ///   "created": "1581630901"
+        ///   "data": "http:\/\/signnow.com"
         /// }
         /// </code>
         /// </example>
@@ -60,8 +62,9 @@ namespace SignNow.Net.Test.FakeModels
                 .RuleFor(obj => obj.Id, f => f.Random.Hash(40))
                 .RuleFor(obj => obj.UserId, f => f.Random.Hash(40))
                 .RuleFor(obj => obj.Email, f => f.Internet.Email())
-                .RuleFor(obj => obj.Data, f => new Uri(f.Internet.Url()))
-                .RuleFor(obj => obj.Label, f => f.Internet.DomainWord());
+                .RuleFor(obj => obj.PageNumber, f => f.IndexFaker + 1)
+                .RuleFor(obj => obj.Label, f => f.Internet.DomainWord())
+                .RuleFor(obj => obj.Data, f => new Uri(f.Internet.Url()));
         }
     }
 
@@ -80,9 +83,7 @@ namespace SignNow.Net.Test.FakeModels
         ///   "id": "2ad6dd38b401bb4fad31858174e75642679a5bbd",
         ///   "user_id": "9640e7a2c6d2fca9282a6e24e3b5319a07718b34",
         ///   "email": "Bernadine46@yahoo.com",
-        ///   "data": "http:\/\/signnow.com",
-        ///   "label": "Signnow",
-        ///   "created": "1581630901"
+        ///   "page_number": "3"
         /// }
         /// </code>
         /// </example>

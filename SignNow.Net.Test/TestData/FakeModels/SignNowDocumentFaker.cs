@@ -28,7 +28,10 @@ namespace SignNow.Net.Test.FakeModels
         ///      "signatures": [],
         ///      "fields": [],
         ///      "requests": [],
-        ///      "field_invites": []
+        ///      "field_invites": [],
+        ///      "texts": [],
+        ///      "hyperlinks": [],
+        ///      "checks": []
         ///  }
         /// </code>
         /// </example>
