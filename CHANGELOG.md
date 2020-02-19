@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Signature status for the specified signer of a field invite - `Models.FieldInvite.Status`
 - `ISignNowInviteStatus` interface for role-based or freeform invites status retrieval
 - `Model.DocumentStatus` with all statuses for the document
-- `Model.SignStatus` with all statuses for the Freeform and Field (role-based) invites
+- `Model.InviteStatus` with all statuses for the Freeform and Field (role-based) invites
 
 ### Changed
 - Removed redundant tests.
