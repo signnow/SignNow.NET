@@ -137,4 +137,37 @@ namespace SignNow.Net.Test.FakeModels
             });
         }
     }
+
+    /// <summary>
+    /// Faker for <see cref="EnumerationField"/>
+    /// </summary>
+    internal class EnumerationFieldFaker : Faker<EnumerationField>
+    {
+        /// <summary>
+        /// Creates new instance of <see cref="EnumerationField"/> fake object.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "id": "0b66c18d352d680d9e718e9c1d95a2b6b8bcf97b",
+        ///   "enumeration_id": "078f803b534ed8a1295f82319c1ed3e06b016931",
+        ///   "data": "12345",
+        ///   "created": "1582138620",
+        ///   "updated": "1582208088"
+        /// }
+        /// </code>
+        /// </example>
+        public EnumerationFieldFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Id            = f.Random.Hash(40);
+                o.EnumerationId = f.Random.Hash(40);
+                o.Data          = f.Lorem.Word();
+                o.Created       = f.Date.Recent().ToUniversalTime();
+                o.Updated       = f.Date.Recent().ToUniversalTime();
+            });
+        }
+    }
 }

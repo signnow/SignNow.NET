@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -29,12 +30,13 @@ namespace UnitTests
         }
 
         [DataTestMethod]
-        [DataRow(FieldType.Text, DisplayName = "Get values for TextFields")]
-        [DataRow(FieldType.Signature, DisplayName = "Get values for Signature Fields")]
-        [DataRow(FieldType.Initial, DisplayName = "Get values for Initial Fields")]
-        [DataRow(FieldType.Hyperlink, DisplayName = "Get values for Hyperlink Fields")]
-        [DataRow(FieldType.Checkbox, DisplayName = "Get values for Checkbox Fields")]
-        [DataRow(FieldType.Attachment, DisplayName = "Get values for Attachment Fields")]
+        [DataRow(FieldType.Text,        DisplayName = "Get values for Text Fields")]
+        [DataRow(FieldType.Signature,   DisplayName = "Get values for Signature Fields")]
+        [DataRow(FieldType.Initial,     DisplayName = "Get values for Initial Fields")]
+        [DataRow(FieldType.Hyperlink,   DisplayName = "Get values for Hyperlink Fields")]
+        [DataRow(FieldType.Checkbox,    DisplayName = "Get values for Checkbox Fields")]
+        [DataRow(FieldType.Attachment,  DisplayName = "Get values for Attachment Fields")]
+        [DataRow(FieldType.Dropdown,    DisplayName = "Get values for Dropdown Fields")]
         public void ShouldGetFieldValuesForDocument(object testType)
         {
             var testObjQty = 3;
@@ -51,14 +53,15 @@ namespace UnitTests
                 .RuleFor(obj => obj.Signatures, new SignatureFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Checkboxes, new CheckboxFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Attachments, new AttachmentFieldFaker().Generate(testObjQty))
+                .RuleFor(obj => obj.Enumerations, new EnumerationFieldFaker().Generate(testObjQty))
                 .FinishWith((f, obj) => {
-                    var role = obj.Roles.GetEnumerator();
-                    var field = obj.Fields.GetEnumerator();
-                    var text = obj.Texts.GetEnumerator();
-                    var link = obj.Hyperlinks.GetEnumerator();
-                    var sign = obj.Signatures.GetEnumerator();
+                    var role    = obj.Roles.GetEnumerator();
+                    var field   = obj.Fields.GetEnumerator();
+                    var text    = obj.Texts.GetEnumerator();
+                    var link    = obj.Hyperlinks.GetEnumerator();
+                    var sign    = obj.Signatures.GetEnumerator();
+                    var attach  = obj.Attachments.GetEnumerator();
                     var checkbox = obj.Checkboxes.GetEnumerator();
-                    var attach = obj.Attachments.GetEnumerator();
 
                     while (role.MoveNext() && field.MoveNext() && text.MoveNext()
                         && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext()
@@ -71,7 +74,9 @@ namespace UnitTests
 
                         text.Current.Id = field.Current.ElementId;
                         text.Current.Email = field.Current.Signer;
-                        text.Current.Data = "this is test text field value";
+                        text.Current.Data = (FieldType)testType == FieldType.Dropdown
+                            ? "this is test dropdown element value"
+                            : "this is test text field value";
 
                         link.Current.Id = field.Current.ElementId;
                         link.Current.Email = field.Current.Signer;
@@ -131,6 +136,13 @@ namespace UnitTests
                         var attachmentValue = fieldValue as AttachmentField;
                         Assert.AreEqual(field.ElementId, attachmentValue?.Id, "Wrong attachment ID");
                         Assert.AreEqual("TestFileName.pdf", attachmentValue.OriginalName);
+                        break;
+
+                    case FieldType.Dropdown:
+                        var dropdownValue = fieldValue as TextField;
+                        Assert.AreEqual(field.ElementId, dropdownValue?.Id, "Wrong dropdown ID");
+                        Assert.AreEqual("this is test dropdown element value", dropdownValue?.Data);
+                        Assert.AreEqual("this is test dropdown element value", dropdownValue?.ToString());
                         break;
 
                     default:

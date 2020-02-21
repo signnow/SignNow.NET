@@ -36,6 +36,12 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("attachments")]
         internal IReadOnlyCollection<AttachmentField> Attachments { get; private set; } = new List<AttachmentField>();
+        
+        /// <summary>
+        /// All the documents <see cref="EnumerationField"/> fields.
+        /// </summary>
+        [JsonProperty("enumeration_options")]
+        internal IReadOnlyCollection<EnumerationField> Enumerations { get; private set; } = new List<EnumerationField>();
 
         /// <summary>
         /// Find Field value by <see cref="Field"/> metadata.
@@ -71,6 +77,9 @@ namespace SignNow.Net.Model
 
                 case FieldType.Attachment:
                     return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.ElementId);
+
+                case FieldType.Dropdown:
+                    return Texts.FirstOrDefault(drop => drop.Id == fieldMeta.ElementId);
 
                 default:
                     return default;
