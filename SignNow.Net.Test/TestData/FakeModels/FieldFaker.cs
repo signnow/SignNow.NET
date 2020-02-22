@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Bogus;
 using Bogus.Extensions;
 using SignNow.Net.Model;
@@ -41,24 +39,31 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public FieldFaker()
         {
-            // For Checkbox PrefilledText value can be only one of: "1" or "" 
+            // For Checkbox PrefilledText value can be only one of: "1" or ""
             var checkboxAllowedValues = new[] { "1", "" };
 
-            base
-                .RuleFor(r => r.Id, f => f.Random.Hash(40))
-                .RuleFor(r => r.Type, f => f.PickRandom<FieldType>())
-                .RuleFor(r => r.RoleId, f => f.Random.Hash(40))
-                .RuleFor(r => r.RoleName, f => $"Signer {f.IndexFaker + 1}")
-                .RuleFor(
-                    r => r.JsonAttributes,
-                    (f, r) => new FieldJsonAttributesFaker()
-                        .RuleFor(fld => fld.Name, f1 => $"{r.Type.ToString()}Name")
-                        .RuleFor(fld => fld.PrefilledText,
-                            r.Type == FieldType.Checkbox ? f.PickRandom(checkboxAllowedValues) : f.Lorem.Word()))
-                .RuleFor(r => r.Owner, f => f.Internet.Email())
-                .RuleFor(r => r.Signer, f => f.Internet.Email())
+            Rules((f, o) =>
+            {
+                o.Id = f.Random.Hash(40);
+                o.Type = f.PickRandom<FieldType>();
+                o.RoleId = f.Random.Hash(40);
+                o.RoleName = $"Signer {f.IndexFaker + 1}";
+                o.JsonAttributes = new FieldJsonAttributesFaker()
+                    .Rules((f1, obj) =>
+                    {
+                        obj.Name = $"{o.Type.ToString()}Name";
+                        obj.PrefilledText = o.Type == FieldType.Checkbox ? f1.PickRandom(checkboxAllowedValues) : f1.Lorem.Word();
+                    });
+                o.Owner = f.Internet.Email();
+                o.Signer = f.Internet.Email();
                 // A nullable Id? with 80% probability of being null.
-                .RuleFor(r => r.ElementId, f => f.Random.Hash(40).OrNull(f, .8f));
+                o.ElementId = (string)f.Random.Hash(40).OrNull(f, .8f);
+
+                if (o.Type == FieldType.RadioButton)
+                {
+                    o.RadioGroup = new RadioFieldFaker().Generate(2);
+                }
+            });
         }
     }
 
@@ -88,16 +93,18 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public FieldJsonAttributesFaker()
         {
-            base
-                .RuleFor(fld => fld.PageNumber, f => f.IndexFaker + 1)
-                .RuleFor(fld => fld.X, f => f.Random.Int(0, 1024))
-                .RuleFor(fld => fld.Y, f => f.Random.Int(0, 1024))
-                .RuleFor(fld => fld.Width, f => f.Random.Int(0, 1024))
-                .RuleFor(fld => fld.Height, f => f.Random.Int(0, 1024))
-                .RuleFor(fld => fld.Required, f => f.Random.Bool())
-                .RuleFor(fld => fld.PrefilledText, f => f.Lorem.Word())
-                .RuleFor(fld => fld.Name, f => $"{f.PickRandom<FieldType>().ToString()}Name")
-                .RuleFor(fld => fld.Label, (f, fld) => $"{fld.Name}Label");
+            Rules((f, o) =>
+            {
+                o.PageNumber    = f.IndexFaker + 1;
+                o.X             = f.Random.Int(0, 1024);
+                o.Y             = f.Random.Int(0, 1024);
+                o.Width         = f.Random.Int(0, 1024);
+                o.Height        = f.Random.Int(0, 1024);
+                o.Required      = f.Random.Bool();
+                o.PrefilledText = f.Lorem.Word();
+                o.Name          = $"{f.PickRandom<FieldType>().ToString()}Name";
+                o.Label         = $"{o.Name}Label";
+            });
         }
     }
 }

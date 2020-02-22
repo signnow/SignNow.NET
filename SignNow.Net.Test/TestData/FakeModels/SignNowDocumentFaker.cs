@@ -32,8 +32,11 @@ namespace SignNow.Net.Test.FakeModels
         ///   "texts": [],
         ///   "hyperlinks": [],
         ///   "checks": [],
-        ///   "attachments": []
-        /// }       /// </code>
+        ///   "attachments": [],
+        ///   "enumerations": [],
+        ///   "radiobuttons: []
+        /// }
+        /// </code>
         /// </example>
         public SignNowDocumentFaker()
         {

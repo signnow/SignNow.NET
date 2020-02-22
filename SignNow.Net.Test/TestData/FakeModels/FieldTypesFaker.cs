@@ -170,4 +170,99 @@ namespace SignNow.Net.Test.FakeModels
             });
         }
     }
+
+    /// <summary>
+    /// Faker for <see cref="RadiobuttonField"/>
+    /// </summary>
+    internal class RadiobuttonFieldFaker : Faker<RadiobuttonField>
+    {
+        /// <summary>
+        /// Creates new instance of <see cref="RadiobuttonField"/> fake object.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "id": "0b66c18d352d680d9e718e9c1d95a2b6b8bcf97b",
+        ///   "user_id": "a954c1e8a45ff6bb0d233d8ac160bd4e3271ca94",
+        ///   "name": "RadiobuttonName_ipsum",
+        ///   "created": "1582138620",
+        ///   "x": "234",
+        ///   "y": "15",
+        ///   "page_number": "3",
+        ///   "radio": [
+        ///      {
+        ///         "radio_id": "0b66c18d352d680d9e718e9c1d95a2b6b8bcf97b",
+        ///         "created": "1582138620",
+        ///         "page_number": "3",
+        ///         "x": "551",
+        ///         "y": "203",
+        ///         "width": "30.00",
+        ///         "height": "30.00",
+        ///         "checked": "1",
+        ///         "value": "RadioButtonValue_lorem"
+        ///      }
+        ///      ...
+        ///    ]
+        /// }
+        /// </code>
+        /// </example>
+        public RadiobuttonFieldFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Id            = f.Random.Hash(40);
+                o.UserId        = f.Random.Hash(40);
+                o.Name          = $"RadiobuttonName_{f.Lorem.Word()}";
+                o.Created       = f.Date.Recent().ToUniversalTime();
+                o.X             = f.Random.Int(0, 1024);
+                o.Y             = f.Random.Int(0, 1024);
+                o.Radio         = new RadioFieldFaker()
+                    .Rules((fkr, itm) => itm.PageNumber = o.PageNumber)
+                    .Generate(f.Random.Int(2, 10));
+            })
+            .FinishWith((f, obj) => obj.Radio.FindLast(itm => !itm.Checked).Checked = true);
+        }
+    }
+
+    /// <summary>
+    /// Faker for <see cref="RadioField"/>
+    /// </summary>
+    internal class RadioFieldFaker : Faker<RadioField>
+    {
+        /// <summary>
+        /// Creates new instance of <see cref="RadioField"/> fake object.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "radio_id": "0b66c18d352d680d9e718e9c1d95a2b6b8bcf97b",
+        ///   "created": "1582138620",
+        ///   "page_number": "2",
+        ///   "x": "551",
+        ///   "y": "203",
+        ///   "width": "30.00",
+        ///   "height": "30.00",
+        ///   "checked": "1",
+        ///   "value": "RadioButtonValue_lorem"
+        /// }
+        /// </code>
+        /// </example>
+        public RadioFieldFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Id            = f.Random.Hash(40);
+                o.Created       = f.Date.Recent().ToUniversalTime();
+                o.PageNumber    = f.Random.Int(0, 50);
+                o.X             = f.Random.Int(0, 1024);
+                o.Y             = f.Random.Int(0, 1024);
+                o.Width         = Math.Round(f.Random.Decimal(0, 100), 2);
+                o.Height        = Math.Round(f.Random.Decimal(0, 100), 2);
+                o.Checked       = false;
+                o.Data          = $"RadiobuttonValue_{f.Lorem.Word()}";
+            });
+        }
+    }
 }

@@ -37,16 +37,24 @@ namespace UnitTests
         [DataRow(FieldType.Checkbox,    DisplayName = "Get values for Checkbox Fields")]
         [DataRow(FieldType.Attachment,  DisplayName = "Get values for Attachment Fields")]
         [DataRow(FieldType.Dropdown,    DisplayName = "Get values for Dropdown Fields")]
+        [DataRow(FieldType.RadioButton, DisplayName = "Get values for Radiobutton Fields")]
         public void ShouldGetFieldValuesForDocument(object testType)
         {
             var testObjQty = 3;
 
             var docWithFields = new SignNowDocumentFaker()
                 .RuleFor(obj => obj.Roles, new RoleFaker().Generate(testObjQty))
-                .RuleFor(obj => obj.Fields,
-                    new FieldFaker()
-                        .RuleFor(obj => obj.Type, testType)
-                        .RuleFor(obj => obj.ElementId, f => f.Random.Hash(40))
+                .RuleFor(obj => obj.Fields, new FieldFaker().Rules((f1, obj1) =>
+                        {
+                            obj1.Type = (FieldType)testType;
+                            obj1.ElementId = f1.Random.Hash(40);
+                            if ((FieldType)testType == FieldType.RadioButton)
+                            {
+                                obj1.RadioGroup = new RadioFieldFaker()
+                                    .Rules((f2, o2) => o2.PageNumber = obj1.JsonAttributes.PageNumber)
+                                    .Generate(testObjQty);
+                            }
+                        })
                         .Generate(testObjQty))
                 .RuleFor(obj => obj.Texts, new TextFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Hyperlinks, new HyperlinkFieldFaker().Generate(testObjQty))
@@ -54,6 +62,11 @@ namespace UnitTests
                 .RuleFor(obj => obj.Checkboxes, new CheckboxFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Attachments, new AttachmentFieldFaker().Generate(testObjQty))
                 .RuleFor(obj => obj.Enumerations, new EnumerationFieldFaker().Generate(testObjQty))
+                .RuleFor(obj => obj.Radiobuttons, new RadiobuttonFieldFaker().Rules((f3, obj3) =>
+                        {
+                            obj3.Radio = new RadioFieldFaker().Generate(testObjQty);
+                        })
+                        .Generate(testObjQty))
                 .FinishWith((f, obj) => {
                     var role    = obj.Roles.GetEnumerator();
                     var field   = obj.Fields.GetEnumerator();
@@ -62,10 +75,11 @@ namespace UnitTests
                     var sign    = obj.Signatures.GetEnumerator();
                     var attach  = obj.Attachments.GetEnumerator();
                     var checkbox = obj.Checkboxes.GetEnumerator();
+                    var radio   = obj.Radiobuttons.GetEnumerator();
 
                     while (role.MoveNext() && field.MoveNext() && text.MoveNext()
                         && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext()
-                        && attach.MoveNext())
+                        && attach.MoveNext() && radio.MoveNext())
                     {
                         field.Current.RoleId = role.Current.Id;
                         field.Current.Owner = obj.Owner;
@@ -89,9 +103,16 @@ namespace UnitTests
                         sign.Current.Data = Encoding.UTF8.GetBytes("this is test signature field value");
 
                         checkbox.Current.Id = field.Current.ElementId;
+                        if (field.Current.Type == FieldType.Checkbox)
+                        {
+                            field.Current.JsonAttributes.PrefilledText = f.PickRandom(new[] { "1", "" });
+                        }
 
                         attach.Current.Id = field.Current.ElementId;
                         attach.Current.OriginalName = "TestFileName.pdf";
+
+                        radio.Current.Id = field.Current.ElementId;
+                        radio.Current.Radio.First(itm => itm.Checked == true).Data = "this is test radiobutton field value";
                     }
                 })
                 .Generate();
@@ -143,6 +164,13 @@ namespace UnitTests
                         Assert.AreEqual(field.ElementId, dropdownValue?.Id, "Wrong dropdown ID");
                         Assert.AreEqual("this is test dropdown element value", dropdownValue?.Data);
                         Assert.AreEqual("this is test dropdown element value", dropdownValue?.ToString());
+                        break;
+
+                    case FieldType.RadioButton:
+                        var radioValue = fieldValue as RadiobuttonField;
+                        Assert.AreEqual(field.ElementId, radioValue?.Id, "Wrong dropdown ID");
+                        Assert.AreEqual("this is test radiobutton field value", radioValue?.Data);
+                        Assert.AreEqual("this is test radiobutton field value", radioValue?.ToString());
                         break;
 
                     default:

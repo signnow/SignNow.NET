@@ -36,12 +36,18 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("attachments")]
         internal IReadOnlyCollection<AttachmentField> Attachments { get; private set; } = new List<AttachmentField>();
-        
+
         /// <summary>
         /// All the documents <see cref="EnumerationField"/> fields.
         /// </summary>
         [JsonProperty("enumeration_options")]
         internal IReadOnlyCollection<EnumerationField> Enumerations { get; private set; } = new List<EnumerationField>();
+
+        /// <summary>
+        /// All the documents <see cref="RadiobuttonField"/> fields.
+        /// </summary>
+        [JsonProperty("radiobuttons")]
+        internal IReadOnlyCollection<RadiobuttonField> Radiobuttons { get; private set; } = new List<RadiobuttonField>();
 
         /// <summary>
         /// Find Field value by <see cref="Field"/> metadata.
@@ -80,6 +86,9 @@ namespace SignNow.Net.Model
 
                 case FieldType.Dropdown:
                     return Texts.FirstOrDefault(drop => drop.Id == fieldMeta.ElementId);
+
+                case FieldType.RadioButton:
+                    return Radiobuttons.FirstOrDefault(radio => radio.Id == fieldMeta.ElementId);
 
                 default:
                     return default;
