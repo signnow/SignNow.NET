@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Internal.Model.FieldTypes
+namespace SignNow.Net.Model.FieldTypes
 {
     /// <summary>
     /// Represents SignNow field types: `Checkbox`
     /// </summary>
-    internal class CheckboxField : BaseField
+    public class CheckboxField : BaseField
     {
         /// <summary>
         /// Email of user who fulfilled the field.

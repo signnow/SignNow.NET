@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Internal.Model.FieldTypes
+namespace SignNow.Net.Model.FieldTypes
 {
     /// <summary>
     /// Represents SignNow field types: `Radiobutton`
     /// </summary>
-    internal class RadiobuttonField : BaseField
+    public class RadiobuttonField : BaseField
     {
         /// <summary>
         /// Radiobutton name.
@@ -47,7 +48,7 @@ namespace SignNow.Net.Internal.Model.FieldTypes
         /// Returns Radiobutton content (actual state) as string.
         /// </summary>
         [JsonIgnore]
-        public string Data => Radio.Find(itm => itm.Checked == true).Data;
+        public string Data => Radio.FirstOrDefault(itm => itm.Checked == true)?.Data;
 
         /// <summary>
         /// Returns Radiobutton content (actual state) as string.
@@ -58,7 +59,7 @@ namespace SignNow.Net.Internal.Model.FieldTypes
     /// <summary>
     /// Represents SignNow element for field types: `Radiobutton`
     /// </summary>
-    internal class RadioField
+    public class RadioField
     {
         /// <summary>
         /// Identity of Radio field.

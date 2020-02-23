@@ -1,14 +1,13 @@
 using System;
-using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Internal.Model
+namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents SignNow field types: `Signature`, `Initials fields`.
     /// </summary>
-    internal class Signature
+    public class Signature
     {
         /// <summary>
         /// Identity of the signature.

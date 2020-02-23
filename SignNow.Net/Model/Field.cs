@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Internal.Model.FieldTypes;
+using SignNow.Net.Model.FieldTypes;
 
 namespace SignNow.Net.Model
 {

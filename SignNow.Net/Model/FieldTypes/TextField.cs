@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Internal.Model.FieldTypes
+namespace SignNow.Net.Model.FieldTypes
 {
     /// <summary>
     /// Represents SignNow field types: `Text box`, `Dropdown box`, `Date-Time picker`
     /// </summary>
-    internal class TextField : BaseField
+    public class TextField : BaseField
     {
         /// <summary>
         /// Email of user who fulfilled the field.

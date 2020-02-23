@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Internal.Model.FieldTypes
+namespace SignNow.Net.Model.FieldTypes
 {
     /// <summary>
     /// Basic SignNow field.
     /// </summary>
-    internal abstract class BaseField
+    public abstract class BaseField
     {
         /// <summary>
         /// Identity of field.

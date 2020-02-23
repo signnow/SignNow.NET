@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Model.FieldTypes;
+using SignNow.Net.Model.FieldTypes;
 
 namespace UnitTests
 {

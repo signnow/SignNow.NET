@@ -1,15 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers;
-using SignNow.Net.Internal.Model.FieldTypes;
+using SignNow.Net.Model.FieldTypes;
 
 namespace SignNow.Net.Model
 {
     /// <inheritdoc />
     /// <remarks>
-    /// This part contains related to Fields and Fields value retieval methods only.
+    /// This part contains related to Fields and Fields value retrieval methods only.
     /// </remarks>
     public partial class SignNowDocument
     {

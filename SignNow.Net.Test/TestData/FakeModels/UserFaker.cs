@@ -21,13 +21,12 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public UserFaker()
         {
-            base
-                .RuleFor(obj => obj.Active, faker => faker.Random.Bool())
-                .RuleFor(obj => obj.FirstName, faker => faker.Name.FirstName())
-                .RuleFor(obj => obj.LastName, faker => faker.Name.LastName())
-                .RuleFor(
-                    obj => obj.Email,
-                    (faker, obj) => faker.Internet.Email(obj.FirstName, obj.LastName));
+            Rules((f, o) => {
+                o.Active      = f.Random.Bool();
+                o.FirstName   = f.Name.FirstName();
+                o.LastName    = f.Name.LastName();
+                o.Email       = f.Internet.Email(o.FirstName, o.LastName);
+            });
         }
     }
 
@@ -49,13 +48,12 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public UserSignNowFaker()
         {
-            base
-                .RuleFor(obj => obj.Active, true)
-                .RuleFor(obj => obj.FirstName, faker => faker.Name.FirstName())
-                .RuleFor(obj => obj.LastName, faker => faker.Name.LastName())
-                .RuleFor(
-                    obj => obj.Email,
-                    (faker, obj) => "signnow.tutorial+" + faker.Internet.Email(obj.FirstName, obj.LastName, "gmail.com"));
+            Rules((f, o) => {
+                o.Active      = true;
+                o.FirstName   = f.Name.FirstName();
+                o.LastName    = f.Name.LastName();
+                o.Email       = "signnow.tutorial+" + f.Internet.Email(o.FirstName, o.LastName, "gmail.com");
+            });
         }
     }
 }

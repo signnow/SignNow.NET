@@ -1,6 +1,6 @@
 using System;
 using Bogus;
-using SignNow.Net.Internal.Model.FieldTypes;
+using SignNow.Net.Model.FieldTypes;
 
 namespace SignNow.Net.Test.FakeModels
 {

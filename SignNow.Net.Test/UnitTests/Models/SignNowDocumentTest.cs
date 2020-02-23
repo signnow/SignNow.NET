@@ -2,9 +2,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Model;
-using SignNow.Net.Internal.Model.FieldTypes;
 using SignNow.Net.Model;
+using SignNow.Net.Model.FieldTypes;
 using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
 
@@ -16,10 +15,20 @@ namespace UnitTests
         [TestMethod]
         public void ShouldDeserializeFromJson()
         {
+            var qty = 3;
+
             var fakeDocument = new SignNowDocumentFaker()
-                .RuleFor(obj => obj.Roles, new RoleFaker().Generate(3))
-                .RuleFor(obj => obj.Signatures, new SignatureFaker().Generate(3))
-                .RuleFor(obj => obj.InviteRequests, new FreeformInviteFaker().Generate(2));
+                .RuleFor(obj => obj.Roles, new RoleFaker().Generate(qty))
+                .RuleFor(obj => obj.Signatures, new SignatureFaker().Generate(qty))
+                .RuleFor(obj => obj.InviteRequests, new FreeformInviteFaker().Generate(qty))
+                .RuleFor(obj => obj.Attachments, new AttachmentFieldFaker().Generate(qty))
+                .RuleFor(obj => obj.Checkboxes, new CheckboxFieldFaker().Generate(qty))
+                .RuleFor(obj => obj.Enumerations, new EnumerationFieldFaker().Generate(qty))
+                .RuleFor(obj => obj.FieldInvites, new FieldInviteFaker().Generate(qty))
+                .RuleFor(obj => obj.Fields, new FieldFaker().Generate(qty))
+                .RuleFor(obj => obj.Hyperlinks, new HyperlinkFieldFaker().Generate(qty))
+                .RuleFor(obj => obj.Radiobuttons, new RadiobuttonFieldFaker().Generate(qty))
+                .RuleFor(obj => obj.Texts, new TextFieldFaker().Generate(qty));
 
             var fakeDocumentJson = JsonConvert.SerializeObject(fakeDocument.Generate(), Formatting.Indented);
 

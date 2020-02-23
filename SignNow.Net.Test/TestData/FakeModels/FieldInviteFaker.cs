@@ -28,14 +28,17 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public FieldInviteFaker()
         {
-            RuleFor(obj => obj.Id, f => f.Random.Hash(40));
-            RuleFor(obj => obj.Status, f => f.PickRandom<InviteStatus>());
-            RuleFor(obj => obj.RoleName, f => $"Signer {f.IndexFaker + 1}");
-            RuleFor(obj => obj.RoleId, f => f.Random.Hash(40));
-            RuleFor(obj => obj.SignerEmail, f => f.Internet.Email());
-            RuleFor(obj => obj.Created, f => f.Date.Recent().ToUniversalTime());
-            RuleFor(obj => obj.Updated, f => f.Date.Recent().ToUniversalTime());
-            RuleFor(obj => obj.ExpiredOn, f => f.Date.Recent().ToUniversalTime());
+            Rules((f, o) =>
+            {
+                o.Id          = f.Random.Hash(40);
+                o.Status      = f.PickRandom<InviteStatus>();
+                o.RoleName    = $"Signer {f.IndexFaker + 1}";
+                o.RoleId      = f.Random.Hash(40);
+                o.SignerEmail = f.Internet.Email();
+                o.Created     = f.Date.Recent().ToUniversalTime();
+                o.Updated     = f.Date.Recent().ToUniversalTime();
+                o.ExpiredOn   = f.Date.Recent().ToUniversalTime();
+            });
         }
     }
 }

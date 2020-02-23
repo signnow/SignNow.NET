@@ -23,9 +23,12 @@ namespace SignNow.Net.Test.FakeModels
         /// </example>
         public RoleFaker()
         {
-            RuleFor(r => r.Id, f => f.Random.Hash(40));
-            RuleFor(r => r.Name, f => $"Signer {f.IndexFaker + 1}");
-            RuleFor(r => r.SigningOrder, f => f.IndexFaker + 1);
+            Rules((f, o) =>
+            {
+                o.Id           = f.Random.Hash(40);
+                o.Name         = $"Signer {f.IndexFaker + 1}";
+                o.SigningOrder = f.IndexFaker + 1;
+            });
         }
     }
 }
