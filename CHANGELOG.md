@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Added
+- Introduced all SignNow field types: signature, initial, text, dropdown, checkbox, radiobutton, attachment, hyperlink
+- Added `Model.FieldJsonAttributes` which contains fields properties (e.g. name, label, X/Y coordinates, width, height)
+- Introduced method `Model.SignNowDocument.GetFieldValue(Field)` which allows to retrieve field value for any of SignNow Fileds by Field type
+
+### Changed
+- `Model.Field` now contains property `Model.FieldJsonAttributes`
+- `Model.SignNowDocument` extended by added collections of various SignNow fields (Texts, Checkboxes, Hyperlinks... etc.)
+
+
 ## [0.4.0-beta] - 2020-02-03
 ### Added
 - Added code samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
