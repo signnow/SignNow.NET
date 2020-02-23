@@ -60,11 +60,10 @@ namespace SignNow.Net.Model
             switch (fieldMeta.Type)
             {
                 case FieldType.Text:
+                case FieldType.Dropdown:
                     return Texts.FirstOrDefault(txt => txt.Id == fieldMeta.ElementId);
 
                 case FieldType.Signature:
-                    return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.ElementId);
-
                 case FieldType.Initial:
                     return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.ElementId);
 
@@ -82,9 +81,6 @@ namespace SignNow.Net.Model
 
                 case FieldType.Attachment:
                     return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.ElementId);
-
-                case FieldType.Dropdown:
-                    return Texts.FirstOrDefault(drop => drop.Id == fieldMeta.ElementId);
 
                 case FieldType.RadioButton:
                     return Radiobuttons.FirstOrDefault(radio => radio.Id == fieldMeta.ElementId);

@@ -52,6 +52,7 @@ Changed:
       <Folder Include="_Internal\Model\" />
       <Folder Include="Exceptions\" />
       <Folder Include="_Internal\Infrastructure\" />
+      <Folder Include="Model\Responses\" />
     </ItemGroup>
 
     <ItemGroup>

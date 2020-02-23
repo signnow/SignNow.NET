@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Model
 {
+    /// <summary>
+    /// Represents response from SignNow API for create invite request.
+    /// </summary>
     public class InviteResponse
     {
         /// <summary>
