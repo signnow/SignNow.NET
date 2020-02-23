@@ -15,16 +15,20 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Model.SignNowDocument` extended by added collections of various SignNow fields (Texts, Checkboxes, Hyperlinks... etc.)
 
 
-## [0.4.0-beta] - 2020-02-03
+## [0.4.0-beta] - 2020-02-19
 ### Added
-- Added code samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
-- Sign status for the document - `Models.SignNowDocument.Status`
-- Freeform invite sign status for current signer - `Models.FreeformInvite.Status`
-- Field invite status for current signer - `Models.FieldInvite.Status`
+- Сode samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
+- Signature status property for the document - `Models.SignNowDocument.Status`; can be `NoInvite`, `Pending`, `Complete`
+- Signature status for the specified signer of a Freeform invite - `Models.FreeformInvite.Status`
+- Signature status for the specified signer of a field invite - `Models.FieldInvite.Status`
 - `ISignNowInviteStatus` interface for role-based or freeform invites status retrieval
+- `Model.DocumentStatus` with all statuses for the document
+- `Model.InviteStatus` with all statuses for the Freeform and Field (role-based) invites
 
 ### Changed
-- Removed redundant tests, changed duplicated tests to parametrized tests.
+- Removed redundant tests.
+- Changed duplicated tests to parametrized tests.
+- Replaced Json mocks with Bogus library for tests.
 
 
 ## [0.3.0-beta] 2020-02-03
