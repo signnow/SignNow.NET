@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.FieldTypes
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Text box`, `Dropdown box`, `Date-Time picker`
+    /// Represents SignNow field types: `Checkbox`
     /// </summary>
-    public class TextField : BaseField
+    public class CheckboxContent : BaseContent
     {
         /// <summary>
         /// Email of user who fulfilled the field.
@@ -14,14 +14,14 @@ namespace SignNow.Net.Model.FieldTypes
         public string Email { get; set; }
 
         /// <summary>
-        /// Raw text value of the field.
+        /// Checkbox value (checked or unchecked).
         /// </summary>
-        [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonIgnore]
+        public bool Data { get; set; }
 
         /// <summary>
         /// Returns text value of <see cref="Data"/> field.
         /// </summary>
-        public override string ToString() => Data;
+        public override string ToString() => Data ? "1" : "";
     }
 }

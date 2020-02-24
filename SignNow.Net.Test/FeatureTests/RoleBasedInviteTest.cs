@@ -141,7 +141,7 @@ namespace FeatureTests
 
             // sign the document and check the document status
             var documentSigned = baseDocument
-                .RuleFor(d => d.Signatures, new SignatureFaker().Generate(1))
+                .RuleFor(d => d.Signatures, new SignatureContentFaker().Generate(1))
                 .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
                 .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
                 .FinishWith((f, obj) => {

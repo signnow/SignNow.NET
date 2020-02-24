@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers;
-using SignNow.Net.Model.FieldTypes;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model
 {
@@ -13,40 +13,40 @@ namespace SignNow.Net.Model
     public partial class SignNowDocument
     {
         /// <summary>
-        /// All the document <see cref="TextField"/> fields.
+        /// All the document <see cref="TextContent"/> fields.
         /// </summary>
         [JsonProperty("texts")]
-        internal IReadOnlyCollection<TextField> Texts { get; private set; } = new List<TextField>();
+        internal IReadOnlyCollection<TextContent> Texts { get; private set; } = new List<TextContent>();
 
         /// <summary>
-        /// All the document <see cref="HyperlinkField"/> fields.
+        /// All the document <see cref="HyperlinkContent"/> fields.
         /// </summary>
         [JsonProperty("hyperlinks")]
-        internal IReadOnlyCollection<HyperlinkField> Hyperlinks { get; private set; } = new List<HyperlinkField>();
+        internal IReadOnlyCollection<HyperlinkContent> Hyperlinks { get; private set; } = new List<HyperlinkContent>();
 
         /// <summary>
-        /// All the documents <see cref="CheckboxField"/> fields.
+        /// All the documents <see cref="CheckboxContent"/> fields.
         /// </summary>
         [JsonProperty("checks")]
-        internal IReadOnlyCollection<CheckboxField> Checkboxes { get; private set; } = new List<CheckboxField>();
+        internal IReadOnlyCollection<CheckboxContent> Checkboxes { get; private set; } = new List<CheckboxContent>();
 
         /// <summary>
-        /// All the documents <see cref="AttachmentField"/> fields.
+        /// All the documents <see cref="AttachmentContent"/> fields.
         /// </summary>
         [JsonProperty("attachments")]
-        internal IReadOnlyCollection<AttachmentField> Attachments { get; private set; } = new List<AttachmentField>();
+        internal IReadOnlyCollection<AttachmentContent> Attachments { get; private set; } = new List<AttachmentContent>();
 
         /// <summary>
-        /// All the documents <see cref="EnumerationField"/> fields.
+        /// All the documents <see cref="EnumerationContent"/> fields.
         /// </summary>
         [JsonProperty("enumeration_options")]
-        internal IReadOnlyCollection<EnumerationField> Enumerations { get; private set; } = new List<EnumerationField>();
+        internal IReadOnlyCollection<EnumerationContent> Enumerations { get; private set; } = new List<EnumerationContent>();
 
         /// <summary>
-        /// All the documents <see cref="RadiobuttonField"/> fields.
+        /// All the documents <see cref="RadiobuttonContent"/> fields.
         /// </summary>
         [JsonProperty("radiobuttons")]
-        internal IReadOnlyCollection<RadiobuttonField> Radiobuttons { get; private set; } = new List<RadiobuttonField>();
+        internal IReadOnlyCollection<RadiobuttonContent> Radiobuttons { get; private set; } = new List<RadiobuttonContent>();
 
         /// <summary>
         /// Find Field value by <see cref="Field"/> metadata.

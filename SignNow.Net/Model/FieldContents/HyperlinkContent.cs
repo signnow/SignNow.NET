@@ -2,12 +2,12 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Model.FieldTypes
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Represents SignNow field types: `Hyperlink`
     /// </summary>
-    public class HyperlinkField : BaseField
+    public class HyperlinkContent : BaseContent
     {
         /// <summary>
         /// Email of user who fulfilled the field.

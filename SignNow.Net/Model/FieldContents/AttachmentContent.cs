@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.FieldTypes
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Represents SignNow field types: `Attachment`
     /// </summary>
-    public class AttachmentField : BaseField
+    public class AttachmentContent : BaseContent
     {
         /// <summary>
         /// Original attachment file name with extension.

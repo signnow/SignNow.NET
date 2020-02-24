@@ -1,16 +1,17 @@
 using System;
+using System.Text;
 using Bogus;
-using SignNow.Net.Model.FieldTypes;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Test.FakeModels
 {
     /// <summary>
-    /// Faker for <see cref="TextField"/>
+    /// Faker for <see cref="TextContent"/>
     /// </summary>
-    internal class TextFieldFaker : Faker<TextField>
+    internal class TextContentFaker : Faker<TextContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="TextField"/> fake object.
+        /// Creates new instance of <see cref="TextContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -24,7 +25,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public TextFieldFaker()
+        public TextContentFaker()
         {
             Rules((f, o) =>
             {
@@ -38,12 +39,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="HyperlinkField"/>
+    /// Faker for <see cref="HyperlinkContent"/>
     /// </summary>
-    internal class HyperlinkFieldFaker : Faker<HyperlinkField>
+    internal class HyperlinkContentFaker : Faker<HyperlinkContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="HyperlinkField"/> fake object.
+        /// Creates new instance of <see cref="HyperlinkContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -58,7 +59,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public HyperlinkFieldFaker()
+        public HyperlinkContentFaker()
         {
             Rules((f, o) =>
             {
@@ -73,12 +74,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="CheckboxField"/>
+    /// Faker for <see cref="CheckboxContent"/>
     /// </summary>
-    internal class CheckboxFieldFaker : Faker<CheckboxField>
+    internal class CheckboxContentFaker : Faker<CheckboxContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="CheckboxField"/> fake object.
+        /// Creates new instance of <see cref="CheckboxContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -91,7 +92,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public CheckboxFieldFaker()
+        public CheckboxContentFaker()
         {
             Rules((f, o) =>
             {
@@ -104,12 +105,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="AttachmentField"/>
+    /// Faker for <see cref="AttachmentContent"/>
     /// </summary>
-    internal class AttachmentFieldFaker : Faker<AttachmentField>
+    internal class AttachmentContentFaker : Faker<AttachmentContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="AttachmentField"/> fake object.
+        /// Creates new instance of <see cref="AttachmentContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -124,7 +125,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public AttachmentFieldFaker()
+        public AttachmentContentFaker()
         {
             Rules((f, o) =>
             {
@@ -139,12 +140,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="EnumerationField"/>
+    /// Faker for <see cref="EnumerationContent"/>
     /// </summary>
-    internal class EnumerationFieldFaker : Faker<EnumerationField>
+    internal class EnumerationContentFaker : Faker<EnumerationContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="EnumerationField"/> fake object.
+        /// Creates new instance of <see cref="EnumerationContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -158,7 +159,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public EnumerationFieldFaker()
+        public EnumerationContentFaker()
         {
             Rules((f, o) =>
             {
@@ -172,12 +173,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="RadiobuttonField"/>
+    /// Faker for <see cref="RadiobuttonContent"/>
     /// </summary>
-    internal class RadiobuttonFieldFaker : Faker<RadiobuttonField>
+    internal class RadiobuttonContentFaker : Faker<RadiobuttonContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="RadiobuttonField"/> fake object.
+        /// Creates new instance of <see cref="RadiobuttonContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -207,7 +208,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public RadiobuttonFieldFaker()
+        public RadiobuttonContentFaker()
         {
             Rules((f, o) =>
             {
@@ -217,7 +218,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.Created       = f.Date.Recent().ToUniversalTime();
                 o.X             = f.Random.Int(0, 1024);
                 o.Y             = f.Random.Int(0, 1024);
-                o.Radio         = new RadioFieldFaker()
+                o.Radio         = new RadioContentFaker()
                     .Rules((fkr, itm) => itm.PageNumber = o.PageNumber)
                     .Generate(f.Random.Int(2, 10));
             })
@@ -226,12 +227,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker for <see cref="RadioField"/>
+    /// Faker for <see cref="RadioContent"/>
     /// </summary>
-    internal class RadioFieldFaker : Faker<RadioField>
+    internal class RadioContentFaker : Faker<RadioContent>
     {
         /// <summary>
-        /// Creates new instance of <see cref="RadioField"/> fake object.
+        /// Creates new instance of <see cref="RadioContent"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -249,7 +250,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public RadioFieldFaker()
+        public RadioContentFaker()
         {
             Rules((f, o) =>
             {
@@ -262,6 +263,41 @@ namespace SignNow.Net.Test.FakeModels
                 o.Height        = Math.Round(f.Random.Decimal(0, 100), 2);
                 o.Checked       = false;
                 o.Data          = $"RadiobuttonValue_{f.Lorem.Word()}";
+            });
+        }
+    }
+
+    /// <summary>
+    /// Faker for <see cref="SignatureContent"/>
+    /// </summary>
+    internal class SignatureContentFaker : Faker<SignatureContent>
+    {
+        /// <summary>
+        /// Creates new instance of <see cref="SignatureContent"/> fake object.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "id": "49d2b8a40be75e853f1352afe33dfbb015829039",
+        ///   "user_id": "625f0b4b6f345dc3280385667bdb62f100a1344c",
+        ///   "signature_request_id": "350c40cf474bdb496456608774fb4789214ec810",
+        ///   "email": "Alek.Keebler19@yahoo.com",
+        ///   "created": "1581765801",
+        ///   "data": "dGVzdDEuLi4="
+        /// }
+        /// </code>
+        /// </example>
+        public SignatureContentFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Id                 = f.Random.Hash(40);
+                o.UserId             = f.Random.Hash(40);
+                o.SignatureRequestId = f.Random.Hash(40);
+                o.Email              = f.Internet.Email();
+                o.Created            = f.Date.Recent().ToUniversalTime();
+                o.Data               = Encoding.UTF8.GetBytes(f.Lorem.Paragraph());
             });
         }
     }

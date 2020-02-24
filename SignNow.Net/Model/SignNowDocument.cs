@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model
 {
@@ -97,10 +98,10 @@ namespace SignNow.Net.Model
         internal List<Role> Roles { get; private set; } = new List<Role>();
 
         /// <summary>
-        /// The document <see cref="Signature"/>
+        /// The document <see cref="SignatureContent"/>
         /// </summary>
         [JsonProperty("signatures")]
-        internal List<Signature> Signatures { get; private set; } = new List<Signature>();
+        internal List<SignatureContent> Signatures { get; private set; } = new List<SignatureContent>();
 
         /// <summary>
         /// The document <see cref="Field"/>

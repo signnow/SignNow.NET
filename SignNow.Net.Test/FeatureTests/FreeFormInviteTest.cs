@@ -61,7 +61,7 @@ namespace FeatureTests
 
             // Freeform invite created assertions
             Assert.AreEqual(1, documentWithOneRequest.InviteRequests.Count);
-            Assert.IsNull(documentWithOneRequest.InviteRequests[0].SignatureId, "Signature Id should be null for not signed document");
+            Assert.IsNull(documentWithOneRequest.InviteRequests[0].SignatureId, "SignatureContent Id should be null for not signed document");
             Assert.AreEqual(InviteStatus.Pending, documentWithOneRequest.InviteRequests[0].Status);
             Assert.AreEqual(DocumentStatus.Pending, documentWithOneRequest.Status);
 
@@ -71,7 +71,7 @@ namespace FeatureTests
 
             var documentWithOneSignedRequest = baseDocument
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(1))
-                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(1))
+                .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(1))
                 .FinishWith((f, obj) => {
                     var invite = obj.InviteRequests.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
@@ -125,7 +125,7 @@ namespace FeatureTests
             // sign second freeform invite and complete the document signing
             var documentWithTwoRequestsSigned = baseDocument
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(2))
-                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(2))
+                .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(2))
                 .FinishWith((f, obj) => {
                     var sig = obj.Signatures.GetEnumerator();
 

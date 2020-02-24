@@ -2,13 +2,13 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Model.FieldTypes
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Represents an element of Enumeration options
     /// for `Dropdown` field type.
     /// </summary>
-    public class EnumerationField
+    public class EnumerationContent
     {
         /// <summary>
         /// Unique identifier of field.

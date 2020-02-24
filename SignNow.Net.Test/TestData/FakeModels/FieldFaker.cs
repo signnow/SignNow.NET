@@ -61,7 +61,7 @@ namespace SignNow.Net.Test.FakeModels
 
                 if (o.Type == FieldType.RadioButton)
                 {
-                    o.RadioGroup = new RadioFieldFaker().Generate(2);
+                    o.RadioGroup = new RadioContentFaker().Generate(2);
                 }
             });
         }

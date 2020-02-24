@@ -2,12 +2,12 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net.Model
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Represents SignNow field types: `Signature`, `Initials fields`.
     /// </summary>
-    public class Signature
+    public class SignatureContent
     {
         /// <summary>
         /// Identity of the signature.
@@ -48,7 +48,7 @@ namespace SignNow.Net.Model
         public byte[] Data { get; set; }
 
         /// <summary>
-        /// Returns Signature content as base64 string.
+        /// Returns SignatureContent content as base64 string.
         /// </summary>
         public override string ToString()
         {

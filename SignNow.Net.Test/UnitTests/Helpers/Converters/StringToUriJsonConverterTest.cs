@@ -1,7 +1,7 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using SignNow.Net.Model.FieldTypes;
+using SignNow.Net.Model.FieldContents;
 
 namespace UnitTests
 {
@@ -15,7 +15,7 @@ namespace UnitTests
         [DataRow("https://signnow.com/location/12345?param=42", DisplayName = "valid Uri with path and query")]
         public void ShouldSerializeValidUri(string location)
         {
-            var testObj = new HyperlinkField()
+            var testObj = new HyperlinkContent()
             {
                 Data = new Uri(location)
             };
@@ -30,13 +30,21 @@ namespace UnitTests
         [DataRow("ftp://signnow.com", DisplayName = "ftp location")]
         [DataRow("http://signnow.com/api/1.0/doc/1?param=42", DisplayName = "location with path and query")]
         [DataRow(@"http:\/\/signnow.com\/api\/1.0\/doc\/1?param=42", DisplayName = "location with escaped path and query")]
-        [DataRow(null, DisplayName = "nullable Uri")]
         public void ShouldDeserializeUriFromJsonString(string location)
         {
             var json = $"{{'data': '{location}'}}";
 
-            var actual = JsonConvert.DeserializeObject<HyperlinkField>(json);
+            var actual = JsonConvert.DeserializeObject<HyperlinkContent>(json);
             Assert.AreEqual(location?.Replace(@"\/", "/"), actual.Data?.OriginalString);
+        }
+
+        [TestMethod]
+        public void ShouldThrowExceptionForBrokenUrl()
+        {
+            var exception = Assert.ThrowsException<JsonSerializationException>(
+                () => JsonConvert.DeserializeObject<HyperlinkContent>("{'data': '42'}"));
+
+            Assert.AreEqual("Unexpected value when converting to Uri. Expected an absolute Url, got '42'.", exception.Message);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Model.FieldTypes;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model
 {
@@ -64,7 +64,7 @@ namespace SignNow.Net.Model
         /// Radio group elements initial state for Radiobuttons field type.
         /// </summary>
         [JsonProperty("radio", NullValueHandling = NullValueHandling.Ignore)]
-        internal IReadOnlyCollection<RadioField> RadioGroup { get; set; }
+        internal IReadOnlyCollection<RadioContent> RadioGroup { get; set; }
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ namespace SignNow.Net.Model
         Text,
 
         /// <summary>
-        /// Signature fields.
+        /// SignatureContent fields.
         /// </summary>
         Signature,
 
