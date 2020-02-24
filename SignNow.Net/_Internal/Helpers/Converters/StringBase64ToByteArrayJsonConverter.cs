@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Internal.Helpers.Converters
 {
     /// <summary>
-    /// Converts Base64 <see cref="String"/> to <see cref="Byte[]"/> to and from JSON.
+    /// Converts Base64 <see cref="String"/> to <see cref="Byte"/>[] to and from JSON.
     /// </summary>
     public class StringBase64ToByteArrayJsonConverter : JsonConverter
     {

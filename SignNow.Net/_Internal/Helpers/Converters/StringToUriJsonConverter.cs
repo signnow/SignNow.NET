@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Helpers.Converters
@@ -17,14 +18,15 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.ReadJson(JsonReader, Type, object, JsonSerializer)" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            Uri url = default;
-
-            if (reader.TokenType == JsonToken.String)
+            if (reader.TokenType == JsonToken.String && Uri.TryCreate(reader.Value.ToString(), UriKind.Absolute, out Uri url))
             {
-                Uri.TryCreate(reader.Value.ToString(), UriKind.Absolute, out url);
+                return url;
             }
 
-            return url;
+            throw new JsonSerializationException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        "Unexpected value when converting to Uri. Expected an absolute Url, got '{0}'.",
+                        reader.Value.ToString()));
         }
 
         /// <inheritdoc cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)"/>
