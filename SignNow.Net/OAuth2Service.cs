@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net
 {
@@ -104,7 +105,10 @@ namespace SignNow.Net
                { "scope", scope.AsString() }
             };
 
-            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
+            var token = await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
+            token.ExpiresIn -= (int)UnixTimeStampConverter.ToUnixTimestamp(DateTime.UtcNow);
+
+            return token;
         }
 
         /// <inheritdoc cref="IOAuth2Service.RefreshTokenAsync" />
