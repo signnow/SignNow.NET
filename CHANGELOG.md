@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Changed `expires_in` token value to token lifetime instead of timestamp
 
 ## [0.4.0-beta] - 2020-02-19
 ### Added
