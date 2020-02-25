@@ -7,20 +7,8 @@ namespace SignNow.Net.Model.FieldContents
     /// <summary>
     /// Represents SignNow field types: `Signature`, `Initials fields`.
     /// </summary>
-    public class SignatureContent
+    public class SignatureContent : BaseContent
     {
-        /// <summary>
-        /// Identity of the signature.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// Identity of user that sign the document.
-        /// </summary>
-        [JsonProperty("user_id")]
-        public string UserId { get; set; }
-
         /// <summary>
         /// Identity of the signature request.
         /// </summary>

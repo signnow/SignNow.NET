@@ -133,7 +133,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.UserId        = f.Random.Hash(40);
                 o.PageNumber    = f.Random.Int(0, 50);
                 o.OriginalName  = f.System.FileName();
-                o.Filename      = $"{f.Random.Hash(40)}.{f.System.FileExt()}";
+                o.FileName      = $"{f.Random.Hash(40)}.{f.System.FileExt()}";
                 o.FileSize      = f.Random.ULong();
             });
         }
@@ -282,6 +282,7 @@ namespace SignNow.Net.Test.FakeModels
         ///   "id": "49d2b8a40be75e853f1352afe33dfbb015829039",
         ///   "user_id": "625f0b4b6f345dc3280385667bdb62f100a1344c",
         ///   "signature_request_id": "350c40cf474bdb496456608774fb4789214ec810",
+        ///   "page_number": "0",
         ///   "email": "Alek.Keebler19@yahoo.com",
         ///   "created": "1581765801",
         ///   "data": "dGVzdDEuLi4="
@@ -294,6 +295,7 @@ namespace SignNow.Net.Test.FakeModels
             {
                 o.Id                 = f.Random.Hash(40);
                 o.UserId             = f.Random.Hash(40);
+                o.PageNumber         = f.Random.Int(0, 50);
                 o.SignatureRequestId = f.Random.Hash(40);
                 o.Email              = f.Internet.Email();
                 o.Created            = f.Date.Recent().ToUniversalTime();

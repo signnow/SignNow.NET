@@ -17,7 +17,7 @@ namespace SignNow.Net.Model.FieldContents
         /// Filename with extension used in SignNow.
         /// </summary>
         [JsonProperty("filename")]
-        public string Filename { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// File size in bytes.
