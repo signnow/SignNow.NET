@@ -4,7 +4,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
-using SignNow.Net.Internal.Model;
 using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model

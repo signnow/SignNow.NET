@@ -128,7 +128,7 @@ namespace UnitTests
 
             foreach (var field in docWithFields.Fields)
             {
-                var fieldValue = docWithFields.GetFieldValue(field);
+                var fieldValue = docWithFields.GetFieldContent(field);
 
                 switch (field.Type)
                 {

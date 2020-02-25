@@ -53,7 +53,7 @@ namespace SignNow.Net.Model
         /// </summary>
         /// <param name="fieldMeta">Field metadata.</param>
         /// <returns><see cref="object"/> with that represents state for <see cref="Field.Type"/></returns>
-        public object GetFieldValue(Field fieldMeta)
+        public object GetFieldContent(Field fieldMeta)
         {
             Guard.PropertyNotNull(fieldMeta?.ElementId, "Cannot get field value without ElementId");
 

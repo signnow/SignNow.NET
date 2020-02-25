@@ -8,11 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Added
 - Introduced all SignNow field types: signature, initial, text, dropdown, checkbox, radiobutton, attachment, hyperlink
 - Added `Model.FieldJsonAttributes` which contains fields properties (e.g. name, label, X/Y coordinates, width, height)
-- Introduced method `Model.SignNowDocument.GetFieldValue(Field)` which allows to retrieve field value for any of SignNow Fileds by Field type
+- Introduced method `Model.SignNowDocument.GetFieldContent(Field)` which allows to retrieve field content for any of SignNow Fileds by Field type
 
 ### Changed
 - `Model.Field` now contains property `Model.FieldJsonAttributes`
 - `Model.SignNowDocument` extended by added collections of various SignNow fields (Texts, Checkboxes, Hyperlinks... etc.)
+- `Model.Signature` renamed to `Model.FieldContents.SigntureContent`
 
 
 ## [0.4.0-beta] - 2020-02-19
