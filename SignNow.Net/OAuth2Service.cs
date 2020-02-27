@@ -106,7 +106,9 @@ namespace SignNow.Net
             };
 
             var token = await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
-            token.ExpiresIn -= (int)UnixTimeStampConverter.ToUnixTimestamp(DateTime.UtcNow);
+
+            var tokenLifetime = token.ExpiresIn - (int) UnixTimeStampConverter.ToUnixTimestamp(DateTime.UtcNow);
+            if (tokenLifetime > 0) token.ExpiresIn = tokenLifetime ;
 
             return token;
         }
