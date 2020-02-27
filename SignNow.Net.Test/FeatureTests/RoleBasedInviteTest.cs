@@ -114,8 +114,9 @@ namespace FeatureTests
                     var role = obj.Roles.GetEnumerator();
                     var invite = obj.FieldInvites.GetEnumerator();
 
-                    foreach(var field in obj.Fields)
+                    foreach(var fieldMeta in obj.Fields)
                     {
+                        var field = (Field) fieldMeta;
                         role.MoveNext();
                         invite.MoveNext();
 
@@ -149,8 +150,9 @@ namespace FeatureTests
                     var invite = obj.FieldInvites.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
 
-                    foreach (var field in obj.Fields)
+                    foreach (var fieldMeta in obj.Fields)
                     {
+                        var field = (Field) fieldMeta;
                         role.MoveNext();
                         invite.MoveNext();
                         sign.MoveNext();

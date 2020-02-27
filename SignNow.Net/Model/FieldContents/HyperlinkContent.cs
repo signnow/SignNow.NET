@@ -32,5 +32,8 @@ namespace SignNow.Net.Model.FieldContents
         /// Returns Hyperlink content as <see cref="Uri"/> string.
         /// </summary>
         public override string ToString() => Data.OriginalString;
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Data;
     }
 }

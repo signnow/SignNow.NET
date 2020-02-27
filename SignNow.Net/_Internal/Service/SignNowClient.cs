@@ -113,8 +113,8 @@ namespace SignNow.Net.Internal.Service
         {
             if (!response.IsSuccessStatusCode)
             {
-                var context = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var apiError = context;
+                var rawResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var apiError = rawResponse;
                 var snException = new SignNowException[0];
                 try
                 {
@@ -137,7 +137,7 @@ namespace SignNow.Net.Internal.Service
                 throw new SignNowException(apiError, snException)
                 {
                     RawHeaders = response.Headers.ToDictionary(a => a.Key, a => a.Value),
-                    RawResponse = response.Content.ReadAsStringAsync().Result,
+                    RawResponse = rawResponse,
                     HttpStatusCode = response.StatusCode
                 };
             }

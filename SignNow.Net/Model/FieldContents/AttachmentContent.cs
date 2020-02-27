@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.FieldContents
 {
@@ -24,5 +25,8 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         [JsonProperty("file_size")]
         public ulong FileSize { get; set; }
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Id;
     }
 }

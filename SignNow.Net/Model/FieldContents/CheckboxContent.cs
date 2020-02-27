@@ -23,5 +23,8 @@ namespace SignNow.Net.Model.FieldContents
         /// Returns text value of <see cref="Data"/> field.
         /// </summary>
         public override string ToString() => Data ? "1" : "";
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Data;
     }
 }

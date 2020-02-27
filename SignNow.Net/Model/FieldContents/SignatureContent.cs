@@ -40,7 +40,10 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         public override string ToString()
         {
-            return Convert.ToBase64String(Data ?? default);
+            return Convert.ToBase64String(Data);
         }
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Data;
     }
 }

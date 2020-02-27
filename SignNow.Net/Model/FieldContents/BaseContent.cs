@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Basic SignNow field content.
     /// </summary>
-    public abstract class BaseContent
+    public abstract class BaseContent : ISignNowFieldContent
     {
         /// <summary>
         /// Identity of field.
@@ -24,5 +25,8 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         [JsonProperty("page_number")]
         public int PageNumber { get; set; }
+
+        /// <inheritdoc />
+        public abstract object GetFieldValue();
     }
 }

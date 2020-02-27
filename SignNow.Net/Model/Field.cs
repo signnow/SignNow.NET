@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model
@@ -8,13 +9,13 @@ namespace SignNow.Net.Model
     /// <summary>
     /// SignNow fields metadata.
     /// </summary>
-    public class Field
+    public class Field: ISignNowField
     {
         /// <summary>
         /// Unique identifier of field.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        internal string Id { get; set; }
 
         /// <summary>
         /// Field type.
@@ -28,43 +29,49 @@ namespace SignNow.Net.Model
         /// </summary>
         /// TODO: Use Role model instead of RoleId + RoleName
         [JsonProperty("role_id")]
-        public string RoleId { get; set; }
+        internal string RoleId { get; set; }
 
         /// <summary>
         /// Signer role name.
         /// </summary>
         [JsonProperty("role")]
-        public string RoleName { get; set; }
+        internal string RoleName { get; set; }
 
         /// <summary>
-        /// Field attributes: name, label, x/y coordinates, width, heigth...
+        /// Field attributes: name, label, x/y coordinates, width, height...
         /// </summary>
         [JsonProperty("json_attributes")]
-        public FieldJsonAttributes JsonAttributes { get; set; }
+        internal FieldJsonAttributes JsonAttributes { get; set; }
 
         /// <summary>
         /// Document owner email.
         /// </summary>
         [JsonProperty("originator")]
-        public string Owner { get; set; }
+        internal string Owner { get; set; }
 
         /// <summary>
         /// Signer email.
         /// </summary>
         [JsonProperty("fulfiller")]
-        public string Signer { get; set; }
+        internal string Signer { get; set; }
 
         /// <summary>
         /// Identity of specific element for corresponding field type.
         /// </summary>
         [JsonProperty("element_id")]
-        public string ElementId { get; set; }
+        internal string ElementId { get; set; }
 
         /// <summary>
         /// Radio group elements initial state for Radiobuttons field type.
         /// </summary>
         [JsonProperty("radio", NullValueHandling = NullValueHandling.Ignore)]
         internal IReadOnlyCollection<RadioContent> RadioGroup { get; set; }
+
+        /// <inheritdoc cref="ISignNowField.FieldType"/>
+        public FieldType FieldType() => Type;
+
+        /// <inheritdoc cref="ISignNowField.GetFieldContentId"/>
+        public string GetFieldContentId() => ElementId;
     }
 
     /// <summary>

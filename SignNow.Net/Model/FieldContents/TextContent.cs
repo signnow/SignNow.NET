@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.FieldContents
 {
@@ -23,5 +24,8 @@ namespace SignNow.Net.Model.FieldContents
         /// Returns text value of <see cref="Data"/> field.
         /// </summary>
         public override string ToString() => Data;
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Data;
     }
 }

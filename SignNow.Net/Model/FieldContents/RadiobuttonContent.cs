@@ -54,6 +54,9 @@ namespace SignNow.Net.Model.FieldContents
         /// Returns Radiobutton content (actual state) as string.
         /// </summary>
         public override string ToString() => Data;
+
+        /// <inheritdoc />
+        public override object GetFieldValue() => Data;
     }
 
     /// <summary>
