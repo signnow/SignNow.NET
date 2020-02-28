@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.FieldContents
@@ -8,7 +9,7 @@ namespace SignNow.Net.Model.FieldContents
     /// Represents an element of Enumeration options
     /// for `Dropdown` field type.
     /// </summary>
-    public class EnumerationContent
+    public class EnumerationContent : ISignNowContent
     {
         /// <summary>
         /// Unique identifier of field.
@@ -41,5 +42,8 @@ namespace SignNow.Net.Model.FieldContents
         [JsonProperty("updated")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime Updated { get; set; }
+
+        /// <inheritdoc />
+        public object GetValue() => Data;
     }
 }

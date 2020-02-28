@@ -1,5 +1,6 @@
 using Bogus;
 using Bogus.Extensions;
+using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 
 namespace SignNow.Net.Test.FakeModels
@@ -70,7 +71,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker <see cref="FieldJsonAttributes"/>
     /// </summary>
-    public class FieldJsonAttributesFaker : Faker<FieldJsonAttributes>
+    internal class FieldJsonAttributesFaker : Faker<FieldJsonAttributes>
     {
         /// <summary>
         /// Creates new instance of <see cref="Field"/> fake object.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.FieldContents
@@ -42,7 +43,7 @@ namespace SignNow.Net.Model.FieldContents
         /// List of Radio elements.
         /// </summary>
         [JsonProperty("radio")]
-        public List<RadioContent> Radio { get; set; } = new List<RadioContent>();
+        public List<RadioContent> Radio { get; internal set; } = new List<RadioContent>();
 
         /// <summary>
         /// Returns Radiobutton content (actual state) as string.
@@ -56,13 +57,13 @@ namespace SignNow.Net.Model.FieldContents
         public override string ToString() => Data;
 
         /// <inheritdoc />
-        public override object GetFieldValue() => Data;
+        public override object GetValue() => Data;
     }
 
     /// <summary>
     /// Represents SignNow element for field types: `Radiobutton`
     /// </summary>
-    public class RadioContent
+    public class RadioContent : ISignNowContent
     {
         /// <summary>
         /// Identity of Radio field.
@@ -123,5 +124,8 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         [JsonProperty("value")]
         public string Data { get; set; }
+
+        /// <inheritdoc />
+        public object GetValue() => Data;
     }
 }

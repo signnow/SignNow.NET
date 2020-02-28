@@ -27,6 +27,6 @@ namespace SignNow.Net.Model.FieldContents
         public ulong FileSize { get; set; }
 
         /// <inheritdoc />
-        public override object GetFieldValue() => Id;
+        public override object GetValue() => Id;
     }
 }

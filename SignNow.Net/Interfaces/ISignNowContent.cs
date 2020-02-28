@@ -1,11 +1,10 @@
-using System;
 using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for all SignNow field types content retrieval.
-    /// Resources that implement this interface can be used as SignNow FieldContent.
+    /// Interface for all SignNow content types retrieval.
+    /// Resources that implement this interface can be used as SignNow Content (Field Content).
     /// <para>Possible concrete classes:</para>
     /// <list type="bullet">
     /// <item><description><see cref="AttachmentContent" /></description></item>
@@ -16,11 +15,11 @@ namespace SignNow.Net.Interfaces
     /// <item><description><see cref="TextContent" /></description></item>
     /// </list>
     /// </summary>
-    public interface ISignNowFieldContent
+    public interface ISignNowContent
     {
         /// <summary>
-        /// Returns the field value for any of SignNow FieldContent object.
+        /// Returns the value for any of SignNow content object.
         /// </summary>
-        object GetFieldValue();
+        object GetValue();
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using SignNow.Net.Model;
 
 namespace SignNow.Net.Interfaces
@@ -11,11 +10,11 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Get SignNow field type.
         /// </summary>
-        FieldType FieldType();
+        FieldType Type { get; }
 
         /// <summary>
-        /// Returns FieldContent ID.
+        /// Returns identity for element with content.
         /// </summary>
-        string GetFieldContentId();
+        string ElementId { get; }
     }
 }

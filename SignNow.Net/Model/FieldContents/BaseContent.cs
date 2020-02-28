@@ -6,7 +6,7 @@ namespace SignNow.Net.Model.FieldContents
     /// <summary>
     /// Basic SignNow field content.
     /// </summary>
-    public abstract class BaseContent : ISignNowFieldContent
+    public abstract class BaseContent : ISignNowContent
     {
         /// <summary>
         /// Identity of field.
@@ -27,6 +27,6 @@ namespace SignNow.Net.Model.FieldContents
         public int PageNumber { get; set; }
 
         /// <inheritdoc />
-        public abstract object GetFieldValue();
+        public abstract object GetValue();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Internal.Model;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.FieldContents;
 
@@ -59,19 +60,13 @@ namespace SignNow.Net.Model
         /// Identity of specific element for corresponding field type.
         /// </summary>
         [JsonProperty("element_id")]
-        internal string ElementId { get; set; }
+        public string ElementId { get; set; }
 
         /// <summary>
         /// Radio group elements initial state for Radiobuttons field type.
         /// </summary>
         [JsonProperty("radio", NullValueHandling = NullValueHandling.Ignore)]
         internal IReadOnlyCollection<RadioContent> RadioGroup { get; set; }
-
-        /// <inheritdoc cref="ISignNowField.FieldType"/>
-        public FieldType FieldType() => Type;
-
-        /// <inheritdoc cref="ISignNowField.GetFieldContentId"/>
-        public string GetFieldContentId() => ElementId;
     }
 
     /// <summary>

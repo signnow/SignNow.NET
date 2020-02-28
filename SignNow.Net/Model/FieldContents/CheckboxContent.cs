@@ -25,6 +25,6 @@ namespace SignNow.Net.Model.FieldContents
         public override string ToString() => Data ? "1" : "";
 
         /// <inheritdoc />
-        public override object GetFieldValue() => Data;
+        public override object GetValue() => Data;
     }
 }

@@ -51,24 +51,24 @@ namespace SignNow.Net.Model
         /// Find Field value by <see cref="Field"/> metadata.
         /// </summary>
         /// <param name="fieldMeta">Field metadata.</param>
-        /// <returns><see cref="ISignNowFieldContent"/> object that represents state for <see cref="Field.Type"/></returns>
-        public ISignNowFieldContent GetFieldContent(ISignNowField fieldMeta)
+        /// <returns><see cref="ISignNowContent"/> object that represents state for <see cref="Field.Type"/></returns>
+        public ISignNowContent GetFieldContent(ISignNowField fieldMeta)
         {
-            switch (fieldMeta?.FieldType())
+            switch (fieldMeta?.Type)
             {
                 case FieldType.Text:
                 case FieldType.Dropdown:
-                    return Texts.FirstOrDefault(txt => txt.Id == fieldMeta.GetFieldContentId());
+                    return Texts.FirstOrDefault(txt => txt.Id == fieldMeta.ElementId);
 
                 case FieldType.Signature:
                 case FieldType.Initial:
-                    return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.GetFieldContentId());
+                    return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.ElementId);
 
                 case FieldType.Hyperlink:
-                    return Hyperlinks.FirstOrDefault(lnk => lnk.Id == fieldMeta.GetFieldContentId());
+                    return Hyperlinks.FirstOrDefault(lnk => lnk.Id == fieldMeta.ElementId);
 
                 case FieldType.Checkbox:
-                    var checkbox = Checkboxes.FirstOrDefault(cbox => cbox.Id == fieldMeta.GetFieldContentId());
+                    var checkbox = Checkboxes.FirstOrDefault(cbox => cbox.Id == fieldMeta.ElementId);
                     if (!string.IsNullOrEmpty(checkbox?.Id))
                     {
                         checkbox.Data = ((Field)fieldMeta)?.JsonAttributes.PrefilledText == "1";
@@ -77,10 +77,10 @@ namespace SignNow.Net.Model
                     return checkbox;
 
                 case FieldType.Attachment:
-                    return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.GetFieldContentId());
+                    return Attachments.FirstOrDefault(atch => atch.Id == fieldMeta.ElementId);
 
                 case FieldType.RadioButton:
-                    return Radiobuttons.FirstOrDefault(radio => radio.Id == fieldMeta.GetFieldContentId());
+                    return Radiobuttons.FirstOrDefault(radio => radio.Id == fieldMeta.ElementId);
 
                 default:
                     return default;

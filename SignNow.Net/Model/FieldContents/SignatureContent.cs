@@ -44,6 +44,6 @@ namespace SignNow.Net.Model.FieldContents
         }
 
         /// <inheritdoc />
-        public override object GetFieldValue() => Data;
+        public override object GetValue() => Data;
     }
 }
