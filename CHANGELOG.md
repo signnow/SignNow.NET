@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Introduced Interface `ISignNowFieldContent` which allows to retrieve field value for any of SignNow FieldContent object.
 - Introduced Interface `ISignNowField` which allows to get the Type of the field from any of documents fields.
 - `Model.SignNowDocument.GetFieldContent(FieldType)` which allows to retrieve field content for any of SignNow fields.
+### Fixed
+- Changed `expires_in` token value to token lifetime instead of timestamp
 
 ### Changed
 - `Model.Field` now contains property `Model.FieldJsonAttributes`
