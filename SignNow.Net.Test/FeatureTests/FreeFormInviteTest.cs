@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
@@ -17,14 +16,7 @@ namespace FeatureTests
         {
             // Init all required data: User, Document, Invite
             var signNow = new SignNowContext(Token);
-
-            var invitee = new User
-            {
-                Email = "signnow.tutorial+test@signnow.com",
-                FirstName = "Alex",
-                LastName = "Dou",
-                Active = true
-            };
+            var invitee = new UserSignNowFaker().Generate();
             var invite = new FreeFormSignInvite(invitee.Email);
 
             DocumentId = UploadTestDocument(PdfFilePath, signNow.Documents);
@@ -46,7 +38,7 @@ namespace FeatureTests
 
             Assert.AreEqual(DocumentId, documentInfo.Id, "You should get proper document details.");
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
-            Assert.AreEqual(invitee.Email, documentInviteRequest.SignerEmail, "Invite should contains user email whom was sent invite request.");
+            Assert.AreEqual(invitee.Email.ToLowerInvariant(), documentInviteRequest.SignerEmail, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
             Assert.AreEqual(InviteStatus.Pending, documentInviteRequest.Status);
             Assert.AreEqual(DocumentStatus.Pending, documentInfo.Status);
@@ -69,7 +61,7 @@ namespace FeatureTests
 
             // Freeform invite created assertions
             Assert.AreEqual(1, documentWithOneRequest.InviteRequests.Count);
-            Assert.IsNull(documentWithOneRequest.InviteRequests[0].SignatureId, "Signature Id should be null for not signed document");
+            Assert.IsNull(documentWithOneRequest.InviteRequests[0].SignatureId, "SignatureContent Id should be null for not signed document");
             Assert.AreEqual(InviteStatus.Pending, documentWithOneRequest.InviteRequests[0].Status);
             Assert.AreEqual(DocumentStatus.Pending, documentWithOneRequest.Status);
 
@@ -79,7 +71,7 @@ namespace FeatureTests
 
             var documentWithOneSignedRequest = baseDocument
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(1))
-                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(1))
+                .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(1))
                 .FinishWith((f, obj) => {
                     var invite = obj.InviteRequests.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
@@ -133,7 +125,7 @@ namespace FeatureTests
             // sign second freeform invite and complete the document signing
             var documentWithTwoRequestsSigned = baseDocument
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(2))
-                .RuleFor(doc => doc.Signatures, f => new SignatureFaker().Generate(2))
+                .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(2))
                 .FinishWith((f, obj) => {
                     var sig = obj.Signatures.GetEnumerator();
 

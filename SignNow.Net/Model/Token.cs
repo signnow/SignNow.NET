@@ -2,10 +2,13 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Model
 {
+    /// <summary>
+    /// The access token you can use to make requests on behalf of this SignNow account.
+    /// </summary>
     public class Token
     {
         /// <summary>
-        /// Time in seconds for which the <see cref="Token"/> was issued
+        /// Time in seconds for which the <see cref="Token"/> was issued.
         /// </summary>
         [JsonProperty("expires_in")]
         public int ExpiresIn { get; set; }

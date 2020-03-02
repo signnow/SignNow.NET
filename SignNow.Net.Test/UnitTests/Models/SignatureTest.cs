@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Model;
+using SignNow.Net.Model.FieldContents;
 using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
@@ -11,10 +11,10 @@ namespace UnitTests
         [TestMethod]
         public void ShouldDeserializeFromJson()
         {
-            var signatureFake = new SignatureFaker().Generate();
+            var signatureFake = new SignatureContentFaker().Generate();
             var signatureFakeJson = JsonConvert.SerializeObject(signatureFake, Formatting.Indented);
 
-            var signature = JsonConvert.DeserializeObject<Signature>(signatureFakeJson);
+            var signature = JsonConvert.DeserializeObject<SignatureContent>(signatureFakeJson);
             var signatureJson = JsonConvert.SerializeObject(signature, Formatting.Indented);
 
             Assert.AreEqual(signatureFakeJson, signatureJson);

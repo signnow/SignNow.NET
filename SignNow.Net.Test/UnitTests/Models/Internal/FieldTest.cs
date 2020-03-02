@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 using SignNow.Net.Test.FakeModels;
 

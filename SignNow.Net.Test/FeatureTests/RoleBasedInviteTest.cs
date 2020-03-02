@@ -109,13 +109,14 @@ namespace FeatureTests
             // create document with one role and one role invite and check the document status
             var documentWithOneInvite = baseDocument
                 .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
-                .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
+                .RuleFor(d => d.fields, f => new FieldFaker().Generate(1))
                 .FinishWith((f, obj) => {
                     var role = obj.Roles.GetEnumerator();
                     var invite = obj.FieldInvites.GetEnumerator();
 
-                    foreach(var field in obj.Fields)
+                    foreach(var fieldMeta in obj.Fields)
                     {
+                        var field = (Field) fieldMeta;
                         role.MoveNext();
                         invite.MoveNext();
 
@@ -141,7 +142,7 @@ namespace FeatureTests
 
             // sign the document and check the document status
             var documentSigned = baseDocument
-                .RuleFor(d => d.Signatures, new SignatureFaker().Generate(1))
+                .RuleFor(d => d.Signatures, new SignatureContentFaker().Generate(1))
                 .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
                 .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
                 .FinishWith((f, obj) => {
@@ -149,8 +150,9 @@ namespace FeatureTests
                     var invite = obj.FieldInvites.GetEnumerator();
                     var sign = obj.Signatures.GetEnumerator();
 
-                    foreach (var field in obj.Fields)
+                    foreach (var fieldMeta in obj.Fields)
                     {
+                        var field = (Field) fieldMeta;
                         role.MoveNext();
                         invite.MoveNext();
                         sign.MoveNext();

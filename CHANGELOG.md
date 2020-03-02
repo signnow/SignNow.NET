@@ -5,8 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Added
+- Introduced all SignNow field types: Signature, Initial, Text, Dropdown, Checkbox, Radiobutton, Attachment, Hyperlink
+- Added `Internal.Model.FieldJsonAttributes` which contains fields properties (e.g. name, label, X/Y coordinates, width, height)
+- Introduced Interface `ISignNowContent` which allows to retrieve value for any of SignNow (Field) content object.
+- Introduced Interface `ISignNowField` which allows to get the `Type` and element `Id` of the field from any of documents fields.
+- `Model.SignNowDocument.GetFieldContent(FieldType)` which allows to retrieve field content for any of SignNow fields.
+
 ### Fixed
 - Changed `expires_in` token value to token lifetime instead of timestamp
+
+### Changed
+- `Model.Field` now contains property `Model.FieldJsonAttributes`
+- `Model.SignNowDocument` extended by added collections of various SignNow fields (Texts, Checkboxes, Hyperlinks... etc.)
+- `Model.Signature` renamed to `Model.FieldContents.SignatureContent`
+
 
 ## [0.4.0-beta] - 2020-02-19
 ### Added
@@ -53,7 +66,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [0.0.0-beta] - 2019-10-30
 ### Added
-- Authorizaton token retrieval
+- Authorization token retrieval
 - Document upload
 - Document delete
 - Create signing link (to the document that requires an e-signature)

@@ -4,22 +4,22 @@ using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
-using SignNow.Net.Internal.Model;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents SignNow document object.
-    /// <remarks>
-    /// Document is the fundamental unit of every e-Signature operation. It contains:
-    ///     Metadata: file name, size, extension, ID;
-    ///     Fields, elements (texts, checks and signatures),
-    ///     Invites, status of the invites,
-    ///     <see cref="Role" />,
-    ///     Timestamps (date created, date updated)
-    /// </remarks>
+    /// Document is the fundamental unit of every e-Signature operation.
+    /// <para>It contains:</para>
+    /// <list type="bullet">
+    /// <item><description>Metadata: file name, size, extension, ID;</description></item>
+    /// <item><description>Fields, field content elements (texts, checks, signatures, etc...);</description></item>
+    /// <item><description>Invites, statuses of the invites;</description></item>
+    /// <item><description>Document <see cref="Role"/>;</description></item>
+    /// </list>
     /// </summary>
-    public class SignNowDocument
+    public partial class SignNowDocument
     {
         /// <summary>
         /// Identity of specific document.
@@ -94,19 +94,25 @@ namespace SignNow.Net.Model
         /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
-        internal List<Role> Roles { get; private set; } = new List<Role>();
+        internal List<Role> Roles { get; set; } = new List<Role>();
 
         /// <summary>
-        /// The document <see cref="Signature"/>
+        /// The document <see cref="SignatureContent"/>
         /// </summary>
         [JsonProperty("signatures")]
-        internal List<Signature> Signatures { get; private set; } = new List<Signature>();
+        internal List<SignatureContent> Signatures { get; set; } = new List<SignatureContent>();
 
         /// <summary>
         /// The document <see cref="Field"/>
         /// </summary>
         [JsonProperty("fields")]
-        internal List<Field> Fields { get; private set; } = new List<Field>();
+        internal List<Field> fields { get; set; } = new List<Field>();
+
+        /// <summary>
+        /// All the document fields
+        /// </summary>
+        [JsonIgnore]
+        public IReadOnlyCollection<ISignNowField> Fields => fields;
 
         /// <summary>
         /// The document freeform invite requests.
