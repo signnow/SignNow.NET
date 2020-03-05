@@ -5,7 +5,7 @@
     <TargetFrameworks>netcoreapp2.0;netcoreapp2.2;net45</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
-    <ReleaseVersion>0.4.0-beta</ReleaseVersion>
+    <ReleaseVersion>0.5.0-beta</ReleaseVersion>
   </PropertyGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
         <Reference Include="System.Net.Http" />

@@ -79,15 +79,21 @@ Read about the available SignNow features in [SignNow API Docs][api docs link].
 Get your access token via OAuth 2.0 service.
 
 ```csharp
-string clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
-string clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
+// App credentials from signnow account
+var clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
+var clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
 
-string userLogin = "signnow_dotnet_sdk@example.com";
-string userPassword = "example-user-password";
+// Api URL (Sandbox or Production)
+var ApiBaseUrl = new Uri("https://api-eval.signnow.com");
 
-var oauth = new OAuth2Service(clientId, clientSecret);
+// User credentials
+var login = "signnow_dotnet_sdk@example.com";
+var password = "example-user-password";
 
-var token = oauth.GetTokenAsync(userLogin, userPassword, Scope.All).Result;
+// init OAuth2 service
+var oauth = new OAuth2Service(ApiBaseUrl, clientId, clientSecret);
+// Token retrieval
+var token = oauth.GetTokenAsync(login, password, Scope.All).Result;
 ```
 
 ### <a name="upload-document"></a> Upload a document to SignNow
@@ -121,8 +127,11 @@ Choose the type of download for your document:
 -   `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
+// using token from the Authorization step
+var signNowContext = new SignNowContext(token);
+
 // using `documentId` from the Upload document step
-var downloadPdf = SignNow.Documents.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
+var downloadPdf = signNowContext.Documents.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
 
 using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
 {
@@ -144,6 +153,9 @@ Steps:
 ▶ Send a signing link
 
 ```csharp
+// using token from the Authorization step
+var signNowContext = new SignNowContext(token);
+
 // using `documentId` from the Upload document step
 var signingLinks = signNowContext.Documents.CreateSigningLinkAsync(documentId).Result;
 
@@ -163,6 +175,9 @@ Clicking the button opens a document in SignNow editor. Signers can click anywhe
 Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
 
 ```csharp
+// using token from the Authorization step
+var signNowContext = new SignNowContext(token);
+
 var invite = new FreeFormInvite("signer@signnow.com");
 
 // using `documentId` from the Upload document step
@@ -184,6 +199,9 @@ Clicking the button opens a document in SignNow editor. Signers can sign only th
 You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
 
 ```csharp
+// using token from the Authorization step
+var signNowContext = new SignNowContext(token);
+
 // For example, let use document with only two fillable fields
 var pdfFilePath = "./file-path/document-with-fields.pdf";
 
@@ -218,7 +236,7 @@ roleBasedInvite.AddRoleBasedInvite(signer2);
 // Send invite request for sharing the document to be signed
 var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
 
-// Finaly - check if document has invite request
+// Finally - check if document has invite request
 var documentUpdated = signNowContext.Documents.GetDocumentAsync(documentId).Result;
 var fieldInvites = documentUpdated.FieldInvites.First();
 

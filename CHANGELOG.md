@@ -4,16 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+## [0.5.0-beta] - 2020-03-06
 ### Added
-- Introduced all SignNow field types: Signature, Initial, Text, Dropdown, Checkbox, Radiobutton, Attachment, Hyperlink
-- Added `Internal.Model.FieldJsonAttributes` which contains fields properties (e.g. name, label, X/Y coordinates, width, height)
-- Introduced Interface `ISignNowContent` which allows to retrieve value for any of SignNow (Field) content object.
-- Introduced Interface `ISignNowField` which allows to get the `Type` and element `Id` of the field from any of documents fields.
-- `Model.SignNowDocument.GetFieldContent(FieldType)` which allows to retrieve field content for any of SignNow fields.
+- All SignNow field types: Signature, Initial, Text, Dropdown, Checkbox, Radiobutton, Attachment, Hyperlink
+- `Internal.Model.FieldJsonAttributes` that contains fields properties such as name, label, X/Y coordinates, width, height, etc.
+- The `ISignNowContent` interface that allows to retrieve value of any SignNow (Field) content object.
+- The `ISignNowField` interface that allows to retrieve the field value using the `Type` and `ElementId` parameters of the field element 
+- `Model.SignNowDocument.GetFieldContent(FieldType)` that allows to retrieve the field content of any SignNow field.
 
 ### Fixed
-- Changed `expires_in` token value to token lifetime instead of timestamp
+- Changed `expires_in` token value from a timestamp to token lifetime 
 
 ### Changed
 - `Model.Field` now contains property `Model.FieldJsonAttributes`
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Replaced Json mocks with Bogus library for tests.
 
 
-## [0.3.0-beta] 2020-02-03
+## [0.3.0-beta] - 2020-02-03
 ### Added
 - IUserService.GetCurrentUserAsync method which allows developers to retrieve the User resource.
 - IUserService.CreateInviteAsync method for creating freeform or role-based invites.
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - IDocumentService.GetDocumentAsync method can now be used to retrieve document roles, invite requests, timestamps, pages count, etc..
 
 
-## [0.2.0-beta] 2019-12-18
+## [0.2.0-beta] - 2019-12-18
 ### Added
 - DocumentService.DownloadDocumentAsync method which allows to download a document by ID in either Collapsed/With History/Zipped mode
 
@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - "Argument passed in is not serializable" error on any SignNowException in .NET 4.5
 
 
-## [0.1.0-beta] 2019-11-18
+## [0.1.0-beta] - 2019-11-18
 ### Added
 - OAuth2Service.RefreshTokenAsync method.
 - OAuth2Service.ValidateTokenAsync method.
