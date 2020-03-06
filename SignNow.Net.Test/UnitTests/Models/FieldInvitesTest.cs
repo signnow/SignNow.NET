@@ -1,8 +1,8 @@
 using System;
-using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Model;
+using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
@@ -10,31 +10,22 @@ namespace UnitTests
     public class FieldInvitesTest
     {
         [DataTestMethod]
-        [DataRow("created", InviteStatus.Created, DisplayName = "Status: created")]
-        [DataRow("pending", InviteStatus.Pending, DisplayName = "Status: pending")]
-        [DataRow("fulfilled", InviteStatus.Fulfilled, DisplayName = "Status: fulfilled")]
-        [DataRow("skipped", InviteStatus.Skipped, DisplayName = "Status: skipped")]
-        public void ShouldDeserializeFromJson(string status, Enum expected)
+        [DataRow(InviteStatus.Created,   DisplayName = "Status: created")]
+        [DataRow(InviteStatus.Pending,   DisplayName = "Status: pending")]
+        [DataRow(InviteStatus.Fulfilled, DisplayName = "Status: fulfilled")]
+        [DataRow(InviteStatus.Skipped,   DisplayName = "Status: skipped")]
+        public void ShouldDeserializeFromJson(Enum testStatus)
         {
-            var json = $@"{{
-                'id': 'a09b26test07ce70228afe6290f4445700b6f349',
-                'status': '{status}',
-                'role': 'Signer 1',
-                'email': 'signer1@signnow.com',
-                'created': '1579451165',
-                'updated': '1579451165',
-                'expiration_time': '1582043165'
-            }}";
+            var fieldInviteFake = new FieldInviteFaker()
+                .RuleFor(o => o.Status, testStatus)
+                .Generate();
 
-            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(json);
+            var fieldInviteFakeJson = JsonConvert.SerializeObject(fieldInviteFake, Formatting.Indented);
 
-            Assert.AreEqual("a09b26test07ce70228afe6290f4445700b6f349", fieldInvite.Id);
-            Assert.AreEqual(expected, fieldInvite.Status);
-            Assert.AreEqual("Signer 1", fieldInvite.RoleName);
-            Assert.AreEqual("signer1@signnow.com", fieldInvite.SignerEmail);
-            Assert.AreEqual("2020-01-19 16:26:05Z", fieldInvite.Created.ToString("u", CultureInfo.CurrentCulture));
-            Assert.AreEqual("2020-01-19 16:26:05Z", fieldInvite.Updated.ToString("u", CultureInfo.CurrentCulture));
-            Assert.AreEqual("2020-02-18 16:26:05Z", fieldInvite.ExpiredOn.ToString("u", CultureInfo.CurrentCulture));
+            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(fieldInviteFakeJson);
+            var fieldInviteJson = JsonConvert.SerializeObject(fieldInvite, Formatting.Indented);
+
+            Assert.AreEqual(fieldInviteFakeJson, fieldInviteJson);
         }
     }
 }
