@@ -7,38 +7,12 @@ using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Constants;
+using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
     public partial class SignInviteTest
     {
-        private readonly string testDocJson = @"{
-                'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
-                'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
-                'document_name': 'pdf-test',
-                'page_count': '1',
-                'created': '1565787561',
-                'updated': '1565858757',
-                'original_filename': 'pdf-test.pdf',
-                'origin_user_id': null,
-                'origin_document_id': null,
-                'owner': 'test.dotnet@signnow.com',
-                'template': false,
-                'roles': [
-                    {
-                        'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
-                        'signing_order': '1',
-                        'name': 'Signer 1'
-                    },
-                    {
-                        'unique_id': '585a05488fb971644978d3ec943ff6c719bda83a',
-                        'signing_order': '2',
-                        'name': 'Signer 2'
-                    }
-                ],
-                'requests': []
-            }";
-
         [TestMethod]
         public void ShouldSerializeRoleBasedInvite()
         {
@@ -48,8 +22,11 @@ namespace UnitTests
                 'message':null
             }";
 
+            var document = new SignNowDocumentFaker()
+                    .RuleFor(o => o.Roles, new RoleFaker().Generate(2));
+
             var expected = JsonConvert.DeserializeObject(expectedJson);
-            var roleBasedInvite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var roleBasedInvite = new RoleBasedInvite(document);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(roleBasedInvite));
         }
@@ -65,7 +42,10 @@ namespace UnitTests
                 LastName = "Test"
             };
 
-            var roleBasedInvite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(2));
+
+            var roleBasedInvite = new RoleBasedInvite(document);
             // Set user to documents' role
             var roles = roleBasedInvite.DocumentRoles();
 
@@ -85,46 +65,46 @@ namespace UnitTests
             var requestInvite = JObject.FromObject(roleBasedInvite);
 
             requestInvite.Add("from", sender.Email);
-            var expectedJson = @"{
+            var expectedJson = $@"{{
                 'to':[
-                    {
+                    {{
                         'email':'signer1@signnow.com',
                         'role':'Signer 1',
-                        'role_id':'485a05488fb971644978d3ec943ff6c719bda83a',
+                        'role_id':'{roles.First().Id}',
                         'order':1
-                    },
-                    {
+                    }},
+                    {{
                         'email':'signer2@signnow.com',
                         'role':'Signer 2',
-                        'role_id':'585a05488fb971644978d3ec943ff6c719bda83a',
+                        'role_id':'{roles.Last().Id}',
                         'order':2,
                         'authentication_type':'password',
                         'password':'12345abc',
                         'expiration_days':15
-                    }
+                    }}
                 ],
                 'subject':null,
                 'message':null,
                 'from':'sender@signnow.com'
-            }";
+            }}";
 
             var expected = JsonConvert.DeserializeObject(expectedJson);
-            var actual = JsonConvert.SerializeObject(requestInvite, Formatting.None);
+            var actual = JsonConvert.SerializeObject(requestInvite, Formatting.Indented);
 
-            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.None), actual);
+            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), actual);
         }
 
         [TestMethod]
         public void ThrowsExceptionForMissingRoleInDocument()
         {
-            var fakeRole = new Role
-            {
-                Id = "1",
-                Name = "CEO",
-                SigningOrder = 1
-            };
+            var fakeRole = new RoleFaker()
+                .RuleFor(o => o.Name, "==CEO==")
+                .Generate();
 
-            var invite = new RoleBasedInvite(JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(10));
+
+            var invite = new RoleBasedInvite(document);
             var exception = Assert
                 .ThrowsException<SignNowException>(
                     () => invite.AddRoleBasedInvite(
@@ -160,8 +140,10 @@ namespace UnitTests
         [TestMethod]
         public void ThrowsExceptionOnRoleIsNull()
         {
-            var invite = new RoleBasedInvite(
-                JsonConvert.DeserializeObject<SignNowDocument>(testDocJson));
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(3));
+
+            var invite = new RoleBasedInvite(document);
 
             var exception = Assert
                 .ThrowsException<ArgumentNullException>(
