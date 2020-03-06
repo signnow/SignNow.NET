@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
+          asset_path: ${{ github.workspace }}/SignNow.Net/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_name: SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_content_type: application/octet-stream
 
