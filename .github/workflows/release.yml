@@ -65,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: SignNow .Net SDK ${{ steps.get-version.outputs.VERSION }}
+          release_name: SignNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
           # @TODO: try to parse changelog and use ${{ steps.changelog.outputs.body }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
           draft: false
@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
+          asset_path: ${{ github.workspace }}/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_name: SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_content_type: application/octet-stream
 
