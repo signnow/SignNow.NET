@@ -84,14 +84,14 @@ var clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
 var clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
 
 // Api URL (Sandbox or Production)
-var ApiBaseUrl = new Uri("https://api-eval.signnow.com");
+var apiBaseUrl = new Uri("https://api-eval.signnow.com");
 
 // User credentials
 var login = "signnow_dotnet_sdk@example.com";
 var password = "example-user-password";
 
 // init OAuth2 service
-var oauth = new OAuth2Service(ApiBaseUrl, clientId, clientSecret);
+var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
 // Token retrieval
 var token = oauth.GetTokenAsync(login, password, Scope.All).Result;
 ```

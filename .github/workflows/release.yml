@@ -1,4 +1,4 @@
-name: Creates Release and Publish package
+name: Create Release
 
 on:
   push:
@@ -85,7 +85,7 @@ jobs:
 
       - name: Publish Nuget Package
         run: |
-          cd ./SignNow.Net/bin/Publish
+          cd ${{ github.workspace }}/SignNow.Net/SignNow.Net/bin/Publish
           dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
               -k ${{ secrets.NUGET_TOKEN }} \
               -s https://api.nuget.org/v3/index.json
