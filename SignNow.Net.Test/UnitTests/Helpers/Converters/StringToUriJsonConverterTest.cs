@@ -22,7 +22,7 @@ namespace UnitTests
             if (!string.IsNullOrEmpty(location))
             {
                 testObj.Data = new Uri(location);
-            };
+            }
 
             var testJson = JsonConvert.SerializeObject(testObj, Formatting.Indented);
             StringAssert.Contains(testJson, location);
