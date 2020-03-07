@@ -25,8 +25,8 @@ namespace SignNow.Net.Test.Constants
             "Invalid format of email <{0}>. The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).";
 
         /// <summary>
-        /// Value cannot be null. Parameter name: {0}
+        /// Starts string message for Exceptions with nullable param: `Value cannot be null.`
         /// </summary>
-        public static readonly string ValueCannotBeNull = "Value cannot be null." + Environment.NewLine + "Parameter name: {0}";
+        public static readonly string ValueCannotBeNull = "Value cannot be null.";
     }
 }

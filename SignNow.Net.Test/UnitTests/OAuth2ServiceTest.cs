@@ -49,9 +49,8 @@ namespace UnitTests
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => OAuth2.GetAuthorizationUrl(null));
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "redirectUrl"),
-                exception.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.ParamName, "redirectUrl");
         }
 
         [TestMethod]
@@ -60,9 +59,8 @@ namespace UnitTests
             var exception = Assert.ThrowsException<AggregateException>(
                 () => OAuth2.RefreshTokenAsync(null).Result);
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "token"),
-                exception.InnerException?.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.InnerException?.Message, "token");
         }
 
         [TestMethod]
@@ -71,9 +69,8 @@ namespace UnitTests
             var exception = Assert.ThrowsException<AggregateException>(
                 () => OAuth2.ValidateTokenAsync(null).Result);
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "token"),
-                exception.InnerException?.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.InnerException?.Message, "token");
         }
     }
 }

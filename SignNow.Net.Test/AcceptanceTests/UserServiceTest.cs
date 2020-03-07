@@ -133,9 +133,8 @@ namespace AcceptanceTests
             var actual = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateInviteAsync("", null).Result);
 
-            Assert.AreEqual(
-                    string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "invite"),
-                    actual.InnerException?.Message);
+            StringAssert.Contains(actual.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(actual.InnerException?.Message, "invite");
         }
     }
 }

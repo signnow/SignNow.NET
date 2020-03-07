@@ -132,9 +132,8 @@ namespace UnitTests
                 .ThrowsException<ArgumentNullException>(
                     () => new RoleBasedInvite(null));
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "document"),
-                exception.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.ParamName, "document");
         }
 
         [TestMethod]
@@ -149,9 +148,8 @@ namespace UnitTests
                 .ThrowsException<ArgumentNullException>(
                     () => invite.AddRoleBasedInvite(null));
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "options"),
-                exception.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.ParamName, "options");
         }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
+using SignNow.Net.Test.Constants;
 
 namespace UnitTests
 {
@@ -14,7 +15,8 @@ namespace UnitTests
             var response = service.CancelInviteAsync(null as FreeformInvite).Exception;
 
             Assert.IsNotNull(response);
-            StringAssert.Contains(response.InnerException?.Message, "Parameter name: invite");
+            StringAssert.Contains(response.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(response.InnerException?.Message, "invite");
         }
     }
 }
