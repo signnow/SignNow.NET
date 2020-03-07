@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [Unreleased]
+### Changed
+- Upgraded netcore version from 2.x to 3.x for `SignNow.Net.Test`
+
+
 ## [0.5.0-beta] - 2020-03-06
 ### Added
 - All SignNow field types: Signature, Initial, Text, Dropdown, Checkbox, Radiobutton, Attachment, Hyperlink

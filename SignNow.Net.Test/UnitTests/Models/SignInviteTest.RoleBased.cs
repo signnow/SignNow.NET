@@ -95,6 +95,42 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void ShouldCreateRoleBasedInviteRequest()
+        {
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(1));
+
+            var invite = new RoleBasedInvite(document);
+
+            Assert.AreEqual(1, invite.DocumentRoles().Count);
+            Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
+
+            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
+
+            invite.AddRoleBasedInvite(
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
+            );
+
+            var expected = JsonConvert.DeserializeObject($@"
+            {{
+                'to':[
+                    {{
+                        'email':'signer1@signnow.com',
+                        'role':'Signer 1',
+                        'role_id':'{invite.DocumentRoles().First().Id}',
+                        'order':1
+                    }}
+                ],
+                'subject':null,
+                'message':null
+            }}");
+
+            var inviteJson = JsonConvert.SerializeObject(invite, Formatting.Indented);
+
+            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), inviteJson);
+        }
+
+        [TestMethod]
         public void ThrowsExceptionForMissingRoleInDocument()
         {
             var fakeRole = new RoleFaker()

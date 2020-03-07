@@ -47,11 +47,8 @@ namespace UnitTests
         {
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => OAuth2.GetAuthorizationUrl(null));
-#if NET45
-            StringAssert.Contains(exception.Message, "One or more errors occurred.");
-#else
+
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
-#endif
             StringAssert.Contains(exception.ParamName, "redirectUrl");
         }
 
