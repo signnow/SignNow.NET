@@ -48,11 +48,11 @@ To start using the API  you will need an API key. You can get one here <https://
 #### Windows
 
 -   .Net Framework 4.5 or newer version should be installed in your system, or
--   .Net Core 2.0 and newer
+-   .Net Core 3.0 and newer
 
 #### MacOS and Linux
 
--   .Net Core 2.0 and newer
+-   .Net Core 3.0 and newer
 
 ## <a name="installation"></a>Installation
 

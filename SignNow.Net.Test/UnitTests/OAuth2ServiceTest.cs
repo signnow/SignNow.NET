@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
@@ -48,8 +47,11 @@ namespace UnitTests
         {
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => OAuth2.GetAuthorizationUrl(null));
-
+#if NET45
+            StringAssert.Contains(exception.Message, "One or more errors occurred.");
+#else
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+#endif
             StringAssert.Contains(exception.ParamName, "redirectUrl");
         }
 
@@ -58,8 +60,11 @@ namespace UnitTests
         {
             var exception = Assert.ThrowsException<AggregateException>(
                 () => OAuth2.RefreshTokenAsync(null).Result);
-
+#if NET45
+            StringAssert.Contains(exception.Message, "One or more errors occurred.");
+#else
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+#endif
             StringAssert.Contains(exception.InnerException?.Message, "token");
         }
 
