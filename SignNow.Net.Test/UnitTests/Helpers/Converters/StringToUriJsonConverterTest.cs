@@ -17,9 +17,11 @@ namespace UnitTests
         [DataRow("https://signnow.com/location/12345?param=42", DisplayName = "valid Uri with path and query")]
         public void ShouldSerializeValidUri(string location)
         {
-            var testObj = new HyperlinkContent()
+            var testObj = new HyperlinkContent();
+
+            if (!string.IsNullOrEmpty(location))
             {
-                Data = string.IsNullOrEmpty(location) ? null : new Uri(location)
+                testObj.Data = new Uri(location);
             };
 
             var testJson = JsonConvert.SerializeObject(testObj, Formatting.Indented);

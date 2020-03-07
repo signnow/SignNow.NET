@@ -6,9 +6,39 @@ using SignNow.Net.Model.FieldContents;
 namespace SignNow.Net.Test.FakeModels
 {
     /// <summary>
+    /// Faker for <see cref="BaseContent"/>
+    /// </summary>
+    /// <typeparam name="T"><see cref="BaseContent"/></typeparam>
+    internal class BaseContentFaker<T> : Faker<T> where T : BaseContent
+    {
+        /// <summary>
+        /// Used for generation <see cref="BaseContent"/> with inheritance.
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///  "id": "a77b550226c6f41ab9677f0d7b24ac70aea9c47a",
+        ///  "user_id": "068d235caa6a4a3c75fcb0a7d71c78c13abbbd93"
+        ///  "page_number": "1"
+        /// }
+        /// </code>
+        /// </example>
+        public BaseContentFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Id            = f.Random.Hash(40);
+                o.UserId        = f.Random.Hash(40);
+                o.PageNumber    = f.IndexFaker + 1;
+            });
+        }
+    }
+
+    /// <summary>
     /// Faker for <see cref="TextContent"/>
     /// </summary>
-    internal class TextContentFaker : Faker<TextContent>
+    internal class TextContentFaker : BaseContentFaker<TextContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="TextContent"/> fake object.
@@ -29,10 +59,7 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id            = f.Random.Hash(40);
-                o.UserId        = f.Random.Hash(40);
                 o.Email         = f.Internet.Email();
-                o.PageNumber    = f.IndexFaker + 1;
                 o.Data          = f.Lorem.Word();
             });
         }
@@ -41,7 +68,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="HyperlinkContent"/>
     /// </summary>
-    internal class HyperlinkContentFaker : Faker<HyperlinkContent>
+    internal class HyperlinkContentFaker : BaseContentFaker<HyperlinkContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="HyperlinkContent"/> fake object.
@@ -63,10 +90,7 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id            = f.Random.Hash(40);
-                o.UserId        = f.Random.Hash(40);
                 o.Email         = f.Internet.Email();
-                o.PageNumber    = f.IndexFaker + 1;
                 o.Label         = f.Internet.DomainWord();
                 o.Data          = new Uri(f.Internet.Url());
             });
@@ -76,7 +100,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="CheckboxContent"/>
     /// </summary>
-    internal class CheckboxContentFaker : Faker<CheckboxContent>
+    internal class CheckboxContentFaker : BaseContentFaker<CheckboxContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="CheckboxContent"/> fake object.
@@ -96,10 +120,7 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id            = f.Random.Hash(40);
-                o.UserId        = f.Random.Hash(40);
                 o.Email         = f.Internet.Email();
-                o.PageNumber    = f.IndexFaker + 1;
             });
         }
     }
@@ -107,7 +128,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="AttachmentContent"/>
     /// </summary>
-    internal class AttachmentContentFaker : Faker<AttachmentContent>
+    internal class AttachmentContentFaker : BaseContentFaker<AttachmentContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="AttachmentContent"/> fake object.
@@ -129,8 +150,6 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id            = f.Random.Hash(40);
-                o.UserId        = f.Random.Hash(40);
                 o.PageNumber    = f.Random.Int(0, 50);
                 o.OriginalName  = f.System.FileName();
                 o.FileName      = $"{f.Random.Hash(40)}.{f.System.FileExt()}";
@@ -175,7 +194,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="RadiobuttonContent"/>
     /// </summary>
-    internal class RadiobuttonContentFaker : Faker<RadiobuttonContent>
+    internal class RadiobuttonContentFaker : BaseContentFaker<RadiobuttonContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="RadiobuttonContent"/> fake object.
@@ -212,8 +231,6 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id            = f.Random.Hash(40);
-                o.UserId        = f.Random.Hash(40);
                 o.Name          = $"RadiobuttonName_{f.Lorem.Word()}";
                 o.Created       = f.Date.Recent().ToUniversalTime();
                 o.X             = f.Random.Int(0, 1024);
@@ -270,7 +287,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="SignatureContent"/>
     /// </summary>
-    internal class SignatureContentFaker : Faker<SignatureContent>
+    internal class SignatureContentFaker : BaseContentFaker<SignatureContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="SignatureContent"/> fake object.
@@ -293,8 +310,6 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Id                 = f.Random.Hash(40);
-                o.UserId             = f.Random.Hash(40);
                 o.PageNumber         = f.Random.Int(0, 50);
                 o.SignatureRequestId = f.Random.Hash(40);
                 o.Email              = f.Internet.Email();

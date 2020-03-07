@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Model.FieldContents;
 using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
@@ -8,25 +11,30 @@ namespace UnitTests
     [TestClass]
     public class FieldContentsTest
     {
-        [TestMethod]
-        public void ShouldGetFieldContentValue()
+        [DataTestMethod]
+        [DynamicData(nameof(FieldContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(FieldContentNameProvider))]
+        public void ShouldGetFieldContentValue(string testName, ISignNowContent fieldContent)
         {
-            var contents = new List<ISignNowContent>();
+            Assert.IsNotNull(fieldContent?.GetValue());
+            Assert.IsNotNull(fieldContent?.GetValue().ToString());
+        }
 
-            contents.Add(new TextContentFaker().Generate());
-            contents.Add(new SignatureContentFaker().Generate());
-            contents.Add(new RadiobuttonContentFaker().Generate());
-            contents.Add(new HyperlinkContentFaker().Generate());
-            contents.Add(new EnumerationContentFaker().Generate());
-            contents.Add(new CheckboxContentFaker().Generate());
-            contents.Add(new AttachmentContentFaker().Generate());
-            contents.Add(new RadioContentFaker().Generate());
+        public static IEnumerable<object[]> FieldContentProvider()
+        {
+            // Test DisplayName | test object
+            yield return new object[] { nameof(RadiobuttonContent), new RadiobuttonContentFaker().Generate() };
+            yield return new object[] { nameof(EnumerationContent), new EnumerationContentFaker().Generate() };
+            yield return new object[] { nameof(AttachmentContent), new AttachmentContentFaker().Generate() };
+            yield return new object[] { nameof(HyperlinkContent), new HyperlinkContentFaker().Generate() };
+            yield return new object[] { nameof(SignatureContent), new SignatureContentFaker().Generate() };
+            yield return new object[] { nameof(CheckboxContent), new CheckboxContentFaker().Generate() };
+            yield return new object[] { nameof(RadioContent), new RadioContentFaker().Generate() };
+            yield return new object[] { nameof(TextContent), new TextContentFaker().Generate() };
+        }
 
-            foreach (var element in contents)
-            {
-                Assert.IsNotNull(element.GetValue());
-                Assert.IsNotNull(element.GetValue().ToString());
-            }
+        public static string FieldContentNameProvider(MethodInfo methodInfo, object[] data)
+        {
+            return data.First().ToString();
         }
     }
 }
