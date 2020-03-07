@@ -21,13 +21,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
+
       matrix:
         dotnet:
-          - '2.2.402'
+          - '3.1.100'
 
         framework:
-          - 'netcoreapp2.0'
-          - 'netcoreapp2.2'
+          - 'netcoreapp3.0'
+          - 'netcoreapp3.1'
           - 'net45'
 
         name:

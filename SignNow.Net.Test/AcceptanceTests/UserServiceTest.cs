@@ -1,10 +1,7 @@
 using System;
-using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test;
@@ -85,57 +82,13 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void ShouldCreateRoleBasedInviteRequest()
-        {
-            var json = @"{
-                'id': 'a09b26feeba7ce70228afe6290f4445700b6f349',
-                'user_id': '890d13607d89a7b3f6e67a14757d02ec00cf5eae',
-                'document_name': 'pdf-test',
-                'page_count': '1',
-                'created': '1565787561',
-                'updated': '1565858757',
-                'original_filename': 'pdf-test.pdf',
-                'origin_user_id': null,
-                'origin_document_id': null,
-                'owner': 'test.dotnet@signnow.com',
-                'template': false,
-                'roles': [
-                    {
-                        'unique_id': '485a05488fb971644978d3ec943ff6c719bda83a',
-                        'signing_order': '1',
-                        'name': 'Signer 1'
-                    }
-                ],
-                'requests': []
-            }";
-
-            var document = JsonConvert.DeserializeObject<SignNowDocument>(json);
-            var invite = new RoleBasedInvite(document);
-
-            Assert.AreEqual(1, invite.DocumentRoles().Count);
-            Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
-
-            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
-
-            invite.AddRoleBasedInvite(
-                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
-            );
-
-            var invitee = $"{{\"email\":\"signer1@signnow.com\",\"role\":\"Signer 1\",\"role_id\":\"485a05488fb971644978d3ec943ff6c719bda83a\",\"order\":1}}";
-            var expectedInvite = $"{{\"to\":[{invitee}],\"subject\":null,\"message\":null}}";
-
-            Assert.AreEqual(expectedInvite, JsonConvert.SerializeObject(invite));
-        }
-
-        [TestMethod]
         public void ThrowsExceptionForNullableInvite()
         {
             var actual = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateInviteAsync("", null).Result);
 
-            Assert.AreEqual(
-                    string.Format(CultureInfo.CurrentCulture, ErrorMessages.ValueCannotBeNull, "invite"),
-                    actual.InnerException?.Message);
+            StringAssert.Contains(actual.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(actual.InnerException?.Message, "invite");
         }
     }
 }

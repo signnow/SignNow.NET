@@ -2,6 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model;
+using SignNow.Net.Test.Constants;
 
 namespace UnitTests
 {
@@ -16,7 +17,8 @@ namespace UnitTests
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => Guard.ArgumentNotNull(nullableObj, nameof(nullableObj)));
 
-            Assert.AreEqual($"Value cannot be null.{Environment.NewLine}Parameter name: nullableObj", exception.Message);
+            StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(exception.ParamName, "nullableObj");
         }
 
         [TestMethod]
