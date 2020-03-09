@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace SignNow.Net.Test
 {
@@ -17,5 +18,26 @@ namespace SignNow.Net.Test
 
         protected string PdfFilePath => Path.Combine($"{baseTestDataPath}Documents", pdfFileName);
         protected string TxtFilePath => Path.Combine($"{baseTestDataPath}Documents", txtFileName);
+
+        /// <inheritdoc cref="JsonConvert.SerializeObject(object?, Formatting)"/>
+        protected static string SerializeToJsonFormatted(object value)
+        {
+            return JsonConvert.SerializeObject(value, Formatting.Indented);
+        }
+
+        /// <inheritdoc cref="JsonConvert.DeserializeObject{T}(string)"/>
+        protected static T DeserializeFromJson<T>(string value)
+        {
+            return JsonConvert.DeserializeObject<T>(value);
+        }
+
+        /// <summary>
+        /// Dumps object as Json to console output
+        /// </summary>
+        /// <param name="value">any of object</param>
+        protected static void Dump(object value)
+        {
+            Console.WriteLine(SerializeToJsonFormatted(value));
+        }
     }
 }
