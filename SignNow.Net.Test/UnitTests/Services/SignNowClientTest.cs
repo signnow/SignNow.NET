@@ -63,7 +63,9 @@ namespace UnitTests
                     }]
                 }",
                 "context of single errors item" };
-            yield return new object[] { "with property: errors[many]", @"
+            yield return new object[]
+            {
+                "with property: errors[many]", @"
                 {
                     'errors': [
                         {
@@ -75,7 +77,12 @@ namespace UnitTests
                             'message': 'context of second errors item'
                         }
                     ]}",
-                $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine} (context of first errors item) (context of second errors item)" };
+#if NET45
+                $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine}"
+#else
+                $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine} (context of first errors item) (context of second errors item)"
+#endif
+            };
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
