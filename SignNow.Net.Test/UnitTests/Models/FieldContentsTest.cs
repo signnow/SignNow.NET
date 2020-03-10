@@ -4,15 +4,16 @@ using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.FieldContents;
+using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
     [TestClass]
-    public class FieldContentsTest
+    public class FieldContentsTest : SignNowTestBase
     {
         [DataTestMethod]
-        [DynamicData(nameof(FieldContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(FieldContentNameProvider))]
+        [DynamicData(nameof(FieldContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
         public void ShouldGetFieldContentValue(string testName, ISignNowContent fieldContent)
         {
             Assert.IsNotNull(fieldContent?.GetValue());
@@ -32,9 +33,7 @@ namespace UnitTests
             yield return new object[] { nameof(TextContent), new TextContentFaker().Generate() };
         }
 
-        public static string FieldContentNameProvider(MethodInfo methodInfo, object[] data)
-        {
-            return data.First().ToString();
-        }
+        public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
+            DynamicDataDisplayName(methodInfo, data);
     }
 }

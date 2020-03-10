@@ -1,5 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace SignNow.Net.Test
@@ -38,6 +43,27 @@ namespace SignNow.Net.Test
         protected static void Dump(object value)
         {
             Console.WriteLine(SerializeToJsonFormatted(value));
+        }
+
+        /// <summary>
+        /// Retrieve test case name for `DataTestMethod`.
+        /// Test name must be a first element in `object`.
+        /// <example>
+        /// <code>
+        /// public static IEnumerable{object[]} FieldContentProvider()
+        /// {
+        ///    // Test DisplayName | test object
+        ///    yield return new object[] { "radiobutton content test", new RadiobuttonContentFaker().Generate() };
+        /// }
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected static string DynamicDataDisplayName(MethodInfo methodInfo, object[] data)
+        {
+            return $"{methodInfo?.Name} {data.FirstOrDefault()?.ToString()}";
         }
     }
 }
