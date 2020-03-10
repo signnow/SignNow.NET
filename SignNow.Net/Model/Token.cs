@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SignNow.Net.Model
 {
@@ -35,6 +36,7 @@ namespace SignNow.Net.Model
         /// Type of access token (e.g. 'bearer')
         /// </summary>
         [JsonProperty("token_type")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public TokenType TokenType { get; set; }
 
         [JsonProperty("last_login")]

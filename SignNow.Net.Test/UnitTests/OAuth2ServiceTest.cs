@@ -1,14 +1,32 @@
 using System;
 using System.Net;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using SignNow.Net;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
+using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Service;
+using SignNow.Net.Model;
+using SignNow.Net.Test;
 using SignNow.Net.Test.Constants;
+using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
+    /// <summary>
+    /// Test <see cref="OAuth2Service"/> object with
+    /// </summary>
+    public class OAuth2ServiceMock : OAuth2Service
+    {
+        /// <inheritdoc cref="OAuth2Service"/>
+        public OAuth2ServiceMock(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient mockClient)
+            : base(apiBaseUrl, clientId, clientSecret, mockClient) {}
+    }
+
     [TestClass]
-    public class OAuth2ServiceTest
+    public class OAuth2ServiceTest : SignNowTestBase
     {
         private readonly string RedirectUrl = "https://github.com/signnow/SignNow.NET";
         private readonly string RelativeAuthUrl = "/proxy/index.php/authorize";
@@ -77,6 +95,32 @@ namespace UnitTests
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
 #endif
             StringAssert.Contains(exception.InnerException?.Message, "token");
+        }
+
+        [TestMethod]
+        public void EnsuresTokeLifetimeForCodeGrant()
+        {
+            // Add 30 days for token lifetime test
+            var futureTimestamp = UnixTimeStampConverter.ToUnixTimestamp(DateTime.Now.AddDays(30));
+            var fakeToken = new TokenFaker()
+                .RuleFor(t => t.ExpiresIn, (int)futureTimestamp)
+                .Generate();
+
+            var tokenJsonResponse = SerializeToJsonFormatted(fakeToken);
+
+            // Set up mock
+            var mock = new Mock<SignNowClient>(null);
+            mock.As<ISignNowClient>()
+                .Setup(x => x.RequestAsync<Token>(It.IsAny<RequestOptions>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(DeserializeFromJson<Token>(tokenJsonResponse));
+
+            var oauth2 = new OAuth2ServiceMock(ApiBaseUrl, "id", "secret", mock.Object);
+            var token = oauth2.GetTokenAsync("some_authorization_code", Scope.All).Result;
+
+            Assert.AreNotEqual(tokenJsonResponse, SerializeToJsonFormatted(token));
+            Assert.AreNotEqual(fakeToken.ExpiresIn, token.ExpiresIn);
+            Assert.IsTrue(2599200 - token.ExpiresIn >= 0, "token lifetime adjustment error");
+            Assert.IsTrue(fakeToken.ExpiresIn > token.ExpiresIn, "ExpiresIn is Timestamp, expected lifetime");
         }
     }
 }
