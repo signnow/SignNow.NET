@@ -5,7 +5,7 @@ using SignNow.Net.Model;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Represents a user resource
+    /// Interface for any operations with a User in SignNow; i.e. create a user, authenticate a user, retrieve user's documents etc.
     /// </summary>
     public interface IUserService
     {
