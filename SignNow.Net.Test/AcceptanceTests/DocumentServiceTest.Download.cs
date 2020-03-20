@@ -14,9 +14,9 @@ namespace AcceptanceTests
         [DataRow(DownloadType.ZipCollapsed, ".zip")]
         public void DownloadDocumentAsSpecifiedType(DownloadType downloadType, string expectedType)
         {
-            DocumentId = UploadTestDocument(PdfFilePath, docService);
+            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
 
-            var downloadResponse = docService.DownloadDocumentAsync(DocumentId, downloadType).Result;
+            var downloadResponse = SignNowTestContext.Documents.DownloadDocumentAsync(DocumentId, downloadType).Result;
 
             StringAssert.Contains(downloadResponse.Filename, "DocumentUpload", "Wrong Document name");
             StringAssert.Contains(downloadResponse.Filename, expectedType, "Wrong Document type");

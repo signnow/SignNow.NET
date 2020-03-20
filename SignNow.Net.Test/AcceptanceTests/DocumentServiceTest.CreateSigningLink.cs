@@ -12,9 +12,9 @@ namespace AcceptanceTests
         {
             using (var fileStream = File.OpenRead(PdfFilePath))
             {
-                var uploadResponse = docService.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
+                var uploadResponse = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
                 DocumentId = uploadResponse.Id;
-                var signingLinks = docService.CreateSigningLinkAsync(DocumentId).Result;
+                var signingLinks = SignNowTestContext.Documents.CreateSigningLinkAsync(DocumentId).Result;
 
                 Assert.IsNotNull(signingLinks.Url);
                 Assert.IsNotNull(signingLinks.AnonymousUrl);
@@ -26,7 +26,7 @@ namespace AcceptanceTests
         {
             var exception = Assert
                 .ThrowsException<AggregateException>(
-                    () => docService.CreateSigningLinkAsync("Some Wrong Document Id").Result);
+                    () => SignNowTestContext.Documents.CreateSigningLinkAsync("Some Wrong Document Id").Result);
 
             Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, exception.InnerException?.Message);
         }

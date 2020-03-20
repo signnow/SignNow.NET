@@ -12,9 +12,9 @@ namespace AcceptanceTests
         [TestMethod]
         public void DocumentDeletingSuccess()
         {
-            DocumentId = UploadTestDocument(PdfFilePath, docService);
+            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
 
-            var deleteResponse = docService.DeleteDocumentAsync(DocumentId);
+            var deleteResponse = SignNowTestContext.Documents.DeleteDocumentAsync(DocumentId);
             Task.WaitAll(deleteResponse);
 
             Assert.IsFalse(
@@ -26,7 +26,7 @@ namespace AcceptanceTests
         public void CannotDeleteDocumentWithWrongId()
         {
             var documentId = "test";
-            var deleteResponse = docService.DeleteDocumentAsync(documentId);
+            var deleteResponse = SignNowTestContext.Documents.DeleteDocumentAsync(documentId);
 
             Assert.ThrowsException<ArgumentException>(
                 documentId.ValidateId);
