@@ -22,7 +22,7 @@ namespace AcceptanceTests
         /// <returns>InviteResponse</returns>
         private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
-            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
+            DocumentId = UploadTestDocument(PdfFilePath);
 
             return SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;
         }

@@ -12,7 +12,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void DocumentDeletingSuccess()
         {
-            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
+            DocumentId = UploadTestDocument(PdfFilePath);
 
             var deleteResponse = SignNowTestContext.Documents.DeleteDocumentAsync(DocumentId);
             Task.WaitAll(deleteResponse);

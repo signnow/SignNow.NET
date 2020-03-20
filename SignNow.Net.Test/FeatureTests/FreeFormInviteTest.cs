@@ -15,14 +15,13 @@ namespace FeatureTests
         public void DocumentOwnerCanSendFreeFormInviteToUser()
         {
             // Init all required data: User, Document, Invite
-            var signNow = new SignNowContext(Token);
             var invitee = new UserSignNowFaker().Generate();
             var invite = new FreeFormSignInvite(invitee.Email);
 
-            DocumentId = UploadTestDocument(PdfFilePath, signNow.Documents);
+            DocumentId = UploadTestDocument(PdfFilePath);
 
             // Creating Invite request
-            var inviteResponseTask = signNow.Invites.CreateInviteAsync(DocumentId, invite);
+            var inviteResponseTask = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite);
             Task.WaitAll(inviteResponseTask);
 
             var inviteResponse = inviteResponseTask.Result;
@@ -32,7 +31,7 @@ namespace FeatureTests
             Assert.AreEqual(inviteResponse.Id, inviteResponse.Id.ValidateId(), "Successful invite response should contains valid Invite ID.");
 
             // Check if invite was successful and the document contains invite request data
-            var documentInfo = signNow.Documents.GetDocumentAsync(DocumentId).Result;
+            var documentInfo = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
             var inviteIdx = documentInfo.InviteRequests.FindIndex(request => request.Id == inviteResponse.Id);
             var documentInviteRequest = documentInfo.InviteRequests[inviteIdx];
 

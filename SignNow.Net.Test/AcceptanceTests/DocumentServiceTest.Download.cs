@@ -14,7 +14,7 @@ namespace AcceptanceTests
         [DataRow(DownloadType.ZipCollapsed, ".zip")]
         public void DownloadDocumentAsSpecifiedType(DownloadType downloadType, string expectedType)
         {
-            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
+            DocumentId = UploadTestDocument(PdfFilePath);
 
             var downloadResponse = SignNowTestContext.Documents.DownloadDocumentAsync(DocumentId, downloadType).Result;
 

@@ -12,7 +12,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldGetDocumentInfo()
         {
-            DocumentId = UploadTestDocument(PdfFilePath, SignNowTestContext.Documents);
+            DocumentId = UploadTestDocument(PdfFilePath);
             var response = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
 
             Assert.AreEqual(DocumentId, response.Id);
