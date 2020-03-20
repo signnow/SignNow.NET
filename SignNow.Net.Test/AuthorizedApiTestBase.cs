@@ -10,7 +10,15 @@ namespace SignNow.Net.Test
     [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase
     {
-        protected Token Token { get; private set; }
+        /// <summary>
+        /// Token for all authorized API tests
+        /// </summary>
+        protected Token Token { get; set; }
+
+        /// <summary>
+        /// Entry point for all SignNow services by <see cref="ISignNowContext"/>
+        /// </summary>
+        public ISignNowContext SignNowTestContext { get; set; }
 
         /// <summary>
         /// Uploaded test document identity which will be deleted after run TestCase.
@@ -32,21 +40,21 @@ namespace SignNow.Net.Test
             var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.Login, apiCreds.Password);
 
             Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, Scope.All).Result;
+            SignNowTestContext = new SignNowContext(ApiBaseUrl, Token);
         }
 
         /// <summary>
         /// Uploads Document from test fixtures.
         /// </summary>
         /// <param name="filePath">Path to test data.</param>
-        /// <param name="docService"></param>
         /// <returns></returns>
-        protected string UploadTestDocument(string filePath, IDocumentService docService)
+        protected string UploadTestDocument(string filePath)
         {
             string docId = default;
 
             using (var fileStream = File.OpenRead(filePath))
             {
-                var uploadResponse = docService?.UploadDocumentAsync(fileStream, pdfFileName).Result;
+                var uploadResponse = SignNowTestContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
                 docId = uploadResponse?.Id;
 
                 Assert.IsNotNull(

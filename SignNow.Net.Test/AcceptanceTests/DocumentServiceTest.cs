@@ -9,19 +9,11 @@ namespace AcceptanceTests
     [TestClass]
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
-        private IDocumentService docService;
-
-        [TestInitialize]
-        public void Setup()
-        {
-            docService = new DocumentService(Token);
-        }
-
         [TestMethod]
         public void ShouldGetDocumentInfo()
         {
-            DocumentId = UploadTestDocument(PdfFilePath, docService);
-            var response = docService.GetDocumentAsync(DocumentId).Result;
+            DocumentId = UploadTestDocument(PdfFilePath);
+            var response = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
 
             Assert.AreEqual(DocumentId, response.Id);
             Assert.AreEqual(1, response.PageCount);

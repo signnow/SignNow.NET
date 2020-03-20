@@ -5,7 +5,7 @@ using SignNow.Net.Model;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Send a freeform or role-based invite.
+    /// Interface for any operations with an Invite in SignNow: creating or canceling the invite to sign a document, checking status of the invite, etc.
     /// </summary>
     public interface ISignInvite
     {

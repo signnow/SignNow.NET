@@ -15,14 +15,12 @@ namespace AcceptanceTests
         [TestMethod]
         public void ExceptionHandlingTest()
         {
-            var docService = new SignNowContext(Token).Documents;
-
             var documentId = "mstestSignNowDotNetSDK000000000000000000";
             var errorMessage = "Unable to find a route to match the URI: document/" + documentId;
             var rawErrorResponse = "{\"404\":\"Unable to find a route to match the URI: document\\/" + documentId + "\"}";
 
             var exception = Assert.ThrowsException<AggregateException>(
-                () => Task.WaitAll(docService.DeleteDocumentAsync(documentId)));
+                () => Task.WaitAll(SignNowTestContext.Documents.DeleteDocumentAsync(documentId)));
 
             Assert.AreEqual(errorMessage, exception.InnerException?.Message);
             Assert.AreEqual(1, exception.InnerExceptions.Count);

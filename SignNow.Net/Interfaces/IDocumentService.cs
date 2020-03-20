@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace SignNow.Net.Interfaces
 {
+    /// <summary>
+    /// Interface for any operations with a Document in SignNow; can be used to create, download, retrieve, delete a document etc.
+    /// </summary>
     public interface IDocumentService
     {
         /// <summary>

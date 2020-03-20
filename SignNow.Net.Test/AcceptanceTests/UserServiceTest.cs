@@ -12,11 +12,6 @@ namespace AcceptanceTests
     [TestClass]
     public class UserServiceTest : AuthorizedApiTestBase
     {
-        /// <summary>
-        /// Test UserService instance
-        /// </summary>
-        private UserService userService;
-
         private readonly string emailPattern = @"(?<userid>\S+)@(?<domain>\w+.\w+)";
         private readonly string inviteIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
@@ -27,22 +22,15 @@ namespace AcceptanceTests
         /// <returns>InviteResponse</returns>
         private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
-            var documentService = new DocumentService(Token);
-            DocumentId = UploadTestDocument(PdfFilePath, documentService);
+            DocumentId = UploadTestDocument(PdfFilePath);
 
-            return userService.CreateInviteAsync(DocumentId, invite).Result;
-        }
-
-        [TestInitialize]
-        public void Setup()
-        {
-            userService = new UserService(Token);
+            return SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;
         }
 
         [TestMethod]
         public void ShouldGetUserInfo()
         {
-            var userResponse = userService.GetCurrentUserAsync().Result;
+            var userResponse = SignNowTestContext.Users.GetCurrentUserAsync().Result;
 
             StringAssert.Matches(userResponse.Email, new Regex(emailPattern));
             Assert.IsTrue(userResponse.Active);
@@ -75,7 +63,7 @@ namespace AcceptanceTests
                 Id = inviteResponse.Id
             };
 
-            var cancelResponse = userService.CancelInviteAsync(freeformInvite);
+            var cancelResponse = SignNowTestContext.Invites.CancelInviteAsync(freeformInvite);
             Task.WaitAll(cancelResponse);
 
             Assert.IsFalse(cancelResponse.IsFaulted);
@@ -85,7 +73,7 @@ namespace AcceptanceTests
         public void ThrowsExceptionForNullableInvite()
         {
             var actual = Assert.ThrowsException<AggregateException>(
-                () => userService.CreateInviteAsync("", null).Result);
+                () => SignNowTestContext.Invites.CreateInviteAsync("", null).Result);
 
             StringAssert.Contains(actual.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
             StringAssert.Contains(actual.InnerException?.Message, "invite");
