@@ -10,7 +10,15 @@ namespace SignNow.Net.Test
     [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase
     {
-        protected Token Token { get; private set; }
+        /// <summary>
+        /// Token for all authorized API tests
+        /// </summary>
+        protected Token Token { get; set; }
+
+        /// <summary>
+        /// Entry point for all SignNow services by <see cref="ISignNowContext"/>
+        /// </summary>
+        public ISignNowContext SignNowTestContext { get; set; }
 
         /// <summary>
         /// Uploaded test document identity which will be deleted after run TestCase.
@@ -32,6 +40,7 @@ namespace SignNow.Net.Test
             var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.Login, apiCreds.Password);
 
             Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, Scope.All).Result;
+            SignNowTestContext = new SignNowContext(ApiBaseUrl, Token);
         }
 
         /// <summary>
