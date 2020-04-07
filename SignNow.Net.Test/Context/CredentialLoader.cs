@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SignNow.Net.Test.Context
 {
-    class CredentialLoader
+    public class CredentialLoader
     {
         public const string credentialsDirectory = @"Pass";
 
