@@ -15,21 +15,21 @@ Get your account at <https://www.signnow.com/developers>
 
 ## Contents
 
-1.  [Get started](#get-started)
-2.  [Platform dependencies](#platform-dependencies)
-3.  [Installation](#installation)
-4.  [Documentation](#documentation)
-5.  [Features](#features)
-    -   [Authorization](#authorization)
-    -   [Upload a document to SignNow](#upload-document)
-    -   [Download a document from SignNow](#download-document)
-    -   [Create a single-use link to the document for signature](#create-signing-link)
-    -   [Create a freeform invite to the document for signature](#create-freeform-invite)
-    -   [Create a role-based invite to the document for signature](#create-role-based-invite)
-6.  [Contribution guidelines](#contribution-guidelines)
-    -   [XML doc generation](#xml-doc-generation)
-    -   [Important notes](#important-notes)
-7.  [License](#license)
+1. [Get started](#get-started)
+2. [Platform dependencies](#platform-dependencies)
+3. [Installation](#installation)
+4. [Documentation](#documentation)
+5. [Features](#features)
+    - [Authorization](#authorization)
+    - [Upload a document to SignNow](#upload-document)
+    - [Download a document from SignNow](#download-document)
+    - [Create a single-use link to the document for signature](#create-signing-link)
+    - [Create a freeform invite to the document for signature](#create-freeform-invite)
+    - [Create a role-based invite to the document for signature](#create-role-based-invite)
+6. [Contribution guidelines](#contribution-guidelines)
+    - [XML doc generation](#xml-doc-generation)
+    - [Important notes](#important-notes)
+7. [License](#license)
 
 ## <a name="get-started"></a>Get started
 
@@ -47,12 +47,12 @@ To start using the API  you will need an API key. You can get one here <https://
 
 #### Windows
 
--   .Net Framework 4.5 or newer version should be installed in your system, or
--   .Net Core 3.0 and newer
+- .Net Framework 4.5 or newer version should be installed in your system, or
+- .Net Core 3.0 and newer
 
 #### MacOS and Linux
 
--   .Net Core 3.0 and newer
+- .Net Core 3.0 and newer
 
 ## <a name="installation"></a>Installation
 
@@ -79,22 +79,35 @@ Read about the available SignNow features in [SignNow API Docs][api docs link].
 Get your access token via OAuth 2.0 service.
 
 ```csharp
-// App credentials from signnow account
-var clientId = "0fa****-EXAMPLE_CLIENT_ID-****13";
-var clientSecret = "0fb**-EXAMPLE_CLIENT_SECRET-**13";
+public static class AuthenticationExamples
+{
+    /// <summary>
+    /// An example of obtaining an access token via OAuth 2.0 service.
+    /// </summary>
+    public static async Task<Token> RequestAccessToken()
+    {
+        // Api URL (Sandbox or Production)
+        var apiBaseUrl = new Uri("https://api-eval.signnow.com");
 
-// Api URL (Sandbox or Production)
-var apiBaseUrl = new Uri("https://api-eval.signnow.com");
+        // App credentials from SignNow account
+        var clientId = "YOUR_CLIENT_ID";
+        var clientSecret = "YOUR_CLIENT_SECRET";
 
-// User credentials
-var login = "signnow_dotnet_sdk@example.com";
-var password = "example-user-password";
+        // User credentials
+        var userLogin = "USER_EMAIL";
+        var userPassword = "USER_PASSWORD";
 
-// init OAuth2 service
-var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
-// Token retrieval
-var token = oauth.GetTokenAsync(login, password, Scope.All).Result;
+        // init OAuth2 service
+        var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
+
+        // Token retrieval
+        return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All)
+            .ConfigureAwait(false);
+    }
+}
 ```
+
+More examples: [Access Token][access_token example]
 
 ### <a name="upload-document"></a> Upload a document to SignNow
 
@@ -121,10 +134,10 @@ using (var fileStream = File.OpenRead(pdfFilePath))
 
 Choose the type of download for your document:
 
--   `PdfOriginal` - download a document in a state it's been when uploaded to SignNow, before any changes
--   `PdfCollapsed` - download a document in PDF file format
--   `ZipCollapsed` - download a document in ZIP archive
--   `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
+- `PdfOriginal` - download a document in a state it's been when uploaded to SignNow, before any changes
+- `PdfCollapsed` - download a document in PDF file format
+- `ZipCollapsed` - download a document in ZIP archive
+- `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
 // using token from the Authorization step
@@ -167,9 +180,9 @@ Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
 
 *Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
 
-Simply upload a document and send it for signature right away. No need for adding fields and configuring roles. 
-Just add the signer's email address and customize the message in your email. 
-The document will be available for signing via a button in the email. 
+Simply upload a document and send it for signature right away. No need for adding fields and configuring roles.
+Just add the signer's email address and customize the message in your email.
+The document will be available for signing via a button in the email.
 Clicking the button opens a document in SignNow editor. Signers can click anywhere on a document to add their signature.
 
 Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
@@ -191,7 +204,7 @@ var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite
 
 Role-based invites allow you to build e-signature workflows. The document can be signed by multiple signers: each with individual access settings, all arranged in a specific order.
 
-Upload a document or create one from a template. 
+Upload a document or create one from a template.
 
 The document will be available for signing via a button in the email. You can customize email messages for every signer.
 Clicking the button opens a document in SignNow editor. Signers can sign only the fields designated for their role.
@@ -262,13 +275,13 @@ More about the InheritDoc [here](https://www.inheritdoc.io)
 
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
 
--   We accept pull requests from the community. Please, send your pull requests to the **DEVELOP branch** which is the consolidated work-in-progress branch. We don't accept requests to the Master branch.
+- We accept pull requests from the community. Please, send your pull requests to the **DEVELOP branch** which is the consolidated work-in-progress branch. We don't accept requests to the Master branch.
 
--   Please, check in with the documentation first before you open a new Issue.
+- Please, check in with the documentation first before you open a new Issue.
 
--   When suggesting new functionality, give as many details as possible. Add a test or code example if you can.
+- When suggesting new functionality, give as many details as possible. Add a test or code example if you can.
 
--   When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
+- When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
 
 ## <a name="license"></a>License
 
@@ -281,7 +294,6 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 **Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
 
 **Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit <https://www.signnow.com/contact>.
-
 
 <!-- Aliases for URLs: please place here any long urls to keep clean markdown markup -->
 [actions build badge]: https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status"
@@ -297,3 +309,6 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License"
 [license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
 [api docs link]: https://docs.signnow.com
+
+<!-- All examples URLs should be -->
+[access_token example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs
