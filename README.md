@@ -114,21 +114,34 @@ More examples: [Access Token][access_token example]
 All the features in SignNow require a `document_id`. Once you upload a document to SignNow, you get the `document_id` from a successful response.
 
 ```csharp
-string documentId = default;
-
-var pdfFilePath = "./file-path/document-example.pdf";
-var pdfFileName = "document-example.pdf";
-
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
-
-using (var fileStream = File.OpenRead(pdfFilePath))
+public static class DocumentExamples
 {
-    var uploadResponse = signNowContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
+    /// <summary>
+    /// Uploads a PDF document to SignNow and returns SignNowDocument object.
+    /// </summary>
+    /// <param name="pdfFilePath">Full qualified path to your PDF file.</param>
+    /// <param name="token">Access token</param>
+    public static async Task<SignNowDocument> UploadDocument(string pdfFilePath, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+        var pdfFileName = "document-example.pdf";
+        
+        await using var fileStream = File.OpenRead(pdfFilePath);
+        
+        // Upload the document
+        var uploadResponse = signNowContext.Documents
+            .UploadDocumentAsync(fileStream, pdfFileName).Result;
 
-    documentId = uploadResponse.Id;
+        // Gets document ID from successful response
+        var documentId = uploadResponse.Id;
+
+        return await signNowContext.Documents.GetDocumentAsync(documentId);
+    }
 }
 ```
+
+More examples: [Upload document with field extract][upload_doc_extract example]
 
 ### <a name="download-document"></a> Download a document from SignNow
 
@@ -312,3 +325,4 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 
 <!-- All examples URLs should be -->
 [access_token example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs
+[upload_doc_extract example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithFieldExtract.cs
