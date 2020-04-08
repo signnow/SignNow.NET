@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - 'README.md'
       - 'CHANGELOG.md'
-      - '/SignNow.Net.Examples/**'
+      - 'SignNow.Net/SignNow.Net.Examples/**'
 
   pull_request:
     branches:
