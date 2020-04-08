@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SignNow.Net.Test.Context
+﻿namespace SignNow.Net.Test.Context
 {
-    interface ICredentialProvider
+    public interface ICredentialProvider
     {
         CredentialModel GetCredential();
     }
