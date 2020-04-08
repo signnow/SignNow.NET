@@ -68,6 +68,8 @@ namespace SignNow.Net.Examples
             disposableDocumentId = string.Empty;
         }
 
+        #region Authentication Examples
+
         [TestMethod]
         public void RequestAccessTokenTest()
         {
@@ -78,10 +80,14 @@ namespace SignNow.Net.Examples
             Assert.IsFalse(string.IsNullOrEmpty(requestAccessToken.RefreshToken));
         }
 
+        #endregion
+
+        #region Documents Examples
+
         [TestMethod]
         public void UploadDocumentWithFieldExtractTest()
         {
-            var pdfWithTags = Path.Combine(baseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");;
+            var pdfWithTags = Path.Combine(baseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
 
             var documentWithFields = DocumentExamples
                 .UploadDocumentWithFieldExtract(pdfWithTags, token).Result;
@@ -94,5 +100,25 @@ namespace SignNow.Net.Examples
             Assert.AreEqual(FieldType.Text, documentFields.Current.Type);
             Assert.IsTrue(documentWithFields.Fields.Count > 0);
         }
+
+        [TestMethod]
+        public void DownloadSignedDocument()
+        {
+            var testDocument = Path.Combine(baseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
+
+            using var fileStream = File.OpenRead(testDocument);
+            var document = testContext.Documents
+                .UploadDocumentAsync(fileStream, "SignedDocumentTest.pdf").Result;
+
+            disposableDocumentId = document.Id;
+
+            var documentSigned = DocumentExamples
+                .DownloadSignedDocument(document.Id, token).Result;
+
+            Assert.AreEqual("SignedDocumentTest.pdf", documentSigned.Filename);
+            Assert.IsInstanceOfType(documentSigned.Document, typeof(Stream));
+        }
+
+        #endregion
     }
 }

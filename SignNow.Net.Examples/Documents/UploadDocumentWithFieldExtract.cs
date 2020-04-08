@@ -4,7 +4,7 @@ using SignNow.Net.Model;
 
 namespace SignNow.Net.Examples.Documents
 {
-    public static class DocumentExamples
+    public static partial class DocumentExamples
     {
         /// <summary>
         /// Uploads a PDF with fillable field (Signature field)

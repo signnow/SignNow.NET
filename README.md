@@ -153,19 +153,28 @@ Choose the type of download for your document:
 - `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
 
 ```csharp
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
-
-// using `documentId` from the Upload document step
-var downloadPdf = signNowContext.Documents.DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed).Result;
-
-using (FileStream output = new FileStream(@"./outputDir/" + downloadPdf.Filename, FileMode.Create))
+public static class DocumentExamples
 {
-  downloadPdf.Document.CopyTo(output);
+    /// <summary>
+    /// Downloads signed document.
+    /// <see cref="DownloadDocumentResponse"/> contains: file name, file length, Stream content
+    /// </summary>
+    /// <param name="documentId">ID of signed document</param>
+    /// <param name="token">Access token</param>
+    public static async Task<DownloadDocumentResponse> DownloadDocument(string documentId, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+        
+        // using `documentId` from the Upload document step
+        return await signNowContext.Documents
+                        .DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed)
+                        .ConfigureAwait(false);
+    }
 }
-
-Console.WriteLine("Downloaded successful: " + downloadPdf.Filename);
 ```
+
+More examples: [Download Signed document][download_signed_doc example]
 
 ### <a name="create-signing-link"></a> Create a signing link to the document for signature
 
@@ -326,3 +335,4 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 <!-- All examples URLs should be -->
 [access_token example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs
 [upload_doc_extract example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithFieldExtract.cs
+[download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
