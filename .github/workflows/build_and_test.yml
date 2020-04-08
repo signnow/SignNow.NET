@@ -4,9 +4,10 @@ name: Build and Test
 
 on:
   push:
-    path-ignore:
+    paths-ignore:
       - 'README.md'
       - 'CHANGELOG.md'
+      - '/SignNow.Net.Examples/**'
 
   pull_request:
     branches:
