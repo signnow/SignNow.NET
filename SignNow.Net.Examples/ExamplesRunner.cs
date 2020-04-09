@@ -211,6 +211,35 @@ namespace SignNow.Net.Examples
             Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="InviteExamples.CreateRoleBasedInviteToSignTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateRoleBasedInviteToSignTheDocumentTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoleBasedInviteToSignTheDocument.pdf").Result;
+
+            var signNowDoc = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
+
+            disposableDocumentId = document?.Id;
+
+            var inviteResponse = InviteExamples
+                .CreateRoleBasedInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", token).Result;
+
+            Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
+
+            var documentWithInvite = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var createdInvite = documentWithInvite.FieldInvites.FirstOrDefault();
+
+            Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
+            Assert.AreEqual("Signer 1", createdInvite?.RoleName, "Signer role mismatch.");
+            Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
+        }
+
         #endregion
     }
 }
