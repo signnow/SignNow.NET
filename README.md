@@ -228,15 +228,37 @@ Clicking the button opens a document in SignNow editor. Signers can click anywhe
 Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
 
 ```csharp
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
+public static partial class InviteExamples
+{
+    /// <summary>
+    /// Create a freeform invite to the document for signature.
+    /// </summary>
+    /// <param name="document">SignNow document you’d like to have signed</param>
+    /// <param name="email">The email of the invitee.</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// <see cref="InviteResponse"/> which contains an Identity of invite request.
+    /// </returns>
+    public static async Task<InviteResponse>
+        CreateFreeformInviteToSignTheDocument(SignNowDocument document, string email, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
 
-var invite = new FreeFormInvite("signer@signnow.com");
+        // Create freeform invite
+        var invite = new FreeFormSignInvite(email)
+        {
+            Message = $"{email} invited you to sign the document {document.Name}",
+            Subject = "The subject of the Email"
+        };
 
-// using `documentId` from the Upload document step
-// creating Invite request
-var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
+        // Creating Invite request
+        return await signNowContext.Invites.CreateInviteAsync(document.Id, invite).ConfigureAwait(false);
+    }
+}
 ```
+
+More examples: [Create freeform invite][create_ff_invite example]
 
 ### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
 
@@ -356,3 +378,4 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
 [create_sign_lnk example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
 [check_sign_status example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
+[create_ff_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
