@@ -123,7 +123,7 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.DownloadSignedDocument"/>
         /// </summary>
         [TestMethod]
-        public void DownloadSignedDocument()
+        public void DownloadSignedDocumentTest()
         {
             using var fileStream = File.OpenRead(PdfWithoutFields);
             var document = testContext.Documents
@@ -142,7 +142,7 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.CreateSigningLinkToTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateSigningLintToTheDocument()
+        public void CreateSigningLintToTheDocumentTest()
         {
             using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = testContext.Documents
@@ -158,6 +158,23 @@ namespace SignNow.Net.Examples
             Assert.IsInstanceOfType(signingLink.Url, typeof(Uri));
             Assert.AreEqual("https", signingLink.Url.Scheme);
             Assert.IsFalse(string.IsNullOrEmpty(signingLink.Url.OriginalString));
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CheckTheStatusOfTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public void CheckTheStatusOfTheDocumentTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf").Result;
+
+            disposableDocumentId = document?.Id;
+
+            var documentStatus = DocumentExamples.CheckTheStatusOfTheDocument(document.Id, token).Result;
+
+            Assert.AreEqual(DocumentStatus.NoInvite, documentStatus);
         }
 
         #endregion

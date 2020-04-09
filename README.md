@@ -212,7 +212,7 @@ public static partial class DocumentExamples
 }
 ```
 
-More examples: [Create Signing link][create_sign_lnk example]
+More examples: [Create Signing link][create_sign_lnk example] [Check Signing status][check_sign_status example]
 
 ### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
 
@@ -353,3 +353,4 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [upload_doc_extract example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithFieldExtract.cs
 [download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
 [create_sign_lnk example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
+[check_sign_status example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
