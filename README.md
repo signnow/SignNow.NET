@@ -188,15 +188,31 @@ Steps:
 ▶ Send a signing link
 
 ```csharp
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
+public static partial class DocumentExamples
+{
+    /// <summary>
+    /// Create a signing link to the document for signature.
+    /// </summary>
+    /// <param name="documentId">Identity of the document you’d like to have signed</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// Response with:
+    /// <para><see cref="SigningLinkResponse.Url"/> to sign the document via web browser using SignNow credentials.</para>
+    /// <para><see cref="SigningLinkResponse.AnonymousUrl"/> to sign the document via web browser without SignNow credentials.</para>
+    /// </returns>
+    public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
 
-// using `documentId` from the Upload document step
-var signingLinks = signNowContext.Documents.CreateSigningLinkAsync(documentId).Result;
-
-Console.WriteLine("Authorize and Sign the Document" + signingLinks.Url);
-Console.WriteLine("Sign the Document" + signingLinks.AnonymousUrl);
+        // using `documentId` from the Upload document step
+        return await signNowContext.Documents
+            .CreateSigningLinkAsync(documentId).ConfigureAwait(false);
+    }
+}
 ```
+
+More examples: [Create Signing link][create_sign_lnk example]
 
 ### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
 
@@ -336,3 +352,4 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [access_token example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs
 [upload_doc_extract example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithFieldExtract.cs
 [download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
+[create_sign_lnk example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs

@@ -9,10 +9,21 @@ using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
 {
+    /// <summary>
+    /// This Test class contains all tests for Code Samples.
+    /// </summary>
     [TestClass]
     public class ExamplesRunner
     {
-        private readonly string baseTestExamplesPath = "../../../TestExamples/".Replace('/', Path.DirectorySeparatorChar);
+        /// <summary>
+        /// Base path to the `TestExamples` directory.
+        /// Path should use Unix-like directory separator char. It requires for cross platform path compatibility.
+        /// </summary>
+        private static readonly string BaseTestExamplesPath = "../../../TestExamples/"
+            .Replace('/', Path.DirectorySeparatorChar);
+
+        private static readonly string PdfWithSignatureField = Path.Combine(BaseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
+        private static readonly string PdfWithoutFields = Path.Combine(BaseTestExamplesPath, "SignAndDate.pdf");
 
         private static CredentialModel _clientInfo, _userCredentials;
 
@@ -50,6 +61,9 @@ namespace SignNow.Net.Examples
             testContext = new SignNowContext(ApiBaseUrl, token);
         }
 
+        /// <summary>
+        /// Delete test document after each test.
+        /// </summary>
         [TestCleanup]
         public void TearDown()
         {
@@ -70,6 +84,9 @@ namespace SignNow.Net.Examples
 
         #region Authentication Examples
 
+        /// <summary>
+        /// Run test for example: <see cref="AuthenticationExamples.RequestAccessToken"/>
+        /// </summary>
         [TestMethod]
         public void RequestAccessTokenTest()
         {
@@ -84,13 +101,14 @@ namespace SignNow.Net.Examples
 
         #region Documents Examples
 
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.UploadDocumentWithFieldExtract"/>
+        /// </summary>
         [TestMethod]
         public void UploadDocumentWithFieldExtractTest()
         {
-            var pdfWithTags = Path.Combine(baseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
-
             var documentWithFields = DocumentExamples
-                .UploadDocumentWithFieldExtract(pdfWithTags, token).Result;
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result;
 
             disposableDocumentId = documentWithFields?.Id;
 
@@ -101,12 +119,13 @@ namespace SignNow.Net.Examples
             Assert.IsTrue(documentWithFields.Fields.Count > 0);
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.DownloadSignedDocument"/>
+        /// </summary>
         [TestMethod]
         public void DownloadSignedDocument()
         {
-            var testDocument = Path.Combine(baseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
-
-            using var fileStream = File.OpenRead(testDocument);
+            using var fileStream = File.OpenRead(PdfWithoutFields);
             var document = testContext.Documents
                 .UploadDocumentAsync(fileStream, "SignedDocumentTest.pdf").Result;
 
@@ -117,6 +136,28 @@ namespace SignNow.Net.Examples
 
             Assert.AreEqual("SignedDocumentTest.pdf", documentSigned.Filename);
             Assert.IsInstanceOfType(documentSigned.Document, typeof(Stream));
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CreateSigningLinkToTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateSigningLintToTheDocument()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateSigningLinkToTheDocument.pdf").Result;
+
+            disposableDocumentId = document?.Id;
+
+            var signingLink = DocumentExamples
+                .CreateSigningLinkToTheDocument(document.Id, token).Result;
+
+            Assert.IsNotNull(signingLink.Url);
+            Assert.IsNotNull(signingLink.AnonymousUrl);
+            Assert.IsInstanceOfType(signingLink.Url, typeof(Uri));
+            Assert.AreEqual("https", signingLink.Url.Scheme);
+            Assert.IsFalse(string.IsNullOrEmpty(signingLink.Url.OriginalString));
         }
 
         #endregion
