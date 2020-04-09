@@ -202,7 +202,8 @@ public static partial class DocumentExamples
     /// <para> <see cref="SigningLinkResponse.AnonymousUrl"/>
     /// to sign the document via web browser without SignNow credentials. </para>
     /// </returns>
-    public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, Token token)
+    public static async Task<SigningLinkResponse>
+        CreateSigningLinkToTheDocument(string documentId, Token token)
     {
         // using token from the Authorization step
         var signNowContext = new SignNowContext(token);
@@ -228,15 +229,37 @@ Clicking the button opens a document in SignNow editor. Signers can click anywhe
 Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
 
 ```csharp
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
+public static partial class InviteExamples
+{
+    /// <summary>
+    /// Create a freeform invite to the document for signature.
+    /// </summary>
+    /// <param name="document">SignNow document you’d like to have signed</param>
+    /// <param name="email">The email of the invitee.</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// <see cref="InviteResponse"/> which contains an Identity of invite request.
+    /// </returns>
+    public static async Task<InviteResponse>
+        CreateFreeformInviteToSignTheDocument(SignNowDocument document, string email, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
 
-var invite = new FreeFormInvite("signer@signnow.com");
+        // Create freeform invite
+        var invite = new FreeFormSignInvite(email)
+        {
+            Message = $"{email} invited you to sign the document {document.Name}",
+            Subject = "The subject of the Email"
+        };
 
-// using `documentId` from the Upload document step
-// creating Invite request
-var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
+        // Creating Invite request
+        return await signNowContext.Invites.CreateInviteAsync(document.Id, invite).ConfigureAwait(false);
+    }
+}
 ```
+
+More examples: [Create freeform invite][create_ff_invite example]
 
 ### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
 
@@ -252,52 +275,46 @@ Clicking the button opens a document in SignNow editor. Signers can sign only th
 You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
 
 ```csharp
-// using token from the Authorization step
-var signNowContext = new SignNowContext(token);
-
-// For example, let use document with only two fillable fields
-var pdfFilePath = "./file-path/document-with-fields.pdf";
-
-// Upload document with fillable fields and extract fields
-using (var fileStream = File.OpenRead(pdfFilePath))
+public static partial class InviteExamples
 {
-    var documentId = signNowContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, "DocumentWithFields.pdf").Result.Id;
-}
-
-// Get the SignNow document instance by uploaded documentId
-var document = signNowContext.Documents.GetDocumentAsync(documentId).Result;
-
-// Create role-based invite using document with fillable fields
-var roleBasedInvite = new RoleBasedInvite(document);
-
-// Get all document signer roles
-var roles = roleBasedInvite.DocumentRoles();
-
-// Creates options for signers
-var signer1 = new SignerOptions("signer1@signnow.com", roles.First());
-var signer2 = new SignerOptions("signer2@signnow.com", roles.Last())
+    /// <summary>
+    /// Create a role-based invite to the document for signature.
+    /// </summary>
+    /// <param name="document">SignNow document with fields you’d like to have signed</param>
+    /// <param name="email">The email of the invitee.</param>
+    /// <param name="token">Access token</param>
+    /// <returns><see cref="InviteResponse"/> without any Identity of invite request.</returns>
+    public static async Task<InviteResponse>
+        CreateRoleBasedInviteToSignTheDocument(SignNowDocument document, string email, Token token)
     {
-        ExpirationDays = 15,
-        RemindAfterDays = 7
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+
+        // Create role-based invite
+        var invite = new RoleBasedInvite(document)
+        {
+            Message = $"{email} invited you to sign the document {document.Name}",
+            Subject = "The subject of the Email"
+        };
+
+        // Creates options for signers
+        var signer = new SignerOptions(email, invite.DocumentRoles().First())
+            {
+                ExpirationDays = 15,
+                RemindAfterDays = 7,
+            }
+            .SetAuthenticationByPassword("***PASSWORD_TO_OPEN_THE_DOCUMENT***");
+
+        // Attach signer to existing roles in the document
+        invite.AddRoleBasedInvite(signer);
+
+        // Creating Invite request
+        return await signNowContext.Invites.CreateInviteAsync(document.Id, invite).ConfigureAwait(false);
     }
-    .SetAuthenticationByPassword("***secret***");
-
-// Attach signers to existing roles in the document
-roleBasedInvite.AddRoleBasedInvite(signer1);
-roleBasedInvite.AddRoleBasedInvite(signer2);
-
-// Send invite request for sharing the document to be signed
-var inviteResponse = signNowContext.Invites.CreateInviteAsync(documentId, invite).Result;
-
-// Finally - check if document has invite request
-var documentUpdated = signNowContext.Documents.GetDocumentAsync(documentId).Result;
-var fieldInvites = documentUpdated.FieldInvites.First();
-
-// Get field invite request status for the first signer
-var status = fieldInvites.Status.ToString(); // "Pending"
-var roleName = fieldInvites.RoleName; // "Signer 1"
-var signer1email = fieldInvites.Email; // "signer1@signnow.com"
+}
 ```
+
+More examples: [Create role-based invite][create_rb_invite example]
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
 
@@ -356,3 +373,5 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
 [create_sign_lnk example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
 [check_sign_status example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
+[create_ff_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
+[create_rb_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
