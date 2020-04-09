@@ -202,7 +202,8 @@ public static partial class DocumentExamples
     /// <para> <see cref="SigningLinkResponse.AnonymousUrl"/>
     /// to sign the document via web browser without SignNow credentials. </para>
     /// </returns>
-    public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, Token token)
+    public static async Task<SigningLinkResponse>
+        CreateSigningLinkToTheDocument(string documentId, Token token)
     {
         // using token from the Authorization step
         var signNowContext = new SignNowContext(token);
