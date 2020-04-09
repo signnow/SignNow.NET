@@ -25,7 +25,10 @@ namespace SignNow.Net.Examples
         private static readonly string PdfWithSignatureField = Path.Combine(BaseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
         private static readonly string PdfWithoutFields = Path.Combine(BaseTestExamplesPath, "SignAndDate.pdf");
 
-        private static CredentialModel _clientInfo, _userCredentials;
+        /// <summary>Contains application clientId and clientSecret</summary>
+        private static readonly CredentialModel ClientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
+        /// <summary>Contains user Email and Password</summary>
+        private static readonly CredentialModel UserCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
 
         /// <summary>Token for ExampleRunner</summary>
         private readonly Token token;
@@ -33,7 +36,7 @@ namespace SignNow.Net.Examples
         /// <summary>
         /// SignNow service container used for ExampleRunner
         /// </summary>
-        private SignNowContext testContext;
+        private readonly SignNowContext testContext;
 
         /// <summary>
         /// Document Id which should be deleted after each test
@@ -52,12 +55,8 @@ namespace SignNow.Net.Examples
 
         public ExamplesRunner()
         {
-            // Contains application clientId and clientSecret
-            _clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            // Contains user Email and Password
-            _userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
             // Token for test runner
-            token = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, _clientInfo, _userCredentials).Result;
+            token = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, ClientInfo, UserCredentials).Result;
             testContext = new SignNowContext(ApiBaseUrl, token);
         }
 
@@ -90,7 +89,7 @@ namespace SignNow.Net.Examples
         [TestMethod]
         public void RequestAccessTokenTest()
         {
-            var requestAccessToken = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, _clientInfo, _userCredentials).Result;
+            var requestAccessToken = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, ClientInfo, UserCredentials).Result;
 
             Assert.IsNotNull(requestAccessToken);
             Assert.IsFalse(string.IsNullOrEmpty(requestAccessToken.AccessToken));

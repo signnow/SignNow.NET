@@ -107,7 +107,7 @@ public static class AuthenticationExamples
 }
 ```
 
-More examples: [Access Token][access_token example]
+More examples: [Access token][access_token example]
 
 ### <a name="upload-document"></a> Upload a document to SignNow
 
@@ -174,7 +174,7 @@ public static class DocumentExamples
 }
 ```
 
-More examples: [Download Signed document][download_signed_doc example]
+More examples: [Download signed document][download_signed_doc example]
 
 ### <a name="create-signing-link"></a> Create a signing link to the document for signature
 
@@ -197,8 +197,10 @@ public static partial class DocumentExamples
     /// <param name="token">Access token</param>
     /// <returns>
     /// Response with:
-    /// <para><see cref="SigningLinkResponse.Url"/> to sign the document via web browser using SignNow credentials.</para>
-    /// <para><see cref="SigningLinkResponse.AnonymousUrl"/> to sign the document via web browser without SignNow credentials.</para>
+    /// <para> <see cref="SigningLinkResponse.Url"/>
+    /// to sign the document via web browser using SignNow credentials. </para>
+    /// <para> <see cref="SigningLinkResponse.AnonymousUrl"/>
+    /// to sign the document via web browser without SignNow credentials. </para>
     /// </returns>
     public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, Token token)
     {
@@ -212,7 +214,7 @@ public static partial class DocumentExamples
 }
 ```
 
-More examples: [Create Signing link][create_sign_lnk example] [Check Signing status][check_sign_status example]
+More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example]
 
 ### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
 
