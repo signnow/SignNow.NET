@@ -100,8 +100,8 @@ namespace UnitTests
         [TestMethod]
         public void EnsuresTokeLifetimeForCodeGrant()
         {
-            // Add 30 days for token lifetime test
-            var futureTimestamp = UnixTimeStampConverter.ToUnixTimestamp(DateTime.Now.AddDays(30));
+            // Add 3 days for token lifetime test
+            var futureTimestamp = UnixTimeStampConverter.ToUnixTimestamp(DateTime.Now.AddDays(3));
             var fakeToken = new TokenFaker()
                 .RuleFor(t => t.ExpiresIn, (int)futureTimestamp)
                 .Generate();
@@ -119,7 +119,7 @@ namespace UnitTests
 
             Assert.AreNotEqual(tokenJsonResponse, SerializeToJsonFormatted(token));
             Assert.AreNotEqual(fakeToken.ExpiresIn, token.ExpiresIn);
-            Assert.IsTrue(2599200 - token.ExpiresIn >= 0, "token lifetime adjustment error");
+            Assert.IsTrue(2592000 - token.ExpiresIn >= 0, $"token lifetime adjustment error: {token.ExpiresIn}");
             Assert.IsTrue(fakeToken.ExpiresIn > token.ExpiresIn, "ExpiresIn is Timestamp, expected lifetime");
         }
     }
