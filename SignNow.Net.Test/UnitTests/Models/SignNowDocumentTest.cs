@@ -46,7 +46,7 @@ namespace UnitTests
         [DataRow(FieldType.Hyperlink,   DisplayName = "Get values for Hyperlink Fields")]
         [DataRow(FieldType.Checkbox,    DisplayName = "Get values for Checkbox Fields")]
         [DataRow(FieldType.Attachment,  DisplayName = "Get values for Attachment Fields")]
-        [DataRow(FieldType.Dropdown,    DisplayName = "Get values for Dropdown Fields")]
+        [DataRow(FieldType.Enumeration, DisplayName = "Get values for Enumeration Fields")]
         [DataRow(FieldType.RadioButton, DisplayName = "Get values for Radiobutton Fields")]
         public void ShouldGetFieldValuesForDocument(object testType)
         {
@@ -93,12 +93,12 @@ namespace UnitTests
                     {
                         field.Current.RoleId = role.Current.Id;
                         field.Current.Owner = obj.Owner;
-                        field.Current.JsonAttributes.Name = ((FieldType)testType).ToString() + "Name";
-                        field.Current.JsonAttributes.Label = ((FieldType)testType).ToString() + "LabelName";
+                        field.Current.JsonAttributes.Name = (FieldType)testType + "Name";
+                        field.Current.JsonAttributes.Label = (FieldType)testType + "LabelName";
 
                         text.Current.Id = field.Current.ElementId;
                         text.Current.Email = field.Current.Signer;
-                        text.Current.Data = (FieldType)testType == FieldType.Dropdown
+                        text.Current.Data = (FieldType)testType == FieldType.Enumeration
                             ? "this is test dropdown element value"
                             : "this is test text field value";
 
@@ -115,7 +115,7 @@ namespace UnitTests
                         checkbox.Current.Id = field.Current.ElementId;
                         if (field.Current.Type == FieldType.Checkbox)
                         {
-                            field.Current.JsonAttributes.PrefilledText = f.PickRandom(new[] { "1", "" });
+                            field.Current.JsonAttributes.PrefilledText = f.PickRandom("1", "");
                         }
 
                         attach.Current.Id = field.Current.ElementId;
@@ -171,7 +171,7 @@ namespace UnitTests
                         Assert.AreEqual("TestFileName.pdf", attachmentValue.OriginalName);
                         break;
 
-                    case FieldType.Dropdown:
+                    case FieldType.Enumeration:
                         var dropdownValue = fieldValue as TextContent;
                         Assert.AreEqual(field.ElementId, dropdownValue?.Id, "Wrong dropdown ID");
                         Assert.AreEqual("this is test dropdown element value", dropdownValue.GetValue());

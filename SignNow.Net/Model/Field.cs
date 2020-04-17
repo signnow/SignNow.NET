@@ -95,9 +95,9 @@ namespace SignNow.Net.Model
         Checkbox,
 
         /// <summary>
-        /// Dropdown list.
+        /// Enumeration list.
         /// </summary>
-        Dropdown,
+        Enumeration,
 
         /// <summary>
         /// Radio button group with Radio elements included.
