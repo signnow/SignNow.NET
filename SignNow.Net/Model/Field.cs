@@ -87,7 +87,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Initials fields.
         /// </summary>
-        Initial,
+        Initials,
 
         /// <summary>
         /// Check box.

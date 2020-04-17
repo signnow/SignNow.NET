@@ -61,7 +61,7 @@ namespace SignNow.Net.Model
                     return Texts.FirstOrDefault(txt => txt.Id == fieldMeta.ElementId);
 
                 case FieldType.Signature:
-                case FieldType.Initial:
+                case FieldType.Initials:
                     return Signatures.FirstOrDefault(sig => sig.Id == fieldMeta.ElementId);
 
                 case FieldType.Hyperlink:
