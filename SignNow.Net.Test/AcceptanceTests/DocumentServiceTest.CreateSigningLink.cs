@@ -1,7 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Test.Constants;
 using System;
+using System.Globalization;
 using System.IO;
+using SignNow.Net.Exceptions;
 
 namespace AcceptanceTests
 {
@@ -28,7 +29,10 @@ namespace AcceptanceTests
                 .ThrowsException<AggregateException>(
                     () => SignNowTestContext.Documents.CreateSigningLinkAsync("Some Wrong Document Id").Result);
 
-            Assert.AreEqual(ErrorMessages.TheDocumentIdShouldHave40Characters, exception.InnerException?.Message);
+            var expected = string
+                .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, "Some Wrong Document Id");
+
+            Assert.AreEqual(expected, exception.InnerException?.Message);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Internal.Extensions
 {
@@ -29,8 +31,7 @@ namespace SignNow.Net.Internal.Extensions
             if (regex.IsMatch(id) && !string.IsNullOrWhiteSpace(id)) return id;
 
             throw new ArgumentException(
-                "Invalid format of ID <" + id + ">. " +
-                "The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.");
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, id));
         }
 
         /// <summary>
@@ -46,8 +47,7 @@ namespace SignNow.Net.Internal.Extensions
             if (regex.IsMatch(email) && !string.IsNullOrWhiteSpace(email)) return email;
 
             throw new ArgumentException(
-                "Invalid format of email <" + email + ">. " +
-                "The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).");
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, email));
         }
     }
 }
