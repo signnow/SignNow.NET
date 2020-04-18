@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+
+
+## [0.5.1-beta] - 2020-04-18
 ### Changed
 - Upgraded netcore version from 2.x to 3.x for `SignNow.Net.Test`
 - Added project `SignNow.Net.Examples` with code samples

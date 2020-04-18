@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.5.0-beta</Version>
+        <Version>0.5.1-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
         <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
@@ -13,27 +13,20 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
-        <PackageReleaseNotes>Added:
-- All SignNow field types: Signature, Initial, Text, Dropdown, Checkbox, Radiobutton, Attachment, Hyperlink
-- `Internal.Model.FieldJsonAttributes` that contains fields properties such as name, label, X/Y coordinates, width, height, etc.
-- The `ISignNowContent` interface that allows to retrieve value of any SignNow (Field) content object.
-- The `ISignNowField` interface that allows to retrieve the field value using the `Type` and `ElementId` parameters of the field element
-- `Model.SignNowDocument.GetFieldContent(FieldType)` that allows to retrieve the field content of any SignNow field.
+        <PackageReleaseNotes>Changed:
+- Upgraded netcore version from 2.x to 3.x for `SignNow.Net.Test`
+- Added project `SignNow.Net.Examples` with code samples
+- Added validation for all document identity
 
 Fixed:
-- Changed `expires_in` token value from a timestamp to token lifetime
-
-Changed:
-- `Model.Field` now contains property `Model.FieldJsonAttributes`
-- `Model.SignNowDocument` extended by added collections of various SignNow fields (Texts, Checkboxes, Hyperlinks... etc.)
-- `Model.Signature` renamed to `Model.FieldContents.SignatureContent`
+- Fixed `Field.Type` converting error
 </PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <ReleaseVersion>0.5.0-beta</ReleaseVersion>
-        <PackageVersion>0.5.0-beta</PackageVersion>
+        <ReleaseVersion>0.5.1-beta</ReleaseVersion>
+        <PackageVersion>0.5.1-beta</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>
