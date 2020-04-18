@@ -16,6 +16,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be viewed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be removed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -52,6 +54,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to create signing link for</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing URL to sign the document using web browser.</returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -61,6 +64,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="type">Download document <see cref="DownloadType">type</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
     }
 }

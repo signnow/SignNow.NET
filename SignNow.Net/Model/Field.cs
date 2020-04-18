@@ -80,7 +80,7 @@ namespace SignNow.Net.Model
         Text,
 
         /// <summary>
-        /// SignatureContent fields.
+        /// Signature fields.
         /// </summary>
         Signature,
 

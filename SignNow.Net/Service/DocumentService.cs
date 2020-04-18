@@ -14,14 +14,22 @@ namespace SignNow.Net.Service
 {
     public class DocumentService : AuthorizedWebClientBase, IDocumentService
     {
+        /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
         public DocumentService(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
         }
 
+        /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
         public DocumentService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
         {
         }
 
+        /// <summary>
+        /// Creates new instance of <see cref="DocumentService"/>
+        /// </summary>
+        /// <param name="baseApiUrl"><see cref="ApiUrl.ApiBaseUrl"/></param>
+        /// <param name="token"><see cref="Token"/></param>
+        /// <param name="signNowClient"><see cref="ISignNowClient"/></param>
         protected internal DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
         {
         }
@@ -46,7 +54,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestFullUrl,
-                Content = new JsonHttpContent(new { document_id = documentId }),
+                Content = new JsonHttpContent(new { document_id = documentId.ValidateId() }),
                 Token = Token
             };
 
@@ -124,12 +132,13 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync(
-                requestOptions,
-                new HttpContentToDownloadDocumentResponseAdapter(),
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken
-                ).ConfigureAwait(false);
+            return await SignNowClient
+                .RequestAsync(
+                    requestOptions,
+                    new HttpContentToDownloadDocumentResponseAdapter(),
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }
