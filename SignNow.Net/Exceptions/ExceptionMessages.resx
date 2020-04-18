@@ -129,4 +129,12 @@
     <value>Document must contains at least one fillable field assigned to one role.</value>
     <comment>Looks up a localized string similar to Document must have fillable fields.</comment>
   </data>
+  <data name="InvalidFormatOfId" xml:space="preserve">
+    <value>Invalid format of ID `{0}`. The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.</value>
+    <comment>Looks up a localized string similar to Invalid format of ID.</comment>
+  </data>
+  <data name="InvalidFormatOfEmail" xml:space="preserve">
+    <value>Invalid format of email `{0}`. The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).</value>
+    <comment>Looks up a localized string similar to Invalid format of email.</comment>
+  </data>
 </root>

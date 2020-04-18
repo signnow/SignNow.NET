@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - Upgraded netcore version from 2.x to 3.x for `SignNow.Net.Test`
 - Added project `SignNow.Net.Examples` with code samples
+- Added validation for all document identity
+
+### Fixed
+- Fixed `Field.Type` converting error [#96](https://github.com/signnow/SignNow.NET/issues/96)
 
 
 ## [0.5.0-beta] - 2020-03-06

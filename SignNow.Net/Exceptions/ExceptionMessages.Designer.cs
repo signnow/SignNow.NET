@@ -87,5 +87,23 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("NoFillableFieldsWithRole", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid format of ID.
+        /// </summary>
+        internal static string InvalidFormatOfId {
+            get {
+                return ResourceManager.GetString("InvalidFormatOfId", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid format of email.
+        /// </summary>
+        internal static string InvalidFormatOfEmail {
+            get {
+                return ResourceManager.GetString("InvalidFormatOfEmail", resourceCulture);
+            }
+        }
     }
 }

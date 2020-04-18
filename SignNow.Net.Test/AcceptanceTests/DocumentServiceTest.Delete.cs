@@ -2,8 +2,8 @@ using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
-using SignNow.Net.Test.Constants;
 
 namespace AcceptanceTests
 {
@@ -36,7 +36,7 @@ namespace AcceptanceTests
                     () => Task.WaitAll(deleteResponse));
 
             Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.InvalidFormatOfId, documentId),
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, documentId),
                 exception.InnerException?.Message);
         }
     }

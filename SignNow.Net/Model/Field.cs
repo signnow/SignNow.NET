@@ -80,14 +80,14 @@ namespace SignNow.Net.Model
         Text,
 
         /// <summary>
-        /// SignatureContent fields.
+        /// Signature fields.
         /// </summary>
         Signature,
 
         /// <summary>
         /// Initials fields.
         /// </summary>
-        Initial,
+        Initials,
 
         /// <summary>
         /// Check box.
@@ -95,9 +95,9 @@ namespace SignNow.Net.Model
         Checkbox,
 
         /// <summary>
-        /// Dropdown list.
+        /// Enumeration list.
         /// </summary>
-        Dropdown,
+        Enumeration,
 
         /// <summary>
         /// Radio button group with Radio elements included.

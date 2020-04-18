@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
-using SignNow.Net.Test.Constants;
 
 namespace UnitTests
 {
@@ -22,7 +22,7 @@ namespace UnitTests
                 id.ValidateId);
 
             Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.InvalidFormatOfId, id),
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, id),
                 exception.Message);
         }
 
@@ -43,7 +43,7 @@ namespace UnitTests
                 email.ValidateEmail);
 
             Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ErrorMessages.InvalidFormatOfEmail, email),
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, email),
                 exception.Message);
         }
 
