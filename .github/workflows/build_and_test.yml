@@ -132,7 +132,7 @@ jobs:
       - name: Store coverage result for ${{ matrix.framework }}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ runner.os }}-${{ matrix.framework }}-coverage.opencover.xml
+          name: ${{ runner.os }}/${{ matrix.framework }}/coverage.opencover.xml
           path: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
 
       # - name: Setup Codacy report sender Cache
@@ -184,50 +184,50 @@ jobs:
         # Download all code coverage reports
       - uses: actions/download-artifact@v1
         with:
-          name: Linux-netcoreapp3.0-coverage.opencover.xml
+          name: Linux/netcoreapp3.0/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: Linux-netcoreapp3.1-coverage.opencover.xml
+          name: Linux/netcoreapp3.1/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: macOS-netcoreapp3.0-coverage.opencover.xml
+          name: macOS/netcoreapp3.0/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: macOS-netcoreapp3.1-coverage.opencover.xml
+          name: macOS/netcoreapp3.1/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: Windows-netcoreapp3.0-coverage.opencover.xml
+          name: Windows/netcoreapp3.0/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: Windows-netcoreapp3.1-coverage.opencover.xml
+          name: Windows/netcoreapp3.1/coverage.opencover.xml
       - uses: actions/download-artifact@v1
         with:
-          name: Windows-net45-coverage.opencover.xml
+          name: Windows/net45/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r Linux-netcoreapp3.0-coverage.opencover.xml
+            --force-language csharp --partial -r Linux/netcoreapp3.0/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r Linux-netcoreapp3.1-coverage.opencover.xml
+            --force-language csharp --partial -r Linux/netcoreapp3.1/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r macOS-netcoreapp3.0-coverage.opencover.xml
+            --force-language csharp --partial -r macOS/netcoreapp3.0/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r macOS-netcoreapp3.1-coverage.opencover.xml
+            --force-language csharp --partial -r macOS/netcoreapp3.1/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r Windows-netcoreapp3.0-coverage.opencover.xml
+            --force-language csharp --partial -r Windows/netcoreapp3.0/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp --partial -r Windows-netcoreapp3.1-coverage.opencover.xml
+            --force-language csharp --partial -r Windows/netcoreapp3.1/coverage.opencover.xml
       - run: |
           bash <(curl -Ls https://coverage.codacy.com/get.sh) final \
             --codacy-api-base-url https://api.codacy.com --commit-uuid ${{ github.sha }} \
-            --force-language csharp -r Windows-net45-coverage.opencover.xml
+            --force-language csharp -r Windows/net45/coverage.opencover.xml
