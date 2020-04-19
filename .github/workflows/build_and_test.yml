@@ -66,10 +66,13 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
-      COVERAGE_PATH: ${{ github.workspace }}/SignNow.Net.Test/bin/Debug
+      COVERAGE_PATH: SignNow.Net.Test/bin/Debug
+      CODACY_COVERAGE_REPORTER_URL: https://github.com/codacy/codacy-coverage-reporter/releases/download/7.8.1/codacy-coverage-reporter-assembly-7.8.1.jar
 
     steps:
       - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
 
       - name: Setup .Net ${{ matrix.dotnet }}
         if: (runner.os == 'macOS' || runner.os == 'Linux')
@@ -94,8 +97,7 @@ jobs:
           echo "::add-path::$HOME/.dotnet/tools"
 
       - name: Restore Nuget packages
-        run: |
-          dotnet restore -v:n
+        run: dotnet restore -v:n
 
       - name: Configure SignNow account
         run: |
@@ -104,55 +106,46 @@ jobs:
           echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
 
       - name: Build for .Net Standard 1.2
+        if: matrix.framework == 'netcoreapp3.0'
         shell: pwsh
-        run: |
-          dotnet build SignNow.Net `
-            --configuration Debug --framework netstandard1.2
+        run: dotnet build SignNow.Net --configuration Debug --framework netstandard1.2
 
       - name: Build for .Net Standard 2.0
+        if: matrix.framework == 'netcoreapp3.1'
         shell: pwsh
-        run: |
-          dotnet build SignNow.Net `
-            --configuration Debug --framework netstandard2.0
+        run: dotnet build SignNow.Net --configuration Debug --framework netstandard2.0
 
       - name: Build for .Net 4.5
-        if: runner.os == 'Windows'
+        if: (runner.os == 'Windows' && matrix.framework == 'net45')
         shell: pwsh
-        run: |
-          dotnet build SignNow.Net `
-            --configuration Debug --framework net45
+        run: dotnet build SignNow.Net --configuration Debug --framework net45
 
       - name: Run Tests on ${{ matrix.framework }}
         shell: pwsh
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
-            /p:EnableCoverage=true
+            /p:CollectCoverage=true
 
-      # - name: Setup Codacy report sender Cache
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ${{ github.workspace }}/.codacy-coverage
-      #     key: ${{ runner.os }}-codacy-${{ hashFiles('**/.github/workflows/build_and_test.yml') }}
-      #     restore-keys: ${{ runner.os }}-codacy-
+      - name: Upload Code Coverage Report (Codacy)
+        if: github.ref == 'refs/heads/develop'
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        shell: pwsh
+        run: |
+          curl -LS -o codacy-coverage-reporter-assembly.jar ${{ env.CODACY_COVERAGE_REPORTER_URL }}
+          java -jar codacy-coverage-reporter-assembly.jar report `
+            -t ${{ secrets.CODACY_PROJECT_TOKEN }} `
+            -l csharp --force-language --commit-uuid ${{ github.sha }} `
+            -r ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
 
-      # - name: Upload Code Coverage Report (Codacy)
-      #   env:
-      #     CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      #   run: |
-      #     bash <(curl -sSL https://coverage.codacy.com/get.sh) report \
-      #       --codacy-api-base-url https://api.codacy.com \
-      #       --commit-uuid ${{ github.sha }} \
-      #       --force-language csharp \
-      #       -r ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
-
-      - name: Setup Codecov tags
+      - name: Setup Code Coverage report flags
         shell: pwsh
         run: |
           If ("${{ matrix.framework }}" -eq "netcoreapp3.0") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard1.2"
+            echo "::set-env name=TARGET_FRAMEWORK::netstandard12"
           } ElseIf ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard2.0"
+            echo "::set-env name=TARGET_FRAMEWORK::netstandard20"
           } Else {
             echo "::set-env name=TARGET_FRAMEWORK::net45"
           }
@@ -164,6 +157,6 @@ jobs:
           name: ${{ runner.os }}-codecov-${{ matrix.framework }}
           flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./SignNow.Net.Test/bin/Debug/${{ matrix.framework }}/coverage.opencover.xml
+          file: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
           yml: ./codecov.yml
           fail_ci_if_error: false

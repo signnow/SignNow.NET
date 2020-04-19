@@ -79,13 +79,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/SignNow.Net/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
+          asset_path: ${{ github.workspace }}/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_name: SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
           asset_content_type: application/octet-stream
 
       - name: Publish Nuget Package
         run: |
-          cd ${{ github.workspace }}/SignNow.Net/SignNow.Net/bin/Publish
+          cd ${{ github.workspace }}/SignNow.Net/bin/Publish
           dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
               -k ${{ secrets.NUGET_TOKEN }} \
               -s https://api.nuget.org/v3/index.json
