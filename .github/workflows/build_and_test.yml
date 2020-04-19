@@ -124,7 +124,7 @@ jobs:
         shell: pwsh
         run: |
           dotnet test SignNow.Net.Test `
-            --configuration Debug --framework ${{ matrix.framework }} --filter UnitTests `
+            --configuration Debug --framework ${{ matrix.framework }} `
             /p:CollectCoverage=true
 
       - name: Upload Code Coverage Report (Codacy)
