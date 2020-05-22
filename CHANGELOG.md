@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-
+### Fixed
+- Fixed `Models.FieldContents.RadiobuttonContent` converting error [#104](https://github.com/signnow/SignNow.NET/issues/104)
 
 ## [0.5.1-beta] - 2020-04-18
 ### Changed
