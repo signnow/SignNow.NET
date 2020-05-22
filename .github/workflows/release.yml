@@ -59,29 +59,19 @@ jobs:
 #          echo "::set-output name=body::$(cat CHANGELOG.md)
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: SignNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: SignNow .Net SDK v${{ steps.get-version.outputs.version }}
+          tag: ${{ steps.get-version.outputs.version }}
           # @TODO: try to parse changelog and use ${{ steps.changelog.outputs.body }}
           body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          draft: false
-          # Change `prerelease: false` when finish with beta versions
+          # This will update existing tags if any
+          allowUpdates: true
+          artifacts: ${{ github.workspace }}/SignNow.Net/bin/Publish/*.nupkg
+          artifactContentType: application/octet-stream
+          # @TODO: Change `prerelease: false` or remove this flag when finish with beta versions
           prerelease: true
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/SignNow.Net/bin/Publish/SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
-          asset_name: SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg
-          asset_content_type: application/octet-stream
 
       - name: Publish Nuget Package
         run: |
