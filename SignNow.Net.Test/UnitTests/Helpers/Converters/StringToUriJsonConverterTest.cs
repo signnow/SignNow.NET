@@ -1,6 +1,8 @@
 using System;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model.FieldContents;
 
@@ -18,14 +20,21 @@ namespace UnitTests
         public void ShouldSerializeValidUri(string location)
         {
             var testObj = new HyperlinkContent();
+            var expected = $"\"data\": \"{location}\",";
 
             if (!string.IsNullOrEmpty(location))
             {
                 testObj.Data = new Uri(location);
             }
+            else
+            {
+                testObj.Data = null;
+                expected = "\"data\": null,";
+            }
 
             var testJson = JsonConvert.SerializeObject(testObj, Formatting.Indented);
-            StringAssert.Contains(testJson, location);
+            Console.WriteLine(testJson);
+            StringAssert.Contains(testJson, expected);
         }
 
         [DataTestMethod]
@@ -48,14 +57,19 @@ namespace UnitTests
             var exception = Assert.ThrowsException<JsonSerializationException>(
                 () => JsonConvert.DeserializeObject<HyperlinkContent>("{'data': '42'}"));
 
-            Assert.AreEqual("Unexpected value when converting to Uri. Expected an absolute Url, got '42'.", exception.Message);
+            var expectedMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                "Uri", "an absolute Url", 42);
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
 
         [TestMethod]
         public void CanConvertUriType()
         {
             var converter = new StringToUriJsonConverter();
+
             Assert.IsTrue(converter.CanConvert(typeof(Uri)));
+            Assert.IsFalse(converter.CanConvert(typeof(string)));
         }
     }
 }

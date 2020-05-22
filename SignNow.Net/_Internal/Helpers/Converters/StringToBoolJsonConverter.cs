@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Internal.Helpers.Converters
 {
@@ -29,8 +30,8 @@ namespace SignNow.Net.Internal.Helpers.Converters
                     return false;
                 default:
                     throw new JsonSerializationException(string.Format(
-                        CultureInfo.CurrentCulture,
-                        "Unexpected value when converting to Bool. Expected \"true\", \"false\", got '{0}'.",
+                        CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                        objectType.Name, "`true`, `false`",
                         reader.Value.ToString()));
             }
         }

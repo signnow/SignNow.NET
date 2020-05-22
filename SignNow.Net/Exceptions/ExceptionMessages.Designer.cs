@@ -105,5 +105,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("InvalidFormatOfEmail", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to: Unexpected value when converting to `{0}`. Expected {1}, got {2}.
+        /// </summary>
+        internal static string UnexpectedValueWhenConverting {
+            get {
+                return ResourceManager.GetString("UnexpectedValueWhenConverting", resourceCulture);
+            }
+        }
     }
 }

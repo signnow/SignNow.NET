@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Internal.Helpers.Converters
 {
@@ -19,9 +20,19 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.ReadJson" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return reader.TokenType == JsonToken.String
-                ? UnixTimeStampConverter.FromUnixTimestamp(long.Parse(reader.Value.ToString(), NumberStyles.None,  NumberFormatInfo.InvariantInfo))
-                : DateTime.Parse(reader.Value.ToString().Trim(), NumberFormatInfo.InvariantInfo, DateTimeStyles.None);
+            var hasAllowedType = reader.TokenType == JsonToken.Integer
+                              || reader.TokenType == JsonToken.String;
+
+            if (reader.Value != null && hasAllowedType)
+            {
+                return UnixTimeStampConverter.FromUnixTimestamp(
+                        long.Parse(reader.Value.ToString(), NumberStyles.None, NumberFormatInfo.InvariantInfo));
+            }
+
+            throw new JsonSerializationException(
+                string.Format(
+                    CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                    objectType.Name, "`String`, `Integer`", reader.Value?.GetType().Name));
         }
 
         /// <inheritdoc cref="JsonConverter.CanConvert" />
