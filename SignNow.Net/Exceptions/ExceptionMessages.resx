@@ -137,4 +137,8 @@
     <value>Invalid format of email `{0}`. The required format: valid email address (e.g john+1@gmail.com or john123@gmail.com).</value>
     <comment>Looks up a localized string similar to Invalid format of email.</comment>
   </data>
+  <data name="UnexpectedValueWhenConverting" xml:space="preserve">
+    <value>Unexpected value when converting to `{0}`. Expected {1}, got {2}.</value>
+    <comment>Looks up a localized string similar to Unexpected value when converting.</comment>
+  </data>
 </root>
