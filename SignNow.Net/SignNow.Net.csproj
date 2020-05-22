@@ -3,7 +3,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.5.1-beta</Version>
+        <Version>0.5.2-beta</Version>
         <Authors>SignNow</Authors>
         <Company>SignNow</Company>
         <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
@@ -13,20 +13,15 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
-        <PackageReleaseNotes>Changed:
-- Upgraded netcore version from 2.x to 3.x for `SignNow.Net.Test`
-- Added project `SignNow.Net.Examples` with code samples
-- Added validation for all document identity
-
-Fixed:
-- Fixed `Field.Type` converting error
+        <PackageReleaseNotes>Fixed:
+- Fixed `Models.FieldContents.RadiobuttonContent` converting error
 </PackageReleaseNotes>
         <PackageIcon>icon.png</PackageIcon>
         <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <ReleaseVersion>0.5.1-beta</ReleaseVersion>
-        <PackageVersion>0.5.1-beta</PackageVersion>
+        <ReleaseVersion>0.5.2-beta</ReleaseVersion>
+        <PackageVersion>0.5.2-beta</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>
