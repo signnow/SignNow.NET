@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
@@ -25,11 +26,15 @@ namespace UnitTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(JsonSerializationException))]
         public void ThrowsExceptionOnWrongValue()
         {
-            var json = $"{{\"active\": \"error\"}}";
-            JsonConvert.DeserializeObject<User>(json);
+            var exception = Assert.ThrowsException<JsonSerializationException>(
+                () => JsonConvert.DeserializeObject<User>($"{{\"active\": \"error\"}}"));
+
+            var expectedMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                "Boolean", "`true`, `false`", "error");
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
 
         [DataTestMethod]

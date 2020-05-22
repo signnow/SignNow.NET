@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Internal.Helpers.Converters
 {
@@ -24,9 +25,9 @@ namespace SignNow.Net.Internal.Helpers.Converters
             }
 
             throw new JsonSerializationException(string.Format(
-                        CultureInfo.CurrentCulture,
-                        "Unexpected value when converting to Uri. Expected an absolute Url, got '{0}'.",
-                        reader.Value.ToString()));
+                        CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                        objectType?.Name, "an absolute Url",
+                        reader.Value?.ToString()));
         }
 
         /// <inheritdoc cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)"/>
