@@ -1,6 +1,8 @@
 using System;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
@@ -11,12 +13,12 @@ namespace UnitTests
     {
         private readonly string _dtFormat = "dd/MM/yyyy H:mm:ss";
 
-        [TestMethod]
-        public void ShouldDeserializeAsDateTime()
+        [DataTestMethod]
+        [DataRow(@"{'created':'1572968651'}", DisplayName = "with timestamp as string")]
+        [DataRow(@"{'created': 1572968651 }", DisplayName = "with timestamp as integer")]
+        public void ShouldDeserializeAsDateTime(string input)
         {
-            // Should deserialize from string UTC format
-            var jsonUtc = @"{'created':'1572968651'}";
-            var objUtc = JsonConvert.DeserializeObject<SignNowDocument>(jsonUtc);
+            var objUtc = JsonConvert.DeserializeObject<SignNowDocument>(input);
             var expectedUtc = DateTime.ParseExact("05/11/2019 15:44:11", _dtFormat, null);
 
             Assert.AreEqual(expectedUtc, objUtc.Created);
@@ -43,7 +45,21 @@ namespace UnitTests
         public void CanConvertDateTimeType()
         {
             var converter = new UnixTimeStampJsonConverter();
+
             Assert.IsTrue(converter.CanConvert(typeof(DateTime)));
+            Assert.IsFalse(converter.CanConvert(typeof(Int64)));
+        }
+
+        [TestMethod]
+        public void ThrowExceptionForNotSupportedTypes()
+        {
+            var exception = Assert.ThrowsException<JsonSerializationException>(
+                () => JsonConvert.DeserializeObject<SignNowDocument>("{'created':1.2}"));
+
+            var expectedMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
+                "DateTime", "`String`, `Integer`", "Double");
+
+            Assert.AreEqual(expectedMessage, exception.Message);
         }
     }
 }
