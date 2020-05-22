@@ -158,5 +158,4 @@ jobs:
           flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
-          yml: ./codecov.yml
           fail_ci_if_error: false
