@@ -35,8 +35,7 @@ namespace FeatureTests
 
             // Attach signer email to existing role in the document
             invite.AddRoleBasedInvite(
-                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
-                );
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First()));
 
             // Send invite request
             var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;

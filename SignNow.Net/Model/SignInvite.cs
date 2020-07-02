@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
@@ -85,6 +84,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="FreeFormSignInvite(string)"/>
+        /// <param name="to">The email of the invitee.</param>
         /// <param name="cc">The email of copy receiver.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public FreeFormSignInvite(string to, string cc) : this(to)
@@ -93,6 +93,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="FreeFormSignInvite(string)"/>
+        /// <param name="to">The email of the invitee.</param>
         /// <param name="cc">The emails list of copy receivers.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public FreeFormSignInvite(string to, IEnumerable<string> cc) : this(to)
@@ -134,6 +135,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
+        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
         /// <param name="cc">The email of copy receiver.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public RoleBasedInvite(SignNowDocument document, string cc): this(document)
@@ -142,6 +144,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
+        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
         /// <param name="cc">The emails list of copy receivers.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public RoleBasedInvite(SignNowDocument document, IEnumerable<string> cc): this(document)
