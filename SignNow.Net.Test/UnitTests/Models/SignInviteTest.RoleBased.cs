@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -131,6 +132,26 @@ namespace UnitTests
             var inviteJson = JsonConvert.SerializeObject(invite, Formatting.Indented);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), inviteJson);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionForNotValidEmail()
+        {
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(1));
+            var exceptionMessage = string
+                .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, "not-an-email");
+
+            var exceptionCtor1 = Assert
+                .ThrowsException<ArgumentException>(
+                    () => new RoleBasedInvite(document, "not-an-email"));
+
+            var exceptionCtor2 = Assert
+                .ThrowsException<ArgumentException>(
+                    () => new RoleBasedInvite(document, new List<string> { senderEmail, "not-an-email" }));
+
+            Assert.AreEqual(exceptionMessage, exceptionCtor1.Message);
+            Assert.AreEqual(exceptionMessage, exceptionCtor2.Message);
         }
 
         [TestMethod]
