@@ -19,7 +19,8 @@ namespace UnitTests
             var expectedJson = @"{
                 'to':[],
                 'subject':null,
-                'message':null
+                'message':null,
+                'cc':[]
             }";
 
             var document = new SignNowDocumentFaker()
@@ -85,6 +86,7 @@ namespace UnitTests
                 ],
                 'subject':null,
                 'message':null,
+                'cc':[],
                 'from':'sender@signnow.com'
             }}";
 
@@ -105,7 +107,7 @@ namespace UnitTests
             Assert.AreEqual(1, invite.DocumentRoles().Count);
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
 
-            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
+            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}}", JsonConvert.SerializeObject(invite));
 
             invite.AddRoleBasedInvite(
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
@@ -122,7 +124,8 @@ namespace UnitTests
                     }}
                 ],
                 'subject':null,
-                'message':null
+                'message':null,
+                'cc':[]
             }}");
 
             var inviteJson = JsonConvert.SerializeObject(invite, Formatting.Indented);
