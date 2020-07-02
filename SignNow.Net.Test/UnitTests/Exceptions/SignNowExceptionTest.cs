@@ -91,7 +91,7 @@ namespace UnitTests
             StringAssert.Contains(serialized, "Message");
             StringAssert.Contains(serialized, "Data");
 
-            Assert.AreEqual(JsonConvert.SerializeObject(snExFromJson), serialized);
+            AssertJson.AreEqual(snExFromJson, serialized);
         }
     }
 }

@@ -15,9 +15,8 @@ namespace UnitTests
             var signatureFakeJson = JsonConvert.SerializeObject(signatureFake, Formatting.Indented);
 
             var signature = JsonConvert.DeserializeObject<SignatureContent>(signatureFakeJson);
-            var signatureJson = JsonConvert.SerializeObject(signature, Formatting.Indented);
 
-            Assert.AreEqual(signatureFakeJson, signatureJson);
+            AssertJson.AreEqual(signatureFakeJson, signature);
         }
     }
 }

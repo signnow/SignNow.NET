@@ -33,7 +33,7 @@ namespace UnitTests
             }
 
             var testJson = JsonConvert.SerializeObject(testObj, Formatting.Indented);
-            Console.WriteLine(testJson);
+
             StringAssert.Contains(testJson, expected);
         }
 

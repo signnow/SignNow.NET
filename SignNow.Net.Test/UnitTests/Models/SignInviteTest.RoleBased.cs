@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
@@ -27,10 +26,9 @@ namespace UnitTests
             var document = new SignNowDocumentFaker()
                     .RuleFor(o => o.Roles, new RoleFaker().Generate(2));
 
-            var expected = JsonConvert.DeserializeObject(expectedJson);
             var roleBasedInvite = new RoleBasedInvite(document);
 
-            Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(roleBasedInvite));
+            AssertJson.AreEqual(expectedJson, roleBasedInvite);
         }
 
         [TestMethod]
@@ -91,10 +89,7 @@ namespace UnitTests
                 'from':'sender@signnow.com'
             }}";
 
-            var expected = JsonConvert.DeserializeObject(expectedJson);
-            var actual = JsonConvert.SerializeObject(requestInvite, Formatting.Indented);
-
-            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), actual);
+            AssertJson.AreEqual(expectedJson, requestInvite);
         }
 
         [TestMethod]
@@ -108,13 +103,13 @@ namespace UnitTests
             Assert.AreEqual(1, invite.DocumentRoles().Count);
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
 
-            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}}", JsonConvert.SerializeObject(invite));
+            AssertJson.AreEqual("{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}", invite);
 
             invite.AddRoleBasedInvite(
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
             );
 
-            var expected = JsonConvert.DeserializeObject($@"
+            var expected = $@"
             {{
                 'to':[
                     {{
@@ -127,11 +122,9 @@ namespace UnitTests
                 'subject':null,
                 'message':null,
                 'cc':[]
-            }}");
+            }}";
 
-            var inviteJson = JsonConvert.SerializeObject(invite, Formatting.Indented);
-
-            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), inviteJson);
+            AssertJson.AreEqual(expected, invite);
         }
 
         [TestMethod]

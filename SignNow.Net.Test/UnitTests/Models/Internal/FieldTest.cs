@@ -15,9 +15,8 @@ namespace UnitTests
             var fieldFakerJson =  JsonConvert.SerializeObject(fieldFake, Formatting.Indented);
 
             var fieldActual = JsonConvert.DeserializeObject<Field>(fieldFakerJson);
-            var fieldActualJson = JsonConvert.SerializeObject(fieldActual, Formatting.Indented);
 
-            Assert.AreEqual(fieldFakerJson, fieldActualJson);
+            AssertJson.AreEqual(fieldFakerJson, fieldActual);
         }
     }
 }

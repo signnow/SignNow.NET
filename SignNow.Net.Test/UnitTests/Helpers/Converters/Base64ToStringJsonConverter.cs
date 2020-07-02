@@ -13,11 +13,9 @@ namespace UnitTests
         public void ShouldDeserializeBase64AsByteArray()
         {
             var testJson = JsonConvert.SerializeObject(new SignatureContentFaker().Generate(), Formatting.Indented);
-
             var actualObj = JsonConvert.DeserializeObject<SignatureContent>(testJson);
-            var actualJson = JsonConvert.SerializeObject(actualObj, Formatting.Indented);
 
-            Assert.AreEqual(testJson, actualJson);
+            AssertJson.AreEqual(testJson, actualObj);
         }
 
         [TestMethod]

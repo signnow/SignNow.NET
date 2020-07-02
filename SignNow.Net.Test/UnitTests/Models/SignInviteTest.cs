@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
@@ -45,7 +44,7 @@ namespace UnitTests
 
             var expected = $"{{\"to\":\"{recipientEmail}\",\"subject\":{jsonSubject},\"message\":{jsonMessage},\"cc\":[],\"from\":\"{senderEmail}\"}}";
 
-            Assert.AreEqual(expected, JsonConvert.SerializeObject(requestInvite, Formatting.None));
+            AssertJson.AreEqual(expected, requestInvite);
         }
 
         [TestMethod]
@@ -54,7 +53,7 @@ namespace UnitTests
             var ffInvite = new FreeFormSignInvite(recipientEmail);
             var expected = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[]}}";
 
-            Assert.AreEqual(expected, JsonConvert.SerializeObject(ffInvite));
+            AssertJson.AreEqual(expected, ffInvite);
         }
 
         [TestMethod]
@@ -66,8 +65,8 @@ namespace UnitTests
             var expectedEmptyCc = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[]}}";
             var expectedFilledCc = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[\"user1@email.com\"]}}";
 
-            Assert.AreEqual(expectedEmptyCc, JsonConvert.SerializeObject(invite));
-            Assert.AreEqual(expectedFilledCc, JsonConvert.SerializeObject(inviteCc));
+            AssertJson.AreEqual(expectedEmptyCc, invite);
+            AssertJson.AreEqual(expectedFilledCc, inviteCc);
         }
 
         [TestMethod]
