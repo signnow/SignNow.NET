@@ -15,7 +15,7 @@ namespace UnitTests
             var testJson = JsonConvert.SerializeObject(new SignatureContentFaker().Generate(), Formatting.Indented);
             var actualObj = JsonConvert.DeserializeObject<SignatureContent>(testJson);
 
-            AssertJson.AreEqual(testJson, actualObj);
+            Assert.That.JsonEqual(testJson, actualObj);
         }
 
         [TestMethod]

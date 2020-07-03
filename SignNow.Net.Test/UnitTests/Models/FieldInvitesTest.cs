@@ -24,7 +24,7 @@ namespace UnitTests
 
             var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(expected);
 
-            AssertJson.AreEqual(expected, fieldInvite);
+            Assert.That.JsonEqual(expected, fieldInvite);
         }
     }
 }

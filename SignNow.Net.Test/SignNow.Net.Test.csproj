@@ -6,6 +6,7 @@
 
     <IsPackable>false</IsPackable>
     <ReleaseVersion>0.5.2-beta</ReleaseVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
         <Reference Include="System.Net.Http" />

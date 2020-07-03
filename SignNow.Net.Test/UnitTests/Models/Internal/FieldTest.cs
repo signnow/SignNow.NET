@@ -16,7 +16,7 @@ namespace UnitTests
 
             var fieldActual = JsonConvert.DeserializeObject<Field>(fieldFakerJson);
 
-            AssertJson.AreEqual(fieldFakerJson, fieldActual);
+            Assert.That.JsonEqual(fieldFakerJson, fieldActual);
         }
     }
 }

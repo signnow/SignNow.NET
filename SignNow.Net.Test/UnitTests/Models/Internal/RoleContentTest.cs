@@ -36,7 +36,7 @@ namespace UnitTests
                 'reminder': 7
             }}";
 
-            AssertJson.AreEqual(expected, content);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace UnitTests
                 'expiration_days': 7
             }}";
 
-            AssertJson.AreEqual(expected, content);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace UnitTests
                 'reminder': 1
             }}";
 
-            AssertJson.AreEqual(expected, content);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]

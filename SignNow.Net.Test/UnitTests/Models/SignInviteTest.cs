@@ -44,7 +44,7 @@ namespace UnitTests
 
             var expected = $"{{\"to\":\"{recipientEmail}\",\"subject\":{jsonSubject},\"message\":{jsonMessage},\"cc\":[],\"from\":\"{senderEmail}\"}}";
 
-            AssertJson.AreEqual(expected, requestInvite);
+            Assert.That.JsonEqual(expected, requestInvite);
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace UnitTests
             var ffInvite = new FreeFormSignInvite(recipientEmail);
             var expected = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[]}}";
 
-            AssertJson.AreEqual(expected, ffInvite);
+            Assert.That.JsonEqual(expected, ffInvite);
         }
 
         [TestMethod]
@@ -65,8 +65,8 @@ namespace UnitTests
             var expectedEmptyCc = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[]}}";
             var expectedFilledCc = $"{{\"to\":\"{recipientEmail}\",\"subject\":null,\"message\":null,\"cc\":[\"user1@email.com\"]}}";
 
-            AssertJson.AreEqual(expectedEmptyCc, invite);
-            AssertJson.AreEqual(expectedFilledCc, inviteCc);
+            Assert.That.JsonEqual(expectedEmptyCc, invite);
+            Assert.That.JsonEqual(expectedFilledCc, inviteCc);
         }
 
         [TestMethod]

@@ -28,7 +28,7 @@ namespace UnitTests
 
             var roleBasedInvite = new RoleBasedInvite(document);
 
-            AssertJson.AreEqual(expectedJson, roleBasedInvite);
+            Assert.That.JsonEqual(expectedJson, roleBasedInvite);
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace UnitTests
                 'from':'sender@signnow.com'
             }}";
 
-            AssertJson.AreEqual(expectedJson, requestInvite);
+            Assert.That.JsonEqual(expectedJson, requestInvite);
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace UnitTests
             Assert.AreEqual(1, invite.DocumentRoles().Count);
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
 
-            AssertJson.AreEqual("{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}", invite);
+            Assert.That.JsonEqual("{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}", invite);
 
             invite.AddRoleBasedInvite(
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
@@ -124,7 +124,7 @@ namespace UnitTests
                 'cc':[]
             }}";
 
-            AssertJson.AreEqual(expected, invite);
+            Assert.That.JsonEqual(expected, invite);
         }
 
         [TestMethod]

@@ -16,6 +16,8 @@ namespace FeatureTests
             // Init all required data: User, Document, Invite
             var invitee = new UserSignNowFaker().Generate();
             var invite = new FreeFormSignInvite(invitee.Email);
+            var cc = new UserSignNowFaker().Generate();
+            invite.AddCcRecipients(cc.Email);
 
             DocumentId = UploadTestDocument(PdfFilePath);
 
@@ -139,7 +141,7 @@ namespace FeatureTests
                 })
                 .Generate();
 
-            // check if document fullfilled
+            // check if document fulfilled
             Assert.AreEqual(2, documentWithTwoRequestsSigned.Signatures.Count);
             Assert.IsTrue(documentWithTwoRequestsSigned.InviteRequests.TrueForAll(req => req.Status == InviteStatus.Fulfilled), "Invite requests should have a signature");
             Assert.AreEqual(DocumentStatus.Completed, documentWithTwoRequestsSigned.Status);

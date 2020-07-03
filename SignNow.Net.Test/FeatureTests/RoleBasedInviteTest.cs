@@ -28,6 +28,8 @@ namespace FeatureTests
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
+            var cc = new UserSignNowFaker().Generate();
+            invite.AddCcRecipients(cc.Email);
 
             Assert.AreEqual(1, invite.DocumentRoles().Count, "Expected one Role in the Document.");
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name, "Signer role name mismatch.");
