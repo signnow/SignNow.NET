@@ -217,8 +217,8 @@ namespace SignNow.Net.Test.FakeModels
         ///         "page_number": "3",
         ///         "x": "551",
         ///         "y": "203",
-        ///         "width": "30.00",
-        ///         "height": "30.00",
+        ///         "width": "30.0",
+        ///         "height": "30.0",
         ///         "checked": "1",
         ///         "value": "RadioButtonValue_lorem"
         ///      }
@@ -260,8 +260,8 @@ namespace SignNow.Net.Test.FakeModels
         ///   "page_number": "2",
         ///   "x": "551",
         ///   "y": "203",
-        ///   "width": "30.00",
-        ///   "height": "30.00",
+        ///   "width": "30.0",
+        ///   "height": "30.0",
         ///   "checked": "1",
         ///   "value": "RadioButtonValue_lorem"
         /// }
@@ -276,8 +276,8 @@ namespace SignNow.Net.Test.FakeModels
                 o.PageNumber    = f.Random.Int(0, 50);
                 o.X             = f.Random.Int(0, 1024);
                 o.Y             = f.Random.Int(0, 1024);
-                o.Width         = Math.Round(f.Random.Decimal(0, 100), 2);
-                o.Height        = Math.Round(f.Random.Decimal(0, 100), 2);
+                o.Width         = Math.Round(f.Random.Decimal(0, 100), 1);
+                o.Height        = Math.Round(f.Random.Decimal(0, 100), 1);
                 o.Checked       = false;
                 o.Data          = $"RadiobuttonValue_{f.Lorem.Word()}";
             });

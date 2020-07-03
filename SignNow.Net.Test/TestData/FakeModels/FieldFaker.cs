@@ -59,12 +59,9 @@ namespace SignNow.Net.Test.FakeModels
                 o.Signer = f.Internet.Email();
                 // A nullable Id? with 80% probability of being null.
                 o.ElementId = (string)f.Random.Hash(40).OrNull(f, .8f);
-
-                if (o.Type == FieldType.RadioButton)
-                {
-                    o.RadioGroup = new RadioContentFaker().Generate(2);
-                }
-            });
+            })
+                .FinishWith((f, o) =>
+                o.RadioGroup = o.Type == FieldType.RadioButton ? new RadioContentFaker().Generate(2) : null);
         }
     }
 
