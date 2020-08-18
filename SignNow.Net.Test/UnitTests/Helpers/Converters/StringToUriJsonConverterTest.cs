@@ -20,7 +20,7 @@ namespace UnitTests
         public void ShouldSerializeValidUri(string location)
         {
             var testObj = new HyperlinkContent();
-            var expected = $"\"data\": \"{location}\",";
+            var data = $"'data': '{location}'";
 
             if (!string.IsNullOrEmpty(location))
             {
@@ -29,12 +29,19 @@ namespace UnitTests
             else
             {
                 testObj.Data = null;
-                expected = "\"data\": null,";
+                data = "'data': null";
             }
 
-            var testJson = JsonConvert.SerializeObject(testObj, Formatting.Indented);
-            Console.WriteLine(testJson);
-            StringAssert.Contains(testJson, expected);
+            var expected = @$"{{
+                'email': null,
+                'label': null,
+                {data},
+                'id': null,
+                'user_id': null,
+                'page_number': 0
+            }}";
+
+            Assert.That.JsonEqual(expected, testObj);
         }
 
         [DataTestMethod]
@@ -49,6 +56,22 @@ namespace UnitTests
 
             var actual = JsonConvert.DeserializeObject<HyperlinkContent>(json);
             Assert.AreEqual(location?.Replace(@"\/", "/"), actual.Data?.OriginalString);
+        }
+
+        [TestMethod]
+        public void ShouldBeSerializable()
+        {
+            var emptyClass = new HyperlinkContent();
+            var expected = @"{
+                'email': null,
+                'label': null,
+                'data': null,
+                'id': null,
+                'user_id': null,
+                'page_number': 0
+            }";
+
+            Assert.That.JsonEqual(expected, emptyClass);
         }
 
         [TestMethod]

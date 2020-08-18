@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
@@ -19,16 +19,16 @@ namespace UnitTests
             var expectedJson = @"{
                 'to':[],
                 'subject':null,
-                'message':null
+                'message':null,
+                'cc':[]
             }";
 
             var document = new SignNowDocumentFaker()
                     .RuleFor(o => o.Roles, new RoleFaker().Generate(2));
 
-            var expected = JsonConvert.DeserializeObject(expectedJson);
             var roleBasedInvite = new RoleBasedInvite(document);
 
-            Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(roleBasedInvite));
+            Assert.That.JsonEqual(expectedJson, roleBasedInvite);
         }
 
         [TestMethod]
@@ -85,13 +85,11 @@ namespace UnitTests
                 ],
                 'subject':null,
                 'message':null,
+                'cc':[],
                 'from':'sender@signnow.com'
             }}";
 
-            var expected = JsonConvert.DeserializeObject(expectedJson);
-            var actual = JsonConvert.SerializeObject(requestInvite, Formatting.Indented);
-
-            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), actual);
+            Assert.That.JsonEqual(expectedJson, requestInvite);
         }
 
         [TestMethod]
@@ -105,13 +103,13 @@ namespace UnitTests
             Assert.AreEqual(1, invite.DocumentRoles().Count);
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name);
 
-            Assert.AreEqual($"{{\"to\":[],\"subject\":null,\"message\":null}}", JsonConvert.SerializeObject(invite));
+            Assert.That.JsonEqual("{\"to\":[],\"subject\":null,\"message\":null,\"cc\":[]}", invite);
 
             invite.AddRoleBasedInvite(
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
             );
 
-            var expected = JsonConvert.DeserializeObject($@"
+            var expected = $@"
             {{
                 'to':[
                     {{
@@ -122,12 +120,31 @@ namespace UnitTests
                     }}
                 ],
                 'subject':null,
-                'message':null
-            }}");
+                'message':null,
+                'cc':[]
+            }}";
 
-            var inviteJson = JsonConvert.SerializeObject(invite, Formatting.Indented);
+            Assert.That.JsonEqual(expected, invite);
+        }
 
-            Assert.AreEqual(JsonConvert.SerializeObject(expected, Formatting.Indented), inviteJson);
+        [TestMethod]
+        public void ThrowsExceptionForNotValidEmail()
+        {
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(1));
+            var exceptionMessage = string
+                .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, "not-an-email");
+
+            var exceptionCtor1 = Assert
+                .ThrowsException<ArgumentException>(
+                    () => new RoleBasedInvite(document, "not-an-email"));
+
+            var exceptionCtor2 = Assert
+                .ThrowsException<ArgumentException>(
+                    () => new RoleBasedInvite(document, new List<string> { senderEmail, "not-an-email" }));
+
+            Assert.AreEqual(exceptionMessage, exceptionCtor1.Message);
+            Assert.AreEqual(exceptionMessage, exceptionCtor2.Message);
         }
 
         [TestMethod]

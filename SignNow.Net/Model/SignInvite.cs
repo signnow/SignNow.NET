@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 
 namespace SignNow.Net.Model
@@ -29,8 +30,36 @@ namespace SignNow.Net.Model
         [JsonProperty("message")]
         public string Message { get; set; }
 
-        internal SignInvite()
+        /// <summary>
+        /// The list with emails of copy receivers.
+        /// </summary>
+        [JsonProperty("cc", NullValueHandling = NullValueHandling.Ignore)]
+        public IEnumerable<string> Cc => CcList;
+
+        [JsonIgnore]
+        protected HashSet<string> CcList { get; } = new HashSet<string>();
+
+        internal SignInvite() { }
+
+        /// <summary>
+        /// Add an Email to CC list.
+        /// </summary>
+        /// <param name="email">Email of copy receiver.</param>
+        /// <exception cref="ArgumentException">when an email is not valid.</exception>
+        public void AddCcRecipients(string email)
         {
+            CcList.Add(email.ValidateEmail());
+        }
+
+        /// <inheritdoc cref="AddCcRecipients(string)"/>
+        /// <param name="emails">Emails list of copy receivers.</param>
+        public void AddCcRecipients(IEnumerable<string> emails)
+        {
+            Guard.ArgumentNotNull(emails, nameof(emails));
+            foreach (var email in emails)
+            {
+                AddCcRecipients(email);
+            }
         }
     }
 
@@ -52,6 +81,24 @@ namespace SignNow.Net.Model
         public FreeFormSignInvite(string to)
         {
             Recipient = to;
+        }
+
+        /// <inheritdoc cref="FreeFormSignInvite(string)"/>
+        /// <param name="to">The email of the invitee.</param>
+        /// <param name="cc">The email of copy receiver.</param>
+        /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
+        public FreeFormSignInvite(string to, string cc) : this(to)
+        {
+            AddCcRecipients(cc);
+        }
+
+        /// <inheritdoc cref="FreeFormSignInvite(string)"/>
+        /// <param name="to">The email of the invitee.</param>
+        /// <param name="cc">The emails list of copy receivers.</param>
+        /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
+        public FreeFormSignInvite(string to, IEnumerable<string> cc) : this(to)
+        {
+            AddCcRecipients(cc);
         }
     }
 
@@ -85,6 +132,24 @@ namespace SignNow.Net.Model
             }
 
             ExistingDocumentRoles = document.Roles;
+        }
+
+        /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
+        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <param name="cc">The email of copy receiver.</param>
+        /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
+        public RoleBasedInvite(SignNowDocument document, string cc): this(document)
+        {
+            AddCcRecipients(cc);
+        }
+
+        /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
+        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <param name="cc">The emails list of copy receivers.</param>
+        /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
+        public RoleBasedInvite(SignNowDocument document, IEnumerable<string> cc): this(document)
+        {
+            AddCcRecipients(cc);
         }
 
         /// <summary>

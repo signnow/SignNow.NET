@@ -20,12 +20,11 @@ namespace UnitTests
                 .RuleFor(o => o.Status, testStatus)
                 .Generate();
 
-            var fieldInviteFakeJson = JsonConvert.SerializeObject(fieldInviteFake, Formatting.Indented);
+            var expected = JsonConvert.SerializeObject(fieldInviteFake, Formatting.Indented);
 
-            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(fieldInviteFakeJson);
-            var fieldInviteJson = JsonConvert.SerializeObject(fieldInvite, Formatting.Indented);
+            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(expected);
 
-            Assert.AreEqual(fieldInviteFakeJson, fieldInviteJson);
+            Assert.That.JsonEqual(expected, fieldInvite);
         }
     }
 }

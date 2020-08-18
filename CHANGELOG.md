@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## Added
+- Carbon Copy for freeform invite and role-based invite
+
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
 - Fixed `Models.FieldContents.RadiobuttonContent` converting error [#104](https://github.com/signnow/SignNow.NET/issues/104)
@@ -94,3 +97,13 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 <!-- Aliases for URLs: please place here any long urls to keep clean markdown markup -->
 [create role-based invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-role-based-invite
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
+
+
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...HEAD
+[0.5.2-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.1-beta...0.5.2-beta
+[0.5.1-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.0-beta...0.5.1-beta
+[0.5.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.4.0-beta...0.5.0-beta
+[0.4.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.3.0-beta...0.4.0-beta
+[0.3.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.2.0-beta...0.3.0-beta
+[0.2.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.1.0-beta...0.2.0-beta
+[0.1.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.0.0-beta...0.1.0-beta

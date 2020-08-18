@@ -2,7 +2,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
@@ -29,14 +28,15 @@ namespace FeatureTests
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
+            var cc = new UserSignNowFaker().Generate();
+            invite.AddCcRecipients(cc.Email);
 
             Assert.AreEqual(1, invite.DocumentRoles().Count, "Expected one Role in the Document.");
             Assert.AreEqual("Signer 1", invite.DocumentRoles().First().Name, "Signer role name mismatch.");
 
             // Attach signer email to existing role in the document
             invite.AddRoleBasedInvite(
-                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First())
-                );
+                new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First()));
 
             // Send invite request
             var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;

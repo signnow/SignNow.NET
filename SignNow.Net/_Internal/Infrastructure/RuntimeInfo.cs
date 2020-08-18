@@ -53,7 +53,7 @@ namespace SignNow.Net.Internal.Infrastructure
                 os = "Linux";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                os = "macOs";
+                os = "macOS";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 os = "Windows";
@@ -93,7 +93,7 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static string GetArchitecture()
         {
-            var arch = "X64";
+            var arch = "x64";
 #if NET45
             arch = typeof(RuntimeInfo).Assembly.GetName().ProcessorArchitecture.ToString();
 #else

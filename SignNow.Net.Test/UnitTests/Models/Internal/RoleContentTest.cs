@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Test.FakeModels;
 
@@ -26,7 +25,7 @@ namespace UnitTests
                 }
                 .SetAuthenticationByPassword("***secret***");
 
-            var json = JsonConvert.DeserializeObject($@"{{
+            var expected = $@"{{
                 'email': 'test@email.com',
                 'role': '{role.Name}',
                 'role_id': '{role.Id}',
@@ -35,12 +34,9 @@ namespace UnitTests
                 'password': '***secret***',
                 'expiration_days': 14,
                 'reminder': 7
-            }}");
+            }}";
 
-            var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
-            var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
-
-            Assert.AreEqual(expected, actual);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]
@@ -52,7 +48,7 @@ namespace UnitTests
                 }
                 .SetAuthenticationByPhoneCall("800 831-2050");
 
-            var json = JsonConvert.DeserializeObject($@"{{
+            var expected = $@"{{
                 'email': 'test@email.com',
                 'role': '{role.Name}',
                 'role_id': '{role.Id}',
@@ -60,12 +56,9 @@ namespace UnitTests
                 'authentication_type': 'phone_call',
                 'phone': '800 831-2050',
                 'expiration_days': 7
-            }}");
+            }}";
 
-            var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
-            var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
-
-            Assert.AreEqual(expected, actual);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]
@@ -77,7 +70,7 @@ namespace UnitTests
                 }
                 .SetAuthenticationBySms("800 831-2050");
 
-            var json = JsonConvert.DeserializeObject($@"{{
+            var expected = $@"{{
                 'email': 'test@email.com',
                 'role': '{role.Name}',
                 'role_id': '{role.Id}',
@@ -85,12 +78,9 @@ namespace UnitTests
                 'authentication_type': 'sms',
                 'phone': '800 831-2050',
                 'reminder': 1
-            }}");
+            }}";
 
-            var actual = JsonConvert.SerializeObject(content, Formatting.Indented);
-            var expected = JsonConvert.SerializeObject(json, Formatting.Indented);
-
-            Assert.AreEqual(expected, actual);
+            Assert.That.JsonEqual(expected, content);
         }
 
         [TestMethod]

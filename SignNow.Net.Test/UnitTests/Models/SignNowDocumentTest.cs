@@ -31,12 +31,10 @@ namespace UnitTests
                 .RuleFor(obj => obj.Radiobuttons, new RadiobuttonContentFaker().Generate(qty))
                 .RuleFor(obj => obj.Texts, new TextContentFaker().Generate(qty));
 
-            var fakeDocumentJson = JsonConvert.SerializeObject(fakeDocument.Generate(), Formatting.Indented);
+            var expected = JsonConvert.SerializeObject(fakeDocument.Generate(), Formatting.Indented);
+            var testDocument = JsonConvert.DeserializeObject<SignNowDocument>(expected);
 
-            var testDocument = JsonConvert.DeserializeObject<SignNowDocument>(fakeDocumentJson);
-            var testDocumentJson = JsonConvert.SerializeObject(testDocument, Formatting.Indented);
-
-            Assert.AreEqual(fakeDocumentJson, testDocumentJson);
+            Assert.That.JsonEqual(expected, testDocument);
         }
 
         [DataTestMethod]

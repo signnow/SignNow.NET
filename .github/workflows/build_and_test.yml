@@ -127,6 +127,12 @@ jobs:
             --configuration Debug --framework ${{ matrix.framework }} `
             /p:CollectCoverage=true
 
+      - name: Save Code Coverage Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: CoverageReports.zip
+          path: SignNow.Net.Test/bin/Debug/**/coverage*
+
       - name: Upload Code Coverage Report (Codacy)
         if: github.ref == 'refs/heads/develop'
         env:

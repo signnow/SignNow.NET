@@ -19,7 +19,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.ReadJson(JsonReader, Type, object, JsonSerializer)" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType == JsonToken.String && Uri.TryCreate(reader.Value.ToString(), UriKind.Absolute, out Uri url))
+            if (reader?.TokenType == JsonToken.String && Uri.TryCreate(reader.Value.ToString(), UriKind.Absolute, out Uri url))
             {
                 return url;
             }
@@ -27,7 +27,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
             throw new JsonSerializationException(string.Format(
                         CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
                         objectType?.Name, "an absolute Url",
-                        reader.Value?.ToString()));
+                        reader?.Value?.ToString()));
         }
 
         /// <inheritdoc cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)"/>
@@ -35,12 +35,12 @@ namespace SignNow.Net.Internal.Helpers.Converters
         {
             if (value == null)
             {
-                writer.WriteNull();
+                writer?.WriteNull();
 
                 return;
             }
 
-            writer.WriteValue(((Uri)value).OriginalString);
+            writer?.WriteValue(((Uri)value).OriginalString);
         }
     }
 }
