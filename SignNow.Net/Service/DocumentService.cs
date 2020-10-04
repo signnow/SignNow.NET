@@ -3,6 +3,7 @@ using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,6 +139,32 @@ namespace SignNow.Net.Service
                     new HttpContentToDownloadDocumentResponseAdapter(),
                     HttpCompletionOption.ResponseHeadersRead,
                     cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default)
+        {
+            var requestBody = new MergeDocumentRequest
+            {
+                Name = documentName
+            };
+            requestBody.AddDocuments(documents);
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/document/merge"),
+                Content = new JsonHttpContent(requestBody),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync(
+                    requestOptions,
+                    new HttpContentToDownloadDocumentResponseAdapter(),
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken
+                    )
                 .ConfigureAwait(false);
         }
     }
