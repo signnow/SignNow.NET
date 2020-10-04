@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SignNow.Net.Model;
 using System.IO;
 using System.Threading;
@@ -66,5 +67,15 @@ namespace SignNow.Net.Interfaces
         /// <returns>Operation result object containing File info with Stream file content.</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Merges existing documents into one.
+        /// </summary>
+        /// <param name="documentName">The name of merged document</param>
+        /// <param name="documents">Collection of the <see cref="SignNowDocument">documents</see></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>Operation result object containing File info with Stream file content.</returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
+        Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default);
     }
 }
