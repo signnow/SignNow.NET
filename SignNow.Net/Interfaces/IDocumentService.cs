@@ -69,9 +69,9 @@ namespace SignNow.Net.Interfaces
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Merges existing documents into one.
+        /// Merges two or more documents into one.
         /// </summary>
-        /// <param name="documentName">The name of merged document</param>
+        /// <param name="documentName">The name of the document that will be created and written to</param>
         /// <param name="documents">Collection of the <see cref="SignNowDocument">documents</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>

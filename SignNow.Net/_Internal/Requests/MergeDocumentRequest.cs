@@ -10,9 +10,15 @@ namespace SignNow.Net.Internal.Requests
 {
     internal class MergeDocumentRequest : IContent
     {
+        /// <summary>
+        /// The name of the document that will be created and written to.
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// A list of document unique ids that will be merged.
+        /// </summary>
         [JsonProperty("document_ids")]
         public List<string> DocumentIds { get; set; } = new List<string>();
 
