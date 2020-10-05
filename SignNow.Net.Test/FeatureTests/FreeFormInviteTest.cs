@@ -19,10 +19,10 @@ namespace FeatureTests
             var cc = new UserSignNowFaker().Generate();
             invite.AddCcRecipients(cc.Email);
 
-            DocumentId = UploadTestDocument(PdfFilePath);
+            DisposableDocumentId = UploadTestDocument(PdfFilePath);
 
             // Creating Invite request
-            var inviteResponseTask = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite);
+            var inviteResponseTask = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite);
             Task.WaitAll(inviteResponseTask);
 
             var inviteResponse = inviteResponseTask.Result;
@@ -32,11 +32,11 @@ namespace FeatureTests
             Assert.AreEqual(inviteResponse.Id, inviteResponse.Id.ValidateId(), "Successful invite response should contains valid Invite ID.");
 
             // Check if invite was successful and the document contains invite request data
-            var documentInfo = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            var documentInfo = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
             var inviteIdx = documentInfo.InviteRequests.FindIndex(request => request.Id == inviteResponse.Id);
             var documentInviteRequest = documentInfo.InviteRequests[inviteIdx];
 
-            Assert.AreEqual(DocumentId, documentInfo.Id, "You should get proper document details.");
+            Assert.AreEqual(DisposableDocumentId, documentInfo.Id, "You should get proper document details.");
             Assert.AreEqual(inviteResponse.Id, documentInviteRequest.Id, "Document should contains freeform invite ID after invite has been sent.");
             Assert.AreEqual(invitee.Email.ToLowerInvariant(), documentInviteRequest.SignerEmail, "Invite should contains user email whom was sent invite request.");
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");

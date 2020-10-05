@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,20 +10,11 @@ namespace FeatureTests
     [TestClass]
     public class RoleBasedInviteTest : AuthorizedApiTestBase
     {
-        public void UploadTestDocument()
-        {
-            using (var fileStream = File.OpenRead(PdfFilePath))
-            {
-                // Upload document and extract fields
-                DocumentId = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, "RoleBasedInviteTest" + pdfFileName).Result.Id;
-            }
-        }
-
         [TestMethod]
         public void DocumentOwnerCanSendRoleBasedInvite()
         {
-            UploadTestDocument();
-            var document = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            DisposableDocumentId = UploadTestDocumentWithFieldExtract(PdfFilePath, "DocumentOwnerCanSendRoleBasedInvite.pdf");
+            var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
@@ -39,11 +29,11 @@ namespace FeatureTests
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First()));
 
             // Send invite request
-            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;
+            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).Result;
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
 
             // Check role-based invite status in the document
-            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
             var fieldInvites = documentUpdated.FieldInvites.First();
 
             Assert.AreEqual("Pending", fieldInvites.Status.ToString(), "Newly created Invite must have status: pending.");
@@ -54,8 +44,8 @@ namespace FeatureTests
         [TestMethod]
         public void DocumentOwnerShouldCancelFieldInvite()
         {
-            UploadTestDocument();
-            var document = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            DisposableDocumentId = UploadTestDocumentWithFieldExtract(PdfFilePath, "DocumentOwnerShouldCancelFieldInvite.pdf");
+            var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
@@ -66,20 +56,20 @@ namespace FeatureTests
             );
 
             // Send invite request
-            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;
+            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).Result;
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
 
             // Check role-based invite status in the document
-            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
             var fieldInvites = documentUpdated.FieldInvites.First();
 
             Assert.AreEqual("Pending", fieldInvites.Status.ToString());
 
             // Cancel role-based invite for the document
-            var cancelResponse = SignNowTestContext.Invites.CancelInviteAsync(DocumentId);
+            var cancelResponse = SignNowTestContext.Invites.CancelInviteAsync(DisposableDocumentId);
             Task.WaitAll(cancelResponse);
 
-            var documentCanceled = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            var documentCanceled = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
 
             Assert.AreEqual(0, documentCanceled.FieldInvites.Count, "Field invites are not canceled.");
             Assert.IsFalse(cancelResponse.IsFaulted, "Cancel response is not successful.");

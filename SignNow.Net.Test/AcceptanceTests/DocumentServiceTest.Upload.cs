@@ -15,9 +15,9 @@ namespace AcceptanceTests
         {
             using (var fileStream = File.OpenRead(PdfFilePath))
             {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
+                var uploadResponse = SignNowTestContext.Documents.UploadDocumentAsync(fileStream, PdfFileName).Result;
 
-                DocumentId = uploadResponse.Id;
+                DisposableDocumentId = uploadResponse.Id;
 
                 Assert.IsNotNull(uploadResponse.Id, assertMsg);
             }
@@ -28,13 +28,13 @@ namespace AcceptanceTests
         {
             using (var fileStream = File.OpenRead(PdfFilePath))
             {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
+                var uploadResponse = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, PdfFileName).Result;
 
-                DocumentId = uploadResponse.Id;
+                DisposableDocumentId = uploadResponse.Id;
 
                 Assert.IsNotNull(uploadResponse.Id, assertMsg);
 
-                var document = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+                var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
 
                 // Check if fields were extracted (One field with role should be in the document)
                 Assert.IsNotNull(document.Roles.Count);
@@ -48,7 +48,7 @@ namespace AcceptanceTests
             {
                 var exception = Assert
                     .ThrowsException<AggregateException>(
-                        () => SignNowTestContext.Documents.UploadDocumentAsync(fileStream, txtFileName).Result);
+                        () => SignNowTestContext.Documents.UploadDocumentAsync(fileStream, TxtFileName).Result);
 
                 Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
             }
@@ -61,7 +61,7 @@ namespace AcceptanceTests
             {
                 var exception = Assert
                     .ThrowsException<AggregateException>(
-                        () => SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, txtFileName).Result);
+                        () => SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, TxtFileName).Result);
 
                 Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
             }

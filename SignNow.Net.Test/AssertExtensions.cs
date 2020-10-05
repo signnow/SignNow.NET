@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -58,19 +57,32 @@ namespace UnitTests
         /// The message to include in the exception when <paramref name="file"/>
         /// is not a PDF file. The message is shown in test results.
         /// </param>
-        public static void StreamIsPdf(this Assert assert, Stream file, string message = "")
+        public static void StreamIsPdf(this Assert assert, Stream file, string message = "Document content is not a PDF format")
+            => StreamContainsMagicBytes(file, "%PDF-1.", message);
+
+        /// <summary>
+        /// Tests whether the specified Stream is a Zip file and throws an exception
+        /// if it is not a Zip.
+        /// </summary>
+        /// <param name="file">The Stream the test expects to be a Zip file.</param>
+        /// <param name="message">
+        /// The message to include in the exception when <paramref name="file"/>
+        /// is not a Zip file. The message is shown in test results.
+        /// </param>
+        public static  void StreamIsZip(this Assert assert, Stream file, string message = "Document content is not a ZIP format")
+            => StreamContainsMagicBytes(file, "PK", message);
+
+        private static void StreamContainsMagicBytes(Stream file, string byteSignature, string message)
         {
             Assert.IsNotNull(file, "Document is Empty or not exists");
             Assert.IsTrue(file.CanRead, "Not readable Document content");
 
-            var msg = String.IsNullOrEmpty(message) ? "Document content is not a PDF format" : message;
-            var pdfSignature = "%PDF-1.";
             string actual;
 
             using var reader = new StreamReader(file, Encoding.UTF8);
             actual = reader.ReadLine();
 
-            StringAssert.StartsWith(actual, pdfSignature, msg);
+            StringAssert.StartsWith(actual, byteSignature, message);
         }
     }
 }

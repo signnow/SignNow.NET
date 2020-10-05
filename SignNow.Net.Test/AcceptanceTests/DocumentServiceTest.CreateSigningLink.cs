@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
-using System.IO;
 using SignNow.Net.Exceptions;
 
 namespace AcceptanceTests
@@ -11,15 +10,10 @@ namespace AcceptanceTests
         [TestMethod]
         public void SigningLinkCreatedSuccessfully()
         {
-            using (var fileStream = File.OpenRead(PdfFilePath))
-            {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, pdfFileName).Result;
-                DocumentId = uploadResponse.Id;
-                var signingLinks = SignNowTestContext.Documents.CreateSigningLinkAsync(DocumentId).Result;
+            var signingLinks = SignNowTestContext.Documents.CreateSigningLinkAsync(TestPdfDocumentIdWithFields).Result;
 
-                Assert.IsNotNull(signingLinks.Url);
-                Assert.IsNotNull(signingLinks.AnonymousUrl);
-            }
+            Assert.IsNotNull(signingLinks.Url);
+            Assert.IsNotNull(signingLinks.AnonymousUrl);
         }
 
         [TestMethod]

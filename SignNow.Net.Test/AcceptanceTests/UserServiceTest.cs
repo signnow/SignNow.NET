@@ -22,9 +22,7 @@ namespace AcceptanceTests
         /// <returns>InviteResponse</returns>
         private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
-
-            return SignNowTestContext.Invites.CreateInviteAsync(DocumentId, invite).Result;
+            return SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).Result;
         }
 
         [TestMethod]
@@ -41,7 +39,7 @@ namespace AcceptanceTests
         {
             var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com")
             {
-                Message = $"SignNow.Net SDK invited you to sign the {pdfFileName}",
+                Message = $"SignNow.Net SDK invited you to sign the {PdfFileName}",
                 Subject = "SignNow.Net SDK Needs Your Signature"
             };
             var inviteResponse = ProcessCreateInvite(invite);

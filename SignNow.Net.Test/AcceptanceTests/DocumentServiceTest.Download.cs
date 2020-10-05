@@ -1,7 +1,6 @@
-using System.IO;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
+using UnitTests;
 
 namespace AcceptanceTests
 {
@@ -14,25 +13,19 @@ namespace AcceptanceTests
         [DataRow(DownloadType.ZipCollapsed, ".zip")]
         public void DownloadDocumentAsSpecifiedType(DownloadType downloadType, string expectedType)
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
-
-            var downloadResponse = SignNowTestContext.Documents.DownloadDocumentAsync(DocumentId, downloadType).Result;
+            var downloadResponse = SignNowTestContext.Documents.DownloadDocumentAsync(TestPdfDocumentId, downloadType).Result;
 
             StringAssert.Contains(downloadResponse.Filename, "DocumentUpload", "Wrong Document name");
             StringAssert.Contains(downloadResponse.Filename, expectedType, "Wrong Document type");
 
-            Assert.IsTrue(downloadResponse.Document.CanRead, "Not readable Document content");
-            Assert.IsNotNull(downloadResponse.Length, "Document is Empty or not exists");
-
-            string actual;
-            var expected = expectedType == ".pdf" ? "%PDF-1.3" : "PK";
-
-            using (var reader = new StreamReader(downloadResponse.Document, Encoding.UTF8))
+            if (downloadType == DownloadType.ZipCollapsed)
             {
-                actual = reader.ReadLine();
+                Assert.That.StreamIsZip(downloadResponse.Document);
             }
-
-            StringAssert.StartsWith(actual, expected, "Document content is not a ZIP or PDF format");
+            else
+            {
+                Assert.That.StreamIsPdf(downloadResponse.Document);
+            }
         }
     }
 }
