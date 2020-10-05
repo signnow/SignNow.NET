@@ -106,18 +106,18 @@ namespace UnitTests
                 .RuleFor(t => t.ExpiresIn, (int)futureTimestamp)
                 .Generate();
 
-            var tokenJsonResponse = SerializeToJsonFormatted(fakeToken);
+            var tokenJsonResponse = TestUtils.SerializeToJsonFormatted(fakeToken);
 
             // Set up mock
             var mock = new Mock<SignNowClient>(null);
             mock.As<ISignNowClient>()
                 .Setup(x => x.RequestAsync<Token>(It.IsAny<RequestOptions>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(DeserializeFromJson<Token>(tokenJsonResponse));
+                .ReturnsAsync(TestUtils.DeserializeFromJson<Token>(tokenJsonResponse));
 
             var oauth2 = new OAuth2ServiceMock(ApiBaseUrl, "id", "secret", mock.Object);
             var token = oauth2.GetTokenAsync("some_authorization_code", Scope.All).Result;
 
-            Assert.AreNotEqual(tokenJsonResponse, SerializeToJsonFormatted(token));
+            Assert.AreNotEqual(tokenJsonResponse, TestUtils.SerializeToJsonFormatted(token));
             Assert.AreNotEqual(fakeToken.ExpiresIn, token.ExpiresIn);
             Assert.IsTrue(2592000 - token.ExpiresIn >= 0, $"token lifetime adjustment error: {token.ExpiresIn}");
             Assert.IsTrue(fakeToken.ExpiresIn > token.ExpiresIn, "ExpiresIn is Timestamp, expected lifetime");

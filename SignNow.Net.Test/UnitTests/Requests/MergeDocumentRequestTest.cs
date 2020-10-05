@@ -20,8 +20,8 @@ namespace UnitTests
             };
             request.AddDocuments(documents);
 
-            var serialized = SerializeToJsonFormatted(request);
-            var requestJ = DeserializeFromJson<MergeDocumentRequest>(serialized);
+            var serialized = TestUtils.SerializeToJsonFormatted(request);
+            var requestJ = TestUtils.DeserializeFromJson<MergeDocumentRequest>(serialized);
 
             Assert.AreEqual(mergedName, requestJ.Name);
             Assert.AreEqual(5, requestJ.DocumentIds.Count);

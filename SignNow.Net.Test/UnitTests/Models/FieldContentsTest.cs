@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Interfaces;
@@ -34,6 +33,6 @@ namespace UnitTests
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
-            DynamicDataDisplayName(methodInfo, data);
+            TestUtils.DynamicDataDisplayName(methodInfo, data);
     }
 }

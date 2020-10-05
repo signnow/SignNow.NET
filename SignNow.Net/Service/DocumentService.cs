@@ -145,6 +145,8 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default)
         {
+            Guard.ArgumentNotNull(documents, nameof(documents));
+
             var requestBody = new MergeDocumentRequest
             {
                 Name = documentName
