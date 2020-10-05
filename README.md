@@ -23,6 +23,7 @@ Get your account at <https://www.signnow.com/developers>
     - [Authorization](#authorization)
     - [Upload a document to SignNow](#upload-document)
     - [Download a document from SignNow](#download-document)
+    - [Merge two or more SignNow documents into one](#merge-documents)
     - [Create a single-use link to the document for signature](#create-signing-link)
     - [Create a freeform invite to the document for signature](#create-freeform-invite)
     - [Create a role-based invite to the document for signature](#create-role-based-invite)
@@ -175,6 +176,43 @@ public static class DocumentExamples
 ```
 
 More examples: [Download signed document][download_signed_doc example]
+
+### <a name="download-document"></a> Merge two or more SignNow documents into one
+
+Merges two or more SignNow documents into one single PDF file.
+
+Steps:
+
+▶ Upload documents or Get document IDs of the documents you’d like to merge
+
+▶ Merge the documents
+
+Merged document will be saved in PDF file format.
+
+```csharp
+public static partial class DocumentExamples
+{
+    /// <summary>
+    /// Merge two documents into one final document
+    /// </summary>
+    /// <param name="documentName">New Document name with extension</param>
+    /// <param name="documentsList">List of the documents to be merged</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// <see cref="DownloadDocumentResponse"/> contains: file name, file length, Stream content
+    /// </returns>
+    public static async Task<DownloadDocumentResponse>
+        MergeTwoDocuments(string documentName, IEnumerable<SignNowDocument> documentsList, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+
+        return await signNowContext.Documents
+            .MergeDocumentsAsync(documentName, documentsList)
+            .ConfigureAwait(false);
+    }
+}
+```
 
 ### <a name="create-signing-link"></a> Create a signing link to the document for signature
 
