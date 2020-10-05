@@ -71,7 +71,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Merges two or more documents into one.
         /// </summary>
-        /// <param name="documentName">The name of the document that will be created and written to</param>
+        /// <param name="documentName">The name of the document with extension that will be created and written to</param>
         /// <param name="documents">Collection of the <see cref="SignNowDocument">documents</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>

@@ -160,7 +160,7 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient
+            var mergeResponse = await SignNowClient
                 .RequestAsync(
                     requestOptions,
                     new HttpContentToDownloadDocumentResponseAdapter(),
@@ -168,6 +168,10 @@ namespace SignNow.Net.Service
                     cancellationToken
                     )
                 .ConfigureAwait(false);
+
+            mergeResponse.Filename = documentName;
+
+            return mergeResponse;
         }
     }
 }

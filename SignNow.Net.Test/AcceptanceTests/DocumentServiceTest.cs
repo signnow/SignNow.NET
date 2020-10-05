@@ -29,5 +29,20 @@ namespace AcceptanceTests
 
             Assert.IsFalse(response.IsTemplate);
         }
+
+        [TestMethod]
+        public void MergeDocuments()
+        {
+            var doc1 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).Result;
+            var doc2 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentIdWithFields).Result;
+
+            var documents = new List<SignNowDocument> {doc1, doc2};
+
+            var merged = SignNowTestContext.Documents
+                .MergeDocumentsAsync("merged-document.pdf", documents).Result;
+
+            Assert.AreEqual("merged-document.pdf", merged.Filename);
+            Assert.That.StreamIsPdf(merged.Document);
+        }
     }
 }
