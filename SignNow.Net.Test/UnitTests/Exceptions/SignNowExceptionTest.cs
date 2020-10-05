@@ -2,7 +2,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using Newtonsoft.Json;
 
 namespace UnitTests
 {
@@ -83,8 +82,8 @@ namespace UnitTests
                 'InnerExceptions': []
             }";
 
-            var snExFromJson = JsonConvert.DeserializeObject<SignNowException>(asJson);
-            var serialized = JsonConvert.SerializeObject(new SignNowException());
+            var snExFromJson = TestUtils.DeserializeFromJson<SignNowException>(asJson);
+            var serialized = TestUtils.SerializeToJsonFormatted(new SignNowException());
 
             StringAssert.Contains(serialized, "One or more errors occurred.");
             StringAssert.Contains(serialized, "InnerExceptions");

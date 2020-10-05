@@ -86,6 +86,6 @@ namespace UnitTests
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
-            DynamicDataDisplayName(methodInfo, data);
+            TestUtils.DynamicDataDisplayName(methodInfo, data);
     }
 }

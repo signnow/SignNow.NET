@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Extensions;
-using SignNow.Net.Service;
+using SignNow.Net.Model;
 using SignNow.Net.Test;
+using UnitTests;
 
 namespace AcceptanceTests
 {
@@ -12,12 +13,11 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldGetDocumentInfo()
         {
-            DocumentId = UploadTestDocument(PdfFilePath);
-            var response = SignNowTestContext.Documents.GetDocumentAsync(DocumentId).Result;
+            var response = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).Result;
 
-            Assert.AreEqual(DocumentId, response.Id);
+            Assert.AreEqual(TestPdfDocumentId, response.Id);
             Assert.AreEqual(1, response.PageCount);
-            Assert.AreEqual(pdfFileName, response.OriginalName);
+            Assert.AreEqual(PdfFileName, response.OriginalName);
             Assert.AreEqual("DocumentUpload", response.Name);
 
             Assert.IsNotNull(response.UserId.ValidateId());
@@ -28,6 +28,21 @@ namespace AcceptanceTests
             Assert.IsNull(response.OriginUserId);
 
             Assert.IsFalse(response.IsTemplate);
+        }
+
+        [TestMethod]
+        public void MergeDocuments()
+        {
+            var doc1 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).Result;
+            var doc2 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentIdWithFields).Result;
+
+            var documents = new List<SignNowDocument> {doc1, doc2};
+
+            var merged = SignNowTestContext.Documents
+                .MergeDocumentsAsync("merged-document.pdf", documents).Result;
+
+            Assert.AreEqual("merged-document.pdf", merged.Filename);
+            Assert.That.StreamIsPdf(merged.Document);
         }
     }
 }

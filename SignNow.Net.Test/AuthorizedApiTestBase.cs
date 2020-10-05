@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,25 +14,34 @@ namespace SignNow.Net.Test
         /// <summary>
         /// Token for all authorized API tests
         /// </summary>
-        protected Token Token { get; set; }
+        protected static Token Token { get; set; }
 
         /// <summary>
         /// Entry point for all SignNow services by <see cref="ISignNowContext"/>
         /// </summary>
-        public ISignNowContext SignNowTestContext { get; set; }
+        public static ISignNowContext SignNowTestContext { get; set; }
 
         /// <summary>
         /// Uploaded test document identity which will be deleted after run TestCase.
         /// </summary>
-        protected string DocumentId { get; set; }
+        protected string DisposableDocumentId { get; set; }
 
-        [TestCleanup]
-        public void TearDown()
-        {
-            DeleteDocument(DocumentId);
-        }
+        /// <summary>
+        /// Pdf document required for almost all Acceptance tests
+        /// </summary>
+        protected static string TestPdfDocumentId { get; set; }
 
-        protected AuthorizedApiTestBase()
+        /// <summary>
+        /// Pdf document with Fields required for almost all Acceptance tests
+        /// </summary>
+        protected static string TestPdfDocumentIdWithFields { get; set; }
+
+        /// <summary>
+        /// Use this method to upload all required for test documents
+        /// </summary>
+        /// <param name="context"></param>
+        [AssemblyInitialize]
+        public static void AssemblyInitialize(TestContext context)
         {
             var userCredentialsLoader = new CredentialLoader(ApplicationBaseUrl);
             var apiCredentialsLoader = new CredentialLoader(ApiBaseUrl);
@@ -41,20 +51,58 @@ namespace SignNow.Net.Test
 
             Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, Scope.All).Result;
             SignNowTestContext = new SignNowContext(ApiBaseUrl, Token);
+
+            TestPdfDocumentId = UploadTestDocument(PdfFilePath);
+            TestPdfDocumentIdWithFields = UploadTestDocumentWithFieldExtract(PdfFilePath);
+        }
+
+        [AssemblyCleanup]
+        public static void AssemblyCleanup()
+        {
+            DeleteTestDocument(TestPdfDocumentId);
+            DeleteTestDocument(TestPdfDocumentIdWithFields);
+        }
+
+        [TestCleanup]
+        public void TearDown()
+        {
+            DeleteTestDocument(DisposableDocumentId);
         }
 
         /// <summary>
         /// Uploads Document from test fixtures.
         /// </summary>
         /// <param name="filePath">Path to test data.</param>
+        /// <param name="fileName">Custom file name, if empty <see cref="SignNowTestBase.PdfFileName"/> will be used</param>
         /// <returns></returns>
-        protected string UploadTestDocument(string filePath)
+        protected static string UploadTestDocument(string filePath, string fileName = "")
+            => ProcessUploadDocument(filePath, fileName);
+
+        /// <summary>
+        /// Uploads Document with Fields Extract from test fixtures.
+        /// </summary>
+        /// <param name="filePath">Path to test data.</param>
+        /// <param name="fileName">Custom file name, if empty <see cref="SignNowTestBase.PdfFileName"/> will be used</param>
+        /// <returns></returns>
+        protected static string UploadTestDocumentWithFieldExtract(string filePath, string fileName = "")
+            => ProcessUploadDocument(filePath, fileName, true);
+
+        private static string ProcessUploadDocument(string filePath, string fileName, bool extractFields = false)
         {
             string docId = default;
 
+            if (String.IsNullOrEmpty(fileName))
+            {
+                fileName = PdfFileName;
+            }
+
             using (var fileStream = File.OpenRead(filePath))
             {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentAsync(fileStream, pdfFileName).Result;
+                var uploadTask = extractFields
+                    ? SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, fileName)
+                    : SignNowTestContext.Documents.UploadDocumentAsync(fileStream, fileName);
+
+                var uploadResponse = uploadTask.Result;
                 docId = uploadResponse?.Id;
 
                 Assert.IsNotNull(
@@ -69,16 +117,16 @@ namespace SignNow.Net.Test
         /// <summary>
         /// Cleanup Document uploaded by Unit tests.
         /// </summary>
-        /// <param name="id">Identity of the document to be removed.</param>
-        protected void DeleteDocument(string id)
+        /// <param name="documentId">Identity of the document to be removed.</param>
+        protected static void DeleteTestDocument(string documentId)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(documentId))
             {
                 return;
             }
 
             using (var client = new HttpClient())
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{id}"))
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{documentId}"))
             {
                 requestMessage.Headers.Add("Authorization", Token.GetAuthorizationHeaderValue());
                 var response = client.SendAsync(requestMessage).Result;

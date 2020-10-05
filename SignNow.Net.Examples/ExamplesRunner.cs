@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -176,6 +177,34 @@ namespace SignNow.Net.Examples
             var documentStatus = DocumentExamples.CheckTheStatusOfTheDocument(document.Id, token).Result;
 
             Assert.AreEqual(DocumentStatus.NoInvite, documentStatus);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.MergeTwoDocuments"/>
+        /// </summary>
+        [TestMethod]
+        public void MergeTwoDocumentsTest()
+        {
+            using var file1Stream = File.OpenRead(PdfWithSignatureField);
+            using var file2Stream = File.OpenRead(PdfWithoutFields);
+
+            var doc1 = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(file1Stream, "MergeTwoDocumentsTest1.pdf").Result;
+            var doc2 = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(file2Stream, "MergeTwoDocumentsTest2.pdf").Result;
+
+            var document1 = testContext.Documents.GetDocumentAsync(doc1.Id).Result;
+            var document2 = testContext.Documents.GetDocumentAsync(doc2.Id).Result;
+
+            var documents = new List<SignNowDocument> { document1, document2 };
+            var finalDocument = DocumentExamples
+                .MergeTwoDocuments("MergeTwoDocumentsTestResult.pdf", documents, token).Result;
+
+            testContext.Documents.DeleteDocumentAsync(doc1.Id);
+            testContext.Documents.DeleteDocumentAsync(doc2.Id);
+
+            Assert.AreEqual("MergeTwoDocumentsTestResult.pdf", finalDocument.Filename);
+            Assert.IsInstanceOfType(finalDocument.Document, typeof(Stream) );
         }
 
         #endregion

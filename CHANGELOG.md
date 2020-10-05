@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 
 ## Added
-- Carbon Copy for freeform invite and role-based invite
+- Carbon Copy for freeform invite and role-based invite [#106](https://github.com/signnow/SignNow.NET/issues/106)
+- `Service.DocumentService.MergeDocumentsAsync` that allows to merge two or more documents into one document
 
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
@@ -42,7 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [0.4.0-beta] - 2020-02-19
 ### Added
-- Сode samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
+- Code samples for [role-based invite][create role-based invite] and [freeform invite][create freeform invite] to README
 - Signature status property for the document - `Models.SignNowDocument.Status`; can be `NoInvite`, `Pending`, `Complete`
 - Signature status for the specified signer of a Freeform invite - `Models.FreeformInvite.Status`
 - Signature status for the specified signer of a field invite - `Models.FieldInvite.Status`
