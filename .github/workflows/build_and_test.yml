@@ -95,7 +95,7 @@ jobs:
         run: |
           dotnet tool install --global InheritDocTool
           dotnet tool install --global coverlet.console
-          echo "::add-path::$HOME/.dotnet/tools"
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
         run: dotnet restore -v:n
@@ -150,11 +150,11 @@ jobs:
         shell: pwsh
         run: |
           If ("${{ matrix.framework }}" -eq "netcoreapp3.0") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard12"
+            echo "name=TARGET_FRAMEWORK::netstandard12" >> $GITHUB_ENV
           } ElseIf ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard20"
+            echo "name=TARGET_FRAMEWORK::netstandard20" >> $GITHUB_ENV
           } Else {
-            echo "::set-env name=TARGET_FRAMEWORK::net45"
+            echo "name=TARGET_FRAMEWORK::net45" >> $GITHUB_ENV
           }
 
       - name: Upload Code Coverage Report (Codecov.io)

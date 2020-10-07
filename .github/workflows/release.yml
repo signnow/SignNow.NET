@@ -42,7 +42,7 @@ jobs:
         run: |
           dotnet tool install --global InheritDocTool
           dotnet tool install --global coverlet.console
-          echo "::add-path::$HOME/.dotnet/tools"
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
         run: dotnet restore -v:n
