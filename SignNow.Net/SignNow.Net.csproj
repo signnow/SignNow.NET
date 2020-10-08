@@ -22,6 +22,7 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <NeutralLanguage>en-US</NeutralLanguage>
         <ReleaseVersion>0.5.2-beta</ReleaseVersion>
         <PackageVersion>0.5.2-beta</PackageVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>

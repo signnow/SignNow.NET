@@ -45,7 +45,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync<SignNowDocument>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient
+                .RequestAsync<SignNowDocument>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -59,7 +61,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient
+                .RequestAsync<SigningLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -73,19 +77,23 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
-            return await UploadDocumentAsync("/document", documentContent, fileName, cancellationToken).ConfigureAwait(false);
+            return await UploadDocumentAsync("/document", documentContent, fileName, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
         public async Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
-            return await UploadDocumentAsync("/document/fieldextract", documentContent, fileName, cancellationToken).ConfigureAwait(false);
+            return await UploadDocumentAsync("/document/fieldextract", documentContent, fileName, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private async Task<UploadDocumentResponse> UploadDocumentAsync(string requestRelativeUrl, Stream documentContent, string fileName, CancellationToken cancellationToken = default)
@@ -98,7 +106,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            return await SignNowClient.RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient
+                .RequestAsync<UploadDocumentResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -172,6 +182,21 @@ namespace SignNow.Net.Service
             mergeResponse.Filename = documentName;
 
             return mergeResponse;
+        }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/historyfull");
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<List<DocumentHistoryResponse>>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

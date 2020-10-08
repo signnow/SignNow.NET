@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
@@ -43,6 +44,18 @@ namespace AcceptanceTests
 
             Assert.AreEqual("merged-document.pdf", merged.Filename);
             Assert.That.StreamIsPdf(merged.Document);
+        }
+
+        [TestMethod]
+        public void DocumentHistory()
+        {
+            var response = SignNowTestContext.Documents
+                .GetDocumentHistoryAsync(TestPdfDocumentIdWithFields)
+                .Result;
+
+            TestUtils.Dump(response);
+            Assert.IsTrue(response.All(itm => itm.Id.Length == 40));
+            Assert.IsTrue(response.All(itm => itm.DocumentId == TestPdfDocumentIdWithFields));
         }
     }
 }
