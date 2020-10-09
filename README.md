@@ -178,7 +178,7 @@ public static class DocumentExamples
 
 More examples: [Download signed document][download_signed_doc example]
 
-### <a name="download-document"></a> Merge two or more SignNow documents into one
+### <a name="merge-documents"></a> Merge two or more SignNow documents into one
 
 Merges two or more SignNow documents into one single PDF file.
 
@@ -357,7 +357,7 @@ public static partial class InviteExamples
 
 More examples: [Create role-based invite][create_rb_invite example]
 
-### <a name="download-history"></a> Get the history of a document
+### <a name="document-history"></a> Get the history of a document
 
 ```csharp
 public static partial class DocumentExamples
