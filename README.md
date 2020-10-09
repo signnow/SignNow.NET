@@ -27,6 +27,7 @@ Get your account at <https://www.signnow.com/developers>
     - [Create a single-use link to the document for signature](#create-signing-link)
     - [Create a freeform invite to the document for signature](#create-freeform-invite)
     - [Create a role-based invite to the document for signature](#create-role-based-invite)
+    - [Create a one-time link to download the document as a PDF](#share-document-via-link)
     - [Get the history of a document](#document-history)
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
@@ -357,6 +358,32 @@ public static partial class InviteExamples
 
 More examples: [Create role-based invite][create_rb_invite example]
 
+### <a name="share-document-via-link"></a> Create a one-time link to download the document as a PDF
+
+```csharp
+public static partial class DocumentExamples
+{
+    /// <summary>
+    /// Create a one-time use URL for anyone to download the document as a PDF.
+    /// </summary>
+    /// <param name="documentId">Identity of the document</param>
+    /// <param name="token">Access token</param>
+    /// <returns><see cref="DownloadLinkResponse"/></returns>
+    public static async Task<DownloadLinkResponse>
+        CreateOneTimeLinkToDownloadTheDocument(string documentId, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+
+        return await signNowContext.Documents
+            .CreateOneTimeDownloadLinkAsync(documentId)
+            .ConfigureAwait(false);
+    }
+}
+```
+
+More examples: [Create a One-time Use Download URL][create_one_time_link example]
+
 ### <a name="document-history"></a> Get the history of a document
 
 ```csharp
@@ -444,4 +471,5 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [check_sign_status example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_ff_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
 [create_rb_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
+[create_one_time_link example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs

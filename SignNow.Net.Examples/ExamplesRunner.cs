@@ -227,6 +227,24 @@ namespace SignNow.Net.Examples
             Assert.IsTrue(documentHistory.All(item => item.Email == UserCredentials.Login));
         }
 
+        /// <summary>
+        /// Run the test for example: <see cref="DocumentExamples.CreateOneTimeLinkToDownloadTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateOneTimeLinkToDownloadTheDocumentTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateOneTimeLinkToDownloadTheDocumentTest.pdf").Result;
+
+            disposableDocumentId = document?.Id;
+
+            var oneTimeLink = DocumentExamples
+                .CreateOneTimeLinkToDownloadTheDocument(disposableDocumentId, token).Result;
+
+            StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
+        }
+
         #endregion
 
         #region Invites Examples
