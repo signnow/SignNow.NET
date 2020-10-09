@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,9 +54,18 @@ namespace AcceptanceTests
                 .GetDocumentHistoryAsync(TestPdfDocumentIdWithFields)
                 .Result;
 
-            TestUtils.Dump(response);
             Assert.IsTrue(response.All(itm => itm.Id.Length == 40));
             Assert.IsTrue(response.All(itm => itm.DocumentId == TestPdfDocumentIdWithFields));
+        }
+
+        [TestMethod]
+        public void CreateOneTimeDocumentDownloadLink()
+        {
+            var link = SignNowTestContext.Documents
+                .CreateOneTimeDownloadLinkAsync(TestPdfDocumentId).Result;
+
+            Assert.IsNotNull(link.Url);
+            StringAssert.Contains(link.Url.Host, "signnow.com");
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SignNow.Net.Model;
 using System.IO;
@@ -19,9 +20,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<SignNowDocument> GetDocumentAsync(
-            string documentId,
-            CancellationToken cancellationToken = default);
+        Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Uploads a file to the SignNow account and creates a document.
@@ -31,10 +30,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="fileName">Uploaded document file name</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
-        Task<UploadDocumentResponse> UploadDocumentAsync(
-            Stream documentContent,
-            string fileName,
-            CancellationToken cancellationToken = default);
+        Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Uploads a file to the SignNow account, creates a document and extracts simple field tags if any.
@@ -44,10 +40,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="fileName">Uploaded document file name</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
-        Task<UploadDocumentResponse> UploadDocumentWithFieldExtractAsync(
-            Stream documentContent,
-            string fileName,
-            CancellationToken cancellationToken = default);
+        Task<UploadDocumentResponse>UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a document from SignNow account.
@@ -56,9 +49,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task DeleteDocumentAsync(
-            string documentId,
-            CancellationToken cancellationToken = default);
+        Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates URL to sign the document containing fillable fields using web browser.
@@ -67,9 +58,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing URL to sign the document using web browser.</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<SigningLinkResponse> CreateSigningLinkAsync(
-            string documentId,
-            CancellationToken cancellationToken = default);
+        Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Downloads a Collapsed/Zipped Document.
@@ -79,10 +68,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<DownloadDocumentResponse> DownloadDocumentAsync(
-            string documentId,
-            DownloadType type = DownloadType.PdfCollapsed,
-            CancellationToken cancellationToken = default);
+        Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Merges two or more documents into one.
@@ -92,10 +78,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<DownloadDocumentResponse> MergeDocumentsAsync(
-            string documentName,
-            IEnumerable<SignNowDocument> documents,
-            CancellationToken cancellationToken = default);
+        Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a document history (action log) data
@@ -104,8 +87,16 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>List of Document history items</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(
-            string documentId,
-            CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default);
+
+
+        /// <summary>
+        /// Create a one-time use URL for anyone to download the document as a PDF.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to be downloaded with one-time link</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>link to download specified document in PDF format</returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
+        Task<DownloadLinkResponse> CreateOneTimeDownloadLinkAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }

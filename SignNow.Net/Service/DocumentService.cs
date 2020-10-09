@@ -144,11 +144,7 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync(
-                    requestOptions,
-                    new HttpContentToDownloadDocumentResponseAdapter(),
-                    HttpCompletionOption.ResponseHeadersRead,
-                    cancellationToken)
+                .RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -171,12 +167,7 @@ namespace SignNow.Net.Service
             };
 
             var mergeResponse = await SignNowClient
-                .RequestAsync(
-                    requestOptions,
-                    new HttpContentToDownloadDocumentResponseAdapter(),
-                    HttpCompletionOption.ResponseHeadersRead,
-                    cancellationToken
-                    )
+                .RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                 .ConfigureAwait(false);
 
             mergeResponse.Filename = documentName;
@@ -185,7 +176,8 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<DocumentHistoryResponse>>
+            GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/historyfull");
             var requestOptions = new GetHttpRequestOptions
@@ -196,6 +188,21 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<List<DocumentHistoryResponse>>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DownloadLinkResponse> CreateOneTimeDownloadLinkAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/download/link");
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DownloadLinkResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }
