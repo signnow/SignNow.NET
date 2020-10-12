@@ -207,6 +207,44 @@ namespace SignNow.Net.Examples
             Assert.IsInstanceOfType(finalDocument.Document, typeof(Stream) );
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.GetTheDocumentHistory"/>
+        /// </summary>
+        [TestMethod]
+        public void GetTheDocumentHistoryTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "GetTheDocumentHistory.pdf").Result;
+
+            disposableDocumentId = document?.Id;
+
+            var documentHistory = DocumentExamples
+                .GetTheDocumentHistory(disposableDocumentId, token).Result;
+
+            Assert.IsTrue(documentHistory.All(item => item.DocumentId == disposableDocumentId));
+            Assert.IsTrue(documentHistory.Any(item => item.Origin == "original"));
+            Assert.IsTrue(documentHistory.All(item => item.Email == UserCredentials.Login));
+        }
+
+        /// <summary>
+        /// Run the test for example: <see cref="DocumentExamples.CreateOneTimeLinkToDownloadTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateOneTimeLinkToDownloadTheDocumentTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateOneTimeLinkToDownloadTheDocumentTest.pdf").Result;
+
+            disposableDocumentId = document?.Id;
+
+            var oneTimeLink = DocumentExamples
+                .CreateOneTimeLinkToDownloadTheDocument(disposableDocumentId, token).Result;
+
+            StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
+        }
+
         #endregion
 
         #region Invites Examples

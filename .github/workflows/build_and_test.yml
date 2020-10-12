@@ -5,8 +5,7 @@ name: Build and Test
 on:
   push:
     paths-ignore:
-      - 'README.md'
-      - 'CHANGELOG.md'
+      - '**.md'
       - 'SignNow.Net/SignNow.Net.Examples/**'
 
   pull_request:
@@ -26,7 +25,7 @@ jobs:
 
       matrix:
         dotnet:
-          - '3.1.100'
+          - '3.1.x'
 
         framework:
           - 'netcoreapp3.0'
@@ -64,13 +63,15 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
       # prevent the caching of the packages on the build machine
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      # removes logo and telemetry message from first run of dotnet cli
+      DOTNET_NOLOGO: true
       # prevent the download of the XML documentation for the packages
       NUGET_XMLDOC_MODE: skip
       COVERAGE_PATH: SignNow.Net.Test/bin/Debug
       CODACY_COVERAGE_REPORTER_URL: https://github.com/codacy/codacy-coverage-reporter/releases/download/7.8.1/codacy-coverage-reporter-assembly-7.8.1.jar
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 1
 
@@ -81,7 +82,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet }}
 
       - name: Setup nuget cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         id: nuget-cache
         with:
           path: ~/.nuget
@@ -94,7 +95,7 @@ jobs:
         run: |
           dotnet tool install --global InheritDocTool
           dotnet tool install --global coverlet.console
-          echo "::add-path::$HOME/.dotnet/tools"
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
         run: dotnet restore -v:n
@@ -149,11 +150,11 @@ jobs:
         shell: pwsh
         run: |
           If ("${{ matrix.framework }}" -eq "netcoreapp3.0") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard12"
+            echo "name=TARGET_FRAMEWORK::netstandard12" >> $GITHUB_ENV
           } ElseIf ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
-            echo "::set-env name=TARGET_FRAMEWORK::netstandard20"
+            echo "name=TARGET_FRAMEWORK::netstandard20" >> $GITHUB_ENV
           } Else {
-            echo "::set-env name=TARGET_FRAMEWORK::net45"
+            echo "name=TARGET_FRAMEWORK::net45" >> $GITHUB_ENV
           }
 
       - name: Upload Code Coverage Report (Codecov.io)

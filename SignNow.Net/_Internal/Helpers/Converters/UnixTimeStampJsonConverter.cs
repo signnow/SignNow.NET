@@ -23,7 +23,12 @@ namespace SignNow.Net.Internal.Helpers.Converters
             var hasAllowedType = reader.TokenType == JsonToken.Integer
                               || reader.TokenType == JsonToken.String;
 
-            if (reader.Value != null && hasAllowedType)
+            if (reader.Value == null)
+            {
+                return UnixTimeStampConverter.UnixEpoch;
+            }
+
+            if (hasAllowedType)
             {
                 return UnixTimeStampConverter.FromUnixTimestamp(
                         long.Parse(reader.Value.ToString(), NumberStyles.None, NumberFormatInfo.InvariantInfo));
@@ -47,7 +52,7 @@ namespace SignNow.Net.Internal.Helpers.Converters
     /// </summary>
     internal static class UnixTimeStampConverter
     {
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// Converts Unix timestamp to <see cref="DateTime"/>

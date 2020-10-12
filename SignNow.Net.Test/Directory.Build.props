@@ -10,7 +10,7 @@
       <CollectCoverage>true</CollectCoverage>
       <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
       <CoverletOutput>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/</CoverletOutput>
-      <MergeWith>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/coverage.json</MergeWith>
+      <MergeWith>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/coverage.$(TargetFramework).json</MergeWith>
       <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
     </PropertyGroup>
 </Project>

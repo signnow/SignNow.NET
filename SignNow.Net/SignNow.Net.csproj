@@ -22,6 +22,7 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <NeutralLanguage>en-US</NeutralLanguage>
         <ReleaseVersion>0.5.2-beta</ReleaseVersion>
         <PackageVersion>0.5.2-beta</PackageVersion>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -36,6 +37,7 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+        <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     </ItemGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
         <Reference Include="System.Net.Http" />

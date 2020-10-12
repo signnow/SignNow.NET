@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## Added
 - Carbon Copy for freeform invite and role-based invite [#106](https://github.com/signnow/SignNow.NET/issues/106)
 - `Service.DocumentService.MergeDocumentsAsync` that allows to merge two or more documents into one document
+- `Service.DocumentService.GetDocumentHistoryAsync` that allows to retrieve the history of the document actions
+- `Service.DocumentService.CreateOneTimeDownloadLinkAsync` that allows to share document via one-time URL
 
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
