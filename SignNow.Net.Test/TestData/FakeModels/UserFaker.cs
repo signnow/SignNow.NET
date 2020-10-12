@@ -1,3 +1,4 @@
+using System;
 using Bogus;
 using SignNow.Net.Model;
 
@@ -12,20 +13,35 @@ namespace SignNow.Net.Test.FakeModels
         /// This example shows Json representation.
         /// <code>
         /// {
+        ///   "id": "c376990ca7e1e84ea7f6e252144e435f314bb63b",
         ///   "active": false,
+        ///   "verified": true,
+        ///   "is_logged_in": false,
         ///   "first_name": "Jesus",
         ///   "last_name": "Monahan",
-        ///   "primary_email": "Jesus_Monahan@gmail.com"
+        ///   "primary_email": "Jesus_Monahan@gmail.com",
+        ///   "created": "1580771931",
+        ///   "billing_period": {
+        ///     "start_date": "09/23/2020",
+        ///     "end_date": "10/23/2020",
+        ///     "start_timestamp": 1600819200,
+        ///     "end_timestamp": 1603411200
+        ///   }
         /// }
         /// </code>
         /// </example>
         public UserFaker()
         {
             Rules((f, o) => {
+                o.Id          = f.Random.Hash(40);
                 o.Active      = f.Random.Bool();
+                o.Verified    = f.Random.Bool();
+                o.IsLoggedIn  = f.Random.Bool();
                 o.FirstName   = f.Name.FirstName();
                 o.LastName    = f.Name.LastName();
                 o.Email       = f.Internet.Email(o.FirstName, o.LastName);
+                o.Created     = f.Date.Recent().ToUniversalTime();
+                o.BillingPeriod = new UserBillingFaker().Generate();
             });
         }
     }
@@ -39,20 +55,61 @@ namespace SignNow.Net.Test.FakeModels
         /// This example shows Json representation.
         /// <code>
         /// {
+        ///   "id": "c376990ca7e1e84ea7f6e252144e435f314bb63b",
         ///   "active": true,
+        ///   "verified": true,
+        ///   "is_logged_in": false,
         ///   "first_name": "Jesus",
         ///   "last_name": "Monahan",
-        ///   "primary_email": "signnow.tutorial+Jesus_Monahan@gmail.com"
+        ///   "primary_email": "signnow.tutorial+Jesus_Monahan@gmail.com",
+        ///   "created": "1580771931",
+        ///   "billing_period": {
+        ///     "start_date": "09/23/2020",
+        ///     "end_date": "10/23/2020",
+        ///     "start_timestamp": 1600819200,
+        ///     "end_timestamp": 1603411200
+        ///   }
         /// }
         /// </code>
         /// </example>
         public UserSignNowFaker()
         {
             Rules((f, o) => {
+                o.Id          = f.Random.Hash(40);
                 o.Active      = true;
+                o.Verified    = true;
+                o.IsLoggedIn  = true;
                 o.FirstName   = f.Name.FirstName();
                 o.LastName    = f.Name.LastName();
                 o.Email       = "signnow.tutorial+" + f.Internet.Email(o.FirstName, o.LastName, "gmail.com");
+                o.Created     = f.Date.Recent().ToUniversalTime();
+                o.BillingPeriod = new UserBillingFaker().Generate();
+            });
+        }
+    }
+
+    public class UserBillingFaker : Faker<UserBilling>
+    {
+        /// <summary>
+        /// Faker <see cref="UserBilling"/>
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "start_date": "09/23/2020",
+        ///   "end_date": "10/23/2020",
+        ///   "start_timestamp": 1600819200,
+        ///   "end_timestamp": 1603411200
+        /// }
+        /// </code>
+        /// </example>
+        public UserBillingFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.StartDate = f.Date.Recent().ToUniversalTime();
+                o.EndDate   = f.Date.Recent().Add(TimeSpan.FromDays(14)).ToUniversalTime();
             });
         }
     }
