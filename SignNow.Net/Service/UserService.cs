@@ -8,6 +8,7 @@ using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Service
 {
@@ -23,6 +24,23 @@ namespace SignNow.Net.Service
 
         protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token, client)
         {
+        }
+
+        /// <inheritdoc cref="IUserService.CreateUserAsync" />
+        public async Task<UserCreateResponse> CreateUserAsync(UserRequest user, CancellationToken cancellation = default)
+        {
+            var basicToken = Token;
+            basicToken.TokenType = TokenType.Basic;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user"),
+                Content = new JsonHttpContent(user),
+                Token = basicToken
+            };
+
+            return await SignNowClient.RequestAsync<UserCreateResponse>(requestOptions, cancellation)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="IUserService.GetCurrentUserAsync" />
