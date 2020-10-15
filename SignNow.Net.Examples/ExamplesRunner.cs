@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Examples.Authentication;
 using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Invites;
+using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Context;
 
@@ -305,6 +306,28 @@ namespace SignNow.Net.Examples
             Assert.AreEqual("Signer 1", createdInvite?.RoleName, "Signer role mismatch.");
             Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
             Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
+        }
+
+        #endregion
+
+        #region User Examples
+
+        /// <summary>
+        /// Run test for <see cref="UserExamples.CreateSignNowUser"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateSignNowUserTest()
+        {
+            var createUserResponse = UserExamples.CreateSignNowUser(
+                "John",
+                "Test001",
+                "john_test001@signnow.com",
+                "secretPassword",
+                token
+            ).Result;
+
+            Assert.AreEqual("john_test001@signnow.com", createUserResponse.Email);
+            Assert.IsFalse(createUserResponse.Verified);
         }
 
         #endregion
