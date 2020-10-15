@@ -10,7 +10,7 @@ namespace SignNow.Net.Examples.Users
         {
             var signNowContext = new SignNowContext(token);
 
-            var userRequest = new UserRequest
+            var userRequest = new CreateUserOptions
             {
                 Email = email,
                 FirstName = firstname,

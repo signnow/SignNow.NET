@@ -1,20 +1,17 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.Requests
+namespace SignNow.Net.Model
 {
-    public class UserRequest
+    /// <summary>
+    /// Represents response from SignNow API for User update request.
+    /// </summary>
+    public class UserUpdateResponse
     {
         /// <summary>
-        /// User email.
+        /// User identity.
         /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        /// <summary>
-        /// User password.
-        /// </summary>
-        [JsonProperty("password")]
-        public string Password { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
         /// <summary>
         /// User firstname.

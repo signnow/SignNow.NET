@@ -27,7 +27,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="IUserService.CreateUserAsync" />
-        public async Task<UserCreateResponse> CreateUserAsync(UserRequest user, CancellationToken cancellation = default)
+        public async Task<UserCreateResponse> CreateUserAsync(CreateUserOptions createUser, CancellationToken cancellation = default)
         {
             var basicToken = Token;
             basicToken.TokenType = TokenType.Basic;
@@ -35,7 +35,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
-                Content = new JsonHttpContent(user),
+                Content = new JsonHttpContent(createUser),
                 Token = basicToken
             };
 
@@ -53,6 +53,21 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient.RequestAsync<User>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IUserService.UpdateUserAsync" />
+        public async Task<UserUpdateResponse> UpdateUserAsync(UpdateUserOptions updateUser, CancellationToken cancellationToken = default)
+        {
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user"),
+                Content = new JsonHttpContent(updateUser),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<UserUpdateResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />

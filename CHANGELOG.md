@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Service.DocumentService.MergeDocumentsAsync` that allows to merge two or more documents into one document
 - `Service.DocumentService.GetDocumentHistoryAsync` that allows to retrieve the history of the document actions
 - `Service.DocumentService.CreateOneTimeDownloadLinkAsync` that allows to share document via one-time URL
+- `Service.UserService.CreateUserAsync` that allows to create an account for user
+- `Service.UserService.UpdateUserAsync` that allows to update user information i.e. first name, last name
+
+## Changed
+- Added support for Basic Auth param to `Model.Token`
 
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
