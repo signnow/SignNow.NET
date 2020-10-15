@@ -1,5 +1,5 @@
 using System;
-using System.Globalization;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
@@ -65,31 +65,23 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("billing_period")]
         public UserBilling BillingPeriod { get; internal set; }
-    }
-
-    /// <summary>
-    /// User billing period data
-    /// </summary>
-    public class UserBilling
-    {
-        [JsonProperty("start_date")]
-        internal string Start => StartDate.Date.ToString("d", DateTimeFormatInfo.InvariantInfo);
-
-        [JsonProperty("end_date")]
-        internal string End => EndDate.Date.ToString("d", DateTimeFormatInfo.InvariantInfo);
 
         /// <summary>
-        /// User billing period start date.
+        /// Companies which user belongs to.
         /// </summary>
-        [JsonProperty("start_timestamp")]
-        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
-        public DateTime StartDate { get; set; }
+        [JsonProperty("companies")]
+        public IReadOnlyCollection<Company> Companies { get; set; } = new List<Company>();
 
         /// <summary>
-        /// User billing period end date.
+        /// Documents used by User per month.
         /// </summary>
-        [JsonProperty("end_timestamp")]
-        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
-        public DateTime EndDate { get; set; }
+        [JsonProperty("monthly_document_count")]
+        public int MonthlyDocumentCount { get; internal set; }
+
+        /// <summary>
+        /// The number of documents used by User for the entire time.
+        /// </summary>
+        [JsonProperty("lifetime_document_count")]
+        public int LifetimeDocumentCount { get; internal set; }
     }
 }

@@ -26,7 +26,15 @@ namespace SignNow.Net.Test.FakeModels
         ///     "end_date": "10/23/2020",
         ///     "start_timestamp": 1600819200,
         ///     "end_timestamp": 1603411200
-        ///   }
+        ///   },
+        ///   "companies": [
+        ///     {
+        ///       "name": "Signnow",
+        ///       "full_access": true
+        ///     }
+        ///   ],
+        ///   "monthly_document_count": 0,
+        ///   "lifetime_document_count": 0
         /// }
         /// </code>
         /// </example>
@@ -42,14 +50,17 @@ namespace SignNow.Net.Test.FakeModels
                 o.Email       = f.Internet.Email(o.FirstName, o.LastName);
                 o.Created     = f.Date.Recent().ToUniversalTime();
                 o.BillingPeriod = new UserBillingFaker().Generate();
+                o.Companies     = new CompanyFaker().Generate(1);
+                o.MonthlyDocumentCount = f.Random.Number();
+                o.LifetimeDocumentCount = o.MonthlyDocumentCount + f.Random.Number();
             });
         }
     }
 
-    public class UserSignNowFaker : Faker<User>
+    public class UserSignNowFaker : UserFaker
     {
         /// <summary>
-        /// Faker <see cref="User"/> with signnow  email.
+        /// Faker <see cref="User"/> with signnow email.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -68,22 +79,32 @@ namespace SignNow.Net.Test.FakeModels
         ///     "end_date": "10/23/2020",
         ///     "start_timestamp": 1600819200,
         ///     "end_timestamp": 1603411200
-        ///   }
+        ///   },
+        ///   "companies": [
+        ///     {
+        ///       "name": "Signnow",
+        ///       "full_access": true
+        ///     }
+        ///   ],
+        ///   "monthly_document_count": 0,
+        ///   "lifetime_document_count": 0
         /// }
         /// </code>
         /// </example>
         public UserSignNowFaker()
         {
-            Rules((f, o) => {
-                o.Id          = f.Random.Hash(40);
+            base.FinishWith((f, o) => {
                 o.Active      = true;
                 o.Verified    = true;
                 o.IsLoggedIn  = true;
-                o.FirstName   = f.Name.FirstName();
-                o.LastName    = f.Name.LastName();
                 o.Email       = "signnow.tutorial+" + f.Internet.Email(o.FirstName, o.LastName, "gmail.com");
-                o.Created     = f.Date.Recent().ToUniversalTime();
-                o.BillingPeriod = new UserBillingFaker().Generate();
+                o.Companies     = new CompanyFaker()
+                    .FinishWith((f, c) =>
+                    {
+                        c.Name = "Signnow";
+                        c.FullAccess = true;
+                    })
+                    .Generate(1);
             });
         }
     }
@@ -110,6 +131,30 @@ namespace SignNow.Net.Test.FakeModels
             {
                 o.StartDate = f.Date.Recent().ToUniversalTime();
                 o.EndDate   = f.Date.Recent().Add(TimeSpan.FromDays(14)).ToUniversalTime();
+            });
+        }
+    }
+
+    public class CompanyFaker : Faker<Company>
+    {
+        /// <summary>
+        /// Faker <see cref="Company"/>
+        /// </summary>
+        /// <example>
+        /// This example shows Json representation.
+        /// <code>
+        /// {
+        ///   "name": "Signnow",
+        ///   "full_access": true
+        /// }
+        /// </code>
+        /// </example>
+        public CompanyFaker()
+        {
+            Rules((f, o) =>
+            {
+                o.Name = f.Company.CompanyName();
+                o.FullAccess = f.Random.Bool();
             });
         }
     }
