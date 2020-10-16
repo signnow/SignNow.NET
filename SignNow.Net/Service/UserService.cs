@@ -70,8 +70,29 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="IUserService.SendVerificationEmailAsync" />
+        /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
+        public async Task SendVerificationEmailAsync(string email, CancellationToken cancellationToken = default)
+        {
+            var basicToken = Token;
+            basicToken.TokenType = TokenType.Basic;
+
+            var requestBody = new {email = email.ValidateEmail()};
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user/verifyemail"),
+                Content = new JsonHttpContent(requestBody),
+                Token = basicToken
+            };
+
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />
-        /// <exception cref="ArgumentNullException"><see cref="SignInvite"/> cannot be null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
+        /// <exception cref="ArgumentException">Invalid format of <paramref name="documentId"/></exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
@@ -92,7 +113,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(FreeformInvite, CancellationToken)" />
-        /// <exception cref="ArgumentNullException"><see cref="FreeformInvite"/> cannot be null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
         public async Task CancelInviteAsync(FreeformInvite invite, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
@@ -101,7 +122,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(string, CancellationToken)" />
-        /// <exception cref="ArgumentException">Invalid format of Document Id.</exception>
+        /// <exception cref="ArgumentException">Invalid format of <paramref name="documentId"/>.</exception>
         public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
             await ProcessCancelInviteAsync($"/document/{documentId.ValidateId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);

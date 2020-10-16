@@ -313,21 +313,27 @@ namespace SignNow.Net.Examples
         #region User Examples
 
         /// <summary>
-        /// Run test for <see cref="UserExamples.CreateSignNowUser"/>
+        /// Run test for <see cref="UserExamples.CreateSignNowUser"/> and <see cref="UserExamples.SendVerificationEmailToUser"/>
         /// </summary>
         [TestMethod]
         public void CreateSignNowUserTest()
         {
+            DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
+
             var createUserResponse = UserExamples.CreateSignNowUser(
                 "John",
-                "Test001",
-                "john_test001@signnow.com",
+                $"Sample{timestamp}",
+                $"signnow.tutorial+sample_test{timestamp}@gmail.com",
                 "secretPassword",
                 token
             ).Result;
 
-            Assert.AreEqual("john_test001@signnow.com", createUserResponse.Email);
+            Assert.AreEqual($"signnow.tutorial+sample_test{timestamp}@gmail.com", createUserResponse.Email);
             Assert.IsFalse(createUserResponse.Verified);
+
+            // Finally - send verification email to User
+            UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
         }
 
         #endregion
