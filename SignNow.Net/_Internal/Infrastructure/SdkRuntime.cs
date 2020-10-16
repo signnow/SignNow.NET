@@ -25,7 +25,7 @@ namespace SignNow.Net.Internal.Infrastructure
 
         public static string OsDescription()
         {
-#if NET45
+#if NETFRAMEWORK
             return Environment.OSVersion.ToString();
 #else
             return RuntimeInformation.OSDescription;
@@ -39,7 +39,31 @@ namespace SignNow.Net.Internal.Infrastructure
         public static string FrameworkName()
         {
 #if NET45
-            return ".NET 4.5+";
+            return ".NET 4.5";
+#elif NET451
+            return ".NET 4.5.1";
+#elif NET452
+            return ".NET 4.5.2";
+#elif NET46
+            return ".NET 4.6";
+#elif NET461
+            return ".NET 4.6.1";
+#elif NET462
+            return ".NET 4.6.2";
+#elif NET47
+            return ".NET 4.7";
+#elif NET471
+            return ".NET 4.7.1";
+#elif NET472
+            return ".NET 4.7.2";
+#elif NET48
+            return ".NET 4.8";
+#elif NET5_0
+            return ".NET 5.0";
+#elif NETCOREAPP3_1
+            return ".NET Core 3.1";
+#elif NETCOREAPP3_0
+            return ".NET Core 3.0";
 #else
             return ".NET Core";
 #endif
@@ -51,7 +75,7 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         public static string FrameworkVersion()
         {
-#if NET45
+#if NETFRAMEWORK
             return Environment.Version.ToString();
 #else
             return RuntimeInformation.FrameworkDescription.Replace(".NET Core ", String.Empty);

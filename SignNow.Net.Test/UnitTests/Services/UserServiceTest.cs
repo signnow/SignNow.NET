@@ -103,7 +103,12 @@ namespace UnitTests
             var exception = Assert.ThrowsException<AggregateException>(
                 () => userService.CreateUserAsync(new CreateUserOptions()).Result);
 
-            StringAssert.Contains(exception.Message, "unverified_email");
+            var expectedMessage = "unverified_email";
+
+#if NETFRAMEWORK
+            expectedMessage = "One or more errors occurred.";
+#endif
+            StringAssert.Contains(exception.Message, expectedMessage);
             Assert.AreEqual("unverified_email", exception.InnerExceptions[0].Message);
         }
     }

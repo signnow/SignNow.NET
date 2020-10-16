@@ -75,7 +75,7 @@ namespace UnitTests
         {
             var exception = Assert.ThrowsException<AggregateException>(
                 () => OAuth2.RefreshTokenAsync(null).Result);
-#if NET45
+#if NETFRAMEWORK
             StringAssert.Contains(exception.Message, "One or more errors occurred.");
 #else
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);
@@ -89,7 +89,7 @@ namespace UnitTests
             var exception = Assert.ThrowsException<AggregateException>(
                 () => OAuth2.ValidateTokenAsync(null).Result);
 
-#if NET45
+#if NETFRAMEWORK
             StringAssert.Contains(exception.Message, "One or more errors occurred.");
 #else
             StringAssert.Contains(exception.Message, ErrorMessages.ValueCannotBeNull);

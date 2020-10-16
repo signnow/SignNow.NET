@@ -4,7 +4,7 @@ using System.Globalization;
 namespace SignNow.Net.Internal.Infrastructure
 {
 
-#if NET45
+#if NETFRAMEWORK
     using System.Reflection;
     using Microsoft.Win32;
 #else
@@ -46,7 +46,7 @@ namespace SignNow.Net.Internal.Infrastructure
         private static string GetOSName()
         {
             var os = "Unknown";
-#if NET45
+#if NETFRAMEWORK
             os = Environment.OSVersion.ToString();
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -69,7 +69,7 @@ namespace SignNow.Net.Internal.Infrastructure
         private static string GetOsVersion()
         {
             var version = string.Empty;
-#if NET45
+#if NETFRAMEWORK
             // On Windows we already have FQ string, e.g: WINDOWS_NT 10.11
             return version;
 #else
@@ -93,8 +93,8 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static string GetArchitecture()
         {
-            var arch = "x64";
-#if NET45
+            var arch = "x86_64";
+#if NETFRAMEWORK
             arch = typeof(RuntimeInfo).Assembly.GetName().ProcessorArchitecture.ToString();
 #else
             arch = RuntimeInformation.OSArchitecture.ToString();
@@ -109,7 +109,7 @@ namespace SignNow.Net.Internal.Infrastructure
         private static string GetPlatform()
         {
             var platform = "unknown";
-#if NET45
+#if NETFRAMEWORK
             platform = Environment.Is64BitOperatingSystem ? "win64" : "win32";
 #else
             platform = RuntimeInformation.ProcessArchitecture.ToString();
@@ -212,20 +212,24 @@ namespace SignNow.Net.Internal.Infrastructure
                     version = "10.11";
                     break;
 
-                case (int)MacOsVersions.MacOsX1012:
+                case (int)MacOsVersions.macOS1012:
                     version = "10.12";
                     break;
 
-                case (int)MacOsVersions.MacOsX1013:
+                case (int)MacOsVersions.macOS1013:
                     version = "10.13";
                     break;
 
-                case (int)MacOsVersions.MacOsX1014:
+                case (int)MacOsVersions.macOS1014:
                     version = "10.14";
                     break;
 
-                case (int)MacOsVersions.MacOsX1015:
+                case (int)MacOsVersions.macOS1015:
                     version = "10.15";
+                    break;
+
+                case (int)MacOsVersions.macOS1100:
+                    version = "11.0";
                     break;
 
                 default:
@@ -252,10 +256,11 @@ namespace SignNow.Net.Internal.Infrastructure
             MacOsX109,
             MacOsX1010,
             MacOsX1011,
-            MacOsX1012,
-            MacOsX1013,
-            MacOsX1014,
-            MacOsX1015,
+            macOS1012,
+            macOS1013,
+            macOS1014,
+            macOS1015,
+            macOS1100
         }
     }
 }

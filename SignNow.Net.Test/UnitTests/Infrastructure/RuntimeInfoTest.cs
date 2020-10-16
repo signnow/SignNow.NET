@@ -12,7 +12,7 @@ namespace UnitTests
         [DataRow("Linux 3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018", "3.10.0-693.21.1.el7.x86_64", DisplayName = "Long Linux version")]
         [DataRow("Linux bad3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018", "", DisplayName = "Broken Linux version")]
         [DataRow("CentOs 3.10.0 - 693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018", "3.10.0", DisplayName = "Not a Linux")]
-#if NET45
+#if NETFRAMEWORK
         [Ignore]
 #endif
         public void ShouldProperParseLinuxOsDetails(string kernelStr, string expected)
@@ -22,7 +22,7 @@ namespace UnitTests
             Assert.AreEqual(actual, expected);
         }
 
-#if NET45
+#if NETFRAMEWORK
         [Ignore]
 #endif
         [DataTestMethod]
@@ -42,6 +42,7 @@ namespace UnitTests
         [DataRow("Darwin 17.5.0 Darwin Kernel Version 17.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.13", DisplayName = "High Sierra")]
         [DataRow("Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.14", DisplayName = "Mojave")]
         [DataRow("Darwin 19.0.0 Darwin Kernel Version 19.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.15", DisplayName = "Catalina")]
+        [DataRow("Darwin 20.0.0 Darwin Kernel Version 20.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "11.0", DisplayName = "Big Sur")]
         [DataRow("Darwin 99.0.0 Darwin Kernel Version 99.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "", DisplayName = "Unknown")]
         public void ShouldProperParseMacOsDetails(string kernelStr, string expected)
         {
@@ -50,7 +51,7 @@ namespace UnitTests
             Assert.AreEqual(actual, expected);
         }
 
-#if NET45
+#if NETFRAMEWORK
         [Ignore]
 #endif
         [DataTestMethod]
