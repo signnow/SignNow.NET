@@ -33,5 +33,18 @@ namespace SignNow.Net.Examples.Users
                 .CreateUserAsync(userRequest)
                 .ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Retrieve User Information example
+        /// </summary>
+        /// <param name="token">Access token</param>
+        /// <returns></returns>
+        public static async Task<User> RetrieveUserInformation(Token token)
+        {
+            var signNowContext = new SignNowContext(token);
+
+            return await signNowContext.Users.GetCurrentUserAsync()
+                .ConfigureAwait(false);
+        }
     }
 }
