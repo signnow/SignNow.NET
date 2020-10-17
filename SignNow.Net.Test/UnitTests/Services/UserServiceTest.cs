@@ -90,6 +90,24 @@ namespace UnitTests
 
             var sendTask = userService.SendVerificationEmailAsync("user@signnow.com");
 
+            Task.WaitAll(sendTask);
+            Assert.IsTrue(sendTask.IsCompleted);
+            Assert.AreEqual(TaskStatus.RanToCompletion, sendTask.Status);
+        }
+
+        [TestMethod]
+        public void SendPasswordResetLinkToUser()
+        {
+            var mockResponse = @"
+            {
+                ""status"": ""success""
+            }";
+
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(mockResponse));
+
+            var sendTask = userService.SendPasswordResetLinkAsync("user@signnow.com");
+
+            Task.WaitAll(sendTask);
             Assert.IsTrue(sendTask.IsCompleted);
             Assert.AreEqual(TaskStatus.RanToCompletion, sendTask.Status);
         }

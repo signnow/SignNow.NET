@@ -22,7 +22,8 @@ namespace SignNow.Net.Examples.Documents
 
             // using `documentId` from the Upload document step
             return await signNowContext.Documents
-                .CreateSigningLinkAsync(documentId).ConfigureAwait(false);
+                .CreateSigningLinkAsync(documentId)
+                .ConfigureAwait(false);
         }
     }
 }

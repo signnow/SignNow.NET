@@ -41,5 +41,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns></returns>
         Task SendVerificationEmailAsync(string email, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Sends password reset link
+        /// </summary>
+        /// <param name="email">User email</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns></returns>
+        Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default);
     }
 }

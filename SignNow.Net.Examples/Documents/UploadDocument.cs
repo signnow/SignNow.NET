@@ -24,5 +24,28 @@ namespace SignNow.Net.Examples.Documents
 
             return await signNowContext.Documents.GetDocumentAsync(documentId);
         }
+
+        /// <summary>
+        /// Uploads a PDF document to SignNow and returns SignNowDocument object.
+        /// </summary>
+        /// <param name="pdfFilePath">Full qualified path to your PDF file.</param>
+        /// <param name="token">Access token</param>
+        public static async Task<SignNowDocument> UploadDocument(string pdfFilePath, Token token)
+        {
+            // using token from the Authorization step
+            var signNowContext = new SignNowContext(token);
+            var pdfFileName = "document-example.pdf";
+
+            await using var fileStream = File.OpenRead(pdfFilePath);
+
+            // Upload the document
+            var uploadResponse = signNowContext.Documents
+                .UploadDocumentAsync(fileStream, pdfFileName).Result;
+
+            // Gets document ID from successful response
+            var documentId = uploadResponse.Id;
+
+            return await signNowContext.Documents.GetDocumentAsync(documentId);
+        }
     }
 }

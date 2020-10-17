@@ -90,6 +90,26 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="IUserService.SendPasswordResetLinkAsync"/>
+        /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
+        public async Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default)
+        {
+            var basicToken = Token;
+            basicToken.TokenType = TokenType.Basic;
+
+            var requestBody = new {email = email.ValidateEmail()};
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user/forgotpassword"),
+                Content = new JsonHttpContent(requestBody),
+                Token = basicToken
+            };
+
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />
         /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
         /// <exception cref="ArgumentException">Invalid format of <paramref name="documentId"/></exception>

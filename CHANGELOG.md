@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Service.UserService.CreateUserAsync` that allows to create an account for user
 - `Service.UserService.UpdateUserAsync` that allows to update user information i.e. first name, last name
 - `Service.UserService.SendVerificationEmailAsync` that allows to sends verification email to a user
+- `Service.UserService.SendPasswordResetLinkAsync` that allows to sends password reset link to a user
 
 ## Changed
 - Added support for Basic Auth param to `Model.Token`

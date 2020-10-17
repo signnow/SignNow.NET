@@ -37,8 +37,8 @@ namespace AcceptanceTests
             var token = oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, scope).Result;
 
             Assert.IsNotNull(token);
-            Assert.IsFalse(String.IsNullOrEmpty(token.AccessToken));
-            Assert.IsFalse(String.IsNullOrEmpty(token.RefreshToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.RefreshToken));
             Assert.AreEqual("Bearer", token.TokenType.ToString());
             Assert.AreEqual(scope.AsString(), token.Scope);
             Assert.IsTrue(token.ExpiresIn > 0);
