@@ -1,23 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\netfx.props" />
+  <Import Project="..\SignNow.props" />
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net45</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <ReleaseVersion>0.5.2-beta</ReleaseVersion>
-    <LangVersion>8.0</LangVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup>
-    <WarningsNotAsErrors>1801</WarningsNotAsErrors>
-    <NoWarn>$(NoWarn);1801</NoWarn>
+    <NoWarn>1801,1591</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -39,11 +38,11 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard1.2" />
   </ItemGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard2.0" />
   </ItemGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=net45" />
   </ItemGroup>
