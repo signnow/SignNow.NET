@@ -28,6 +28,7 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
     <PropertyGroup>
       <NoWarn>1591</NoWarn>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
@@ -54,12 +55,6 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
       <Compile Remove="SignNowClient.cs" />
     </ItemGroup>
 
-    <PropertyGroup>
-        <PostBuildEvent>InheritDoc -o</PostBuildEvent>
-        <NeutralLanguage>en-US</NeutralLanguage>
-    </PropertyGroup>
-
-
     <ItemGroup>
       <Compile Update="Exceptions\ExceptionMessages.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -74,4 +69,8 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
+
+    <!-- XML documentation generation -->
+    <Import Project="..\InheritDoc.targets" />
+
 </Project>
