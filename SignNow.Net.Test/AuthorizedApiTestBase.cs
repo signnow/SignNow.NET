@@ -8,7 +8,6 @@ using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Test
 {
-    [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase
     {
         /// <summary>
@@ -40,7 +39,7 @@ namespace SignNow.Net.Test
         /// Use this method to upload all required for test documents
         /// </summary>
         /// <param name="context"></param>
-        [AssemblyInitialize]
+        [ClassInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
             var userCredentialsLoader = new CredentialLoader(ApplicationBaseUrl);
@@ -56,7 +55,7 @@ namespace SignNow.Net.Test
             TestPdfDocumentIdWithFields = UploadTestDocumentWithFieldExtract(PdfFilePath);
         }
 
-        [AssemblyCleanup]
+        [ClassCleanup]
         public static void AssemblyCleanup()
         {
             DeleteTestDocument(TestPdfDocumentId);
