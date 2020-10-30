@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Requests;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
@@ -29,6 +29,7 @@ namespace UnitTests
         }
 
         [TestMethod]
+        [SuppressMessage("ReSharper", "CA1307")]
         public void CreatesJsonContext()
         {
             var documents = new SignNowDocumentFaker().Generate(10);
@@ -38,10 +39,10 @@ namespace UnitTests
             };
             request.AddDocuments(documents);
 
-            var JsonHttpContext = request.GetHttpContent();
-            var jsonBody = JsonHttpContext.ReadAsStringAsync().Result;
+            var jsonHttpContext = request.GetHttpContent();
+            var jsonBody = jsonHttpContext.ReadAsStringAsync().Result;
 
-            Assert.AreEqual("application/json", JsonHttpContext.Headers.ContentType.MediaType);
+            Assert.AreEqual("application/json", jsonHttpContext.Headers.ContentType.MediaType);
             Assert.IsTrue(jsonBody.Contains("mergedName"));
             Assert.IsTrue(jsonBody.Contains(documents[1].Id));
         }

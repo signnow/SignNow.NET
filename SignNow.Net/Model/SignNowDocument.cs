@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
@@ -185,6 +186,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Default empty Invites collection for case when document haven't any invites
         /// </summary>
+        [SuppressMessage("Avoid unnecessary zero-length array allocations.", "CA1825")]
         private static readonly IReadOnlyCollection<ISignNowInviteStatus> _emptyInvites = new SignNowInvite[0];
     }
 }

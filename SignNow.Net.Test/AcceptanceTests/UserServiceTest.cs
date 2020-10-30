@@ -19,7 +19,7 @@ namespace AcceptanceTests
         /// </summary>
         /// <param name="invite">FreeForm invite object.</param>
         /// <returns>InviteResponse</returns>
-        private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
+        private static InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
             return SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).Result;
         }
