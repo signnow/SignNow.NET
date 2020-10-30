@@ -2,8 +2,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace FeatureTests
 {

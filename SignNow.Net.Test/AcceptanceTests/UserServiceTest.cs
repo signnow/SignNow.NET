@@ -3,9 +3,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
-using SignNow.Net.Service;
-using SignNow.Net.Test;
 using SignNow.Net.Test.Constants;
+using UnitTests;
 
 namespace AcceptanceTests
 {

@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using SignNow.Net.Test.Context;
+using UnitTests;
 
 namespace AcceptanceTests
 {
