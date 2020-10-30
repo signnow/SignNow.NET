@@ -1,0 +1,28 @@
+<Project>
+
+  <PropertyGroup>
+
+    <Version>0.5.2-beta</Version>
+    <Authors>SignNow</Authors>
+    <Company>SignNow</Company>
+    <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API. (Official Library)
+SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.</Description>
+    <Copyright>airSlate Inc.</Copyright>
+
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
+    <PackageProjectUrl>https://github.com/signnow/SignNow.NET</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageReleaseNotes>Release notes are available at: https://github.com/signnow/SignNow.NET/releases</PackageReleaseNotes>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <PackageOutputPath>bin\Publish\</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>

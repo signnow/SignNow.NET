@@ -2,11 +2,12 @@ using System;
 using System.IO;
 using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Context;
 
-namespace SignNow.Net.Test
+namespace UnitTests
 {
     [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase

@@ -3,9 +3,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
-using SignNow.Net.Service;
-using SignNow.Net.Test;
 using SignNow.Net.Test.Constants;
+using UnitTests;
 
 namespace AcceptanceTests
 {
@@ -20,7 +19,7 @@ namespace AcceptanceTests
         /// </summary>
         /// <param name="invite">FreeForm invite object.</param>
         /// <returns>InviteResponse</returns>
-        private InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
+        private static InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
         {
             return SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).Result;
         }

@@ -415,7 +415,7 @@ More examples: [Get document history][document_history example]
 
 ### <a name="xml-doc-generation"></a>XML doc generation
 
-For XML documentation generation, install InheritDocTool (the project build will fail without it):
+For XML documentation generation, install InheritDocTool:
 
 ```bash
 dotnet tool install -g InheritDocTool

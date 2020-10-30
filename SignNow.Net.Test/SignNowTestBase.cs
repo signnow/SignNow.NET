@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace SignNow.Net.Test
+namespace UnitTests
 {
     public abstract class SignNowTestBase
     {
