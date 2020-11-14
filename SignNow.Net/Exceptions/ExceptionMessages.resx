@@ -141,4 +141,8 @@
     <value>Unexpected value when converting to `{0}`. Expected {1}, got {2}.</value>
     <comment>Looks up a localized string similar to Unexpected value when converting.</comment>
   </data>
+  <data name="UnableToProcessRequest" xml:space="preserve">
+    <value>Unable to process request {0}:{1}, Time taken: {2}s</value>
+    <comment>Unable to process request {HttpMethod}:{RequestUrl}, Time taken: {requestTime}s</comment>
+  </data>
 </root>

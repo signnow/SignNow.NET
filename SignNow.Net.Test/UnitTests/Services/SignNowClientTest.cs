@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -8,47 +9,16 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Service;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 
 namespace UnitTests
 {
     [TestClass]
     public class SignNowClientTest : SignNowTestBase
     {
-        [DataTestMethod]
-        [DynamicData(nameof(ErrorContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
-        public void ShouldCatchAndProcessAnyOfErrorResponse(string testName, string errorContext, string expectedMessage)
-        {
-            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-
-#pragma warning disable // CA2000 Dispose objects before losing scope
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>()
-                )
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Content = new StringContent(errorContext)
-                })
-                .Verifiable();
-
-            // use real http client with mocked handler here
-            var signnowClient = new SignNowClient(new HttpClient(handlerMock.Object, false));
-#pragma warning restore // CA2000 Dispose objects before losing scope
-
-            var exception = Assert
-                .ThrowsException<AggregateException>(
-                    () => signnowClient.RequestAsync(
-                        new PostHttpRequestOptions { RequestUrl = ApiBaseUrl },
-                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result);
-
-            Assert.AreEqual(expectedMessage, exception.InnerException?.Message);
-        }
-
         public static IEnumerable<object[]> ErrorContentProvider()
         {
             // Test name | errorContext | expected error message
@@ -87,5 +57,74 @@ namespace UnitTests
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
             TestUtils.DynamicDataDisplayName(methodInfo, data);
+
+        [DataTestMethod]
+        [DynamicData(nameof(ErrorContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
+        public void ShouldCatchAndProcessAnyOfErrorResponse(string testName, string errorContext, string expectedMessage)
+        {
+            var signNowClientMock = SignNowClientMock(errorContext, HttpStatusCode.BadRequest);
+
+            var exception = Assert
+                .ThrowsException<AggregateException>(
+                    () => signNowClientMock.RequestAsync(
+                        new PostHttpRequestOptions { RequestUrl = ApiBaseUrl },
+                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result);
+
+            Assert.AreEqual(expectedMessage, exception.InnerException?.Message);
+        }
+
+        [TestMethod]
+        public void HandleBrokenJsonResponseWhileDeserialization()
+        {
+            var signNowClientMock = SignNowClientMock("{Broken response body", HttpStatusCode.BadRequest);
+
+            var exception = Assert
+                .ThrowsException<AggregateException>(
+                    () => signNowClientMock.RequestAsync(
+                        new GetHttpRequestOptions { RequestUrl = ApiBaseUrl },
+                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result
+                    );
+
+            StringAssert.Contains(exception.Message, "One or more errors occurred.");
+            StringAssert.Contains(exception.InnerException?.Message, "Newtonsoft.Json.JsonReaderException thrown while parsing Json body from https://api-eval.signnow.com/");
+            StringAssert.Contains(exception.InnerException?.InnerException?.Message, "Invalid Json syntax in response");
+            StringAssert.Contains(exception.InnerException?.InnerException?.InnerException?.Message, "Invalid character after parsing property name. Expected ':' but got: r. Path '', line 1, position 8.");
+
+            Assert.AreEqual("{Broken response body", ((SignNowException)exception.InnerException)?.RawResponse);
+        }
+
+        [TestMethod]
+        public void ShouldHandleTimeoutExceptionFromHttpClient()
+        {
+            var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ThrowsAsync(
+                    new TaskCanceledException("A task was canceled."), TimeSpan.FromSeconds(3))
+                .Verifiable();
+
+            var httpClient = new HttpClient(handlerMock.Object, false);
+
+            var signnowClient = new SignNowClient(httpClient);
+
+            // Override timeout for Client to minimal value
+            httpClient.Timeout = TimeSpan.FromSeconds(1);
+
+            var exception = Assert
+                .ThrowsException<AggregateException>(
+                    () => signnowClient.RequestAsync(
+                        new GetHttpRequestOptions { RequestUrl = new Uri(ApiBaseUrl + "user") },
+                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result);
+
+            var errorMessage = string.Format(CultureInfo.CurrentCulture,
+                ExceptionMessages.UnableToProcessRequest,
+                "GET", ApiBaseUrl + "user", 3);
+
+            StringAssert.Contains(exception.InnerException?.Message, errorMessage.TrimEnd('s'));
+            StringAssert.Contains(exception.InnerException?.InnerException?.Message, "A task was canceled.");
+            Assert.AreEqual(TimeSpan.FromSeconds(1), httpClient.Timeout);
+        }
     }
 }
