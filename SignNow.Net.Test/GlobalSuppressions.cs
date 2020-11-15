@@ -4,7 +4,13 @@
 // Project-level suppression either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>", Scope = "member", Target = "~M:SignNow.Net.Test.Context.JsonCredentialProvider.GetCredential~SignNow.Net.Test.Context.CredentialModel")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Scope = "module")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:Review unused parameters.", Scope = "module")]
+using System.Diagnostics.CodeAnalysis;
 
+[assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Scope = "module")]
+
+// Suppression for various Mock usage
+[assembly: SuppressMessage("Microsoft.Usage", "CA1801:Review unused parameters.", Scope = "module")]
+[assembly: SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope")]
+
+// Suppression for string messages in tests
+[assembly: SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
