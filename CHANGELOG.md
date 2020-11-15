@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Service.DocumentService.GetDocumentHistoryAsync` that allows to retrieve the history of the document actions
 - `Service.DocumentService.CreateOneTimeDownloadLinkAsync` that allows to share document via one-time URL
 
+## Changed
+- Increased timeout for Http Client
+- Added Http method, Url and response time to error messages
+
+
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
 - Fixed `Models.FieldContents.RadiobuttonContent` converting error [#104](https://github.com/signnow/SignNow.NET/issues/104)
