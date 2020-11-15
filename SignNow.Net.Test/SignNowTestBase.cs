@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -34,8 +33,7 @@ namespace UnitTests
         /// <param name="jsonResponse">Json response that you want to be returned</param>
         /// <param name="code">Http status that you expect</param>
         /// <returns></returns>
-        [SuppressMessage("Call System.IDisposable.Dispose on object before all references to it are out of scope.", "CA2000")]
-        protected ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
+        protected static ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
