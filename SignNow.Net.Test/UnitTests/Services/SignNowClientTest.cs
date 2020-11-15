@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -120,9 +121,9 @@ namespace UnitTests
 
             var errorMessage = string.Format(CultureInfo.CurrentCulture,
                 ExceptionMessages.UnableToProcessRequest,
-                "GET", ApiBaseUrl + "user", 3);
+                "GET", ApiBaseUrl + "user", "");
 
-            StringAssert.Contains(exception.InnerException?.Message, errorMessage.TrimEnd('s'));
+            StringAssert.Matches(exception.InnerException?.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
             StringAssert.Contains(exception.InnerException?.InnerException?.Message, "A task was canceled.");
             Assert.AreEqual(TimeSpan.FromSeconds(1), httpClient.Timeout);
         }
