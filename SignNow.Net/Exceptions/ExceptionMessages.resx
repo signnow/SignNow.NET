@@ -145,4 +145,8 @@
     <value>Unable to process request {0}:{1}, Time taken: {2}s</value>
     <comment>Unable to process request {HttpMethod}:{RequestUrl}, Time taken: {requestTime}s</comment>
   </data>
+  <data name="InvalidJsonSyntax" xml:space="preserve">
+    <value>Invalid Json syntax in response</value>
+    <comment>Invalid Json syntax in response</comment>
+  </data>
 </root>

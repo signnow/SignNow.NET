@@ -156,7 +156,7 @@ namespace SignNow.Net.Internal.Service
                 catch (Exception ex) when (ex is JsonSerializationException || ex is JsonReaderException)
                 {
                     errorMessage = $"{ex.GetType()} thrown while parsing Json body from {requestOptions.RequestUrl.OriginalString}";
-                    snException = new[] { new SignNowException("Invalid Json syntax in response", ex) };
+                    snException = new[] { new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidJsonSyntax), ex) };
                 }
 
                 throw new SignNowException(errorMessage, snException)

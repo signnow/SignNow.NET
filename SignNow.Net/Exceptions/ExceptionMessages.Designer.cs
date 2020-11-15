@@ -28,8 +28,8 @@ namespace SignNow.Net.Exceptions {
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
                     System.Resources.ResourceManager temp = new System.Resources.ResourceManager("SignNow.Net.Exceptions.ExceptionMessages", typeof(ExceptionMessages).GetTypeInfo().Assembly);
@@ -43,8 +43,8 @@ namespace SignNow.Net.Exceptions {
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -113,6 +113,15 @@ namespace SignNow.Net.Exceptions {
         internal static string UnableToProcessRequest {
             get {
                 return ResourceManager.GetString("UnableToProcessRequest", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// Invalid Json syntax in response
+        /// </summary>
+        internal static string InvalidJsonSyntax {
+            get {
+                return ResourceManager.GetString("InvalidJsonSyntax", resourceCulture);
             }
         }
     }
