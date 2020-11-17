@@ -22,6 +22,7 @@ namespace UnitTests
             Assert.AreEqual(fakeToken.ExpiresIn, actual.ExpiresIn);
             Assert.AreEqual(fakeToken.Scope, actual.Scope);
             Assert.AreEqual(fakeToken.TokenType, actual.TokenType);
+            Assert.AreNotEqual(fakeToken.AppToken, actual.AppToken);
         }
 
         [TestMethod]
@@ -31,6 +32,10 @@ namespace UnitTests
             var expected = $"Bearer {token.AccessToken}";
 
             Assert.AreEqual(expected, token.GetAuthorizationHeaderValue());
+
+            token.TokenType = TokenType.Basic;
+            token.AppToken = "basic_token";
+            Assert.AreEqual("Basic basic_token", token.GetAuthorizationHeaderValue());
         }
     }
 }

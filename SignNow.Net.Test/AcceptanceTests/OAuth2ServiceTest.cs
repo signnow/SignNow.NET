@@ -37,8 +37,8 @@ namespace AcceptanceTests
             var token = oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, scope).Result;
 
             Assert.IsNotNull(token);
-            Assert.IsFalse(String.IsNullOrEmpty(token.AccessToken));
-            Assert.IsFalse(String.IsNullOrEmpty(token.RefreshToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.RefreshToken));
             Assert.AreEqual("Bearer", token.TokenType.ToString());
             Assert.AreEqual(scope.AsString(), token.Scope);
             Assert.IsTrue(token.ExpiresIn > 0);
@@ -50,7 +50,7 @@ namespace AcceptanceTests
         {
             var exception = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync("wrong_auth_code", Scope.All).Result);
-#if NET45
+#if NETFRAMEWORK
             Assert.AreEqual("One or more errors occurred.", exception.Message);
 #else
             Assert.AreEqual("One or more errors occurred. (internal api error)", exception.Message);
@@ -64,7 +64,7 @@ namespace AcceptanceTests
             oAuthTest = new OAuth2Service(_clientInfo.Login, "wrong_client_secret");
             var exception = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, Scope.All).Result);
-#if NET45
+#if NETFRAMEWORK
             Assert.AreEqual("One or more errors occurred.", exception.Message);
 #else
             Assert.AreEqual("One or more errors occurred. (invalid_client)", exception.Message);
@@ -78,7 +78,7 @@ namespace AcceptanceTests
         {
             var exceptionLogin = Assert.ThrowsException<AggregateException>(
                 () => oAuthTest.GetTokenAsync(login,pass, scope).Result);
-#if NET45
+#if NETFRAMEWORK
             Assert.AreEqual($"One or more errors occurred.", exceptionLogin.Message);
 #else
             Assert.AreEqual($"One or more errors occurred. ({expected})", exceptionLogin.Message);

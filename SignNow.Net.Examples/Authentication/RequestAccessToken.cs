@@ -10,19 +10,52 @@ namespace SignNow.Net.Examples.Authentication
         /// <summary>
         /// An example of obtaining an access token via OAuth 2.0 service.
         /// </summary>
+        /// <param name="apiBase">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
+        /// <param name="userCredentials"><see cref="CredentialModel"/> with User email and User password</param>
         public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel clientInfo, CredentialModel userCredentials)
         {
-            Uri apiBaseUrl = apiBase; // "https://api-eval.signnow.com"
+            Uri apiBaseUrl = apiBase;
 
-            string clientId = clientInfo.Login; // "YOUR_CLIENT_ID";
-            string clientSecret = clientInfo.Password; // "YOUR_CLIENT_SECRET";
+            string clientId = clientInfo.Login;
+            string clientSecret = clientInfo.Password;
 
-            string userLogin = userCredentials.Login; // "USER_EMAIL";
-            string userPassword = userCredentials.Password; // "USER_PASSWORD";
+            string userLogin = userCredentials.Login;
+            string userPassword = userCredentials.Password;
 
             var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
 
             return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Verify access token example
+        /// </summary>
+        /// <param name="apiBaseUrl">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
+        /// <param name="token">Access token</param>
+        /// <returns></returns>
+        public static async Task<bool> VerifyAccessToken(Uri apiBaseUrl, CredentialModel clientInfo, Token token)
+        {
+            var oauth2 = new OAuth2Service(apiBaseUrl, clientInfo.Login, clientInfo.Password);
+
+            return await oauth2.ValidateTokenAsync(token)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Refresh access token example
+        /// </summary>
+        /// <param name="apiBaseUrl">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
+        /// <param name="token">Access token</param>
+        /// <returns></returns>
+        public static async Task<Token> RefreshAccessToken(Uri apiBaseUrl, CredentialModel clientInfo, Token token)
+        {
+            var oauth2 = new OAuth2Service(apiBaseUrl, clientInfo.Login, clientInfo.Password);
+
+            return await oauth2.RefreshTokenAsync(token)
                 .ConfigureAwait(false);
         }
     }

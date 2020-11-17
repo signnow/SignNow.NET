@@ -6,15 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+
+## [0.6.0-beta] - 2020-11-17
 ## Added
 - Carbon Copy for freeform invite and role-based invite [#106](https://github.com/signnow/SignNow.NET/issues/106)
 - `Service.DocumentService.MergeDocumentsAsync` that allows to merge two or more documents into one document
 - `Service.DocumentService.GetDocumentHistoryAsync` that allows to retrieve the history of the document actions
 - `Service.DocumentService.CreateOneTimeDownloadLinkAsync` that allows to share document via one-time URL
+- `Service.UserService.CreateUserAsync` that allows to create an account for user
+- `Service.UserService.UpdateUserAsync` that allows to update user information i.e. first name, last name
+- `Service.UserService.SendVerificationEmailAsync` that allows to sends verification email to a user
+- `Service.UserService.SendPasswordResetLinkAsync` that allows to sends password reset link to a user
 
 ## Changed
 - Increased timeout for Http Client
 - Added Http method, Url and response time to error messages
+- Added support for Basic Auth param to `Model.Token`
 
 
 ## [0.5.2-beta] - 2020-05-22
@@ -107,7 +114,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...HEAD
+[0.6.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...0.6.0-beta
 [0.5.2-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.1-beta...0.5.2-beta
 [0.5.1-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.0-beta...0.5.1-beta
 [0.5.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.4.0-beta...0.5.0-beta

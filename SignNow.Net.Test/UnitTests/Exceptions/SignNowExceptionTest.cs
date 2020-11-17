@@ -1,12 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace UnitTests
 {
-    [SuppressMessage("Microsoft.Globalization", "CA1303:Message string literals should be taken from resource file",
-        Justification = "In the unit tests below no reason to use resource file")]
     [TestClass]
     public partial class SignNowExceptionTest
     {
@@ -53,7 +50,7 @@ namespace UnitTests
             var exception = new SignNowException(TestMessage, innerEx);
             var expectedMessage = TestMessage + $" ({innerExMessage})";
 
-#if NET45
+#if NETFRAMEWORK
             expectedMessage = TestMessage;
 #endif
 

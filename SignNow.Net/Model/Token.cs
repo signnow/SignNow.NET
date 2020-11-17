@@ -43,12 +43,20 @@ namespace SignNow.Net.Model
         public int LastLogin { get; set; }
 
         /// <summary>
+        /// Application Basic Token.
+        /// </summary>
+        [JsonIgnore]
+        public string AppToken { get; set; }
+
+        /// <summary>
         /// Returns formatted Authorization header param
         /// </summary>
         /// <returns>String value in format: 'bearer access_token'</returns>
         public string GetAuthorizationHeaderValue()
         {
-            return $"{TokenType} {AccessToken}";
+            return TokenType == TokenType.Basic
+                ? $"{TokenType.Basic} {AppToken}"
+                : $"{TokenType} {AccessToken}";
         }
     }
 }

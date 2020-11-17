@@ -13,7 +13,7 @@ SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the Si
 
 Get your account at <https://www.signnow.com/developers>
 
-## Contents
+## <a name="table-of-contents"></a>Table of Contents
 
 1. [Get started](#get-started)
 2. [Platform dependencies](#platform-dependencies)
@@ -21,14 +21,27 @@ Get your account at <https://www.signnow.com/developers>
 4. [Documentation](#documentation)
 5. [Features](#features)
     - [Authorization](#authorization)
-    - [Upload a document to SignNow](#upload-document)
-    - [Download a document from SignNow](#download-document)
-    - [Merge two or more SignNow documents into one](#merge-documents)
-    - [Create a single-use link to the document for signature](#create-signing-link)
-    - [Create a freeform invite to the document for signature](#create-freeform-invite)
-    - [Create a role-based invite to the document for signature](#create-role-based-invite)
-    - [Create a one-time link to download the document as a PDF](#share-document-via-link)
-    - [Get the history of a document](#document-history)
+        - [Request Access Token](#get-token)
+        - [Verify Access Token][verify_access_token example]
+        - [Refresh Access Token][refresh_access_token example]
+    - [User](#user)
+        - [Creates an account for a user](#create-user)
+        - [Retrieve User Information][get_user_info example]
+        - [Sends verification email to a user][send_verification example]
+        - [Change User details][update_user example]
+        - [Sends password reset link via email][reset_password example]
+    - [Document](#document)
+        - [Upload a document to SignNow](#upload-document)
+        - [Upload a document & Extract Fields][upload_doc_extract example]
+        - [Download a document from SignNow](#download-document)
+        - [Retrieve a document resource][get_document example]
+        - [Merge two or more SignNow documents into one](#merge-documents)
+        - [Create a signing link to the document for signature](#create-signing-link)
+        - [Create a freeform invite to the document for signature](#create-freeform-invite)
+        - [Create a role-based invite to the document for signature](#create-role-based-invite)
+        - [Create a one-time link to download the document as a PDF](#share-document-via-link)
+        - [Get the history of a document](#document-history)
+        - [Check the status of the document][check_sign_status example]
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -77,7 +90,9 @@ Read about the available SignNow features in [SignNow API Docs][api docs link].
 
 ## <a name="features"></a>Features
 
-### <a name="authorization"></a> Authorization
+## <a name="authorization"></a>Authorization
+
+#### <a name="get-token"></a>Request Access Token
 
 Get your access token via OAuth 2.0 service.
 
@@ -87,32 +102,74 @@ public static class AuthenticationExamples
     /// <summary>
     /// An example of obtaining an access token via OAuth 2.0 service.
     /// </summary>
-    public static async Task<Token> RequestAccessToken()
+    /// <param name="apiBase">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+    /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
+    /// <param name="userCredentials"><see cref="CredentialModel"/> with User email and User password</param>
+    public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel clientInfo, CredentialModel userCredentials)
     {
-        // Api URL (Sandbox or Production)
-        var apiBaseUrl = new Uri("https://api-eval.signnow.com");
+        Uri apiBaseUrl = apiBase;
 
-        // App credentials from SignNow account
-        var clientId = "YOUR_CLIENT_ID";
-        var clientSecret = "YOUR_CLIENT_SECRET";
+        string clientId = clientInfo.Login;
+        string clientSecret = clientInfo.Password;
 
-        // User credentials
-        var userLogin = "USER_EMAIL";
-        var userPassword = "USER_PASSWORD";
+        string userLogin = userCredentials.Login;
+        string userPassword = userCredentials.Password;
 
-        // init OAuth2 service
         var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
 
-        // Token retrieval
         return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All)
             .ConfigureAwait(false);
     }
 }
 ```
 
-More examples: [Access token][access_token example]
+More examples: [Request Access token][request_access_token example], [Verify Access Token][verify_access_token example], [Refresh Access Token][refresh_access_token example]
 
-### <a name="upload-document"></a> Upload a document to SignNow
+## <a name="user"></a>User
+
+### <a name="create-user"></a>Creates an account for a user
+
+By default verification email is not sent to newly created User.
+To send it - use `IUserService.SendVerificationEmailAsync(string email)`
+
+```csharp
+public static partial class UserExamples
+{
+    /// <summary>
+    /// Creates an account for a user example
+    /// </summary>
+    /// <param name="firstname">User firstname</param>
+    /// <param name="lastname">User lastname</param>
+    /// <param name="email">User email</param>
+    /// <param name="password">User password</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// Response with: User identity, email
+    /// </returns>
+    public static async Task<UserCreateResponse> CreateSignNowUser(string firstname, string lastname, string email, string password, Token token)
+    {
+        var signNowContext = new SignNowContext(token);
+
+        var userRequest = new CreateUserOptions
+        {
+            Email = email,
+            FirstName = firstname,
+            LastName = lastname,
+            Password = password
+        };
+
+        return await signNowContext.Users
+            .CreateUserAsync(userRequest)
+            .ConfigureAwait(false);
+    }
+}
+```
+
+More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example]
+
+## <a name="document"></a>Document
+
+### <a name="upload-document"></a>Upload a document to SignNow
 
 All the features in SignNow require a `document_id`. Once you upload a document to SignNow, you get the `document_id` from a successful response.
 
@@ -144,9 +201,9 @@ public static class DocumentExamples
 }
 ```
 
-More examples: [Upload document with field extract][upload_doc_extract example]
+More examples: [Upload document][upload_document example], [Upload document with field extract][upload_doc_extract example]
 
-### <a name="download-document"></a> Download a document from SignNow
+### <a name="download-document"></a>Download a document from SignNow
 
 Choose the type of download for your document:
 
@@ -179,7 +236,7 @@ public static class DocumentExamples
 
 More examples: [Download signed document][download_signed_doc example]
 
-### <a name="merge-documents"></a> Merge two or more SignNow documents into one
+### <a name="merge-documents"></a>Merge two or more SignNow documents into one
 
 Merges two or more SignNow documents into one single PDF file.
 
@@ -218,7 +275,7 @@ public static partial class DocumentExamples
 
 More examples: [Merge document][merge_documents example]
 
-### <a name="create-signing-link"></a> Create a signing link to the document for signature
+### <a name="create-signing-link"></a>Create a signing link to the document for signature
 
 Signing link - a single-use link to a document that requires a signature. When the document is signed (or the signer declines to sign it), the link is no longer valid.
 Having followed the link, signers can click anywhere on the document to sign it.
@@ -259,7 +316,7 @@ public static partial class DocumentExamples
 
 More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example]
 
-### <a name="create-freeform-invite"></a> Create a freeform invite to the document for signature
+### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
 
 *Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
 
@@ -303,7 +360,7 @@ public static partial class InviteExamples
 
 More examples: [Create freeform invite][create_ff_invite example]
 
-### <a name="create-role-based-invite"></a> Create a role-based invite to the document for signature
+### <a name="create-role-based-invite"></a>Create a role-based invite to the document for signature
 
 *Role-based invite* - an invitation to sign a document which contains at least one fillable field assigned to one role.
 
@@ -358,7 +415,7 @@ public static partial class InviteExamples
 
 More examples: [Create role-based invite][create_rb_invite example]
 
-### <a name="share-document-via-link"></a> Create a one-time link to download the document as a PDF
+### <a name="share-document-via-link"></a>Create a one-time link to download the document as a PDF
 
 ```csharp
 public static partial class DocumentExamples
@@ -384,7 +441,7 @@ public static partial class DocumentExamples
 
 More examples: [Create a One-time Use Download URL][create_one_time_link example]
 
-### <a name="document-history"></a> Get the history of a document
+### <a name="document-history"></a>Get the history of a document
 
 ```csharp
 public static partial class DocumentExamples
@@ -463,13 +520,27 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [api docs link]: https://docs.signnow.com
 
 <!-- All examples URLs should be there -->
-[access_token example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs
-[upload_doc_extract example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithFieldExtract.cs
-[download_signed_doc example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
-[merge_documents example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MergeTwoDocuments.cs
-[create_sign_lnk example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
-[check_sign_status example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
-[create_ff_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
-[create_rb_invite example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
-[create_one_time_link example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
-[document_history example]: https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
+<!-- Authorization -->
+[request_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#L16
+[verify_access_token example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#39
+[refresh_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#54
+
+<!-- Users -->
+[create_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
+[get_user_info example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs#42
+[send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/SendVerificationEmailToUser.cs
+[update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#18
+[reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#40
+
+<!-- Documents -->
+[upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#33
+[upload_doc_extract example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#14
+[download_signed_doc example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
+[get_document example]:             https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#48
+[merge_documents example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MergeTwoDocuments.cs
+[create_sign_lnk example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
+[create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
+[create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
+[check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
+[create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
+[document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs

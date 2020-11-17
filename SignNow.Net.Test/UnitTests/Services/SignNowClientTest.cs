@@ -48,7 +48,7 @@ namespace UnitTests
                             'message': 'context of second errors item'
                         }
                     ]}",
-#if NET45
+#if NETFRAMEWORK
                 $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine}"
 #else
                 $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine} (context of first errors item) (context of second errors item)"

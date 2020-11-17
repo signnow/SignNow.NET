@@ -32,6 +32,9 @@ namespace SignNow.Net.Exceptions
             set => Data["RawHeaders"] = value;
         }
 
+        /// <summary>
+        /// Contains all the details of original Json response from SignNow API
+        /// </summary>
         public string RawResponse
         {
             get => Data.Contains("RawResponse") ? (string)Data["RawResponse"] : String.Empty;

@@ -36,6 +36,7 @@ namespace SignNow.Net.Test.FakeModels
                     o.Scope        = f.PickRandom("user", "*");
                     o.TokenType    = TokenType.Bearer;
                     o.LastLogin    = 1;
+                    o.AppToken     = "basic_token";
                 }
             );
         }

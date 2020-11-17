@@ -162,12 +162,15 @@ namespace SignNow.Net
             var appToken = Convert.ToBase64String(plainTextBytes);
             var options = new PostHttpRequestOptions
             {
-                Token = new Token { AccessToken = appToken, TokenType = TokenType.Basic },
+                Token = new Token { AppToken = appToken, TokenType = TokenType.Basic },
                 Content = new FormUrlEncodedHttpContent(body),
                 RequestUrl = OAuthRequestUrl
             };
 
-            return await SignNowClient.RequestAsync<Token>(options, cancellationToken).ConfigureAwait(false);
+            var token = await SignNowClient.RequestAsync<Token>(options, cancellationToken).ConfigureAwait(false);
+            token.AppToken = appToken;
+
+            return token;
         }
     }
 }
