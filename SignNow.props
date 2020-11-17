@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 
-    <Version>0.5.2-beta</Version>
+    <Version>0.6.0-beta</Version>
     <Authors>SignNow</Authors>
     <Company>SignNow</Company>
     <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API. (Official Library)
