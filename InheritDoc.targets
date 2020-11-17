@@ -1,0 +1,22 @@
+<Project>
+
+  <!--
+    InheritDoc allows adding <inheritdoc/> tags to XML comments in C# source code to inherit XML comments
+    from base classes, interfaces, and similar methods.
+    This eliminates unwanted copying and pasting of duplicate XML comments and automatically keeps XML comments sychronized.
+
+    XML comments (starting with ///) are compiled into XML documentation files for each assembly by the normal build process.
+    InheritDoc post processes these XML documentation files to inherit XML comments as needed.
+    This approach makes the XML comments compatible with other documentation tools,
+    accessible by Intellisense in compiled packages, and packagable into a Nuget packageif distributing a library.
+  -->
+
+  <Target Name="InheritDoc" AfterTargets="PostBuildEvent">
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
+      Condition="$(Configuration) == 'Release'"
+      ContinueOnError="True"
+      Command="InheritDoc -o -b $(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)"
+      IgnoreExitCode="true" />
+  </Target>
+
+</Project>

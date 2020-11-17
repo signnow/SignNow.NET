@@ -11,15 +11,16 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 
 namespace SignNow.Net.Internal.Service
 {
     class SignNowClient : ISignNowClient
     {
-        private static string sdkUserAgentString = String.Empty;
+        private static string sdkUserAgentString = string.Empty;
 
-        private static string xUserAgentString = String.Empty;
+        private static string xUserAgentString = string.Empty;
 
         /// <summary>
         /// client_name>/version (OS_type OS_release; platform; arch) runtime/version
@@ -64,6 +65,7 @@ namespace SignNow.Net.Internal.Service
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif
             this.HttpClient = httpClient ?? new HttpClient();
+            this.HttpClient.Timeout = TimeSpan.FromSeconds(180);
         }
 
         /// <inheritdoc cref="ISignNowClient.RequestAsync{TResponse}(RequestOptions, CancellationToken)" />
@@ -91,30 +93,53 @@ namespace SignNow.Net.Internal.Service
         /// <inheritdoc cref="ISignNowClient.RequestAsync{TResponse}(RequestOptions, IHttpContentAdapter{TResponse}, HttpCompletionOption, CancellationToken)" />
         public async Task<TResponse> RequestAsync<TResponse>(RequestOptions requestOptions, IHttpContentAdapter<TResponse> adapter = default, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
         {
+            Guard.ArgumentNotNull(adapter, nameof(adapter));
+
+            DateTime startTime = DateTime.Now;
+
             using (var request = CreateHttpRequest(requestOptions))
             {
-                var response = await HttpClient.SendAsync(request, completionOption, cancellationToken).ConfigureAwait(false);
+                try
+                {
+                    var response = await HttpClient
+                        .SendAsync(request, completionOption, cancellationToken)
+                        .ConfigureAwait(false);
 
-                await ProcessErrorResponse(response).ConfigureAwait(false);
+                    await ProcessErrorResponse(requestOptions, response).ConfigureAwait(false);
 
-                return await adapter.Adapt(response.Content).ConfigureAwait(false);
+                    return await adapter.Adapt(response.Content).ConfigureAwait(false);
+                }
+                catch (TaskCanceledException ex)
+                {
+                    var requestTime = (DateTime.Now - startTime).TotalSeconds;
+                    var message = string.Format(CultureInfo.CurrentCulture,
+                        ExceptionMessages.UnableToProcessRequest,
+                        requestOptions.HttpMethod.Method,
+                        requestOptions.RequestUrl.OriginalString,
+                        requestTime);
+
+                    throw new SignNowException(message, ex);
+                }
             }
         }
 
         /// <summary>
         /// Process Error Response to prepare SignNow Exception
         /// </summary>
+        /// <param name="requestOptions">request basic params (Url, Method)</param>
         /// <param name="response"><see cref="HttpResponseMessage"/></param>
         /// <exception cref="SignNowException">SignNow Exception.</exception>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Performance", "CA1825:Unnecessary zero-length array allocation", Justification = "Solution Array.Empty<>() works only for .NetStandard2.0, no significant memory or performance improvement")]
-        private static async Task ProcessErrorResponse(HttpResponseMessage response)
+        private static async Task ProcessErrorResponse(RequestOptions requestOptions, HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
+                string errorMessage;
+
                 var rawResponse = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var apiError = rawResponse;
                 var snException = new SignNowException[0];
+
                 try
                 {
                     var converter = new HttpContentToObjectAdapter<ErrorResponse>(new HttpContentToStringAdapter());
@@ -125,15 +150,16 @@ namespace SignNow.Net.Internal.Service
                         snException = errorResponse.Errors.Select(e => new SignNowException(e.Message)).ToArray();
                     }
 
-                    apiError = errorResponse.GetErrorMessage();
+                    errorMessage = errorResponse.GetErrorMessage();
                 }
-#pragma warning disable CA1031 // Do not catch general exception types
-                catch (JsonSerializationException)
+                // Catch error if something happened with Json body (possible broken response..)
+                catch (Exception ex) when (ex is JsonSerializationException || ex is JsonReaderException)
                 {
+                    errorMessage = $"{ex.GetType()} thrown while parsing Json body from {requestOptions.RequestUrl.OriginalString}";
+                    snException = new[] { new SignNowException(string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidJsonSyntax), ex) };
                 }
-#pragma warning restore CA1031 // Do not catch general exception types
 
-                throw new SignNowException(apiError, snException)
+                throw new SignNowException(errorMessage, snException)
                 {
                     RawHeaders = response.Headers.ToDictionary(a => a.Key, a => a.Value),
                     RawResponse = rawResponse,

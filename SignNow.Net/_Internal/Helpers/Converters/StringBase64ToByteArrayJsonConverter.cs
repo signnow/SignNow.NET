@@ -17,13 +17,13 @@ namespace SignNow.Net.Internal.Helpers.Converters
         /// <inheritdoc cref="JsonConverter.ReadJson(JsonReader, Type, object, JsonSerializer)" />
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return Convert.FromBase64String(reader.Value.ToString());
+            return Convert.FromBase64String(reader?.Value?.ToString());
         }
 
         /// <inheritdoc cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)"/>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue(Convert.ToBase64String((byte[])value));
+            writer?.WriteValue(Convert.ToBase64String((byte[])value));
         }
     }
 }

@@ -1,9 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace FeatureTests
 {
@@ -11,6 +12,7 @@ namespace FeatureTests
     public class FreeFormInviteTest : AuthorizedApiTestBase
     {
         [TestMethod]
+        [SuppressMessage("[CA1308] Replace the call to 'ToLowerInvariant' with 'ToUpperInvariant'.", "CA1308")]
         public void DocumentOwnerCanSendFreeFormInviteToUser()
         {
             // Init all required data: User, Document, Invite

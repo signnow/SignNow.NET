@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 
@@ -33,6 +34,7 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         [JsonProperty("data")]
         [JsonConverter(typeof(StringBase64ToByteArrayJsonConverter))]
+        [SuppressMessage("Properties should not return arrays", "CA1819")]
         public byte[] Data { get; set; }
 
         /// <summary>

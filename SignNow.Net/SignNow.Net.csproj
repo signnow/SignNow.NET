@@ -1,33 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\netfx.props" />
+  <Import Project="..\SignNow.props" />
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
-        <Version>0.5.2-beta</Version>
-        <Authors>SignNow</Authors>
-        <Company>SignNow</Company>
-        <Description>SignNow.Net is a .NET 4.5+ and .NET standard class library for the SignNow API.  (Official Library)
-SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.</Description>
-        <PackageProjectUrl>https://github.com/signnow/SignNow.NET</PackageProjectUrl>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
-        <RepositoryType>Git</RepositoryType>
-        <PackageTags>e-signature;eSign;electronic-signatures;pdf;forms;document;saas;signnow-api;api-client;REST;document management;workflow automation</PackageTags>
-        <PackageReleaseNotes>Fixed:
-- Fixed `Models.FieldContents.RadiobuttonContent` converting error
-</PackageReleaseNotes>
-        <PackageIcon>icon.png</PackageIcon>
-        <Copyright>airSlate Inc.</Copyright>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <ReleaseVersion>0.5.2-beta</ReleaseVersion>
-        <PackageVersion>0.5.2-beta</PackageVersion>
-        <LangVersion>8</LangVersion>
+        <PackageId>SignNow.NET</PackageId>
     </PropertyGroup>
 
     <PropertyGroup>
       <NoWarn>1591</NoWarn>
     </PropertyGroup>
+
     <ItemGroup>
         <None Include="icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
@@ -37,7 +22,6 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     </ItemGroup>
     <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
         <Reference Include="System.Net.Http" />
@@ -54,12 +38,6 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
       <Compile Remove="SignNowClient.cs" />
     </ItemGroup>
 
-    <PropertyGroup>
-        <PostBuildEvent>InheritDoc -o</PostBuildEvent>
-        <NeutralLanguage>en-US</NeutralLanguage>
-    </PropertyGroup>
-
-
     <ItemGroup>
       <Compile Update="Exceptions\ExceptionMessages.Designer.cs">
         <DesignTime>True</DesignTime>
@@ -74,4 +52,8 @@ SignNow allows you to embed legally-binding e-signatures into your app, CRM or c
         <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
+
+    <!-- XML documentation generation -->
+    <Import Project="..\InheritDoc.targets" />
+
 </Project>

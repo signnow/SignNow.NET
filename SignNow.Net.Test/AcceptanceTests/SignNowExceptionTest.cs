@@ -3,9 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Test;
+using UnitTests;
 
 namespace AcceptanceTests
 {

@@ -9,7 +9,7 @@ using Moq.Protected;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Service;
 
-namespace SignNow.Net.Test
+namespace UnitTests
 {
     public abstract class SignNowTestBase
     {
@@ -33,7 +33,7 @@ namespace SignNow.Net.Test
         /// <param name="jsonResponse">Json response that you want to be returned</param>
         /// <param name="code">Http status that you expect</param>
         /// <returns></returns>
-        protected ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
+        protected static ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
