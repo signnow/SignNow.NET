@@ -498,7 +498,7 @@ This SDK is distributed under the MIT License, see [LICENSE][license link] for m
 
 #### API Contact Information
 
-If you have questions about the SignNow API, please visit <https://docs.signnow.com/reference> or email api@signnow.com.<br>
+If you have questions about the SignNow API, please visit <https://docs.signnow.com/sn/ref> or email api@signnow.com.<br>
 
 **Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
 
