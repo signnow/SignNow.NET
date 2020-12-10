@@ -11,17 +11,16 @@ namespace SignNow.Net.Examples.Authentication
         /// An example of obtaining an access token via OAuth 2.0 service.
         /// </summary>
         /// <param name="apiBase">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
-        /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
-        /// <param name="userCredentials"><see cref="CredentialModel"/> with User email and User password</param>
-        public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel clientInfo, CredentialModel userCredentials)
+        /// <param name="credentials"><see cref="CredentialModel"/> with Application Client ID, Client Secret, Login and Password</param>
+        public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel credentials)
         {
             Uri apiBaseUrl = apiBase;
 
-            string clientId = clientInfo.Login;
-            string clientSecret = clientInfo.Password;
+            string clientId = credentials.ClientId;
+            string clientSecret = credentials.ClientSecret;
 
-            string userLogin = userCredentials.Login;
-            string userPassword = userCredentials.Password;
+            string userLogin = credentials.Login;
+            string userPassword = credentials.Password;
 
             var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
 

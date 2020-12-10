@@ -5,13 +5,18 @@ namespace SignNow.Net.Test.Context
 {
     public class CredentialLoader
     {
-        public const string credentialsDirectory = @"Pass";
+        /// <summary>
+        /// Directory where is located file with credentials.
+        /// </summary>
+        public static string CredentialsDirectory { get; set; } = "./../../../../";
 
         private readonly ICredentialProvider credentialProvider;
 
-        public CredentialLoader(Uri credentialsTarget) : this(
+        public CredentialLoader(Uri credentialsTarget, string basePath = default) : this(
             new JsonFileCredentialProvider(GetCredentialsFilePath(credentialsTarget)))
         {
+            if (!String.IsNullOrWhiteSpace(basePath))
+                CredentialsDirectory = basePath.Replace('/', Path.DirectorySeparatorChar);
         }
 
         public CredentialLoader(ICredentialProvider credentialProvider)
@@ -24,17 +29,14 @@ namespace SignNow.Net.Test.Context
             return credentialProvider.GetCredential();
         }
 
-        static string GetCredentialsFileName(Uri credentialsTarget)
+        private static string GetCredentialsFileName(Uri credentialsTarget)
         {
             return $"{credentialsTarget.Host}.json";
         }
 
-        static string GetCredentialsFilePath(Uri credentialsTarget)
+        private static string GetCredentialsFilePath(Uri credentialsTarget)
         {
-            var userHomeFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-            return Environment.ExpandEnvironmentVariables(
-                Path.Combine(userHomeFolder, credentialsDirectory, GetCredentialsFileName(credentialsTarget)));
+            return Path.GetFullPath($"{CredentialsDirectory}{GetCredentialsFileName(credentialsTarget)}");
         }
     }
 }

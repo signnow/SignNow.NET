@@ -14,7 +14,6 @@ namespace UnitTests
     public abstract class SignNowTestBase
     {
         public static Uri ApiBaseUrl => new Uri("https://api-eval.signnow.com/");
-        public static Uri ApplicationBaseUrl => new Uri("https://app-eval.signnow.com/");
 
         private static readonly string BaseTestDataPath = "../../../TestData/"
             .Replace('/', Path.DirectorySeparatorChar);

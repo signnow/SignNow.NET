@@ -7,7 +7,7 @@ namespace SignNow.Net.Test.Context
 {
     class JsonCredentialProvider : ICredentialProvider
     {
-        readonly string jsonString;
+        private readonly string jsonString;
         public JsonCredentialProvider(string jsonString)
         {
             this.jsonString = jsonString;

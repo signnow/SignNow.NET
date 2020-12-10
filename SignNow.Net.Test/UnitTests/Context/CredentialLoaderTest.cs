@@ -9,11 +9,6 @@ namespace UnitTests
     [TestClass]
     public class CredentialLoaderTest
     {
-        /// <summary>
-        /// User Home Dir relative to OS
-        /// </summary>
-        private readonly string usrHomeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
         private readonly string testDomain = @"https://api.signnow.test";
         private Uri testUrl;
 
@@ -23,21 +18,23 @@ namespace UnitTests
         [TestInitialize]
         public void Setup()
         {
-            this.testCredentialPath = Path.Combine(this.usrHomeDir, CredentialLoader.credentialsDirectory);
-            this.testCredentialFile = Path.Combine(this.testCredentialPath, "api.signnow.test.json");
+            testCredentialPath = Path.GetFullPath(CredentialLoader.CredentialsDirectory);
+            testCredentialFile = Path.GetFullPath($"{testCredentialPath}api.signnow.test.json");
 
-            this.testUrl = new Uri(this.testDomain);
+            testUrl = new Uri(testDomain);
 
             // Ensure Test Directory
-            if (!Directory.Exists(this.testCredentialPath))
+            if (!Directory.Exists(testCredentialPath))
             {
-                Directory.CreateDirectory(this.testCredentialPath);
+                Directory.CreateDirectory(testCredentialPath);
             }
 
             // Ensure test demo file
-            if(!File.Exists(this.testCredentialFile))
+            if (!File.Exists(testCredentialFile))
             {
-                File.WriteAllText(this.testCredentialFile, "{'login':'test', 'password':'signnow'}");
+                File.WriteAllText(
+                    testCredentialFile,
+                    "{'login':'test', 'password':'signnow', 'client_id':'test001', 'client_secret':'test002'}");
             }
         }
 
@@ -45,15 +42,15 @@ namespace UnitTests
         public void TearDown()
         {
             // cleanup test file
-            if (File.Exists(this.testCredentialFile))
+            if (File.Exists(testCredentialFile))
             {
-               File.Delete(this.testCredentialFile);
+               File.Delete(testCredentialFile);
             }
 
             // remove test directory if it doesn't have any other files
-            if (Directory.GetFiles(this.testCredentialPath).Length == 0)
+            if (Directory.GetFiles(testCredentialPath).Length == 0)
             {
-                Directory.Delete(this.testCredentialPath);
+                Directory.Delete(testCredentialPath);
             }
         }
 
@@ -61,22 +58,26 @@ namespace UnitTests
         [SuppressMessage("Microsoft.Globalization", "CA1305:string.Format could vary based on locale", Justification = "Locale is not used for this test")]
         public void ItCanObtainProperFilePath()
         {
-            var testCredentialLoader = new CredentialLoader(this.testUrl);
-            var testCredentials = testCredentialLoader.GetCredentials();
+            var TestCreds = new CredentialLoader(testUrl).GetCredentials();
 
-            var message = "You have to specify json string with `{0}` text properties in the {1}";
+            const string message = "You have to specify json string with `{0}` text properties in the {1}";
 
-            Assert.AreEqual(
-                "test",
-                testCredentials.Login,
-                string.Format(message, "login", testCredentialFile)
-                );
+            Assert.AreEqual("test", TestCreds.Login, string.Format(message, "login", testCredentialFile));
+            Assert.AreEqual("signnow", TestCreds.Password, string.Format(message, "password", testCredentialFile));
+            Assert.AreEqual("test001", TestCreds.ClientId, string.Format(message, "client_id", testCredentialFile));
+            Assert.AreEqual("test002", TestCreds.ClientSecret, string.Format(message, "client_secret", testCredentialFile));
+        }
 
-            Assert.AreEqual(
-                "signnow",
-                testCredentials.Password,
-                string.Format(message, "password", testCredentialFile)
-                );
+        [TestMethod]
+        public void ShowHintWhenCredentialsFileNotExists()
+        {
+            var Credentials = new CredentialLoader(new Uri("https://api.signnow.local"));
+
+            var exception = Assert.ThrowsException<InvalidOperationException>(
+                () => Credentials.GetCredentials());
+
+            StringAssert.Contains(exception.Message, "api.signnow.local.json");
+            StringAssert.Contains(exception.Message, "{{'login':'login string','password':'password string','client_id':'app client id','client_secret':'app client secret'}}");
         }
     }
 }

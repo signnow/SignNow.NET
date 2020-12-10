@@ -101,10 +101,7 @@ jobs:
         run: dotnet restore -v:n
 
       - name: Configure SignNow account
-        run: |
-          mkdir $HOME/Pass
-          echo '${{ secrets.TEST_CREDITS_JSON }}' >> $HOME/Pass/api-eval.signnow.com.json
-          echo '${{ secrets.TEST_ACCOUNT_JSON }}' >> $HOME/Pass/app-eval.signnow.com.json
+        run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
 
       - name: Build for .Net Standard 1.2
         if: matrix.framework == 'netcoreapp3.0'
