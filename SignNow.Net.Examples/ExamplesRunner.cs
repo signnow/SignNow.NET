@@ -15,6 +15,10 @@ namespace SignNow.Net.Examples
 {
     /// <summary>
     /// This Test class contains all tests for Code Samples.
+    ///
+    /// To run single test from console:
+    ///     # For example we want to run only RequestAccessTokenTest
+    ///     dotnet test SignNow.Net.Examples --filter RequestAccessTokenTest
     /// </summary>
     [TestClass]
     public class ExamplesRunner
@@ -29,10 +33,10 @@ namespace SignNow.Net.Examples
         private static readonly string PdfWithSignatureField = Path.Combine(BaseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");
         private static readonly string PdfWithoutFields = Path.Combine(BaseTestExamplesPath, "SignAndDate.pdf");
 
-        /// <summary>Contains application clientId and clientSecret</summary>
-        private static readonly CredentialModel ClientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
-        /// <summary>Contains user Email and Password</summary>
-        private static readonly CredentialModel UserCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
+        /// <summary>
+        /// Contains application clientId, clientSecret and user credentials
+        /// </summary>
+        private static CredentialModel credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
 
         /// <summary>Token for ExampleRunner</summary>
         private readonly Token token;
@@ -52,15 +56,21 @@ namespace SignNow.Net.Examples
         /// </summary>
         private static Uri ApiBaseUrl => new Uri("https://api-eval.signnow.com/");
 
-        /// <summary>
-        /// SignNow Application base Url (sandbox)
-        /// </summary>
-        private static Uri ApplicationBaseUrl => new Uri("https://app-eval.signnow.com/");
-
         public ExamplesRunner()
         {
+            // If you want to use your own credentials just for simple and fast test
+            // uncomment next lines bellow and replace placeholders with your credentials:
+
+            // credentials = new CredentialModel
+            // {
+            //     Login = "user_eamail@noemail.com",
+            //     Password = "your-secret-password",
+            //     ClientId = "your-application-client-id",
+            //     ClientSecret = "your-application-client-secret"
+            // };
+
             // Token for test runner
-            token = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, ClientInfo, UserCredentials).Result;
+            token = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, credentials).Result;
             testContext = new SignNowContext(ApiBaseUrl, token);
         }
 
@@ -93,7 +103,7 @@ namespace SignNow.Net.Examples
         [TestMethod]
         public void RequestAccessTokenTest()
         {
-            var requestAccessToken = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, ClientInfo, UserCredentials).Result;
+            var requestAccessToken = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, credentials).Result;
 
             Assert.IsNotNull(requestAccessToken);
             Assert.IsFalse(string.IsNullOrEmpty(requestAccessToken.AccessToken));
@@ -145,7 +155,7 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.CreateSigningLinkToTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateSigningLintToTheDocumentTest()
+        public void CreateSigningLinkToTheDocumentTest()
         {
             using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = testContext.Documents
@@ -225,7 +235,7 @@ namespace SignNow.Net.Examples
 
             Assert.IsTrue(documentHistory.All(item => item.DocumentId == disposableDocumentId));
             Assert.IsTrue(documentHistory.Any(item => item.Origin == "original"));
-            Assert.IsTrue(documentHistory.All(item => item.Email == UserCredentials.Login));
+            Assert.IsTrue(documentHistory.All(item => item.Email == credentials.Login));
         }
 
         /// <summary>

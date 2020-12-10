@@ -44,13 +44,11 @@ namespace UnitTests
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
         {
-            var userCredentialsLoader = new CredentialLoader(ApplicationBaseUrl);
-            var apiCredentialsLoader = new CredentialLoader(ApiBaseUrl);
-            var apiCreds = apiCredentialsLoader.GetCredentials();
-            var userCreds = userCredentialsLoader.GetCredentials();
-            var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.Login, apiCreds.Password);
+            var loader = new CredentialLoader(ApiBaseUrl);
+            var apiCreds = loader.GetCredentials();
+            var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.ClientId, apiCreds.ClientSecret);
 
-            Token = oauth.GetTokenAsync(userCreds.Login, userCreds.Password, Scope.All).Result;
+            Token = oauth.GetTokenAsync(apiCreds.Login, apiCreds.Password, Scope.All).Result;
             SignNowTestContext = new SignNowContext(ApiBaseUrl, Token);
 
             TestPdfDocumentId = UploadTestDocument(PdfFilePath);

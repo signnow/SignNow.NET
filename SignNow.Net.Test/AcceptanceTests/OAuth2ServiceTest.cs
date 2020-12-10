@@ -14,19 +14,18 @@ namespace AcceptanceTests
     [TestClass]
     public sealed class OAuth2ServiceTest : SignNowTestBase
     {
-        private static CredentialModel _clientInfo, _userCredentials;
+        private static CredentialModel _apiCredentials;
         private OAuth2Service oAuthTest;
 
         public OAuth2ServiceTest()
         {
-            _clientInfo = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            _userCredentials = new CredentialLoader(ApplicationBaseUrl).GetCredentials();
+            _apiCredentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
         }
 
         [TestInitialize]
         public void SetUp()
         {
-            oAuthTest = new OAuth2Service(_clientInfo.Login, _clientInfo.Password);
+            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, _apiCredentials.ClientSecret);
         }
 
         [DataTestMethod]
@@ -34,7 +33,7 @@ namespace AcceptanceTests
         [DataRow(Scope.User, DisplayName = "scope User")]
         public void ShouldGetTokenByUserCredentials(Scope scope)
         {
-            var token = oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, scope).Result;
+            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, scope).Result;
 
             Assert.IsNotNull(token);
             Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
@@ -61,9 +60,9 @@ namespace AcceptanceTests
         [TestMethod]
         public void CannotIssueTokenWithWrongClientSecret()
         {
-            oAuthTest = new OAuth2Service(_clientInfo.Login, "wrong_client_secret");
+            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, "wrong_client_secret");
             var exception = Assert.ThrowsException<AggregateException>(
-                () => oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, Scope.All).Result);
+                () => oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result);
 #if NETFRAMEWORK
             Assert.AreEqual("One or more errors occurred.", exception.Message);
 #else
@@ -93,10 +92,10 @@ namespace AcceptanceTests
         public static IEnumerable<object[]> CredentialsProvider()
         {
             // {login, password, scope, expected, test display name }
-            yield return new object[] { "wrongLogin", _userCredentials.Password, Scope.All, "invalid_request", "wrong login, scope.All"};
-            yield return new object[] { "wrongLogin", _userCredentials.Password, Scope.User, "invalid_request", "wrong login, scope.User"};
-            yield return new object[] { _userCredentials.Login, "wrong_password", Scope.All, "Invalid credentials.", "wrong password, scope.All"};
-            yield return new object[] { _userCredentials.Login, "wrong_password", Scope.User, "Invalid credentials.", "wrong password, scope.User"};
+            yield return new object[] { "wrongLogin", _apiCredentials.Password, Scope.All, "invalid_request", "wrong login, scope.All"};
+            yield return new object[] { "wrongLogin", _apiCredentials.Password, Scope.User, "invalid_request", "wrong login, scope.User"};
+            yield return new object[] { _apiCredentials.Login, "wrong_password", Scope.All, "Invalid credentials.", "wrong password, scope.All"};
+            yield return new object[] { _apiCredentials.Login, "wrong_password", Scope.User, "Invalid credentials.", "wrong password, scope.User"};
         }
 
         public static string WrongCredentialsNames(MethodInfo methodInfo, object[] data)
@@ -107,7 +106,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldRefreshCurrentToken()
         {
-            var token = oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, Scope.All).Result;
+            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result;
             var freshToken = oAuthTest.RefreshTokenAsync(token).Result;
 
             Assert.IsNotNull(freshToken, "Token is null");
@@ -117,7 +116,7 @@ namespace AcceptanceTests
         [TestMethod]
         public void ShouldValidateAccessToken()
         {
-            var token = oAuthTest.GetTokenAsync(_userCredentials.Login, _userCredentials.Password, Scope.All).Result;
+            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result;
 
             Assert.IsTrue(oAuthTest.ValidateTokenAsync(token).Result);
 
