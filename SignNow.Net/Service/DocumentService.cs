@@ -69,7 +69,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = "/document/" + documentId.ValidateId();
+            var requestedDocument = $"/document/{documentId.ValidateId()}";
 
             var requestOptions = new DeleteHttpRequestOptions
             {
@@ -135,7 +135,7 @@ namespace SignNow.Net.Service
                     break;
             }
 
-            var requestedDocument = "/document/" + documentId.ValidateId() + "/download" + query;
+            var requestedDocument = $"/document/{documentId.ValidateId()}/download{query}";
 
             var requestOptions = new GetHttpRequestOptions
             {
