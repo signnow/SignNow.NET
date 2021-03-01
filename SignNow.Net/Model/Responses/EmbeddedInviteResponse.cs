@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -6,7 +7,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents response from SignNow API for create embedded invite request.
     /// </summary>
-    public class EmbeddedInviteResponse
+    public class EmbeddedInviteData
     {
         /// <summary>
         /// Identity of embedded invite request.
@@ -38,5 +39,11 @@ namespace SignNow.Net.Model
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
         public InviteStatus Status { get; set; }
+    }
+
+    public class EmbeddedInviteResponse
+    {
+        [JsonProperty("data")]
+        public IReadOnlyList<EmbeddedInviteData> Data { get; internal set; }
     }
 }
