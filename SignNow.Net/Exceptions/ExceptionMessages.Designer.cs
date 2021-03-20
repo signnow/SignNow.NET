@@ -133,5 +133,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("DocumentDoesNotHaveRoles", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// An invite already exists for this document.
+        /// </summary>
+        internal static string InviteIsAlreadyExistsForDocument {
+            get {
+                return ResourceManager.GetString("InviteIsAlreadyExistsForDocument", resourceCulture);
+            }
+        }
     }
 }

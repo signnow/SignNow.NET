@@ -152,4 +152,7 @@
   <data name="DocumentDoesNotHaveRoles" xml:space="preserve">
     <value>This document does not contain Roles.</value>
   </data>
+  <data name="InviteIsAlreadyExistsForDocument" xml:space="preserve">
+    <value>An invite already exists for this document.</value>
+  </data>
 </root>
