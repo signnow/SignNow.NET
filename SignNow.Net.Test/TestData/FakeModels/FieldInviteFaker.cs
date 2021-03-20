@@ -22,7 +22,8 @@ namespace SignNow.Net.Test.FakeModels
         ///   "email": "Lacy60@yahoo.com",
         ///   "created": 1580844946,
         ///   "updated": 1580841391,
-        ///   "expiration_time": 1580848760
+        ///   "expiration_time": 1580848760,
+        ///   "is_embedded": false
         /// }
         /// </code>
         /// </example>
@@ -38,6 +39,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.Created     = f.Date.Recent().ToUniversalTime();
                 o.Updated     = f.Date.Recent().ToUniversalTime();
                 o.ExpiredOn   = f.Date.Recent().ToUniversalTime();
+                o.IsEmbedded  = false;
             });
         }
     }
