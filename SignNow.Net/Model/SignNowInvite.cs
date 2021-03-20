@@ -75,6 +75,12 @@ namespace SignNow.Net.Model
         [JsonProperty("expiration_time")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime ExpiredOn { get; internal set; }
+
+        /// <summary>
+        /// Is embedded signing invite or not.
+        /// </summary>
+        [JsonProperty("is_embedded")]
+        public bool IsEmbedded { get; internal set; }
     }
 
     /// <summary>
