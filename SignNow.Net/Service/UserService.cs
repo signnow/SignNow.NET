@@ -135,7 +135,7 @@ namespace SignNow.Net.Service
 
         /// <inheritdoc cref="ISignInvite.CreateInviteAsync(string, EmbeddedSigningInvite, CancellationToken" />
         /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
-        public async Task<IReadOnlyList<EmbeddedInviteResponse>> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default)
+        public async Task<EmbeddedInviteResponse> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Interfaces
 {
@@ -28,15 +29,16 @@ namespace SignNow.Net.Interfaces
         /// <param name="invite">An embedded signing invites options for each document role.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<IReadOnlyList<EmbeddedInviteResponse>> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default);
+        Task<EmbeddedInviteResponse> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a link for the embedded invite.
         /// </summary>
         /// <param name="documentId">Identity of the document to create signing link invite for.</param>
+        /// <param name="options">Embedded invite link create options.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<Uri> GenerateEmbeddedInviteLinkAsync(string documentId, CancellationToken cancellationToken = default);
+        Task<Uri> GenerateEmbeddedInviteLinkAsync(string documentId, CreateEmbedLinkOptions options, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Cancels a freeform invite sign request.
