@@ -8,40 +8,19 @@ using SignNow.Net.Model;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class EmbeddedSigningInvite
-    {
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("role_id")]
-        public  string RoleId { get; set; }
-
-        [JsonProperty("order")]
-        public int SigningOrder { get; set; }
-
-        [JsonProperty("auth_method")]
-        public string AuthMethod { get; set; } = "none";
-    }
-
     internal class EmbeddedSigningRequest : IContent
     {
+        /// <summary>
+        /// Collections of <see cref="EmbeddedInvite"/> request options.
+        /// </summary>
         [JsonProperty("invites")]
-        public List<EmbeddedSigningInvite> Invites { get; set; } = new List<EmbeddedSigningInvite>();
+        public List<EmbeddedInvite> Invites { get; set; } = new List<EmbeddedInvite>();
 
         public EmbeddedSigningRequest() {}
 
-        public EmbeddedSigningRequest(SignNowDocument document)
+        public EmbeddedSigningRequest(EmbeddedSigningInvite invite)
         {
-            foreach (var role in document.Roles)
-            {
-                Invites.Add(
-                    new EmbeddedSigningInvite
-                    {
-                        Email = document.FieldInvites.First(i => i.RoleId == role.Id).SignerEmail,
-                        RoleId = role.Id,
-                        SigningOrder = role.SigningOrder
-                    });
-            }
+            Invites = invite.EmbeddedSignInvites;
         }
 
         /// <summary>
@@ -50,9 +29,7 @@ namespace SignNow.Net.Internal.Requests
         /// <returns>HttpContent</returns>
         public HttpContent GetHttpContent()
         {
-            return new StringContent(
-                JsonConvert.SerializeObject(this),
-                Encoding.UTF8, "application/json");
+            return new StringContent(JsonConvert.SerializeObject(this), Encoding.UTF8, "application/json");
         }
     }
 }

@@ -43,7 +43,10 @@ namespace SignNow.Net.Model
 
     public class EmbeddedInviteResponse
     {
+        /// <summary>
+        /// Returns the invite data for newly created embedded invite.
+        /// </summary>
         [JsonProperty("data")]
-        public IReadOnlyList<EmbeddedInviteData> Data { get; internal set; }
+        public IReadOnlyList<EmbeddedInviteData> InviteData { get; internal set; }
     }
 }
