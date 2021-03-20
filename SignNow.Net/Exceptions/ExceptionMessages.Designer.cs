@@ -124,5 +124,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("InvalidJsonSyntax", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// This document does not contain Roles.
+        /// </summary>
+        internal static string DocumentDoesNotHaveRoles {
+            get {
+                return ResourceManager.GetString("DocumentDoesNotHaveRoles", resourceCulture);
+            }
+        }
     }
 }
