@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.Requests;
 
@@ -10,9 +11,10 @@ namespace SignNow.Net.Internal.Requests
     {
         private CreateEmbedLinkOptions LinkOptions { get; set; }
 
-        /// <inheritdoc cref="CreateEmbedLinkOptions.AuthTypeMethodAsync" />
+        /// <inheritdoc cref="CreateEmbedLinkOptions.AuthMethod" />
         [JsonProperty("auth_method")]
-        public EmbeddedAuthType AuthMethod => LinkOptions.AuthTypeMethodAsync;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EmbeddedAuthType AuthMethod => LinkOptions.AuthMethod;
 
         /// <inheritdoc cref="CreateEmbedLinkOptions.LinkExpiration" />
         [JsonProperty("link_expiration")]

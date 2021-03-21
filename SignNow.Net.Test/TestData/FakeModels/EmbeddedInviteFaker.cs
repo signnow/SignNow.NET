@@ -1,5 +1,6 @@
 using Bogus;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Test.FakeModels
 {
@@ -16,7 +17,7 @@ namespace SignNow.Net.Test.FakeModels
         /// <code>
         /// {
         ///   "email": "Jesus_Monahan@gmail.com",
-        ///   "auth_method": "none,
+        ///   "auth_method": "none",
         ///   "role_id": "c376990ca7e1e84ea7f6e252144e435f314bb63b",
         ///   "order": 1
         /// }
@@ -27,7 +28,7 @@ namespace SignNow.Net.Test.FakeModels
             Rules((f, o) =>
             {
                 o.Email = f.Internet.Email();
-                o.AuthMethod = "none";
+                o.AuthMethod = f.PickRandom<EmbeddedAuthType>();
                 o.RoleId = f.Random.Hash(40);
                 o.SigningOrder = (uint)f.Random.Number(1, 10);
             });

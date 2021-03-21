@@ -1,6 +1,8 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Model
 {
@@ -26,7 +28,7 @@ namespace SignNow.Net.Model
         /// Signer's role ID.
         /// </summary>
         [JsonProperty("role_id")]
-        public  string RoleId { get; set; }
+        public string RoleId { get; set; }
 
         /// <summary>
         /// Order of signing. Cannot be 0.
@@ -50,6 +52,7 @@ namespace SignNow.Net.Model
         /// Signer authentication method.
         /// </summary>
         [JsonProperty("auth_method")]
-        public string AuthMethod { get; set; } = "none";
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EmbeddedAuthType AuthMethod { get; set; } = EmbeddedAuthType.None;
     }
 }

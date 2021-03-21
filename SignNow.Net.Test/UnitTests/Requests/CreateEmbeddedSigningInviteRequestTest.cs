@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
@@ -22,7 +23,8 @@ namespace UnitTests
                 {
                     Email = "email@gmail.com",
                     RoleId = document.Roles[0].Id,
-                    SigningOrder = 1
+                    SigningOrder = 1,
+                    AuthMethod = EmbeddedAuthType.Mfa
                 });
 
             var embeddedSigningRequest = new EmbeddedSigningRequest(invite);
@@ -35,7 +37,7 @@ namespace UnitTests
             Assert.IsTrue(jsonBody.Contains("invites"));
             Assert.AreEqual((uint)1, actualEmbeddedSigning.Invites[0].SigningOrder);
             Assert.AreEqual(document.Roles[0].Id, actualEmbeddedSigning.Invites[0].RoleId);
-            Assert.AreEqual("none", actualEmbeddedSigning.Invites[0].AuthMethod);
+            Assert.AreEqual(EmbeddedAuthType.Mfa, actualEmbeddedSigning.Invites[0].AuthMethod);
         }
     }
 }

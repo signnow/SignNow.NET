@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -13,7 +14,7 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         [JsonProperty("auth_method")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public EmbeddedAuthType AuthTypeMethodAsync { get; set; } = EmbeddedAuthType.None;
+        public EmbeddedAuthType AuthMethod { get; set; } = EmbeddedAuthType.None;
 
         /// <summary>
         /// In how many minutes the link expires, ranges from 15 to 45 minutes or null.
@@ -42,6 +43,25 @@ namespace SignNow.Net.Model.Requests
 
     public enum EmbeddedAuthType
     {
-        Password, Email, Mfa, Social, Biometric, Other, None
+        [EnumMember(Value = "password")]
+        Password,
+
+        [EnumMember(Value = "email")]
+        Email,
+
+        [EnumMember(Value = "mfa")]
+        Mfa,
+
+        [EnumMember(Value = "social")]
+        Social,
+
+        [EnumMember(Value = "biometric")]
+        Biometric,
+
+        [EnumMember(Value = "other")]
+        Other,
+
+        [EnumMember(Value = "none")]
+        None
     }
 }
