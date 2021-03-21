@@ -149,7 +149,27 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync<IReadOnlyList<EmbeddedInviteResponse>>(requestOptions, cancellationToken)
+                .RequestAsync<EmbeddedInviteResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.GenerateEmbeddedInviteLinkAsync" />
+        /// <exception cref="ArgumentNullException"><paramref name="options"/> cannot be null.</exception>
+        public async Task<EmbeddedInviteLinkResponse> GenerateEmbeddedInviteLinkAsync(string documentId, CreateEmbedLinkOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+
+            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites/{options.FieldInvite.Id}/link");
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new EmbeddedSigningLinkRequest(options)
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 

@@ -33,7 +33,7 @@ namespace UnitTests
 
             Assert.AreEqual("application/json", embeddedSigningRequest.GetHttpContent().Headers.ContentType.MediaType);
             Assert.IsTrue(jsonBody.Contains("invites"));
-            Assert.AreEqual(1, actualEmbeddedSigning.Invites[0].SigningOrder);
+            Assert.AreEqual((uint)1, actualEmbeddedSigning.Invites[0].SigningOrder);
             Assert.AreEqual(document.Roles[0].Id, actualEmbeddedSigning.Invites[0].RoleId);
             Assert.AreEqual("none", actualEmbeddedSigning.Invites[0].AuthMethod);
         }
