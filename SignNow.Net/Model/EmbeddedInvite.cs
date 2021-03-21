@@ -1,4 +1,6 @@
+using System;
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Extensions;
 
 namespace SignNow.Net.Model
 {
@@ -7,11 +9,18 @@ namespace SignNow.Net.Model
     /// </summary>
     public class EmbeddedInvite
     {
+        private string email { get; set; }
+        private uint signingOrder { get; set; }
+
         /// <summary>
         /// Signer's email address.
         /// </summary>
         [JsonProperty("email")]
-        public string Email { get; set; }
+        public string Email
+        {
+            get { return email; }
+            set { email = value.ValidateEmail(); }
+        }
 
         /// <summary>
         /// Signer's role ID.
@@ -23,7 +32,19 @@ namespace SignNow.Net.Model
         /// Order of signing. Cannot be 0.
         /// </summary>
         [JsonProperty("order")]
-        public int SigningOrder { get; set; }
+        public uint SigningOrder
+        {
+            get { return signingOrder; }
+            set
+            {
+                if (value == 0)
+                {
+                    throw new ArgumentException("Value cannot be 0", nameof(SigningOrder));
+                }
+
+                signingOrder = value;
+            }
+        }
 
         /// <summary>
         /// Signer authentication method.
