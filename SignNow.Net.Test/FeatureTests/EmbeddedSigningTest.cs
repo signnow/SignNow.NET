@@ -36,6 +36,8 @@ namespace FeatureTests
 
             // Generate Link for Embedded Signing
             var documentWithEmbed = SignNowTestContext.Documents.GetDocumentAsync(document.Id).Result;
+            Assert.IsTrue(documentWithEmbed.FieldInvites.First().IsEmbedded);
+
             var linkOptions = new CreateEmbedLinkOptions
             {
                 FieldInvite = documentWithEmbed.FieldInvites.First(),
@@ -48,6 +50,13 @@ namespace FeatureTests
 
             Assert.IsNotNull(embeddedLink);
             Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
+
+            // Cancel embedded invite
+            var deleted = SignNowTestContext.Invites.CancelEmbeddedInviteAsync(documentWithEmbed.Id);
+            var documentWithoutEmbed = SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).Result;
+
+            Assert.IsTrue(deleted.IsCompleted);
+            Assert.AreEqual(0, documentWithoutEmbed.FieldInvites.Count);
         }
     }
 }
