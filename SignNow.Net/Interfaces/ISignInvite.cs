@@ -55,5 +55,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Cancels an embedded sign invite to a document.
+        /// </summary>
+        /// <param name="documentId">The Document identity to cancel an embedded invitation.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task CancelEmbeddedInviteAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }

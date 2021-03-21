@@ -173,6 +173,22 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="ISignInvite.CancelEmbeddedInviteAsync" />
+        public async Task CancelEmbeddedInviteAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
+
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(FreeformInvite, CancellationToken)" />
         /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
         public async Task CancelInviteAsync(FreeformInvite invite, CancellationToken cancellationToken = default)
