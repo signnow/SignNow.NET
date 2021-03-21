@@ -30,7 +30,7 @@ namespace UnitTests
             var exception = Assert.ThrowsException<ArgumentException>(
                 () => invite.SigningOrder = 0);
 
-            Assert.AreEqual("Value cannot be 0 (Parameter 'SigningOrder')", exception.Message);
+            StringAssert.Contains(exception.Message, "Value cannot be 0");
         }
     }
 }
