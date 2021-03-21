@@ -170,5 +170,37 @@ namespace UnitTests
             Assert.AreEqual("139f1a566dc64946ab5fe73883811efd8136deb7", embeddedInvite.InviteData[0].Id);
             Assert.AreEqual("Pending", embeddedInvite.InviteData[0].Status.ToString());
         }
+
+        [TestMethod]
+        public void GenerateEmbeddedSigningLink()
+        {
+            var mockResponse = @"
+            {
+              ""data"": {
+                ""link"": ""https://app-eval.signnow.com/webapp/document/9dbdffc9c5af49809d4dfdf613e9835b50a9582f?access_token=f108a715acd9272b7b25a3ecd2bc06962148de40b2ecdd08c05fbf41994b98b6&route=fieldinvite""
+              }
+            }";
+
+            var document = new SignNowDocumentFaker()
+                .FinishWith((f, o) =>
+                {
+                    o.Roles = new RoleFaker().Generate(1);
+                })
+                .Generate();
+
+            var options = new CreateEmbedLinkOptions
+            {
+                FieldInvite = new FieldInviteFaker().Generate(),
+                AuthMethod = "none",
+                LinkExpiration = 30
+            };
+
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(mockResponse));
+            var embeddedLink = userService.GenerateEmbeddedInviteLinkAsync(document.Id, options).Result;
+            var link =
+                "https://app-eval.signnow.com/webapp/document/9dbdffc9c5af49809d4dfdf613e9835b50a9582f?access_token=f108a715acd9272b7b25a3ecd2bc06962148de40b2ecdd08c05fbf41994b98b6&route=fieldinvite";
+
+            Assert.AreEqual(link, embeddedLink.Link.AbsoluteUri);
+        }
     }
 }

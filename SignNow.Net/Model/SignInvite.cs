@@ -186,4 +186,60 @@ namespace SignNow.Net.Model
             }
         }
     }
+
+    /// <summary>
+    /// Embedded signing - having the documents signed within your website or app by creating an embedded invite.
+    /// </summary>
+    public sealed class EmbeddedSigningInvite
+    {
+        private List<Role> ExistingDocumentRoles { get; set; }
+
+        /// <summary>
+        /// List with Embedded Sign Invites options.
+        /// </summary>
+        public List<EmbeddedInvite> EmbeddedSignInvites { get; private set; } = new List<EmbeddedInvite>();
+
+        /// <summary>
+        /// Initialize a new instance of Embedded Signing Invite.
+        /// </summary>
+        /// <param name="document">SignNow document which you would like to sign with Embedded Invite.</param>
+        /// <exception cref="ArgumentException">The <paramref name="document"/> can not be null.</exception>
+        /// <exception cref="ArgumentException">When <paramref name="document"/> does not have <see cref="Role"/></exception>
+        /// <exception cref="ArgumentException">When <see cref="FreeFormSignInvite"/> exists in a <paramref name="document"/></exception>
+        public EmbeddedSigningInvite(SignNowDocument document)
+        {
+            Guard.ArgumentNotNull(document, nameof(document));
+
+            if (document.Roles.Count == 0)
+            {
+                throw new ArgumentException(ExceptionMessages.DocumentDoesNotHaveRoles);
+            }
+
+            if (document.FieldInvites.Count != 0)
+            {
+                throw new ArgumentException(ExceptionMessages.InviteIsAlreadyExistsForDocument);
+            }
+
+            ExistingDocumentRoles = document.Roles;
+        }
+
+        /// <summary>
+        /// Add Embedded Sign Invite options for a Signer.
+        /// </summary>
+        /// <param name="options">Embedded invite params.</param>
+        /// <exception cref="ArgumentException">If <paramref name="options.RoleId"/> does not exists in document Roles.</exception>
+        public void AddEmbeddedSigningInvite(EmbeddedInvite options)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+
+            var originalRole = ExistingDocumentRoles.Find(p => p.Id == options.RoleId);
+
+            if (null == originalRole)
+            {
+                throw new ArgumentException("RoleId does not exists", nameof(options));
+            }
+
+            EmbeddedSignInvites.Add(options);
+        }
+    }
 }

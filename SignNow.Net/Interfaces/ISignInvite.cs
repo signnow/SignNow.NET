@@ -38,7 +38,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="options">Embedded invite link create options.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<Uri> GenerateEmbeddedInviteLinkAsync(string documentId, CreateEmbedLinkOptions options, CancellationToken cancellationToken = default);
+        Task<EmbeddedInviteLinkResponse> GenerateEmbeddedInviteLinkAsync(string documentId, CreateEmbedLinkOptions options, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Cancels a freeform invite sign request.
