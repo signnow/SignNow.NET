@@ -10,9 +10,9 @@ namespace SignNow.Net.Internal.Requests
     {
         private CreateEmbedLinkOptions LinkOptions { get; set; }
 
-        /// <inheritdoc cref="CreateEmbedLinkOptions.AuthMethod" />
+        /// <inheritdoc cref="CreateEmbedLinkOptions.AuthTypeMethodAsync" />
         [JsonProperty("auth_method")]
-        public string AuthMethod => LinkOptions.AuthMethod;
+        public EmbeddedAuthType AuthMethod => LinkOptions.AuthTypeMethodAsync;
 
         /// <inheritdoc cref="CreateEmbedLinkOptions.LinkExpiration" />
         [JsonProperty("link_expiration")]

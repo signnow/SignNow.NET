@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
@@ -30,8 +31,6 @@ namespace FeatureTests
                 .CreateInviteAsync(document.Id, invite)
                 .Result;
 
-            TestUtils.Dump(embeddedSigningInvite);
-
             Assert.IsNotNull(embeddedSigningInvite);
             Assert.AreEqual(1, embeddedSigningInvite.InviteData.Count);
 
@@ -48,6 +47,7 @@ namespace FeatureTests
                 .Result;
 
             Assert.IsNotNull(embeddedLink);
+            Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
         }
     }
 }

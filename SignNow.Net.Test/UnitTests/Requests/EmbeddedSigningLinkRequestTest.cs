@@ -13,7 +13,7 @@ namespace UnitTests
         {
             var options = new CreateEmbedLinkOptions
             {
-                AuthMethod = "none",
+                AuthTypeMethodAsync = EmbeddedAuthType.None,
                 FieldInvite = new FieldInviteFaker().Generate(),
                 LinkExpiration = null
             };
@@ -23,7 +23,7 @@ namespace UnitTests
             var actualEmbeddedLink = TestUtils.DeserializeFromJson<CreateEmbedLinkOptions>(jsonBody);
 
             Assert.AreEqual("application/json", embedLinkRequest.GetHttpContent().Headers.ContentType.MediaType);
-            Assert.AreEqual("none", actualEmbeddedLink.AuthMethod);
+            Assert.AreEqual(EmbeddedAuthType.None, actualEmbeddedLink.AuthTypeMethodAsync);
             Assert.AreEqual(null, actualEmbeddedLink.LinkExpiration);
         }
     }

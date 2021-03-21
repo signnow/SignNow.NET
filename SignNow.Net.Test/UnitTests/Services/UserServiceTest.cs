@@ -191,7 +191,7 @@ namespace UnitTests
             var options = new CreateEmbedLinkOptions
             {
                 FieldInvite = new FieldInviteFaker().Generate(),
-                AuthMethod = "none",
+                AuthTypeMethodAsync = EmbeddedAuthType.None,
                 LinkExpiration = 30
             };
 
