@@ -54,10 +54,12 @@ namespace FeatureTests
 
             // Cancel embedded invite
             var deleted = SignNowTestContext.Invites.CancelEmbeddedInviteAsync(documentWithEmbed.Id);
-            var documentWithoutEmbed = SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).Result;
 
             Task.WaitAll(deleted);
             Assert.IsTrue(deleted.IsCompleted);
+
+            var documentWithoutEmbed = SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).Result;
+
             Assert.AreEqual(0, documentWithoutEmbed.FieldInvites.Count);
         }
     }
