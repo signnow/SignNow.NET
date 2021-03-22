@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
@@ -55,6 +56,7 @@ namespace FeatureTests
             var deleted = SignNowTestContext.Invites.CancelEmbeddedInviteAsync(documentWithEmbed.Id);
             var documentWithoutEmbed = SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).Result;
 
+            Task.WaitAll(deleted);
             Assert.IsTrue(deleted.IsCompleted);
             Assert.AreEqual(0, documentWithoutEmbed.FieldInvites.Count);
         }
