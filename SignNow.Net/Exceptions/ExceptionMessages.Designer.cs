@@ -142,5 +142,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("InviteIsAlreadyExistsForDocument", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// Allowed range must be from 15 to 45 minutes
+        /// </summary>
+        internal static string AllowedRangeMustBeFrom15to45 {
+            get {
+                return ResourceManager.GetString("AllowedRangeMustBeFrom15to45", resourceCulture);
+            }
+        }
     }
 }

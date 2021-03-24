@@ -2,6 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Model.Requests
 {
@@ -27,7 +28,7 @@ namespace SignNow.Net.Model.Requests
             {
                 if (value < 15 || value > 45)
                 {
-                    throw new ArgumentException("Allowed ranges must be from 15 to 45 minutes", nameof(LinkExpiration));
+                    throw new ArgumentException(ExceptionMessages.AllowedRangeMustBeFrom15to45, nameof(LinkExpiration));
                 }
 
                 linkExpiration = value;
