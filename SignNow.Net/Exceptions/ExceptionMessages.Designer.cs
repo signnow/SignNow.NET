@@ -124,5 +124,32 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("InvalidJsonSyntax", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// This document does not contain Roles.
+        /// </summary>
+        internal static string DocumentDoesNotHaveRoles {
+            get {
+                return ResourceManager.GetString("DocumentDoesNotHaveRoles", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// An invite already exists for this document.
+        /// </summary>
+        internal static string InviteIsAlreadyExistsForDocument {
+            get {
+                return ResourceManager.GetString("InviteIsAlreadyExistsForDocument", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// Allowed range must be from 15 to 45 minutes
+        /// </summary>
+        internal static string AllowedRangeMustBeFrom15to45 {
+            get {
+                return ResourceManager.GetString("AllowedRangeMustBeFrom15to45", resourceCulture);
+            }
+        }
     }
 }

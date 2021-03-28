@@ -1,0 +1,6 @@
+[ReportGenerator]
+	reports = SignNow.Net.Test/bin/Debug/netcoreapp3.0/coverage.netcoreapp3.0.opencover.xml
+	reports = SignNow.Net.Test/bin/Debug/netcoreapp3.1/coverage.netcoreapp3.1.opencover.xml
+	reports = SignNow.Net.Test/bin/Debug/net45/coverage.net45.opencover.xml
+	targetdir = "SignNow.Net.Test/bin/coverage-html"
+	reporttypes = Html;HtmlSummary

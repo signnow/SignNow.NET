@@ -8,9 +8,15 @@ namespace SignNow.Net.Model
     public class InviteResponse
     {
         /// <summary>
-        /// Identity of invite request.
+        /// Identity of freeform invite request.
         /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
+
+        /// <summary>
+        /// Role-based invite status
+        /// </summary>
+        [JsonProperty("status")]
+        public string Status { get; set; }
     }
 }

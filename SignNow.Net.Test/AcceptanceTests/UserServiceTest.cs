@@ -70,7 +70,7 @@ namespace AcceptanceTests
         public void ThrowsExceptionForNullableInvite()
         {
             var actual = Assert.ThrowsException<AggregateException>(
-                () => SignNowTestContext.Invites.CreateInviteAsync("", null).Result);
+                () => SignNowTestContext.Invites.CreateInviteAsync("", (SignInvite) null).Result);
 
             StringAssert.Contains(actual.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
             StringAssert.Contains(actual.InnerException?.Message, "invite");

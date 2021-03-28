@@ -149,4 +149,13 @@
     <value>Invalid Json syntax in response</value>
     <comment>Invalid Json syntax in response</comment>
   </data>
+  <data name="DocumentDoesNotHaveRoles" xml:space="preserve">
+    <value>This document does not contain Roles.</value>
+  </data>
+  <data name="InviteIsAlreadyExistsForDocument" xml:space="preserve">
+    <value>An invite already exists for this document.</value>
+  </data>
+  <data name="AllowedRangeMustBeFrom15to45" xml:space="preserve">
+    <value>Allowed ranges must be from 15 to 45 minutes</value>
+  </data>
 </root>

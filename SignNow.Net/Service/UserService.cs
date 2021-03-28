@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -110,7 +111,7 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ISignInvite.CreateInviteAsync" />
+        /// <inheritdoc cref="ISignInvite.CreateInviteAsync(string, SignInvite, CancellationToken)" />
         /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
         /// <exception cref="ArgumentException">Invalid format of <paramref name="documentId"/></exception>
         public async Task<InviteResponse> CreateInviteAsync(string documentId, SignInvite invite, CancellationToken cancellationToken = default)
@@ -130,6 +131,62 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.CreateInviteAsync(string, EmbeddedSigningInvite, CancellationToken" />
+        /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
+        public async Task<EmbeddedInviteResponse> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(invite, nameof(invite));
+
+            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new EmbeddedSigningRequest(invite)
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.GenerateEmbeddedInviteLinkAsync" />
+        /// <exception cref="ArgumentNullException"><paramref name="options"/> cannot be null.</exception>
+        public async Task<EmbeddedInviteLinkResponse> GenerateEmbeddedInviteLinkAsync(string documentId, CreateEmbedLinkOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+
+            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites/{options.FieldInvite.Id}/link");
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new EmbeddedSigningLinkRequest(options)
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.CancelEmbeddedInviteAsync" />
+        public async Task CancelEmbeddedInviteAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
+
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(FreeformInvite, CancellationToken)" />

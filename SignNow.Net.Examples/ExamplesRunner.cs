@@ -318,6 +318,46 @@ namespace SignNow.Net.Examples
             Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
         }
 
+        /// <summary>
+        /// Run test for example:
+        /// <see cref="InviteExamples.CreateEmbeddedSigningInviteToSignTheDocument"/>
+        /// <see cref="InviteExamples.GenerateLinkForEmbeddedInvite"/>
+        /// </summary>
+        [TestMethod]
+        public void CreateEmbeddedSigningInviteToSignTheDocumentTest()
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateEmbeddedSigningInviteToSignTheDocument.pdf").Result;
+
+            var signNowDoc = testContext.Documents.GetDocumentAsync(document.Id).Result;
+
+            disposableDocumentId = document?.Id;
+
+            // Create Embedded Signing Invite
+            var embeddedInviteResponse = InviteExamples
+                .CreateEmbeddedSigningInviteToSignTheDocument(signNowDoc, "testemail@signnow.com", token).Result;
+
+            Assert.AreEqual(1, embeddedInviteResponse.InviteData.Count);
+            Assert.AreEqual(1, embeddedInviteResponse.InviteData[0].Order);
+            Assert.AreEqual("testemail@signnow.com", embeddedInviteResponse.InviteData[0].Email);
+            Assert.AreEqual("Pending", embeddedInviteResponse.InviteData[0].Status.ToString());
+
+
+            var documentWithEmbed = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            Assert.IsTrue(documentWithEmbed.FieldInvites.First().IsEmbedded);
+
+            // Generate link for Embedded Signing Invite
+            var embeddedLink = InviteExamples
+                .GenerateLinkForEmbeddedInvite(documentWithEmbed, 30, token).Result;
+
+            Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
+            Console.WriteLine($"Embedded link: {embeddedLink.Link.AbsoluteUri}");
+
+            // Cancel embedded invite
+            var cancelled = InviteExamples.CancelEmbeddedInvite(documentWithEmbed, token);
+        }
+
         #endregion
 
         #region User Examples

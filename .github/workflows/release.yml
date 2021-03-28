@@ -41,7 +41,6 @@ jobs:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet tool install --global InheritDocTool
-          dotnet tool install --global coverlet.console
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
@@ -72,8 +71,6 @@ jobs:
           allowUpdates: true
           artifacts: ${{ github.workspace }}/SignNow.Net/bin/Publish/*.nupkg
           artifactContentType: application/octet-stream
-          # @TODO: Change `prerelease: false` or remove this flag when finish with beta versions
-          prerelease: true
 
       - name: Publish Nuget Package
         run: |

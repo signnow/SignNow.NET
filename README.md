@@ -39,6 +39,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a signing link to the document for signature](#create-signing-link)
         - [Create a freeform invite to the document for signature](#create-freeform-invite)
         - [Create a role-based invite to the document for signature](#create-role-based-invite)
+        - [Create embedded signing invite to the document for signature](#create-embedded-invite)
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
@@ -49,7 +50,7 @@ Get your account at <https://www.signnow.com/developers>
 
 ## <a name="get-started"></a>Get started
 
-To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: <https://docs.signnow.com/reference>.
+To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: [SignNow API Reference][api reference link].
 
 #### API and Application
 
@@ -415,6 +416,44 @@ public static partial class InviteExamples
 
 More examples: [Create role-based invite][create_rb_invite example]
 
+### <a name="create-embedded-invite"></a>Create embedded signing invite to the document for signature
+
+```csharp
+public static partial class InviteExamples
+{
+    /// <summary>
+    /// Create an embedded signing invite to the document for signature.
+    /// </summary>
+    /// <param name="document">SignNow document you’d like to have signed</param>
+    /// <param name="email">The email of the invitee.</param>
+    /// <param name="token">Access token</param>
+    /// <returns>
+    /// <see cref="EmbeddedInviteResponse"/> which contains an invite data.
+    /// </returns>
+    public static async Task<EmbeddedInviteResponse>
+        CreateEmbeddedSigningInviteToSignTheDocument(SignNowDocument document, string email, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+
+        // create embedded signing invite
+        var invite = new EmbeddedSigningInvite(document);
+        invite.AddEmbeddedSigningInvite(
+            new EmbeddedInvite
+            {
+                Email = email,
+                RoleId = document.Roles[0].Id,
+                SigningOrder = 1
+            });
+
+        return await signNowContext.Invites.CreateInviteAsync(document.Id, invite)
+            .ConfigureAwait(false);
+    }
+}
+```
+
+More examples: [Generate embedded signing link][generate_embedded_link example], [Cancel embedded signing invite][cancel_embedded_invite example]
+
 ### <a name="share-document-via-link"></a>Create a one-time link to download the document as a PDF
 
 ```csharp
@@ -498,7 +537,7 @@ This SDK is distributed under the MIT License, see [LICENSE][license link] for m
 
 #### API Contact Information
 
-If you have questions about the SignNow API, please visit <https://docs.signnow.com/sn/ref> or email api@signnow.com.<br>
+If you have questions about the SignNow API, please visit [SignNow API Reference][api reference link] or email api@signnow.com.<br>
 
 **Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
 
@@ -518,6 +557,7 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License"
 [license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
 [api docs link]: https://docs.signnow.com
+[api reference link]: https://docs.signnow.com/sn/ref
 
 <!-- All examples URLs should be there -->
 <!-- Authorization -->
@@ -541,6 +581,8 @@ If you have questions about the SignNow API, please visit <https://docs.signnow.
 [create_sign_lnk example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
 [create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
 [create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
+[generate_embedded_link example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/GenerateLinkForEmbeddedInvite.cs
+[cancel_embedded_invite example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CancelEmbeddedInvite.cs
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs

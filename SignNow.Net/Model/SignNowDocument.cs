@@ -95,7 +95,7 @@ namespace SignNow.Net.Model
         /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
-        internal List<Role> Roles { get; set; } = new List<Role>();
+        public List<Role> Roles { get; internal set; } = new List<Role>();
 
         /// <summary>
         /// The document <see cref="SignatureContent"/>

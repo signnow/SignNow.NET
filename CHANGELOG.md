@@ -5,7 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+## Added
+- `ISignInvite.CreateInviteAsync` that allows to create embedded signing invite for a document
+- `ISignInvite.CancelEmbeddedInviteAsync` that allows to delete embedded signing invite for a document
+- `ISignInvite.GenerateEmbeddedInviteLinkAsync` that allows to create a link for the embedded signing invite for a document
 
+## Changed
+- Changed JsonConverter for `Model.SignNowInvite` properties
 
 ## [0.6.0-beta] - 2020-11-17
 ## Added

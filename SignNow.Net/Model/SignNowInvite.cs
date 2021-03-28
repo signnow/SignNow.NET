@@ -66,15 +66,21 @@ namespace SignNow.Net.Model
         /// Timestamp document was updated.
         /// </summary>
         [JsonProperty("updated")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime Updated { get; internal set; }
 
         /// <summary>
         /// Date and time of invite expiration.
         /// </summary>
         [JsonProperty("expiration_time")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime ExpiredOn { get; internal set; }
+
+        /// <summary>
+        /// Is embedded signing invite or not.
+        /// </summary>
+        [JsonProperty("is_embedded")]
+        public bool IsEmbedded { get; internal set; }
     }
 
     /// <summary>

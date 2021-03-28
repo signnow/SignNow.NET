@@ -94,7 +94,6 @@ jobs:
           DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
         run: |
           dotnet tool install --global InheritDocTool
-          dotnet tool install --global coverlet.console
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
