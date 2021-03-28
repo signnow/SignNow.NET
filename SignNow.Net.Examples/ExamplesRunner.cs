@@ -353,6 +353,9 @@ namespace SignNow.Net.Examples
 
             Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
             Console.WriteLine($"Embedded link: {embeddedLink.Link.AbsoluteUri}");
+
+            // Cancel embedded invite
+            var cancelled = InviteExamples.CancelEmbeddedInvite(documentWithEmbed, token);
         }
 
         #endregion
