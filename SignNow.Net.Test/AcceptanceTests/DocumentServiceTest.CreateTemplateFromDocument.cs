@@ -18,6 +18,7 @@ namespace AcceptanceTests
                     TemplateName = templateName
                 });
             Assert.IsNotNull(response.Id);
+            DisposableDocumentId = response.Id;
             var template = await SignNowTestContext.Documents.GetDocumentAsync(response.Id);
             Assert.AreEqual(templateName, template.Name);
         }
