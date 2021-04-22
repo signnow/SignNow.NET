@@ -8,16 +8,18 @@ namespace AcceptanceTests
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public async Task CreateTemplateFromDocumentSuccessfully()
+        [DataRow("test template name")]
+        public async Task CreateTemplateFromDocumentSuccessfully(string templateName)
         {
             var response =
                 await SignNowTestContext.Documents.CreateTemplateFromDocumentAsync(new CreateTemplateFromDocumentRequest
                 {
                     DocumentId = TestPdfDocumentId,
-                    TemplateName = "test template name"
+                    TemplateName = templateName
                 });
-
             Assert.IsNotNull(response.Id);
+            var template = await SignNowTestContext.Documents.GetDocumentAsync(response.Id);
+            Assert.AreEqual(templateName, template.Name);
         }
     }
 }
