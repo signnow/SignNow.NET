@@ -13,7 +13,7 @@ namespace AcceptanceTests
         {
             var response =
                 await SignNowTestContext.Documents.CreateTemplateFromDocumentAsync(
-                    new CreateTemplateFromDocumentRequest(TestPdfDocumentId, templateName));
+                    new CreateTemplateFromDocumentRequest(templateName, TestPdfDocumentId));
             Assert.IsNotNull(response.Id);
             DisposableDocumentId = response.Id;
             var template = await SignNowTestContext.Documents.GetDocumentAsync(response.Id);
