@@ -12,11 +12,8 @@ namespace AcceptanceTests
         public async Task CreateTemplateFromDocumentSuccessfully(string templateName)
         {
             var response =
-                await SignNowTestContext.Documents.CreateTemplateFromDocumentAsync(new CreateTemplateFromDocumentRequest
-                {
-                    DocumentId = TestPdfDocumentId,
-                    TemplateName = templateName
-                });
+                await SignNowTestContext.Documents.CreateTemplateFromDocumentAsync(
+                    new CreateTemplateFromDocumentRequest(TestPdfDocumentId, templateName));
             Assert.IsNotNull(response.Id);
             DisposableDocumentId = response.Id;
             var template = await SignNowTestContext.Documents.GetDocumentAsync(response.Id);

@@ -18,5 +18,11 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         [JsonProperty("document_id")]
         public string DocumentId { get; set; }
+
+        public CreateTemplateFromDocumentRequest(string templateName, string documentId)
+        {
+            TemplateName = templateName;
+            DocumentId = documentId;
+        }
     }
 }
