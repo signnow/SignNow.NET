@@ -7,6 +7,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NeutralLanguage>en-US</NeutralLanguage>
         <PackageId>SignNow.NET</PackageId>
+        <PackageVersion>0.8.0</PackageVersion>
     </PropertyGroup>
 
     <PropertyGroup>

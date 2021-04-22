@@ -205,5 +205,49 @@ namespace SignNow.Net.Service
                 .RequestAsync<DownloadLinkResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName,
+            CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId}/copy");
+            var requestBody = new CreateDocumentFromTemplateRequest
+            {
+                DocumentName = documentName,
+                TemplateId = templateId
+            };
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new JsonHttpContent(requestBody)
+            };
+
+            return await SignNowClient
+                .RequestAsync<CreateDocumentFromTemplateResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName,
+            CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/template");
+            var requestBody = new CreateTemplateFromDocumentRequest
+            {
+                TemplateName = templateName,
+                DocumentId = documentId
+            };
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new JsonHttpContent(requestBody),
+            };
+
+            return await SignNowClient
+                .RequestAsync<CreateTemplateFromDocumentResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
