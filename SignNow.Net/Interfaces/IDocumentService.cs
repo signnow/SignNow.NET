@@ -4,6 +4,7 @@ using SignNow.Net.Model;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Interfaces
 {
@@ -102,11 +103,10 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Creates a template by flattening an existing document.
         /// </summary>
-        /// <param name="documentId">Identity of the document.</param>
-        /// <param name="templateName">The name of new template</param>
+        /// <param name="request">Create template request <see cref="CreateTemplateFromDocumentRequest">type</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default);
+        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(CreateTemplateFromDocumentRequest request, CancellationToken cancellationToken = default);
     }
 }

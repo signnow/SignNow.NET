@@ -3,9 +3,9 @@ using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 
-namespace SignNow.Net.Internal.Requests
+namespace SignNow.Net.Model.Requests
 {
-    internal class CreateTemplateFromDocumentRequest : IContent
+    public class CreateTemplateFromDocumentRequest : IContent
     {
         /// <summary>
         /// The new template name.
