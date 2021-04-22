@@ -103,7 +103,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Creates a template by flattening an existing document.
         /// </summary>
-        /// <param name="request">Create template request <see cref="CreateTemplateFromDocumentRequest">type</param>
+        /// <param name="request">Create template request <see cref="CreateTemplateFromDocumentRequest"/>type</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
