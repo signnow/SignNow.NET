@@ -5,7 +5,7 @@ using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.Requests
 {
-    public class CreateTemplateFromDocumentRequest : IContent
+    public class CreateTemplateFromDocumentRequest
     {
         /// <summary>
         /// The new template name.
@@ -18,16 +18,5 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         [JsonProperty("document_id")]
         public string DocumentId { get; set; }
-
-        /// <summary>
-        /// Creates Json Http Content from object
-        /// </summary>
-        /// <returns>HttpContent</returns>
-        public HttpContent GetHttpContent()
-        {
-            return new StringContent(
-                JsonConvert.SerializeObject(this),
-                Encoding.UTF8, "application/json");
-        }
     }
 }
