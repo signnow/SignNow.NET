@@ -98,5 +98,15 @@ namespace SignNow.Net.Interfaces
         /// <returns>link to download specified document in PDF format</returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadLinkResponse> CreateOneTimeDownloadLinkAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates a template by flattening an existing document.
+        /// </summary>
+        /// <param name="documentId">Identity of the document.</param>
+        /// <param name="templateName">The name of new template</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
+        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default);
     }
 }
