@@ -222,5 +222,24 @@ namespace SignNow.Net.Service
                 .RequestAsync<CreateTemplateFromDocumentResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId,
+            string documentName,
+            CancellationToken cancellationToken = default)
+        {
+            var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId}/copy");
+            var requestBody = new CreateDocumentFromTemplateRequest(documentName);
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = requestUrl,
+                Token = Token,
+                Content = new JsonHttpContent(requestBody)
+            };
+
+            return await SignNowClient
+                .RequestAsync<CreateDocumentFromTemplateResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
