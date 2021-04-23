@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `ISignInvite.CreateInviteAsync` that allows to create embedded signing invite for a document
 - `ISignInvite.CancelEmbeddedInviteAsync` that allows to delete embedded signing invite for a document
 - `ISignInvite.GenerateEmbeddedInviteLinkAsync` that allows to create a link for the embedded signing invite for a document
+- `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
 
 ## Changed
 - Changed JsonConverter for `Model.SignNowInvite` properties
