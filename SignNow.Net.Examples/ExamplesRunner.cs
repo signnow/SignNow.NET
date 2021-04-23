@@ -9,6 +9,7 @@ using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
@@ -130,6 +131,29 @@ namespace SignNow.Net.Examples
 
             Assert.AreEqual(FieldType.Text, documentFields.Current.Type);
             Assert.IsTrue(documentWithFields.Fields.Count > 0);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        [DataRow("Template Name")]
+        public async Task CreateTemplateFromDocumentTest(string templateName)
+        {
+            using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf");
+
+            disposableDocumentId = document?.Id;
+
+            var request = new CreateTemplateFromDocumentRequest(templateName, document?.Id);
+            var result = await DocumentExamples.CreateTemplateFromTheDocument(request, token);
+            var template = await testContext.Documents.GetDocumentAsync(result.Id);
+
+            Assert.IsNotNull(template?.Id);
+            Assert.AreEqual(templateName, template.Name);
+
+            await testContext.Documents.DeleteDocumentAsync(template.Id);
         }
 
         /// <summary>
