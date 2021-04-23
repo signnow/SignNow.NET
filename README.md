@@ -43,7 +43,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
-        - [Create a template by flattening an existing document ][create_template example]
+        - [Create a template by flattening an existing document][create_template example]
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -205,6 +205,34 @@ public static class DocumentExamples
 
 More examples: [Upload document][upload_document example], [Upload document with field extract][upload_doc_extract example]
 
+### <a name="create-template"></a>Create Template by flattening the existing Document
+
+Set required TemplateName and DocumentId properties in request to create the SignNow Template.
+
+```csharp
+public static partial class DocumentExamples
+    {
+        /// <summary>
+        /// Creates a template by flattening an existing document.
+        /// </summary>
+        /// <param name="request">Request model</param>
+        /// <param name="token">Access token</param>
+        /// <returns><see cref="DocumentStatus"/></returns>
+        public static async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromTheDocument(CreateTemplateFromDocumentRequest request, Token token)
+        {
+            // using token from the Authorization step
+            var signNowContext = new SignNowContext(token);
+
+            var createTemplateResult = await signNowContext.Documents
+                .CreateTemplateFromDocumentAsync(request).ConfigureAwait(false);
+
+            return createTemplateResult;
+        }
+    }
+```
+
+More examples: [Create a template by flattening an existing document][create_template example]
+
 ### <a name="download-document"></a>Download a document from SignNow
 
 Choose the type of download for your document:
@@ -316,7 +344,7 @@ public static partial class DocumentExamples
 }
 ```
 
-More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example], [Create a template by flattening an existing document ][create_template example]
+More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example]
 
 ### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
 
