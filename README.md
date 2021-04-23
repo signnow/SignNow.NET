@@ -43,6 +43,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
+        - [Create a template by flattening an existing document ][create_template example]
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -315,7 +316,7 @@ public static partial class DocumentExamples
 }
 ```
 
-More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example]
+More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example], [Create a template by flattening an existing document ][create_template example]
 
 ### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
 
@@ -586,3 +587,4 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
+[create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
