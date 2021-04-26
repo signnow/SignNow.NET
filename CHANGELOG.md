@@ -5,11 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+
+## Added
+- `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
+
+
+## [0.7.0] - 2021-03-28
 ## Added
 - `ISignInvite.CreateInviteAsync` that allows to create embedded signing invite for a document
 - `ISignInvite.CancelEmbeddedInviteAsync` that allows to delete embedded signing invite for a document
 - `ISignInvite.GenerateEmbeddedInviteLinkAsync` that allows to create a link for the embedded signing invite for a document
-- `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
 
 ## Changed
 - Changed JsonConverter for `Model.SignNowInvite` properties
@@ -121,7 +126,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...0.7.0
 [0.6.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...0.6.0-beta
 [0.5.2-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.1-beta...0.5.2-beta
 [0.5.1-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.0-beta...0.5.1-beta
