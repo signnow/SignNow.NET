@@ -566,7 +566,7 @@ public static partial class DocumentExamples
     }
 ```
 
-More examples: [Create a template by flattening an existing document][create_template example]
+More examples: [Create document from the template][create_doc example]
 
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
