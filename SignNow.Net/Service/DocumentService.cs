@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Internal.Helpers;
 using System.Net.Http;
-using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
 {
@@ -208,14 +208,17 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(CreateTemplateFromDocumentRequest request, CancellationToken cancellationToken = default)
+        public async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default)
         {
+            Guard.ArgumentNotNull(documentId, nameof(documentId));
+            Guard.ArgumentNotNull(templateName, nameof(templateName));
+
             var requestUrl = new Uri(ApiBaseUrl, $"/template");
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestUrl,
                 Token = Token,
-                Content = new JsonHttpContent(request),
+                Content = new JsonHttpContent(new CreateTemplateFromDocumentRequest(templateName, documentId)),
             };
 
             return await SignNowClient

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using SignNow.Net.Model;
-using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Examples.Documents
 {
@@ -9,18 +9,18 @@ namespace SignNow.Net.Examples.Documents
         /// <summary>
         /// Creates a template by flattening an existing document.
         /// </summary>
-        /// <param name="request">Request model</param>
+        /// <param name="documentId">Identity of the document which is the source of a template</param>
+        /// <param name="templateName">The new template name</param>
         /// <param name="token">Access token</param>
-        /// <returns><see cref="DocumentStatus"/></returns>
-        public static async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromTheDocument(CreateTemplateFromDocumentRequest request, Token token)
+        /// <returns><see cref="CreateTemplateFromDocumentResponse"/>Returns a new template ID</returns>
+        public static async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromTheDocument(string documentId, string templateName, Token token)
         {
             // using token from the Authorization step
             var signNowContext = new SignNowContext(token);
 
-            var createTemplateResult = await signNowContext.Documents
-                .CreateTemplateFromDocumentAsync(request).ConfigureAwait(false);
-
-            return createTemplateResult;
+            return await signNowContext.Documents
+                .CreateTemplateFromDocumentAsync(documentId, templateName)
+                .ConfigureAwait(false);
         }
     }
 }

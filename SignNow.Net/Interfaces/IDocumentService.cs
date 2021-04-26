@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using SignNow.Net.Model;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
 {
@@ -90,7 +89,6 @@ namespace SignNow.Net.Interfaces
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default);
 
-
         /// <summary>
         /// Create a one-time use URL for anyone to download the document as a PDF.
         /// </summary>
@@ -103,11 +101,13 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Creates a template by flattening an existing document.
         /// </summary>
-        /// <param name="request">Create template request <see cref="CreateTemplateFromDocumentRequest"/>type</param>
+        /// <param name="documentId">Identity of the document which is the source of a template</param>
+        /// <param name="templateName">The new template name</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(CreateTemplateFromDocumentRequest request, CancellationToken cancellationToken = default);
+        /// <returns>Returns a new template ID</returns>
+        /// <exception cref="System.ArgumentException">If `<paramref name="documentId"/>` is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If `<paramref name="templateName"/>` is null.</exception>
+        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates document from template.

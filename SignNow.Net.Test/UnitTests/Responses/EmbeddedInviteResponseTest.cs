@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 
-namespace UnitTests.Responses
+namespace UnitTests
 {
     [TestClass]
     public class EmbeddedInviteResponseTest
