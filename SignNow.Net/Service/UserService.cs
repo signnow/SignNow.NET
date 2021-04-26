@@ -133,7 +133,7 @@ namespace SignNow.Net.Service
             return await SignNowClient.RequestAsync<InviteResponse>(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="ISignInvite.CreateInviteAsync(string, EmbeddedSigningInvite, CancellationToken" />
+        /// <inheritdoc cref="ISignInvite.CreateInviteAsync(string, EmbeddedSigningInvite, CancellationToken)" />
         /// <exception cref="ArgumentNullException"><paramref name="invite"/> cannot be null.</exception>
         public async Task<EmbeddedInviteResponse> CreateInviteAsync(string documentId, EmbeddedSigningInvite invite, CancellationToken cancellationToken = default)
         {

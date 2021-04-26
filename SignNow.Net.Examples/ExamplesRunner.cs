@@ -405,6 +405,7 @@ namespace SignNow.Net.Examples
             var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token);
             var template = await testContext.Documents.GetDocumentAsync(result.Id);
 
+            Assert.IsFalse(document.IsTemplate);
             Assert.IsNotNull(template?.Id);
             Assert.AreEqual(templateName, template.Name);
             Assert.IsTrue(template.IsTemplate);
