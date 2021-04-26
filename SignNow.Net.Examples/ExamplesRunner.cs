@@ -428,6 +428,7 @@ namespace SignNow.Net.Examples
             var document = await testContext.Documents.GetDocumentAsync(result.Id);
 
             Assert.IsNotNull(document?.Id);
+            Assert.IsFalse(document.IsTemplate);
             Assert.AreEqual(documentName, document.Name);
 
             await testContext.Documents.DeleteDocumentAsync(document.Id);

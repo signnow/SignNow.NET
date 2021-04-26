@@ -7,7 +7,7 @@ namespace SignNow.Net.Examples.Documents
     public static partial class DocumentExamples
     {
         /// <summary>
-        /// Creates a template by flattening an existing document.
+        /// Creates document from template.
         /// </summary>
         /// <param name="templateId">Identity of the template.</param>
         /// <param name="documentName">The name of new document</param>

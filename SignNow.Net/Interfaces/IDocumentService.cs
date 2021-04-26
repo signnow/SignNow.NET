@@ -112,7 +112,7 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Creates document from template.
         /// </summary>
-        /// <param name="templateId">Identity of the template.</param>
+        /// <param name="templateId">Identity of the template which is the source of a document.</param>
         /// <param name="documentName">The name of new document</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>

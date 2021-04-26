@@ -231,13 +231,15 @@ namespace SignNow.Net.Service
             string documentName,
             CancellationToken cancellationToken = default)
         {
+            Guard.ArgumentNotNull(templateId, nameof(templateId));
+            Guard.ArgumentNotNull(documentName, nameof(documentName));
+
             var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId}/copy");
-            var requestBody = new CreateDocumentFromTemplateRequest(documentName);
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestUrl,
                 Token = Token,
-                Content = new JsonHttpContent(requestBody)
+                Content = new JsonHttpContent(new CreateDocumentFromTemplateRequest(documentName))
             };
 
             return await SignNowClient
