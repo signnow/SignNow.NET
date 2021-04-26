@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using SignNow.Net.Model;
-using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Examples.Documents
 {

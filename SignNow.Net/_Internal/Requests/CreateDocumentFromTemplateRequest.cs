@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.Requests
+namespace SignNow.Net.Internal.Requests
 {
     public class CreateDocumentFromTemplateRequest
     {
