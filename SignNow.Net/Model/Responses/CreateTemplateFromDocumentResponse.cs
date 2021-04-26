@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model
+namespace SignNow.Net.Model.Responses
 {
     /// <summary>
     /// Represents response from SignNow API for Create Template from Document request.
