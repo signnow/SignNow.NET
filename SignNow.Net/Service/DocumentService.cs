@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Internal.Helpers;
 using System.Net.Http;
+using SignNow.Net._Internal.Requests;
 using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Service
