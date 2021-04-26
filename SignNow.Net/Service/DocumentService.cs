@@ -210,7 +210,6 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         public async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default)
         {
-            Guard.ArgumentNotNull(documentId, nameof(documentId));
             Guard.ArgumentNotNull(templateName, nameof(templateName));
 
             var requestUrl = new Uri(ApiBaseUrl, $"/template");
@@ -218,7 +217,7 @@ namespace SignNow.Net.Service
             {
                 RequestUrl = requestUrl,
                 Token = Token,
-                Content = new JsonHttpContent(new CreateTemplateFromDocumentRequest(templateName, documentId)),
+                Content = new JsonHttpContent(new CreateTemplateFromDocumentRequest(templateName, documentId.ValidateId())),
             };
 
             return await SignNowClient
@@ -227,14 +226,11 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId,
-            string documentName,
-            CancellationToken cancellationToken = default)
+        public async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default)
         {
-            Guard.ArgumentNotNull(templateId, nameof(templateId));
             Guard.ArgumentNotNull(documentName, nameof(documentName));
 
-            var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId}/copy");
+            var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/copy");
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestUrl,
