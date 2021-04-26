@@ -45,7 +45,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Check the status of the document][check_sign_status example]
     - [Template](#template)
         - [Create a template by flattening an existing document](#create-template)
-        - [Create document from the template](#create_doc)
+        - [Create document from the template](#create-doc)
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
