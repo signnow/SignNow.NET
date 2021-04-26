@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Internal.Requests
 {
-    public class CreateDocumentFromTemplateRequest
+    internal class CreateDocumentFromTemplateRequest
     {
         /// <summary>
         /// The new document name.
