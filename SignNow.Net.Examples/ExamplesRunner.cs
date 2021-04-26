@@ -414,7 +414,7 @@ namespace SignNow.Net.Examples
         }
 
         /// <summary>
-        /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
+        /// Run test for example: <see cref="DocumentExamples.CreateDocumentFromTheTemplate"/>
         /// </summary>
         [TestMethod]
         public async Task CreateDocumentFromTemplateTest()
@@ -422,6 +422,7 @@ namespace SignNow.Net.Examples
             var testDocumentId = DocumentExamples
                 .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result?.Id;
             disposableDocumentId = testDocumentId;
+
             var templateId = (await testContext.Documents.CreateTemplateFromDocumentAsync(testDocumentId, "TemplateName")).Id;
             var documentName = "Document Name";
             var result = await DocumentExamples.CreateDocumentFromTheTemplate(templateId, documentName, token);
