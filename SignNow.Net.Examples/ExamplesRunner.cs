@@ -9,6 +9,7 @@ using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
@@ -384,6 +385,32 @@ namespace SignNow.Net.Examples
 
             // Finally - send verification email to User
             UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
+        }
+
+        #endregion
+
+        #region Templates Examples
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public async Task CreateTemplateFromDocumentTest()
+        {
+            var document = DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result;
+            disposableDocumentId = document?.Id;
+
+            var templateName = "Template Name";
+            var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token);
+            var template = await testContext.Documents.GetDocumentAsync(result.Id);
+
+            Assert.IsFalse(document.IsTemplate);
+            Assert.IsNotNull(template?.Id);
+            Assert.AreEqual(templateName, template.Name);
+            Assert.IsTrue(template.IsTemplate);
+
+            await testContext.Documents.DeleteDocumentAsync(template.Id);
         }
 
         #endregion
