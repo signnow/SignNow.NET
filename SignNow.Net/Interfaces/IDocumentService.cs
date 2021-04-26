@@ -115,8 +115,9 @@ namespace SignNow.Net.Interfaces
         /// <param name="templateId">Identity of the template which is the source of a document.</param>
         /// <param name="documentName">The name of new document</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
+        /// <returns>Returns identity of new Document</returns>
+        /// <exception cref="System.ArgumentException">If `<paramref name="templateId"/>` is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If `<paramref name="documentName"/>` is null.</exception>
         Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default);
     }
 }
