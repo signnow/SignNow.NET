@@ -103,10 +103,11 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Creates a template by flattening an existing document.
         /// </summary>
-        /// <param name="request">Create template request <see cref="CreateTemplateFromDocumentRequest"/>type</param>
+        /// <param name="documentId">Identity of the document</param>
+        /// <param name="templateName">The new template name</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
-        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(CreateTemplateFromDocumentRequest request, CancellationToken cancellationToken = default);
+        Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default);
     }
 }

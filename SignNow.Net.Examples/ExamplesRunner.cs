@@ -134,29 +134,6 @@ namespace SignNow.Net.Examples
         }
 
         /// <summary>
-        /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
-        /// </summary>
-        [TestMethod]
-        [DataRow("Template Name")]
-        public async Task CreateTemplateFromDocumentTest(string templateName)
-        {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = await testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf");
-
-            disposableDocumentId = document?.Id;
-
-            var request = new CreateTemplateFromDocumentRequest(templateName, document?.Id);
-            var result = await DocumentExamples.CreateTemplateFromTheDocument(request, token);
-            var template = await testContext.Documents.GetDocumentAsync(result.Id);
-
-            Assert.IsNotNull(template?.Id);
-            Assert.AreEqual(templateName, template.Name);
-
-            await testContext.Documents.DeleteDocumentAsync(template.Id);
-        }
-
-        /// <summary>
         /// Run test for example: <see cref="DocumentExamples.DownloadSignedDocument"/>
         /// </summary>
         [TestMethod]
@@ -408,6 +385,31 @@ namespace SignNow.Net.Examples
 
             // Finally - send verification email to User
             UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
+        }
+
+        #endregion
+
+        #region Templates Examples
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
+        /// </summary>
+        [TestMethod]
+        public async Task CreateTemplateFromDocumentTest()
+        {
+            var document = DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result;
+            disposableDocumentId = document?.Id;
+
+            var templateName = "Template Name";
+            var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token);
+            var template = await testContext.Documents.GetDocumentAsync(result.Id);
+
+            Assert.IsNotNull(template?.Id);
+            Assert.AreEqual(templateName, template.Name);
+            Assert.IsTrue(template.IsTemplate);
+
+            await testContext.Documents.DeleteDocumentAsync(template.Id);
         }
 
         #endregion
