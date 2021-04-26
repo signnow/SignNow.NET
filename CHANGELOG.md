@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## Added
 - `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
+- `IDocumentService.CreateDocumentFromTemplateAsync` that allows to create document from the template
 
 
 ## [0.7.0] - 2021-03-28

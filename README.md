@@ -45,6 +45,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Check the status of the document][check_sign_status example]
     - [Template](#template)
         - [Create a template by flattening an existing document](#create-template)
+        - [Create document from the template][create_document example]
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -511,7 +512,7 @@ More examples: [Get document history][document_history example]
 ## <a name="template"></a>Template
 ### <a name="create-template"></a>Create Template by flattening the existing Document
 
-Set required TemplateName and DocumentId properties in request to create the SignNow Template.
+Set required templateName and documentId parameters to create the SignNow Template.
 
 ```csharp
 public static class DocumentExamples
@@ -536,7 +537,7 @@ public static class DocumentExamples
 }
 ```
 
-More examples: [Create a template by flattening an existing document][create_template example]
+More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
@@ -621,3 +622,4 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
+[create_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateDocumentFromTheTemplate.cs

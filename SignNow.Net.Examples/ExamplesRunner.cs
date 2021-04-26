@@ -413,6 +413,29 @@ namespace SignNow.Net.Examples
             await testContext.Documents.DeleteDocumentAsync(template.Id);
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.CreateDocumentFromTheTemplate"/>
+        /// </summary>
+        [TestMethod]
+        public async Task CreateDocumentFromTemplateTest()
+        {
+            var testDocumentId = DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result?.Id;
+            disposableDocumentId = testDocumentId;
+
+            var templateId = (await testContext.Documents.CreateTemplateFromDocumentAsync(testDocumentId, "TemplateName")).Id;
+            var documentName = "Document Name";
+            var result = await DocumentExamples.CreateDocumentFromTheTemplate(templateId, documentName, token);
+            var document = await testContext.Documents.GetDocumentAsync(result.Id);
+
+            Assert.IsNotNull(document?.Id);
+            Assert.IsFalse(document.IsTemplate);
+            Assert.AreEqual(documentName, document.Name);
+
+            await testContext.Documents.DeleteDocumentAsync(document.Id);
+            await testContext.Documents.DeleteDocumentAsync(templateId);
+        }
+
         #endregion
     }
 }
