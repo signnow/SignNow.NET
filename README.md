@@ -43,7 +43,8 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
-        - [Create a template by flattening an existing document][create_template example]
+    - [Template](#template)
+        - [Create a template by flattening an existing document](#create-template)
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -204,34 +205,6 @@ public static class DocumentExamples
 ```
 
 More examples: [Upload document][upload_document example], [Upload document with field extract][upload_doc_extract example]
-
-### <a name="create-template"></a>Create Template by flattening the existing Document
-
-Set required TemplateName and DocumentId properties in request to create the SignNow Template.
-
-```csharp
-public static partial class DocumentExamples
-    {
-        /// <summary>
-        /// Creates a template by flattening an existing document.
-        /// </summary>
-        /// <param name="request">Request model</param>
-        /// <param name="token">Access token</param>
-        /// <returns><see cref="DocumentStatus"/></returns>
-        public static async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromTheDocument(CreateTemplateFromDocumentRequest request, Token token)
-        {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
-            var createTemplateResult = await signNowContext.Documents
-                .CreateTemplateFromDocumentAsync(request).ConfigureAwait(false);
-
-            return createTemplateResult;
-        }
-    }
-```
-
-More examples: [Create a template by flattening an existing document][create_template example]
 
 ### <a name="download-document"></a>Download a document from SignNow
 
@@ -535,6 +508,36 @@ public static partial class DocumentExamples
 
 More examples: [Get document history][document_history example]
 
+## <a name="template"></a>Template
+### <a name="create-template"></a>Create Template by flattening the existing Document
+
+Set required TemplateName and DocumentId properties in request to create the SignNow Template.
+
+```csharp
+public static class DocumentExamples
+{
+    /// <summary>
+    /// Creates a template by flattening an existing document.
+    /// </summary>
+    /// <param name="documentId">Identity of the document which is the source of a template</param>
+    /// <param name="templateName">The new template name</param>
+    /// <param name="token">Access token</param>
+    /// <returns><see cref="CreateTemplateFromDocumentResponse"/>Returns a new template ID</returns>
+    public static async Task<CreateTemplateFromDocumentResponse>
+        CreateTemplateFromTheDocument(string documentId, string templateName, Token token)
+    {
+        // using token from the Authorization step
+        var signNowContext = new SignNowContext(token);
+    
+        return await signNowContext.Documents
+            .CreateTemplateFromDocumentAsync(documentId, templateName)
+            .ConfigureAwait(false);    
+    }
+}
+```
+
+More examples: [Create a template by flattening an existing document][create_template example]
+
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
 
@@ -615,4 +618,6 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
+
+<!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
