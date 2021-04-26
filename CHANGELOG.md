@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+
+## [0.8.0] - 2021-04-26
 ## Added
 - `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
 - `IDocumentService.CreateDocumentFromTemplateAsync` that allows to create document from the template
-
 
 ## [0.7.0] - 2021-03-28
 ## Added
@@ -127,7 +128,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.8.0...HEAD
+[0.8.0]: https://github.com/signnow/SignNow.NET/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...0.7.0
 [0.6.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...0.6.0-beta
 [0.5.2-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.1-beta...0.5.2-beta
