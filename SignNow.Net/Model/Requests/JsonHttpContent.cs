@@ -3,9 +3,9 @@ using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 
-namespace SignNow.Net.Internal.Requests
+namespace SignNow.Net.Model.Requests
 {
-    internal class JsonHttpContent : IContent
+    public class JsonHttpContent : IContent
     {
         private readonly object contentBody;
 

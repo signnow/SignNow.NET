@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Net.Http;
 using SignNow.Net.Interfaces;
 
-namespace SignNow.Net.Internal.Requests
+namespace SignNow.Net.Model.Requests
 {
     /// <summary>
     /// A container for name/value pairs encoded with <c>application/x-www-form-urlencoded</c>
     /// </summary>
-    internal class FormUrlEncodedHttpContent : IContent
+    public class FormUrlEncodedHttpContent : IContent
     {
         private readonly IDictionary<string, string> formData;
 

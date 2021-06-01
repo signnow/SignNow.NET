@@ -2,6 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using Method = System.Net.Http.HttpMethod;
 
 namespace UnitTests

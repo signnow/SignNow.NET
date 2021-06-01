@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net
 {
