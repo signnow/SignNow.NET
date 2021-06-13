@@ -30,6 +30,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Sends verification email to a user][send_verification example]
         - [Change User details][update_user example]
         - [Sends password reset link via email][reset_password example]
+        - [Get modified documents][get_modified_docs example]
     - [Document](#document)
         - [Upload a document to SignNow](#upload-document)
         - [Upload a document & Extract Fields][upload_doc_extract example]
@@ -169,7 +170,7 @@ public static partial class UserExamples
 }
 ```
 
-More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example]
+More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example], [Get modified documents][get_modified_docs example]
 
 ## <a name="document"></a>Document
 
@@ -602,6 +603,7 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/SendVerificationEmailToUser.cs
 [update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#18
 [reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#40
+[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs#15
 
 <!-- Documents -->
 [upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#33
