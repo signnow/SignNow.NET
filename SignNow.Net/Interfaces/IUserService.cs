@@ -51,7 +51,6 @@ namespace SignNow.Net.Interfaces
         /// <returns></returns>
         Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default);
 
-
         /// <summary>
         /// Returns an enumerable of user's documents that have been modified
         /// (added fields, texts, signatures, etc.) in descending order by modified date
@@ -59,6 +58,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="perPage">How many document objects to display per page in response. By default, it's 15, maximum 100.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int? perPage = 15, CancellationToken cancellationToken = default);
+        Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int perPage = 15, CancellationToken cancellationToken = default);
     }
 }

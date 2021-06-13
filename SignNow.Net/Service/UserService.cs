@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
@@ -223,17 +225,43 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="IUserService.GetModifiedDocumentsAsync" />
-        public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int? perPage = 15, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int perPage = 15, CancellationToken cancellationToken = default)
         {
-            var requestOptions = new GetHttpRequestOptions
-            {
-                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentsv2?per_page={perPage}"),
-                Token = Token
-            };
+            bool hasMorePages = true;
+            int page = 1;
 
-            return await SignNowClient
-                .RequestAsync<IEnumerable<SignNowDocument>>(requestOptions, cancellationToken)
-                .ConfigureAwait(false);
+            var documents = new List<SignNowDocument>();
+
+            while (hasMorePages)
+            {
+                var requestOptions = new GetHttpRequestOptions
+                {
+                    RequestUrl = new Uri(ApiBaseUrl, $"/user/documentsv2?per_page={perPage}&page={page}"),
+                    Token = Token
+                };
+
+                try
+                {
+                    var request = await SignNowClient
+                        .RequestAsync<IList<SignNowDocument>>(requestOptions, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    documents.AddRange(request);
+
+                    if (request.Count < perPage)
+                    {
+                        hasMorePages = false;
+                    }
+
+                    page += 1;
+                }
+                catch (SignNowException ex) when (ex.HttpStatusCode == HttpStatusCode.BadRequest)
+                {
+                    hasMorePages = false;
+                }
+            }
+
+            return documents;
         }
     }
 }
