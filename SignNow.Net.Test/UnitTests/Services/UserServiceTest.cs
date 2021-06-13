@@ -3,10 +3,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Service;
-using SignNow.Net.Test;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
 
@@ -201,6 +201,47 @@ namespace UnitTests
                 "https://app-eval.signnow.com/webapp/document/9dbdffc9c5af49809d4dfdf613e9835b50a9582f?access_token=f108a715acd9272b7b25a3ecd2bc06962148de40b2ecdd08c05fbf41994b98b6&route=fieldinvite";
 
             Assert.AreEqual(link, embeddedLink.Link.AbsoluteUri);
+        }
+
+        [TestMethod]
+        public void GetUserModifiedDocuments()
+        {
+            var mockDocuments = new SignNowDocumentFaker().Generate(5);
+            var mockJsonResponse = TestUtils.SerializeToJsonFormatted(mockDocuments);
+
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(mockJsonResponse));
+            var modifiedDocuments = userService.GetModifiedDocumentsAsync().Result;
+
+            Assert.AreEqual(5, modifiedDocuments.Count());
+        }
+
+        [TestMethod]
+        public void ThrowExceptionWithNotValidParams()
+        {
+            var jsonError = @"
+            {
+                ""errors"": [
+                    {
+                        ""code"": 13003002,
+                        ""message"": ""Query parameter `per_page` must be more than 0""
+                    }
+                ]
+            }";
+
+            var signNowClientMock = SignNowClientMock(jsonError, HttpStatusCode.BadRequest);
+            var userService = new UserService(ApiBaseUrl, new Token(), signNowClientMock);
+
+            var exception = Assert
+                .ThrowsException<AggregateException>(
+                    () => userService.GetModifiedDocumentsAsync().Result);
+
+            var expectedMessage = "Query parameter `per_page` must be more than 0";
+
+            Assert.IsInstanceOfType(exception.InnerException, typeof(SignNowException));
+#if NETFRAMEWORK
+            expectedMessage = "One or more errors occurred.";
+#endif
+            StringAssert.Contains(exception.Message, expectedMessage);
         }
     }
 }

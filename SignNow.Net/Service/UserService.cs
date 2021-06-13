@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
@@ -220,6 +222,49 @@ namespace SignNow.Net.Service
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IUserService.GetModifiedDocumentsAsync" />
+        public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int perPage = 15, CancellationToken cancellationToken = default)
+        {
+            bool hasMorePages = true;
+            int page = 1;
+
+            var documents = new List<SignNowDocument>();
+
+            while (hasMorePages)
+            {
+                var requestOptions = new GetHttpRequestOptions
+                {
+                    RequestUrl = new Uri(ApiBaseUrl, $"/user/documentsv2?per_page={perPage}&page={page}"),
+                    Token = Token
+                };
+
+                try
+                {
+                    var request = await SignNowClient
+                        .RequestAsync<IList<SignNowDocument>>(requestOptions, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    documents.AddRange(request);
+
+                    if (request.Count < perPage)
+                    {
+                        hasMorePages = false;
+                    }
+
+                    page += 1;
+                }
+                catch (SignNowException ex) when (ex.HttpStatusCode == HttpStatusCode.BadRequest)
+                {
+                    hasMorePages = false;
+
+                    if (documents.Count == 0)
+                        throw;
+                }
+            }
+
+            return documents;
         }
     }
 }

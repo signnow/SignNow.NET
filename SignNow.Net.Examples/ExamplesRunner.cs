@@ -9,7 +9,6 @@ using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
-using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
@@ -126,11 +125,11 @@ namespace SignNow.Net.Examples
 
             disposableDocumentId = documentWithFields?.Id;
 
-            using var documentFields = documentWithFields.Fields.GetEnumerator();
-            documentFields.MoveNext();
+            using var documentFields = documentWithFields?.Fields.GetEnumerator();
+            documentFields?.MoveNext();
 
-            Assert.AreEqual(FieldType.Text, documentFields.Current.Type);
-            Assert.IsTrue(documentWithFields.Fields.Count > 0);
+            Assert.AreEqual(FieldType.Text, documentFields?.Current?.Type);
+            Assert.IsTrue(documentWithFields?.Fields.Count > 0);
         }
 
         /// <summary>
@@ -165,7 +164,7 @@ namespace SignNow.Net.Examples
             disposableDocumentId = document?.Id;
 
             var signingLink = DocumentExamples
-                .CreateSigningLinkToTheDocument(document.Id, token).Result;
+                .CreateSigningLinkToTheDocument(document?.Id, token).Result;
 
             Assert.IsNotNull(signingLink.Url);
             Assert.IsNotNull(signingLink.AnonymousUrl);
@@ -186,7 +185,7 @@ namespace SignNow.Net.Examples
 
             disposableDocumentId = document?.Id;
 
-            var documentStatus = DocumentExamples.CheckTheStatusOfTheDocument(document.Id, token).Result;
+            var documentStatus = DocumentExamples.CheckTheStatusOfTheDocument(document?.Id, token).Result;
 
             Assert.AreEqual(DocumentStatus.NoInvite, documentStatus);
         }
@@ -385,6 +384,27 @@ namespace SignNow.Net.Examples
 
             // Finally - send verification email to User
             UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="UserExamples.GetUserModifiedDocuments"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetUserModifiedDocumentsTest()
+        {
+            var perPage = 25;
+            var SignNowDocumentsAsync = await UserExamples
+                .GetUserModifiedDocuments(perPage, token)
+                .ConfigureAwait(false);
+
+            var modifiedDocuments = SignNowDocumentsAsync.ToList();
+            foreach (var document in modifiedDocuments)
+            {
+                Assert.AreEqual(credentials.Login, document.Owner);
+            }
+
+            Assert.IsNotNull(modifiedDocuments.Count);
+            Console.WriteLine($"Total modified documents: {modifiedDocuments.Count}");
         }
 
         #endregion

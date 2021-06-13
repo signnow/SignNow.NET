@@ -2,7 +2,6 @@
 
 [![Build status][actions build badge]][actions build link]
 [![Codecov][codecov badge]][codecov link]
-[![Codacy][codacy badge]][codacy link]
 [![NuGet Version][nuget badge]][nuget link]
 [![NuGet Downloads][nuget downloads badge]][nuget downloads link]
 [![License][license badge]](LICENSE)
@@ -30,6 +29,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Sends verification email to a user][send_verification example]
         - [Change User details][update_user example]
         - [Sends password reset link via email][reset_password example]
+        - [Get modified documents][get_modified_docs example]
     - [Document](#document)
         - [Upload a document to SignNow](#upload-document)
         - [Upload a document & Extract Fields][upload_doc_extract example]
@@ -169,7 +169,7 @@ public static partial class UserExamples
 }
 ```
 
-More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example]
+More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example], [Get modified documents][get_modified_docs example]
 
 ## <a name="document"></a>Document
 
@@ -246,9 +246,8 @@ Merges two or more SignNow documents into one single PDF file.
 
 Steps:
 
-▶ Upload documents or Get document IDs of the documents you’d like to merge
-
-▶ Merge the documents
+- Upload documents or Get document IDs of the documents you’d like to merge
+- Merge the documents
 
 Merged document will be saved in PDF file format.
 
@@ -286,9 +285,8 @@ Having followed the link, signers can click anywhere on the document to sign it.
 
 Steps:
 
-▶ Upload a document or Get the ID of the document you’d like to have signed
-
-▶ Send a signing link
+- Upload a document or Get the ID of the document you’d like to have signed
+- Send a signing link
 
 ```csharp
 public static partial class DocumentExamples
@@ -322,7 +320,7 @@ More examples: [Create signing link][create_sign_lnk example], [Check signing st
 
 ### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
 
-*Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
+*Freeform invite* - an invitation to sign a document which doesn't contain any fillable fields.
 
 Simply upload a document and send it for signature right away. No need for adding fields and configuring roles.
 Just add the signer's email address and customize the message in your email.
@@ -582,7 +580,6 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [codecov badge]: https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report"
 [codecov link]: https://codecov.io/gh/signnow/SignNow.NET
 [codacy badge]: https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24 "Codacy Repository certification"
-[codacy link]: https://app.codacy.com/manual/AlexNDRmac/SignNow.NET?utm_source=github.com&utm_medium=referral&utm_content=signnow/SignNow.NET&utm_campaign=Badge_Grade_Dashboard
 [nuget badge]: https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version"
 [nuget link]: https://www.nuget.org/packages/SignNow.Net
 [nuget downloads badge]: https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square
@@ -604,6 +601,7 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/SendVerificationEmailToUser.cs
 [update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#18
 [reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#40
+[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs#15
 
 <!-- Documents -->
 [upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#33

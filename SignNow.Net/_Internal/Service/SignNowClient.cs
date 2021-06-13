@@ -16,7 +16,7 @@ using System.IO;
 
 namespace SignNow.Net.Internal.Service
 {
-    class SignNowClient : ISignNowClient
+    internal class SignNowClient : ISignNowClient
     {
         private static string sdkUserAgentString = string.Empty;
 
@@ -97,30 +97,42 @@ namespace SignNow.Net.Internal.Service
 
             DateTime startTime = DateTime.Now;
 
-            using (var request = CreateHttpRequest(requestOptions))
+            try
             {
-                try
-                {
-                    var response = await HttpClient
-                        .SendAsync(request, completionOption, cancellationToken)
-                        .ConfigureAwait(false);
+                var response = await ProcessRequest(requestOptions, completionOption, cancellationToken)
+                    .ConfigureAwait(false);
 
-                    await ProcessErrorResponse(requestOptions, response).ConfigureAwait(false);
+                await ProcessErrorResponse(requestOptions, response).ConfigureAwait(false);
 
-                    return await adapter.Adapt(response.Content).ConfigureAwait(false);
-                }
-                catch (TaskCanceledException ex)
-                {
-                    var requestTime = (DateTime.Now - startTime).TotalSeconds;
-                    var message = string.Format(CultureInfo.CurrentCulture,
-                        ExceptionMessages.UnableToProcessRequest,
-                        requestOptions.HttpMethod.Method,
-                        requestOptions.RequestUrl.OriginalString,
-                        requestTime);
-
-                    throw new SignNowException(message, ex);
-                }
+                return await adapter.Adapt(response.Content).ConfigureAwait(false);
             }
+            catch (TaskCanceledException ex)
+            {
+                var requestTime = (DateTime.Now - startTime).TotalSeconds;
+                var message = string.Format(CultureInfo.CurrentCulture,
+                    ExceptionMessages.UnableToProcessRequest,
+                    requestOptions.HttpMethod.Method,
+                    requestOptions.RequestUrl.OriginalString,
+                    requestTime);
+
+                throw new SignNowException(message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Make Http request with specified options.
+        /// </summary>
+        /// <param name="requestOptions">request basic params (Url, Method)</param>
+        /// <param name="completionOption"><inheritdoc cref="HttpCompletionOption"/></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> ProcessRequest(RequestOptions requestOptions, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
+        {
+            using var request = CreateHttpRequest(requestOptions);
+
+            return await HttpClient
+                .SendAsync(request, completionOption, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
