@@ -53,11 +53,12 @@ namespace SignNow.Net.Interfaces
 
 
         /// <summary>
-        /// Returns an enumerable of user's documents that have been modified (added fields, texts, signatures, etc.) in descending order by modified date
+        /// Returns an enumerable of user's documents that have been modified
+        /// (added fields, texts, signatures, etc.) in descending order by modified date
         /// </summary>
-        /// <param name="perPage">How many document objects to display per page in response. By default, it’s 15, maximum 100.</param>
+        /// <param name="perPage">How many document objects to display per page in response. By default, it's 15, maximum 100.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsForUser(int? perPage = 15, CancellationToken cancellationToken = default);
+        Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int? perPage = 15, CancellationToken cancellationToken = default);
     }
 }

@@ -222,19 +222,18 @@ namespace SignNow.Net.Service
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="IUserService.GetModifiedDocumentsForUser(int?, CancellationToken)" />
-        public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsForUser(int? perPage = 15, CancellationToken cancellationToken = default)
+        /// <inheritdoc cref="IUserService.GetModifiedDocumentsAsync" />
+        public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int? perPage = 15, CancellationToken cancellationToken = default)
         {
-            var bearer = Token;
-            bearer.TokenType = TokenType.Bearer;
-
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl,$"/user/documentsv2?per_page={perPage}"),
-                Token = bearer
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentsv2?per_page={perPage}"),
+                Token = Token
             };
 
-            return await SignNowClient.RequestAsync<IEnumerable<SignNowDocument>>(requestOptions, cancellationToken).ConfigureAwait(false);
+            return await SignNowClient
+                .RequestAsync<IEnumerable<SignNowDocument>>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }
