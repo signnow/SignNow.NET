@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Service;
-using SignNow.Net.Test;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
 
