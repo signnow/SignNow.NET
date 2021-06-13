@@ -246,9 +246,8 @@ Merges two or more SignNow documents into one single PDF file.
 
 Steps:
 
-▶ Upload documents or Get document IDs of the documents you’d like to merge
-
-▶ Merge the documents
+- Upload documents or Get document IDs of the documents you’d like to merge
+- Merge the documents
 
 Merged document will be saved in PDF file format.
 
@@ -286,9 +285,8 @@ Having followed the link, signers can click anywhere on the document to sign it.
 
 Steps:
 
-▶ Upload a document or Get the ID of the document you’d like to have signed
-
-▶ Send a signing link
+- Upload a document or Get the ID of the document you’d like to have signed
+- Send a signing link
 
 ```csharp
 public static partial class DocumentExamples
@@ -322,7 +320,7 @@ More examples: [Create signing link][create_sign_lnk example], [Check signing st
 
 ### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
 
-*Freeform invite* - an invitation to sign a document which doesn’t contain any fillable fields.
+*Freeform invite* - an invitation to sign a document which doesn't contain any fillable fields.
 
 Simply upload a document and send it for signature right away. No need for adding fields and configuring roles.
 Just add the signer's email address and customize the message in your email.
