@@ -258,6 +258,9 @@ namespace SignNow.Net.Service
                 catch (SignNowException ex) when (ex.HttpStatusCode == HttpStatusCode.BadRequest)
                 {
                     hasMorePages = false;
+
+                    if (documents.Count == 0)
+                        throw;
                 }
             }
 

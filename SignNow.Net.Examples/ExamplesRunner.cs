@@ -386,6 +386,9 @@ namespace SignNow.Net.Examples
             UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="UserExamples.GetUserModifiedDocuments"/>
+        /// </summary>
         [TestMethod]
         public async Task GetUserModifiedDocumentsTest()
         {
