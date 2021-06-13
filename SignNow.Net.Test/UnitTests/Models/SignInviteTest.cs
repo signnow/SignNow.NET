@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 using SignNow.Net.Test;
+using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests
 {
@@ -104,6 +105,31 @@ namespace UnitTests
                 .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, "not-valid-email.com");
 
             StringAssert.Contains(exception.Message, errorMessage);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenDocumentDoesNotHaveRoles()
+        {
+            var document = new SignNowDocumentFaker().Generate();
+
+            var exception = Assert.ThrowsException<ArgumentException>(
+                () => new EmbeddedSigningInvite(document));
+
+            Assert.AreEqual("This document does not contain Roles.", exception.Message);
+        }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenInviteIsAlreadyExistsForDocument()
+        {
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(2))
+                .RuleFor(o => o.FieldInvites, new FieldInviteFaker().Generate(2))
+                .Generate();
+
+            var exception = Assert.ThrowsException<ArgumentException>(
+                () => new EmbeddedSigningInvite(document));
+
+            Assert.AreEqual("An invite already exists for this document.", exception.Message);
         }
     }
 }
