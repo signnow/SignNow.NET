@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-
+## Added
+- `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
 
 ## [0.8.0] - 2021-04-26
 ## Added
