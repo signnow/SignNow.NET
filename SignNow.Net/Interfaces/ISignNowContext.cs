@@ -1,7 +1,7 @@
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface that manages other SignNow interfaces: IDocumentService, IUserService, ISignInvite.
+    /// Interface that manages other SignNow interfaces: IDocumentService, IUserService, ISignInvite, IFolderService.
     /// <para>It contains:</para>
     /// <list type="bullet">
     /// <item>
@@ -16,6 +16,10 @@ namespace SignNow.Net.Interfaces
     ///     <description><see cref="ISignInvite"/> interface for any operations with an Invite in SignNow:
     ///         creating or canceling the invite to sign a document, checking status of the invite, etc.</description>
     /// </item>
+    /// <item>
+    ///     <description><see cref="IFolderService"/> interface for any operations with a Folders in SignNow:
+    ///         can be used to create, view, rename or delete a folders.</description>
+    /// </item>
     /// </list>
     /// </summary>
     public interface ISignNowContext
@@ -28,5 +32,8 @@ namespace SignNow.Net.Interfaces
 
         /// <inheritdoc cref="ISignInvite"/>
         ISignInvite Invites { get; }
+
+        /// <inheritdoc cref="IFolderService"/>
+        IFolderService Folders { get; }
     }
 }
