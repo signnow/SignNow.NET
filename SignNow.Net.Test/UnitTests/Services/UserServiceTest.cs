@@ -216,6 +216,18 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void GetUserDocuments()
+        {
+            var mockDocuments = new SignNowDocumentFaker().Generate(5);
+            var mockJsonResponse = TestUtils.SerializeToJsonFormatted(mockDocuments);
+
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(mockJsonResponse));
+            var userDocuments = userService.GetUserDocumentsAsync().Result;
+
+            Assert.AreEqual(5, userDocuments.Count());
+        }
+
+        [TestMethod]
         public void ThrowExceptionWithNotValidParams()
         {
             var jsonError = @"

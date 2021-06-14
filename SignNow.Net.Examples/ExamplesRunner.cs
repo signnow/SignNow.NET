@@ -352,7 +352,7 @@ namespace SignNow.Net.Examples
                 .GenerateLinkForEmbeddedInvite(documentWithEmbed, 30, token).Result;
 
             Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
-            Console.WriteLine($"Embedded link: {embeddedLink.Link.AbsoluteUri}");
+            Console.WriteLine($@"Embedded link: {embeddedLink.Link.AbsoluteUri}");
 
             // Cancel embedded invite
             var cancelled = InviteExamples.CancelEmbeddedInvite(documentWithEmbed, token);
@@ -404,7 +404,28 @@ namespace SignNow.Net.Examples
             }
 
             Assert.IsNotNull(modifiedDocuments.Count);
-            Console.WriteLine($"Total modified documents: {modifiedDocuments.Count}");
+            Console.WriteLine($@"Total modified documents: {modifiedDocuments.Count}");
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="UserExamples.GetUserDocuments"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetUserDocumentsTest()
+        {
+            var perPage = 25;
+            var SignNowDocumentsAsync = await UserExamples
+                .GetUserDocuments(perPage, token)
+                .ConfigureAwait(false);
+
+            var userDocuments = SignNowDocumentsAsync.ToList();
+            foreach (var document in userDocuments)
+            {
+                Assert.AreEqual(credentials.Login, document.Owner);
+            }
+
+            Assert.IsNotNull(userDocuments.Count);
+            Console.WriteLine($@"Total modified documents: {userDocuments.Count}");
         }
 
         #endregion

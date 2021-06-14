@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 ## Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
+- `IUserService.GetUserDocumentsAsync` that allows to get all information of user's documents that were not modified yet
 
 ## [0.8.0] - 2021-04-26
 ## Added
