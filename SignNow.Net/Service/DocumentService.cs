@@ -22,7 +22,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
-        public DocumentService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
+        public DocumentService(Uri baseApiUrl, Token token) : this(baseApiUrl, token, null)
         {
         }
 

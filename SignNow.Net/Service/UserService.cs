@@ -227,28 +227,52 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.GetModifiedDocumentsAsync" />
         public async Task<IEnumerable<SignNowDocument>> GetModifiedDocumentsAsync(int perPage = 15, CancellationToken cancellationToken = default)
         {
+            const string RelativeUrl = "/user/documentsv2";
+
+            return await GetDocumentsAsync(RelativeUrl, perPage, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IUserService.GetUserDocumentsAsync" />
+        public async Task<IEnumerable<SignNowDocument>> GetUserDocumentsAsync(int perPage = 15, CancellationToken cancellationToken = default)
+        {
+            const string RelativeUrl = "/user/documents";
+
+            return await GetDocumentsAsync(RelativeUrl, perPage, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Returns an enumerable of user's documents.
+        /// </summary>
+        /// <param name="relativeUrl">Relative URL for documents (modified or not).</param>
+        /// <param name="perPage">How many document objects to display per page in response.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        private async Task<IEnumerable<SignNowDocument>> GetDocumentsAsync(string relativeUrl, int perPage = 15, CancellationToken cancellationToken = default)
+        {
             bool hasMorePages = true;
             int page = 1;
 
-            var documents = new List<SignNowDocument>();
+            var documentsResponse = new List<SignNowDocument>();
 
             while (hasMorePages)
             {
                 var requestOptions = new GetHttpRequestOptions
                 {
-                    RequestUrl = new Uri(ApiBaseUrl, $"/user/documentsv2?per_page={perPage}&page={page}"),
+                    RequestUrl = new Uri(ApiBaseUrl, $"{relativeUrl}?per_page={perPage}&page={page}"),
                     Token = Token
                 };
 
                 try
                 {
-                    var request = await SignNowClient
+                    var documents = await SignNowClient
                         .RequestAsync<IList<SignNowDocument>>(requestOptions, cancellationToken)
                         .ConfigureAwait(false);
 
-                    documents.AddRange(request);
+                    documentsResponse.AddRange(documents);
 
-                    if (request.Count < perPage)
+                    if (documents.Count < perPage)
                     {
                         hasMorePages = false;
                     }
@@ -259,12 +283,12 @@ namespace SignNow.Net.Service
                 {
                     hasMorePages = false;
 
-                    if (documents.Count == 0)
+                    if (documentsResponse.Count == 0)
                         throw;
                 }
             }
 
-            return documents;
+            return documentsResponse;
         }
     }
 }
