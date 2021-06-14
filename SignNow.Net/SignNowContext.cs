@@ -14,6 +14,8 @@ namespace SignNow.Net
 
         public IDocumentService Documents { get; protected set; }
 
+        public IFolderService Folders { get; protected set; }
+
         public SignNowContext(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
         }
@@ -27,6 +29,7 @@ namespace SignNow.Net
             Users = new UserService(baseApiUrl, token, signNowClient);
             Invites = (ISignInvite) Users;
             Documents = new DocumentService(baseApiUrl, token, signNowClient);
+            Folders = new FolderService(baseApiUrl, token, signNowClient);
         }
     }
 }
