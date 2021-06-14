@@ -6,6 +6,9 @@ using System;
 
 namespace SignNow.Net
 {
+    /// <summary>
+    /// Service container with all SignNow services
+    /// </summary>
     public class SignNowContext : AuthorizedWebClientBase, ISignNowContext
     {
         public IUserService Users { get; protected set; }
