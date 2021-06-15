@@ -96,12 +96,12 @@ namespace SignNow.Net.Model
         /// <see cref="Folder"/> objects stored in this folder and their attributes.
         /// </summary>
         [JsonProperty("folders")]
-        public IReadOnlyCollection<Folder> Folders { get; private set; } = new List<Folder>();
+        public IReadOnlyCollection<Folder> Folders { get; internal set; } = new List<Folder>();
 
         /// <summary>
         /// <see cref="SignNowDocument"/> objects stored in this folder and their attributes.
         /// </summary>
         [JsonProperty("documents")]
-        public IReadOnlyCollection<SignNowDocument> Documents { get; private set; } = new List<SignNowDocument>();
+        public IReadOnlyCollection<SignNowDocument> Documents { get; internal set; } = new List<SignNowDocument>();
     }
 }
