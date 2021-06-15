@@ -13,6 +13,7 @@ namespace UnitTests
         {
             var folderJson = @"{
             ""id"": ""e1d8d63ba51c4009ab8241f249c908b0fd5a5e48"",
+            ""parent_id"": ""a7138ccc971e98080bfa999cc32d4bef4cca51a9"",
             ""user_id"": ""40204b3344983368bb16d61f8550f8b5edfd719b"",
             ""name"": ""Documents"",
             ""created"": ""1566560035"",
@@ -25,6 +26,7 @@ namespace UnitTests
             var folder = JsonConvert.DeserializeObject<Folder>(folderJson);
 
             Assert.AreEqual("e1d8d63ba51c4009ab8241f249c908b0fd5a5e48", folder.Id);
+            Assert.AreEqual("a7138ccc971e98080bfa999cc32d4bef4cca51a9", folder.ParentId);
             Assert.AreEqual("40204b3344983368bb16d61f8550f8b5edfd719b", folder.UserId);
             Assert.AreEqual("Documents", folder.Name);
             Assert.AreEqual("2019-08-23 11:33:55Z", folder.Created.ToString("u", CultureInfo.CurrentCulture));

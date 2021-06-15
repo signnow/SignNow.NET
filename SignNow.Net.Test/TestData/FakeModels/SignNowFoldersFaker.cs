@@ -13,6 +13,7 @@ namespace SignNow.Net.Test.FakeModels
         /// <code>
         /// {
         ///    "id": "e1d8d63ba51c4009ab8241f279c908a0fd5a5e48",
+        ///    "parent_id": "a7138ccc971e98080bfa999cc32d4bef4cca51a9",
         ///    "user_id": "8f882dc816e2ab59288a9744dd84dee3ba67c0b3",
         ///    "name": "Documents",
         ///    "created": "1566560035",
@@ -28,6 +29,7 @@ namespace SignNow.Net.Test.FakeModels
             Rules((f, o) =>
             {
                 o.Id = f.Random.Hash(40);
+                o.ParentId = f.Random.Hash(40);
                 o.UserId = f.Random.Hash(40);
                 o.Name = f.System.FileName();
                 o.Created = f.Date.Recent().ToUniversalTime();

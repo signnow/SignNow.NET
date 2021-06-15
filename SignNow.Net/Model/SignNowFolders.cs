@@ -14,6 +14,12 @@ namespace SignNow.Net.Model
         public string Id { get; set; }
 
         /// <summary>
+        /// Identifier for the parent folder that contains this folder.
+        /// </summary>
+        [JsonProperty("parent_id")]
+        public string ParentId { get; set; }
+
+        /// <summary>
         /// Identifier for the folder owner.
         /// </summary>
         [JsonProperty("user_id")]
@@ -71,12 +77,6 @@ namespace SignNow.Net.Model
     /// </summary>
     public class SignNowFolders : BaseFolder
     {
-        /// <summary>
-        /// Identifier for the parent folder that contains this folder.
-        /// </summary>
-        [JsonProperty("parent_id")]
-        public string ParentId { get; set; }
-
         /// <summary>
         /// Whether or not this is a system folder.
         /// </summary>
