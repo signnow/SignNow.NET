@@ -501,6 +501,23 @@ namespace SignNow.Net.Examples
             Assert.IsTrue(folders.Folders.Any(f => f.Name == "Templates"));
         }
 
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.GetFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetFolderTest()
+        {
+            var folders = await FolderExamples.GetAllFolders(token).ConfigureAwait(false);
+            var folderId = folders.Folders.FirstOrDefault()?.Id;
+
+            var folder = await FolderExamples
+                .GetFolder(folderId, token)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(folderId, folder.Id);
+            Assert.AreEqual(folders.Id, folder.ParentId);
+        }
+
         #endregion
     }
 }
