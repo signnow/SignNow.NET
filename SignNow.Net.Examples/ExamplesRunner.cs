@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Examples.Authentication;
 using SignNow.Net.Examples.Documents;
+using SignNow.Net.Examples.Folders;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
@@ -475,6 +476,29 @@ namespace SignNow.Net.Examples
 
             await testContext.Documents.DeleteDocumentAsync(document.Id);
             await testContext.Documents.DeleteDocumentAsync(templateId);
+        }
+
+        #endregion
+
+        #region Folder Examples
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.GetAllFolders"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetAllFoldersTest()
+        {
+            var folders = await FolderExamples
+                .GetAllFolders(token)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folders, typeof(SignNowFolders));
+            Assert.AreEqual("Root", folders.Name);
+            Assert.IsTrue(folders.SystemFolder);
+
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Documents"));
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Archive"));
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Templates"));
         }
 
         #endregion
