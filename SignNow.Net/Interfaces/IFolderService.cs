@@ -25,5 +25,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<SignNowFolders> GetAllFoldersAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns all details of a specific folder including all documents in that folder.
+        /// </summary>
+        /// <param name="folderId">ID of the folder to get details of</param>
+        /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<Folder> GetFolderAsync(string folderId, CancellationToken cancellation = default);
     }
 }
