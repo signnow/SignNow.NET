@@ -5,6 +5,7 @@ using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Service
 {
@@ -44,16 +45,21 @@ namespace SignNow.Net.Service
 
         /// <inheritdoc cref="IFolderService.GetFolderAsync"/>
         /// <exception cref="System.ArgumentException">If folder identity is not valid.</exception>
-        public async Task<Folder> GetFolderAsync(string folderId, CancellationToken cancellation = default)
+        public async Task<SignNowFolders> GetFolderAsync(string folderId, GetFolderOptions options, CancellationToken cancellation = default)
         {
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}{filters}"),
                 Token = Token
             };
 
             return await SignNowClient
-                .RequestAsync<Folder>(requestOptions, cancellation)
+                .RequestAsync<SignNowFolders>(requestOptions, cancellation)
                 .ConfigureAwait(false);
         }
     }

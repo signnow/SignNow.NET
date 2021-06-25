@@ -10,6 +10,7 @@ using SignNow.Net.Examples.Folders;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
@@ -508,12 +509,20 @@ namespace SignNow.Net.Examples
         public async Task GetFolderTest()
         {
             var folders = await FolderExamples.GetAllFolders(token).ConfigureAwait(false);
-            var folderId = folders.Folders.FirstOrDefault()?.Id;
+            var folderId = folders.Folders.FirstOrDefault(f => f.Name == "Documents")?.Id;
+
+            var filterBySigningStatus = new GetFolderOptions
+            {
+                Filters = new FolderFilters(SigningStatus.Pending)
+            };
 
             var folder = await FolderExamples
-                .GetFolder(folderId, token)
+                .GetFolder(folderId, filterBySigningStatus, token)
                 .ConfigureAwait(false);
 
+            Assert.IsTrue(folders.Documents.All(d => d.Status == DocumentStatus.Pending));
+            Assert.AreEqual(folders.TotalDocuments, folders.Documents.Count);
+            Assert.IsTrue(folder.SystemFolder);
             Assert.AreEqual(folderId, folder.Id);
             Assert.AreEqual(folders.Id, folder.ParentId);
         }

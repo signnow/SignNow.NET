@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Interfaces
 {
@@ -30,8 +31,9 @@ namespace SignNow.Net.Interfaces
         /// Returns all details of a specific folder including all documents in that folder.
         /// </summary>
         /// <param name="folderId">ID of the folder to get details of</param>
+        /// <param name="options">Folder filter and sort options</param>
         /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<Folder> GetFolderAsync(string folderId, CancellationToken cancellation = default);
+        Task<SignNowFolders> GetFolderAsync(string folderId, GetFolderOptions options = default, CancellationToken cancellation = default);
     }
 }
