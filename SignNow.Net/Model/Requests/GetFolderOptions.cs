@@ -8,6 +8,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Requests
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class GetFolderOptions
     {
         [JsonProperty("filters")]
@@ -20,6 +21,10 @@ namespace SignNow.Net.Model.Requests
         public string ToQueryString()
         {
             var filters = JsonConvert.SerializeObject(Filters);
+
+            if (string.IsNullOrEmpty(filters) || filters.ToUpperInvariant().Equals("NULL"))
+                return string.Empty;
+
             var toDictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(filters);
 
             var options = toDictionary
@@ -29,27 +34,27 @@ namespace SignNow.Net.Model.Requests
         }
     }
 
-    [JsonObject]
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public sealed class FolderFilters
     {
         /// <summary>
         /// Documents signing status to filter.
         /// </summary>
-        [JsonProperty("signing-status", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("signing-status")]
         [JsonConverter(typeof(StringEnumConverter))]
         public SigningStatus? Status { get; private set; }
 
         /// <summary>
         /// Timestamp document was updated.
         /// </summary>
-        [JsonProperty("document-updated", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("document-updated")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime? Updated { get; private set; }
 
         /// <summary>
         /// Timestamp document was created.
         /// </summary>
-        [JsonProperty("document-created", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("document-created")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime? Created { get; private set; }
 
