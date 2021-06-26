@@ -11,6 +11,7 @@ using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 
 namespace SignNow.Net.Model.Requests
 {
@@ -14,6 +12,9 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("filters")]
         public FolderFilters Filters { get; set; }
 
+        [JsonProperty("sortby")]
+        public FolderSort SortBy { get; set; }
+
         /// <summary>
         /// Converts <see cref="FolderFilters"/> to query sting
         /// </summary>
@@ -21,103 +22,38 @@ namespace SignNow.Net.Model.Requests
         public string ToQueryString()
         {
             var filters = JsonConvert.SerializeObject(Filters);
+            var sortBy = JsonConvert.SerializeObject(SortBy);
 
-            if (string.IsNullOrEmpty(filters) || filters.ToUpperInvariant().Equals("NULL"))
-                return string.Empty;
+            string filterQuery = default;
+            string sortByQuery = default;
 
-            var toDictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(filters);
+            if (!string.IsNullOrEmpty(filters) || !filters.ToUpperInvariant().Equals("NULL"))
+            {
+                filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
+                sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
+            }
 
-            var options = toDictionary
-                .Select(k => $"filters={k.Key}&filter-values={k.Value}");
+            var options = new List<string>();
+            if (!string.IsNullOrEmpty(filterQuery))
+                options.Add(filterQuery);
+
+            if (!string.IsNullOrEmpty(sortByQuery))
+                options.Add(sortByQuery);
 
             return string.Join("&", options);
         }
-    }
 
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public sealed class FolderFilters
-    {
-        /// <summary>
-        /// Documents signing status to filter.
-        /// </summary>
-        [JsonProperty("signing-status")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public SigningStatus? Status { get; private set; }
-
-        /// <summary>
-        /// Timestamp document was updated.
-        /// </summary>
-        [JsonProperty("document-updated")]
-        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
-        public DateTime? Updated { get; private set; }
-
-        /// <summary>
-        /// Timestamp document was created.
-        /// </summary>
-        [JsonProperty("document-created")]
-        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
-        public DateTime? Created { get; private set; }
-
-        /// <summary>
-        /// Construct <see cref="FolderFilters"/> with signing status.
-        /// </summary>
-        /// <param name="status">Specific status for filtering.</param>
-        public FolderFilters(SigningStatus status) => Status = status;
-
-        /// <summary>
-        /// Construct <see cref="FolderFilters"/> with document created filter.
-        /// </summary>
-        /// <param name="documentCreatedFilter">Specific time point to filter documents that were created starting from a specific date.</param>
-        public FolderFilters(DocumentCreatedFilter documentCreatedFilter)
+        private static string BuildQueryFromJson(string json, string querySchema)
         {
-            Created = documentCreatedFilter?.Created.ToUniversalTime();
+            var toDictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
+
+            if (toDictionary == null)
+                return string.Empty;
+
+            var query = toDictionary
+                .Select(k => string.Format(CultureInfo.InvariantCulture, querySchema, k.Key, k.Value));
+
+            return string.Join("&", query);
         }
-
-        /// <summary>
-        /// Construct <see cref="FolderFilters"/> with document updated filter.
-        /// </summary>
-        /// <param name="documentUpdatedFilter">Specific time point to filter documents that were updated starting from a specific date.</param>
-        public FolderFilters(DocumentUpdatedFilter documentUpdatedFilter)
-        {
-            Updated = documentUpdatedFilter?.Updated.ToUniversalTime();
-        }
-    }
-
-    /// <summary>
-    /// Filter documents that were created starting from a specific date.
-    /// </summary>
-    public class DocumentCreatedFilter
-    {
-        public DateTime Created { get; private set; }
-
-        public DocumentCreatedFilter(DateTime date) => Created = date;
-    }
-
-    /// <summary>
-    /// Filter documents that were updated starting from a specific date.
-    /// </summary>
-    public class DocumentUpdatedFilter
-    {
-        public DateTime Updated { get; private set; }
-
-        public DocumentUpdatedFilter(DateTime date) => Updated = date;
-    }
-
-    /// <summary>
-    /// Document signing statuses.
-    /// </summary>
-    public enum SigningStatus
-    {
-        [EnumMember(Value = "waiting-for-me")]
-        WaitingForMe,
-
-        [EnumMember(Value = "waiting-for-others")]
-        WaitingForOthers,
-
-        [EnumMember(Value = "signed")]
-        Signed,
-
-        [EnumMember(Value = "pending")]
-        Pending
     }
 }
