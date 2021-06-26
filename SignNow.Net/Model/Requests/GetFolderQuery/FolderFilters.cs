@@ -6,6 +6,10 @@ using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Requests.GetFolderQuery
 {
+    /// <summary>
+    /// Filter options to show the documents in the specific folder with the specific status
+    /// or created/updated starting from a specific date.
+    /// </summary>
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public sealed class FolderFilters
     {
