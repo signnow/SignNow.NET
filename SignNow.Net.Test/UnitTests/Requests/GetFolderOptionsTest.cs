@@ -52,7 +52,7 @@ namespace UnitTests
 
         public static IEnumerable<object[]> FolderFilterProvider()
         {
-            var testDate = new DateTime(2021, 06, 25);
+            var testDate = new DateTime(2021, 06, 25, 0, 0, 0, DateTimeKind.Utc);
             const string FilterStatus  = "filters=signing-status&filter-values=";
             const string FilterCreated = "filters=document-created&filter-values=";
             const string FilterUpdated = "filters=document-updated&filter-values=";
@@ -75,11 +75,11 @@ namespace UnitTests
             };
             yield return new object[]
             {
-                "with document created", new FolderFilters(new DocumentCreatedFilter(testDate)), FilterCreated + "1624568400"
+                "with document created", new FolderFilters(new DocumentCreatedFilter(testDate)), FilterCreated + "1624579200"
             };
             yield return new object[]
             {
-                "with document updated", new FolderFilters(new DocumentUpdatedFilter(testDate)), FilterUpdated + "1624568400"
+                "with document updated", new FolderFilters(new DocumentUpdatedFilter(testDate)), FilterUpdated + "1624579200"
             };
             yield return new object[]
             {
