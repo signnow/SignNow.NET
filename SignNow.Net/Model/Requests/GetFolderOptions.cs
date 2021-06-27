@@ -27,6 +27,9 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("with_team_documents")]
         private Dictionary<string, bool> InternalWithTeamDocument { get; set; }
 
+        [JsonProperty("include_documents_subfolders")]
+        private Dictionary<string, bool> InternalIncludeDocumentsSubfolder { get; set; }
+
         /// <summary>
         /// Displays specified number of documents;
         /// Min limit is 0 (no documents will be shown), Max limit is 100.
@@ -77,6 +80,19 @@ namespace SignNow.Net.Model.Requests
         }
 
         /// <summary>
+        /// Allows to hide subfolders and display all documents from those subfolders in the parent folder.
+        /// Parameter works only for "Documents" and "Template" folder and their children.
+        /// Default value: true
+        /// </summary>
+        /// <returns></returns>
+        [JsonIgnore]
+        public bool IncludeDocumentsSubfolder
+        {
+            get => InternalIncludeDocumentsSubfolder.Values.FirstOrDefault();
+            set => InternalIncludeDocumentsSubfolder = new Dictionary<string, bool> {{"include_documents_subfolders", value}};
+        }
+
+        /// <summary>
         /// Converts <see cref="FolderFilters"/> to query sting
         /// </summary>
         /// <returns></returns>
@@ -88,6 +104,7 @@ namespace SignNow.Net.Model.Requests
             var offset = JsonConvert.SerializeObject(InternalOffset);
             var subfolders = JsonConvert.SerializeObject(InternalSubfolderData);
             var withTeamDocs = JsonConvert.SerializeObject(InternalWithTeamDocument);
+            var includeDocsSubfolder = JsonConvert.SerializeObject(InternalIncludeDocumentsSubfolder);
 
             var filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
             var sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
@@ -95,9 +112,14 @@ namespace SignNow.Net.Model.Requests
             var offsetQuery = BuildQueryFromJson(offset,"{0}={1}");
             var subfoldersQuery = BuildQueryFromJson(subfolders,"{0}={1}");
             var withTeamDocsQuery = BuildQueryFromJson(withTeamDocs,"{0}={1}");
+            var includeDocsSubfolderQuery = BuildQueryFromJson(includeDocsSubfolder,"{0}={1}");
 
             var options = new List<string>
-                    (new []{filterQuery, sortByQuery, limitQuery, offsetQuery, subfoldersQuery, withTeamDocsQuery})
+                    (new []
+                    {
+                        filterQuery, sortByQuery, limitQuery, offsetQuery,
+                        subfoldersQuery, withTeamDocsQuery, includeDocsSubfolderQuery
+                    })
                 .Where(d => d.Length != 0).ToList();
 
             return string.Join("&", options);
