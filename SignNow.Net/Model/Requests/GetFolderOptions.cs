@@ -21,6 +21,9 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("offset")]
         private Dictionary<string, int> InternalOffset { get; set; }
 
+        [JsonProperty("subfolder-data")]
+        private Dictionary<string, SubFolders> InternalSubfolderData { get; set; }
+
         /// <summary>
         /// Displays specified number of documents;
         /// Min limit is 0 (no documents will be shown), Max limit is 100.
@@ -47,6 +50,19 @@ namespace SignNow.Net.Model.Requests
         }
 
         /// <summary>
+        /// Defines whether sub-folders of the given folder are displayed in the response.
+        /// <remarks>
+        /// Values: <see cref="SubFolders.Show"/> - yes, displayed, <see cref="SubFolders.DoNotShow"/> - no, don't show.
+        /// </remarks>
+        /// </summary>
+        [JsonIgnore]
+        public SubFolders SubfolderData
+        {
+            get => InternalSubfolderData.Values.FirstOrDefault();
+            set => InternalSubfolderData = new Dictionary<string, SubFolders> {{"subfolder-data", value}};
+        }
+
+        /// <summary>
         /// Converts <see cref="FolderFilters"/> to query sting
         /// </summary>
         /// <returns></returns>
@@ -56,14 +72,16 @@ namespace SignNow.Net.Model.Requests
             var sortBy = JsonConvert.SerializeObject(SortBy);
             var limit = JsonConvert.SerializeObject(InternalLimit);
             var offset = JsonConvert.SerializeObject(InternalOffset);
+            var subfolders = JsonConvert.SerializeObject(InternalSubfolderData);
 
             var filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
             var sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
             var limitQuery = BuildQueryFromJson(limit,"{0}={1}");
             var offsetQuery = BuildQueryFromJson(offset,"{0}={1}");
+            var subfoldersQuery = BuildQueryFromJson(subfolders,"{0}={1}");
 
             var options = new List<string>
-                    (new []{filterQuery, sortByQuery, limitQuery, offsetQuery})
+                    (new []{filterQuery, sortByQuery, limitQuery, offsetQuery, subfoldersQuery})
                 .Where(d => d.Length != 0).ToList();
 
             return string.Join("&", options);

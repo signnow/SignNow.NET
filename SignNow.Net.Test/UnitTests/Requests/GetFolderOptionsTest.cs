@@ -28,6 +28,13 @@ namespace UnitTests
             Assert.AreEqual(expected, options.ToQueryString());
         }
 
+        [DataTestMethod]
+        [DynamicData(nameof(FolderOptionsProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
+        public void BuildOptionsQuery(string testName, GetFolderOptions options, string expected)
+        {
+            Assert.AreEqual(expected, options?.ToQueryString());
+        }
+
         [TestMethod]
         public void BuildFolderQuery()
         {
@@ -36,10 +43,18 @@ namespace UnitTests
                 Filters = new FolderFilters(SigningStatus.Pending),
                 SortBy = new FolderSort(SortByDate.Created, SortOrder.Ascending),
                 Limit = 200,
-                Offset = 10
+                Offset = 10,
+                SubfolderData = SubFolders.DoNotShow
             };
 
-            Assert.AreEqual("filters=signing-status&filter-values=pending&sortby=created&order=asc&limit=100&offset=10", queryOptions.ToQueryString());
+            var expected = "filters=signing-status&filter-values=pending"
+                        + "&sortby=created"
+                        + "&order=asc"
+                        + "&limit=100"
+                        + "&offset=10"
+                        + "&subfolder-data=0";
+
+            Assert.AreEqual(expected, queryOptions.ToQueryString());
         }
 
         #region DataProviders
@@ -87,6 +102,18 @@ namespace UnitTests
             {
                 "without filters", null, ""
             };
+        }
+
+        public static IEnumerable<object[]> FolderOptionsProvider()
+        {
+            yield return new object[] { "with limit=0", new GetFolderOptions {Limit = 0}, "limit=0" };
+            yield return new object[] { "with wrong limit", new GetFolderOptions {Limit = -1}, "" };
+            yield return new object[] { "with limit > 100", new GetFolderOptions {Limit = 999}, "limit=100" };
+            yield return new object[] { "with offset=0", new GetFolderOptions {Offset = 0}, "offset=0" };
+            yield return new object[] { "with offset<0", new GetFolderOptions {Offset = -42}, "offset=0" };
+            yield return new object[] { "with offset>0", new GetFolderOptions {Offset = 999}, "offset=999" };
+            yield return new object[] { "with subfolders", new GetFolderOptions {SubfolderData = SubFolders.Show}, "subfolder-data=1" };
+            yield return new object[] { "without subfolders", new GetFolderOptions {SubfolderData = SubFolders.DoNotShow}, "subfolder-data=0" };
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
