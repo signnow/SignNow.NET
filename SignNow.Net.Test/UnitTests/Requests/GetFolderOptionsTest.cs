@@ -34,10 +34,12 @@ namespace UnitTests
             var queryOptions = new GetFolderOptions
             {
                 Filters = new FolderFilters(SigningStatus.Pending),
-                SortBy = new FolderSort(SortByDate.Created, SortOrder.Ascending)
+                SortBy = new FolderSort(SortByDate.Created, SortOrder.Ascending),
+                Limit = 200,
+                Offset = 10
             };
 
-            Assert.AreEqual("filters=signing-status&filter-values=pending&sortby=created&order=asc", queryOptions.ToQueryString());
+            Assert.AreEqual("filters=signing-status&filter-values=pending&sortby=created&order=asc&limit=100&offset=10", queryOptions.ToQueryString());
         }
 
         #region DataProviders

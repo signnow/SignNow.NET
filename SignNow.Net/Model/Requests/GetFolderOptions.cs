@@ -15,6 +15,37 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("sortby")]
         public FolderSort SortBy { get; set; }
 
+        [JsonProperty("limit")]
+        private Dictionary<string, int> InternalLimit { get; set; }
+
+        [JsonProperty("offset")]
+        private Dictionary<string, int> InternalOffset { get; set; }
+
+        /// <summary>
+        /// Displays specified number of documents;
+        /// Min limit is 0 (no documents will be shown), Max limit is 100.
+        /// </summary>
+        [JsonIgnore]
+        public int Limit
+        {
+            get => InternalLimit.Values.FirstOrDefault();
+            set
+            {
+                if (value >= 0)
+                    InternalLimit = new Dictionary<string, int> {{"limit", value > 100 ? 100 : value}};
+            }
+        }
+
+        /// <summary>
+        /// Displays documents from specified position.
+        /// </summary>
+        [JsonIgnore]
+        public int Offset
+        {
+            get => InternalOffset.Values.FirstOrDefault();
+            set => InternalOffset = new Dictionary<string, int> {{"offset", value > 0 ? value : 0}};
+        }
+
         /// <summary>
         /// Converts <see cref="FolderFilters"/> to query sting
         /// </summary>
@@ -23,22 +54,17 @@ namespace SignNow.Net.Model.Requests
         {
             var filters = JsonConvert.SerializeObject(Filters);
             var sortBy = JsonConvert.SerializeObject(SortBy);
+            var limit = JsonConvert.SerializeObject(InternalLimit);
+            var offset = JsonConvert.SerializeObject(InternalOffset);
 
-            string filterQuery = default;
-            string sortByQuery = default;
+            var filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
+            var sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
+            var limitQuery = BuildQueryFromJson(limit,"{0}={1}");
+            var offsetQuery = BuildQueryFromJson(offset,"{0}={1}");
 
-            if (!string.IsNullOrEmpty(filters) || !filters.ToUpperInvariant().Equals("NULL"))
-            {
-                filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
-                sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
-            }
-
-            var options = new List<string>();
-            if (!string.IsNullOrEmpty(filterQuery))
-                options.Add(filterQuery);
-
-            if (!string.IsNullOrEmpty(sortByQuery))
-                options.Add(sortByQuery);
+            var options = new List<string>
+                    (new []{filterQuery, sortByQuery, limitQuery, offsetQuery})
+                .Where(d => d.Length != 0).ToList();
 
             return string.Join("&", options);
         }
