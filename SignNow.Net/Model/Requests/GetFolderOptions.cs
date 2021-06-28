@@ -30,6 +30,9 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("include_documents_subfolders")]
         private Dictionary<string, bool> InternalIncludeDocumentsSubfolder { get; set; }
 
+        [JsonProperty("exclude_documents_relations")]
+        private Dictionary<string, bool> InternalExcludeDocumentsRelations { get; set; }
+
         /// <summary>
         /// Displays specified number of documents;
         /// Min limit is 0 (no documents will be shown), Max limit is 100.
@@ -93,6 +96,15 @@ namespace SignNow.Net.Model.Requests
         }
 
         /// <summary>
+        /// Allows to display short list of document info and increases maximum limit from 100 to 500 documents per page.
+        /// </summary>
+        public bool ExcludeDocumentsRelations
+        {
+            get => InternalExcludeDocumentsRelations.Values.FirstOrDefault();
+            set => InternalExcludeDocumentsRelations = new Dictionary<string, bool> {{"exclude_documents_relations", value}};
+        }
+
+        /// <summary>
         /// Converts <see cref="FolderFilters"/> to query sting
         /// </summary>
         /// <returns></returns>
@@ -105,6 +117,7 @@ namespace SignNow.Net.Model.Requests
             var subfolders = JsonConvert.SerializeObject(InternalSubfolderData);
             var withTeamDocs = JsonConvert.SerializeObject(InternalWithTeamDocument);
             var includeDocsSubfolder = JsonConvert.SerializeObject(InternalIncludeDocumentsSubfolder);
+            var excludeDocsRelations = JsonConvert.SerializeObject(InternalExcludeDocumentsRelations);
 
             var filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
             var sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
@@ -113,12 +126,13 @@ namespace SignNow.Net.Model.Requests
             var subfoldersQuery = BuildQueryFromJson(subfolders,"{0}={1}");
             var withTeamDocsQuery = BuildQueryFromJson(withTeamDocs,"{0}={1}");
             var includeDocsSubfolderQuery = BuildQueryFromJson(includeDocsSubfolder,"{0}={1}");
+            var excludeDocsRelationsQuery = BuildQueryFromJson(excludeDocsRelations,"{0}={1}");
 
             var options = new List<string>
                     (new []
                     {
                         filterQuery, sortByQuery, limitQuery, offsetQuery,
-                        subfoldersQuery, withTeamDocsQuery, includeDocsSubfolderQuery
+                        subfoldersQuery, withTeamDocsQuery, includeDocsSubfolderQuery, excludeDocsRelationsQuery
                     })
                 .Where(d => d.Length != 0).ToList();
 

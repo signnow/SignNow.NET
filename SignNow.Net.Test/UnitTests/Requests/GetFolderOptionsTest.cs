@@ -46,7 +46,8 @@ namespace UnitTests
                 Offset = 10,
                 SubfolderData = SubFolders.DoNotShow,
                 WithTeamDocuments = false,
-                IncludeDocumentsSubfolder = false
+                IncludeDocumentsSubfolder = false,
+                ExcludeDocumentsRelations = false
             };
 
             var expected = "filters=signing-status&filter-values=pending"
@@ -56,7 +57,8 @@ namespace UnitTests
                         + "&offset=10"
                         + "&subfolder-data=0"
                         + "&with_team_documents=false"
-                        + "&include_documents_subfolders=false";
+                        + "&include_documents_subfolders=false"
+                        + "&exclude_documents_relations=false";
 
             Assert.AreEqual(expected, queryOptions.ToQueryString());
         }
@@ -122,6 +124,8 @@ namespace UnitTests
             yield return new object[] { "without team docs", new GetFolderOptions {WithTeamDocuments = false}, "with_team_documents=false" };
             yield return new object[] { "include documents subfolder", new GetFolderOptions {IncludeDocumentsSubfolder = true}, "include_documents_subfolders=true" };
             yield return new object[] { "exclude documents subfolder", new GetFolderOptions {IncludeDocumentsSubfolder = false}, "include_documents_subfolders=false" };
+            yield return new object[] { "exclude documents relations", new GetFolderOptions {ExcludeDocumentsRelations = true}, "exclude_documents_relations=true" };
+            yield return new object[] { "include documents relations", new GetFolderOptions {ExcludeDocumentsRelations = false}, "exclude_documents_relations=false" };
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
