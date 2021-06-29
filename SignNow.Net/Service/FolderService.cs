@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
 {
@@ -60,6 +63,55 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<SignNowFolders>(requestOptions, cancellation)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IFolderService.CreateFolderAsync"/>
+        /// <exception cref="System.ArgumentException">If folder <paramref name="parentId"/> is not valid.</exception>
+        public async Task<FolderIdentityResponse> CreateFolderAsync(string name, string parentId, CancellationToken cancellationToken = default)
+        {
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user/folder"),
+                Content = new JsonHttpContent(new {name = name, parent_id = parentId.ValidateId()}),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<FolderIdentityResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IFolderService.DeleteFolderAsync"/>
+        /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>
+        public async Task DeleteFolderAsync(string folderId, CancellationToken cancellationToken = default)
+        {
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IFolderService.RenameFolderAsync"/>
+        /// <exception cref="System.ArgumentException">If <paramref name="name"/> is empty.</exception>
+        /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>
+        public async Task<FolderIdentityResponse> RenameFolderAsync(string name, string folderId, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(name, $"{nameof(name)} cannot be null, empty or whitespace");
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
+                Content = new JsonHttpContent(new {name = name}),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<FolderIdentityResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

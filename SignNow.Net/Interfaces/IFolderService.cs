@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
 {
@@ -35,5 +36,31 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<SignNowFolders> GetFolderAsync(string folderId, GetFolderOptions options = default, CancellationToken cancellation = default);
+
+        /// <summary>
+        /// Creates a folder for the user.
+        /// </summary>
+        /// <param name="name">Name of a new folder</param>
+        /// <param name="parentId">Identifier for the parent folder that contains this folder.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Returns ID of a new folder.</returns>
+        Task<FolderIdentityResponse> CreateFolderAsync(string name, string parentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes a folder.
+        /// </summary>
+        /// <param name="folderId">ID of the folder to delete.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task DeleteFolderAsync(string folderId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Renames a folder.
+        /// </summary>
+        /// <param name="name">A new folder's name.</param>
+        /// <param name="folderId">ID of the folder to rename.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Returns ID of the renamed folder.</returns>
+        Task<FolderIdentityResponse> RenameFolderAsync(string name, string folderId, CancellationToken cancellationToken = default);
     }
 }

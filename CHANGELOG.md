@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Interfaces.ISignNowContext` extended with `IFolderService` that allows you works with Folders
 - `IFolderService.GetAllFoldersAsync` that allows you to get all user Folders with documents
 - `IFolderService.GetFolderAsync` that allows you to get all details of a specific folder including all documents in that folder.
+- `IFolderService.CreateFolderAsync` that allows you to create folder for a user.
+- `IFolderService.DeleteFolderAsync` that allows you to deletes a folder.
+- `IFolderService.RenameFolderAsync` that allows you to renames a folder.
 
 ## [0.8.0] - 2021-04-26
 ## Added
