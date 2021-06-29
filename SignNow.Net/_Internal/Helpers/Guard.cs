@@ -19,9 +19,7 @@ namespace SignNow.Net.Internal.Helpers
         public static void ArgumentNotNull(object argument, string argumentName)
         {
             if (null == argument)
-            {
                 throw new ArgumentNullException(argumentName);
-            }
         }
 
         /// <summary>
@@ -33,9 +31,19 @@ namespace SignNow.Net.Internal.Helpers
         public static void PropertyNotNull(object property, string message)
         {
             if (null == property)
-            {
                 throw new ArgumentException(message);
-            }
+        }
+
+        /// <summary>
+        /// Ensures that the specified string is not null, whitespase or empty.
+        /// </summary>
+        /// <param name="arg">Input string for validation.</param>
+        /// <param name="message">Error message.</param>
+        /// <exception cref="ArgumentException">If <paramref name="arg"/> is empty, whitespace or null.</exception>
+        public static void ArgumentIsNotEmptyString(string arg, string message)
+        {
+            if (string.IsNullOrEmpty(arg) || string.IsNullOrWhiteSpace(arg))
+                throw new ArgumentException(message);
         }
     }
 }
