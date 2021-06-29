@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `IFolderService.CreateFolderAsync` that allows you to create folder for a user.
 - `IFolderService.DeleteFolderAsync` that allows you to deletes a folder.
 - `IFolderService.RenameFolderAsync` that allows you to renames a folder.
+- `IDocumentService.MoveDocumentAsync` that allows you to move the document to a specified folder.
 
 ## [0.8.0] - 2021-04-26
 ## Added
