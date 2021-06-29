@@ -1,6 +1,6 @@
 using System;
-using Bogus.DataSets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Constants;
@@ -28,9 +28,10 @@ namespace UnitTests
             var doc = new SignNowDocument();
 
             var exception = Assert.ThrowsException<ArgumentException>(
-                () => Guard.PropertyNotNull(doc.Id, "Document ID cannot be null."));
+                () => Guard.PropertyNotNull(doc.Id, nameof(doc.Id), ExceptionMessages.RequestUrlIsNull));
 
-            Assert.AreEqual("Document ID cannot be null.", exception.Message);
+            Assert.AreEqual($"{ExceptionMessages.RequestUrlIsNull} (Parameter 'Id')", exception.Message);
+            Assert.AreEqual("Id", exception.ParamName);
         }
 
         [DataTestMethod]
@@ -40,9 +41,10 @@ namespace UnitTests
         public void ShouldGuardStringIsNotNullOrEmpty(string name)
         {
             var exception = Assert.ThrowsException<ArgumentException>(
-                () => Guard.ArgumentIsNotEmptyString(name, $"{nameof(name)} cannot be null, empty or whitespace"));
+                () => Guard.ArgumentIsNotEmptyString(name, nameof(name)));
 
-            Assert.AreEqual("name cannot be null, empty or whitespace", exception.Message);
+            Assert.AreEqual($"{ExceptionMessages.StringNotNullOrEmptyOrWhitespace} (Parameter 'name')", exception.Message);
+            Assert.AreEqual("name", exception.ParamName);
         }
     }
 }

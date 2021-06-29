@@ -67,9 +67,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="IFolderService.CreateFolderAsync"/>
+        /// <exception cref="System.ArgumentException">If <paramref name="name"/> is empty.</exception>
         /// <exception cref="System.ArgumentException">If folder <paramref name="parentId"/> is not valid.</exception>
         public async Task<FolderIdentityResponse> CreateFolderAsync(string name, string parentId, CancellationToken cancellationToken = default)
         {
+            Guard.ArgumentIsNotEmptyString(name, $"{nameof(name)} cannot be null, empty or whitespace");
+
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/folder"),
@@ -103,6 +106,7 @@ namespace SignNow.Net.Service
         public async Task<FolderIdentityResponse> RenameFolderAsync(string name, string folderId, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(name, $"{nameof(name)} cannot be null, empty or whitespace");
+
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),

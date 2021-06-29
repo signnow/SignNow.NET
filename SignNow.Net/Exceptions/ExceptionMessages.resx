@@ -158,4 +158,7 @@
   <data name="AllowedRangeMustBeFrom15to45" xml:space="preserve">
     <value>Allowed ranges must be from 15 to 45 minutes</value>
   </data>
+  <data name="StringNotNullOrEmptyOrWhitespace" xml:space="preserve">
+    <value>Cannot be null, empty or whitespace</value>
+  </data>
 </root>

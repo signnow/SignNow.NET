@@ -151,5 +151,14 @@ namespace SignNow.Net.Exceptions {
                 return ResourceManager.GetString("AllowedRangeMustBeFrom15to45", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// String cannot be null, empty or whitespace
+        /// </summary>
+        internal static string StringNotNullOrEmptyOrWhitespace {
+            get {
+                return ResourceManager.GetString("StringNotNullOrEmptyOrWhitespace", resourceCulture);
+            }
+        }
     }
 }
