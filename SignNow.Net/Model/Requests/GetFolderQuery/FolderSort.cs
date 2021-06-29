@@ -18,28 +18,30 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         [JsonConverter(typeof(StringEnumConverter))]
         public SortOrder? Created { get; private set; }
 
+        [JsonProperty("document-name")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public SortOrder? DocumentName { get; private set; }
+
         /// <summary>
         /// Construct Folder sort object.
         /// </summary>
-        /// <param name="sortBy">Sort documents by <see cref="SortByDate.Created"/> or <see cref="SortByDate.Updated"/> date.</param>
+        /// <param name="sortBy">Sort documents by <see cref="SortByParam.Created"/>, <see cref="SortByParam.Updated"/> date or by <see cref="SortByParam.DocumentName"/>.</param>
         /// <param name="order">Order documents in <see cref="SortOrder.Ascending"/> or <see cref="SortOrder.Descending"/> way.</param>
-        public FolderSort(SortByDate sortBy, SortOrder order)
+        public FolderSort(SortByParam sortBy, SortOrder order)
         {
-            if (sortBy == SortByDate.Created)
-            {
+            if (sortBy == SortByParam.Created)
                 Created = order;
-            }
-            else
-            {
+            else if (sortBy == SortByParam.Updated)
                 Updated = order;
-            }
+            else if (sortBy == SortByParam.DocumentName)
+                DocumentName = order;
         }
     }
 
     /// <summary>
-    /// Options to set sort documents in Folder by create or update date.
+    /// Options to set sort documents in Folder by create, update date or document name.
     /// </summary>
-    public enum SortByDate
+    public enum SortByParam
     {
         /// <summary>
         /// Sorts documents by creation date.
@@ -51,7 +53,13 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         /// Sorts documents by update date.
         /// </summary>
         [EnumMember(Value = "updated")]
-        Updated
+        Updated,
+
+        /// <summary>
+        /// Sorts documents by name.
+        /// </summary>
+        [EnumMember(Value = "document-name")]
+        DocumentName
     }
 
     /// <summary>

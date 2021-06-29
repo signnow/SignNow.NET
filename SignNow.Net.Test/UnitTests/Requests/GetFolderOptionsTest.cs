@@ -41,7 +41,7 @@ namespace UnitTests
             var queryOptions = new GetFolderOptions
             {
                 Filters = new FolderFilters(SigningStatus.Pending),
-                SortBy = new FolderSort(SortByDate.Created, SortOrder.Ascending),
+                SortBy = new FolderSort(SortByParam.Created, SortOrder.Ascending),
                 Limit = 200,
                 Offset = 10,
                 SubfolderData = SubFolders.DoNotShow,
@@ -67,10 +67,13 @@ namespace UnitTests
 
         public static IEnumerable<object[]> FolderSortProvider()
         {
-            yield return new object[] { "by Created in Asc order", new FolderSort(SortByDate.Created, SortOrder.Ascending), "sortby=created&order=asc" };
-            yield return new object[] { "by Created in Desc order", new FolderSort(SortByDate.Created, SortOrder.Descending), "sortby=created&order=desc" };
-            yield return new object[] { "by Updated in Asc order", new FolderSort(SortByDate.Updated, SortOrder.Ascending), "sortby=updated&order=asc" };
-            yield return new object[] { "by Updated in Desc order", new FolderSort(SortByDate.Updated, SortOrder.Descending), "sortby=updated&order=desc" };
+            yield return new object[] { "by Created in Asc order", new FolderSort(SortByParam.Created, SortOrder.Ascending), "sortby=created&order=asc" };
+            yield return new object[] { "by Created in Desc order", new FolderSort(SortByParam.Created, SortOrder.Descending), "sortby=created&order=desc" };
+            yield return new object[] { "by Updated in Asc order", new FolderSort(SortByParam.Updated, SortOrder.Ascending), "sortby=updated&order=asc" };
+            yield return new object[] { "by Updated in Desc order", new FolderSort(SortByParam.Updated, SortOrder.Descending), "sortby=updated&order=desc" };
+            yield return new object[] { "by Doc name in Asc order", new FolderSort(SortByParam.DocumentName, SortOrder.Ascending), "sortby=document-name&order=asc" };
+            yield return new object[] { "by Doc name in Desc order", new FolderSort(SortByParam.DocumentName, SortOrder.Descending), "sortby=document-name&order=desc" };
+
         }
 
         public static IEnumerable<object[]> FolderFilterProvider()
@@ -87,6 +90,14 @@ namespace UnitTests
             yield return new object[]
             {
                 $"with signing status {SigningStatus.Signed}", new FolderFilters(SigningStatus.Signed), FilterStatus + "signed"
+            };
+            yield return new object[]
+            {
+                $"with signing status {SigningStatus.Canceled}", new FolderFilters(SigningStatus.Canceled), FilterStatus + "canceled"
+            };
+            yield return new object[]
+            {
+                $"with signing status {SigningStatus.DoesNotCreated}", new FolderFilters(SigningStatus.DoesNotCreated), FilterStatus + "does-not-created"
             };
             yield return new object[]
             {

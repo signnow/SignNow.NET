@@ -94,6 +94,12 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         Signed,
 
         [EnumMember(Value = "pending")]
-        Pending
+        Pending,
+
+        [EnumMember(Value = "canceled")]
+        Canceled,
+
+        [EnumMember(Value = "does-not-created")]
+        DoesNotCreated
     }
 }
