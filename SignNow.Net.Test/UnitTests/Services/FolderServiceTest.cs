@@ -49,11 +49,9 @@ namespace UnitTests
         {
             var service = new FolderService(ApiBaseUrl, new Token(), SignNowClientMock(""));
 
-            var task = service
-                .DeleteFolderAsync(FolderId)
-                .ConfigureAwait(false);
+            var task = service.DeleteFolderAsync(FolderId);
 
-            Assert.IsTrue(task.GetAwaiter().IsCompleted);
+            Assert.IsFalse(task.IsFaulted);
         }
 
         [TestMethod]
