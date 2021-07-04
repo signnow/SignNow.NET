@@ -9,17 +9,25 @@ namespace SignNow.Net.Model.Requests
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class GetFolderOptions
     {
+        private const string FiltersSchema = "filters={0}&filter-values={1}";
+        private const string SortSchema = "sortby={0}&order={1}";
+        private const string ParamsSchema = "{0}={1}";
+
         [JsonProperty("filters")]
         public FolderFilters Filters { get; set; }
 
         [JsonProperty("sortby")]
         public FolderSort SortBy { get; set; }
 
+
         [JsonProperty("limit")]
         private Dictionary<string, int> InternalLimit { get; set; }
 
         [JsonProperty("offset")]
         private Dictionary<string, int> InternalOffset { get; set; }
+
+        [JsonProperty("entity_type")]
+        private Dictionary<string, EntityType> InternalEntityType { get; set; }
 
         [JsonProperty("subfolder-data")]
         private Dictionary<string, SubFolders> InternalSubfolderData { get; set; }
@@ -59,7 +67,22 @@ namespace SignNow.Net.Model.Requests
         }
 
         /// <summary>
-        /// Defines whether sub-folders of the given folder are displayed in the response.
+        /// Displays documents by entity type
+        /// </summary>
+        /// <remarks>
+        /// <see cref="EntityType.All"/> - show document list with active documents and document groups.<br/>
+        /// <see cref="EntityType.Document"/> - show standard document list.<br/>
+        /// <see cref="EntityType.DocumentGroup"/> - show only document groups.
+        /// </remarks>
+        [JsonIgnore]
+        public EntityType EntityTypes
+        {
+            get => InternalEntityType.Values.FirstOrDefault();
+            set => InternalEntityType = new Dictionary<string, EntityType> {{"entity_type", value}};
+        }
+
+        /// <summary>
+        /// Allows to returns information about all system folders and their sub-folders without documents
         /// <remarks>
         /// Values: <see cref="SubFolders.Show"/> - yes, displayed, <see cref="SubFolders.DoNotShow"/> - no, don't show.
         /// </remarks>
@@ -114,24 +137,26 @@ namespace SignNow.Net.Model.Requests
             var sortBy = JsonConvert.SerializeObject(SortBy);
             var limit = JsonConvert.SerializeObject(InternalLimit);
             var offset = JsonConvert.SerializeObject(InternalOffset);
+            var entityType = JsonConvert.SerializeObject(InternalEntityType);
             var subfolders = JsonConvert.SerializeObject(InternalSubfolderData);
             var withTeamDocs = JsonConvert.SerializeObject(InternalWithTeamDocument);
             var includeDocsSubfolder = JsonConvert.SerializeObject(InternalIncludeDocumentsSubfolder);
             var excludeDocsRelations = JsonConvert.SerializeObject(InternalExcludeDocumentsRelations);
 
-            var filterQuery = BuildQueryFromJson(filters, "filters={0}&filter-values={1}");
-            var sortByQuery = BuildQueryFromJson(sortBy, "sortby={0}&order={1}");
-            var limitQuery = BuildQueryFromJson(limit,"{0}={1}");
-            var offsetQuery = BuildQueryFromJson(offset,"{0}={1}");
-            var subfoldersQuery = BuildQueryFromJson(subfolders,"{0}={1}");
-            var withTeamDocsQuery = BuildQueryFromJson(withTeamDocs,"{0}={1}");
-            var includeDocsSubfolderQuery = BuildQueryFromJson(includeDocsSubfolder,"{0}={1}");
-            var excludeDocsRelationsQuery = BuildQueryFromJson(excludeDocsRelations,"{0}={1}");
+            var filterQuery = BuildQueryFromJson(filters, FiltersSchema);
+            var sortByQuery = BuildQueryFromJson(sortBy, SortSchema);
+            var limitQuery = BuildQueryFromJson(limit,ParamsSchema);
+            var offsetQuery = BuildQueryFromJson(offset,ParamsSchema);
+            var entityTypeQuery = BuildQueryFromJson(entityType,ParamsSchema);
+            var subfoldersQuery = BuildQueryFromJson(subfolders,ParamsSchema);
+            var withTeamDocsQuery = BuildQueryFromJson(withTeamDocs,ParamsSchema);
+            var includeDocsSubfolderQuery = BuildQueryFromJson(includeDocsSubfolder,ParamsSchema);
+            var excludeDocsRelationsQuery = BuildQueryFromJson(excludeDocsRelations,ParamsSchema);
 
             var options = new List<string>
                     (new []
                     {
-                        filterQuery, sortByQuery, limitQuery, offsetQuery,
+                        filterQuery, sortByQuery, limitQuery, offsetQuery, entityTypeQuery,
                         subfoldersQuery, withTeamDocsQuery, includeDocsSubfolderQuery, excludeDocsRelationsQuery
                     })
                 .Where(d => d.Length != 0).ToList();

@@ -21,6 +21,13 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         public SigningStatus? Status { get; private set; }
 
         /// <summary>
+        /// Allows filtering docs that do not contain fields and roles
+        /// </summary>
+        [JsonProperty("has-fields")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public HasFieldsAndRoles? FieldsAndRoles { get; private set; }
+
+        /// <summary>
         /// Timestamp document was updated.
         /// </summary>
         [JsonProperty("document-updated")]
@@ -39,6 +46,12 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         /// </summary>
         /// <param name="status">Specific status for filtering.</param>
         public FolderFilters(SigningStatus status) => Status = status;
+
+        /// <summary>
+        /// Construct <see cref="FolderFilters"/> with fields and roles filter.
+        /// </summary>
+        /// <param name="option">Options to set filtering docs that do not contain fields and roles.</param>
+        public FolderFilters(HasFieldsAndRoles option) => FieldsAndRoles = option;
 
         /// <summary>
         /// Construct <see cref="FolderFilters"/> with document created filter.
@@ -62,6 +75,7 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
     /// <summary>
     /// Filter documents that were created starting from a specific date.
     /// </summary>
+    /// <remarks>This filter is not applicable for Templates</remarks>
     public class DocumentCreatedFilter
     {
         public DateTime Created { get; private set; }
@@ -101,5 +115,16 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
 
         [EnumMember(Value = "does-not-created")]
         DoesNotCreated
+    }
+
+    public enum HasFieldsAndRoles
+    {
+        /// <summary>Documents with no fields and roles</summary>
+        [EnumMember(Value = "0")]
+        No,
+
+        /// <summary>Documents with fields and roles</summary>
+        [EnumMember(Value = "1")]
+        Yes
     }
 }

@@ -44,6 +44,7 @@ namespace UnitTests
                 SortBy = new FolderSort(SortByParam.Created, SortOrder.Ascending),
                 Limit = 200,
                 Offset = 10,
+                EntityTypes = EntityType.All,
                 SubfolderData = SubFolders.DoNotShow,
                 WithTeamDocuments = false,
                 IncludeDocumentsSubfolder = false,
@@ -55,6 +56,7 @@ namespace UnitTests
                         + "&order=asc"
                         + "&limit=100"
                         + "&offset=10"
+                        + "&entity_type=all"
                         + "&subfolder-data=0"
                         + "&with_team_documents=false"
                         + "&include_documents_subfolders=false"
@@ -73,7 +75,6 @@ namespace UnitTests
             yield return new object[] { "by Updated in Desc order", new FolderSort(SortByParam.Updated, SortOrder.Descending), "sortby=updated&order=desc" };
             yield return new object[] { "by Doc name in Asc order", new FolderSort(SortByParam.DocumentName, SortOrder.Ascending), "sortby=document-name&order=asc" };
             yield return new object[] { "by Doc name in Desc order", new FolderSort(SortByParam.DocumentName, SortOrder.Descending), "sortby=document-name&order=desc" };
-
         }
 
         public static IEnumerable<object[]> FolderFilterProvider()
@@ -82,6 +83,7 @@ namespace UnitTests
             const string FilterStatus  = "filters=signing-status&filter-values=";
             const string FilterCreated = "filters=document-created&filter-values=";
             const string FilterUpdated = "filters=document-updated&filter-values=";
+            const string FilterHasFields = "filters=has-fields&filter-values=";
 
             yield return new object[]
             {
@@ -117,6 +119,14 @@ namespace UnitTests
             };
             yield return new object[]
             {
+                "with fields and roles", new FolderFilters(HasFieldsAndRoles.Yes), FilterHasFields + "1"
+            };
+            yield return new object[]
+            {
+                "without fields and roles", new FolderFilters(HasFieldsAndRoles.No), FilterHasFields + "0"
+            };
+            yield return new object[]
+            {
                 "without filters", null, ""
             };
         }
@@ -137,6 +147,9 @@ namespace UnitTests
             yield return new object[] { "exclude documents subfolder", new GetFolderOptions {IncludeDocumentsSubfolder = false}, "include_documents_subfolders=false" };
             yield return new object[] { "exclude documents relations", new GetFolderOptions {ExcludeDocumentsRelations = true}, "exclude_documents_relations=true" };
             yield return new object[] { "include documents relations", new GetFolderOptions {ExcludeDocumentsRelations = false}, "exclude_documents_relations=false" };
+            yield return new object[] { "with entity type all", new GetFolderOptions {EntityTypes = EntityType.All}, "entity_type=all" };
+            yield return new object[] { "with entity type document", new GetFolderOptions {EntityTypes = EntityType.Document}, "entity_type=document" };
+            yield return new object[] { "with entity type document-group", new GetFolderOptions {EntityTypes = EntityType.DocumentGroup}, "entity_type=document-group" };
         }
 
         public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
