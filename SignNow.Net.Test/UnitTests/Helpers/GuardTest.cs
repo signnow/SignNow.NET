@@ -31,7 +31,7 @@ namespace UnitTests
                 () => Guard.PropertyNotNull(doc.Id, nameof(doc.Id), ExceptionMessages.RequestUrlIsNull));
 
 #if NETFRAMEWORK
-            Assert.AreEqual($"{ExceptionMessages.RequestUrlIsNull} Parameter name: Id", exception.Message);
+            StringAssert.Contains(exception.Message, ExceptionMessages.RequestUrlIsNull);
 #else
             Assert.AreEqual($"{ExceptionMessages.RequestUrlIsNull} (Parameter 'Id')", exception.Message);
 #endif
@@ -48,7 +48,7 @@ namespace UnitTests
                 () => Guard.ArgumentIsNotEmptyString(name, nameof(name)));
 
 #if NETFRAMEWORK
-            Assert.AreEqual($"{ExceptionMessages.StringNotNullOrEmptyOrWhitespace} Parameter name: name", exception.Message);
+            StringAssert.Contains(exception.Message, ExceptionMessages.StringNotNullOrEmptyOrWhitespace);
 #else
             Assert.AreEqual($"{ExceptionMessages.StringNotNullOrEmptyOrWhitespace} (Parameter 'name')", exception.Message);
 #endif

@@ -28,7 +28,7 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task CanCreatesFolderAsync()
         {
-            var testFolderName = "testCanCreatesFolderAsync";
+            var testFolderName = $"testCanCreatesFolderAsync_{Faker.Hacker.Random.Word()}";
             var root = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
             var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
 
