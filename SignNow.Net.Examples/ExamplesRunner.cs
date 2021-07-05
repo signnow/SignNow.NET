@@ -26,6 +26,8 @@ namespace SignNow.Net.Examples
     [TestClass]
     public class ExamplesRunner
     {
+        private DateTime UnixEpoch => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         /// <summary>
         /// Base path to the `TestExamples` directory.
         /// Path should use Unix-like directory separator char. It requires for cross platform path compatibility.
@@ -371,7 +373,6 @@ namespace SignNow.Net.Examples
         [TestMethod]
         public void CreateSignNowUserTest()
         {
-            DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
 
             var createUserResponse = UserExamples.CreateSignNowUser(
@@ -526,6 +527,36 @@ namespace SignNow.Net.Examples
             Assert.IsTrue(folder.SystemFolder);
             Assert.AreEqual(folderId, folder.Id);
             Assert.AreEqual(folders.Id, folder.ParentId);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.CreateFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task CreateFolderTest()
+        {
+            // Get Root folder and Documents folder
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
+            // Note: You should use different folder name for each example run
+            var myFolderName = $"CreateFolderExample_{timestamp}";
+
+            // Creating new folder
+            var createNewFolder = await FolderExamples
+                .CreateFolder(myFolderName, documentsFolder?.Id, token)
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(createNewFolder.Id);
+
+            // Check if new folder exists
+            var checkNewFolderExists = await testContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, new GetFolderOptions {IncludeDocumentsSubfolder = false})
+                .ConfigureAwait(false);
+
+            var myFolder = checkNewFolderExists.Folders.FirstOrDefault(f => f.Name == myFolderName);
+            Assert.AreEqual(myFolderName, myFolder?.Name);
         }
 
         #endregion

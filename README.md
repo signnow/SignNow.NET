@@ -563,7 +563,7 @@ public static class FolderExamples
 }
 ```
 
-More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example]
+More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example], [Create folder][create_folder example]
 
 ## <a name="contribution-guidelines"></a>Contribution guidelines
 
@@ -653,3 +653,4 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 <!-- Folders -->
 [get_all_folders example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetAllFolders.cs
 [get_folder example]:               https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetFolder.cs
+[create_folder example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/CreateFolder.cs
