@@ -174,7 +174,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IDocumentService.MoveDocumentAsync"/>
         /// <exception cref="System.ArgumentException">If <paramref name="documentId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>
-        public async Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken)
+        public async Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken = default)
         {
             var requestOptions = new PostHttpRequestOptions
             {

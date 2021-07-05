@@ -82,7 +82,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="folderId">of the folder where you'd like to keep this document.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken);
+        Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a document history (action log) data
