@@ -26,7 +26,8 @@ namespace AcceptanceTests
             var expected = string
                 .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, "Some Wrong Document Id");
 
-            Assert.AreEqual(expected, exception.InnerException?.Message);
+            StringAssert.Contains(exception.Message, expected);
+            StringAssert.Contains(exception.InnerException?.Message, expected);
         }
     }
 }

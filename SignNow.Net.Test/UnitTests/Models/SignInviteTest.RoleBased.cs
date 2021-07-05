@@ -143,8 +143,10 @@ namespace UnitTests
                 .ThrowsException<ArgumentException>(
                     () => new RoleBasedInvite(document, new List<string> { senderEmail, "not-an-email" }));
 
-            Assert.AreEqual(exceptionMessage, exceptionCtor1.Message);
-            Assert.AreEqual(exceptionMessage, exceptionCtor2.Message);
+            StringAssert.Contains(exceptionCtor1.Message, exceptionMessage);
+            StringAssert.Contains(exceptionCtor2.Message, exceptionMessage);
+            Assert.AreEqual("not-an-email", exceptionCtor1.ParamName);
+            Assert.AreEqual("not-an-email", exceptionCtor2.ParamName);
         }
 
         [TestMethod]
@@ -163,9 +165,8 @@ namespace UnitTests
                     () => invite.AddRoleBasedInvite(
                         new SignerOptions("test@email.com", fakeRole)));
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture,  ExceptionMessages.CannotAddRole, fakeRole.Name),
-                exception.Message);
+            var errorMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.CannotAddRole, fakeRole.Name);
+            StringAssert.Contains(exception.Message, errorMessage);
         }
 
         [TestMethod]

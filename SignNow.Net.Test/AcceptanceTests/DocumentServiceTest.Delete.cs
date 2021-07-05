@@ -23,21 +23,16 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void CannotDeleteDocumentWithWrongId()
+        public async Task CannotDeleteDocumentWithWrongId()
         {
             var documentId = "test";
-            var deleteResponse = SignNowTestContext.Documents.DeleteDocumentAsync(documentId);
 
-            Assert.ThrowsException<ArgumentException>(
-                documentId.ValidateId);
+            var exception = await Assert
+                .ThrowsExceptionAsync<ArgumentException>(
+                    async () => await SignNowTestContext.Documents.DeleteDocumentAsync(documentId).ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-            var exception = Assert
-                .ThrowsException<AggregateException>(
-                    () => Task.WaitAll(deleteResponse));
-
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, documentId),
-                exception.InnerException?.Message);
+            StringAssert.Contains(exception.Message, string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, documentId));
         }
     }
 }
