@@ -31,7 +31,7 @@ namespace SignNow.Net.Internal.Extensions
             if (regex.IsMatch(id) && !string.IsNullOrWhiteSpace(id)) return id;
 
             throw new ArgumentException(
-                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, id));
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, id), id);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SignNow.Net.Internal.Extensions
             if (regex.IsMatch(email) && !string.IsNullOrWhiteSpace(email)) return email;
 
             throw new ArgumentException(
-                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, email));
+                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, email), email);
         }
     }
 }
