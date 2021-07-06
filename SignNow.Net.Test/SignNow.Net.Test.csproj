@@ -3,7 +3,7 @@
   <Import Project="..\SignNow.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net45;net5</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
@@ -35,11 +35,11 @@
     <PackageReference Include="Bogus" Version="31.0.3" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard1.2" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5' ">
     <ProjectReference Include="..\SignNow.Net\SignNow.Net.csproj" Properties="TargetFramework=netstandard2.0" />
   </ItemGroup>
 
