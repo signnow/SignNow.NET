@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using UnitTests;
 
 namespace AcceptanceTests
@@ -13,9 +13,9 @@ namespace AcceptanceTests
     public partial class DocumentServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public void ShouldGetDocumentInfo()
+        public async Task ShouldGetDocumentInfo()
         {
-            var response = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).Result;
+            var response = await SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).ConfigureAwait(false);
 
             Assert.AreEqual(TestPdfDocumentId, response.Id);
             Assert.AreEqual(1, response.PageCount);
@@ -33,36 +33,42 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void MergeDocuments()
+        public async Task MergeDocuments()
         {
-            var doc1 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentId).Result;
-            var doc2 = SignNowTestContext.Documents.GetDocumentAsync(TestPdfDocumentIdWithFields).Result;
+            var doc1 = await SignNowTestContext.Documents
+                .GetDocumentAsync(TestPdfDocumentId)
+                .ConfigureAwait(false);
+            var doc2 = await SignNowTestContext.Documents
+                .GetDocumentAsync(TestPdfDocumentIdWithFields)
+                .ConfigureAwait(false);
 
             var documents = new List<SignNowDocument> {doc1, doc2};
 
-            var merged = SignNowTestContext.Documents
-                .MergeDocumentsAsync("merged-document.pdf", documents).Result;
+            var merged = await SignNowTestContext.Documents
+                .MergeDocumentsAsync("merged-document.pdf", documents)
+                .ConfigureAwait(false);
 
             Assert.AreEqual("merged-document.pdf", merged.Filename);
             Assert.That.StreamIsPdf(merged.Document);
         }
 
         [TestMethod]
-        public void DocumentHistory()
+        public async Task DocumentHistory()
         {
-            var response = SignNowTestContext.Documents
+            var response = await SignNowTestContext.Documents
                 .GetDocumentHistoryAsync(TestPdfDocumentIdWithFields)
-                .Result;
+                .ConfigureAwait(false);
 
             Assert.IsTrue(response.All(itm => itm.Id.Length == 40));
             Assert.IsTrue(response.All(itm => itm.DocumentId == TestPdfDocumentIdWithFields));
         }
 
         [TestMethod]
-        public void CreateOneTimeDocumentDownloadLink()
+        public async Task CreateOneTimeDocumentDownloadLink()
         {
-            var link = SignNowTestContext.Documents
-                .CreateOneTimeDownloadLinkAsync(TestPdfDocumentId).Result;
+            var link = await SignNowTestContext.Documents
+                .CreateOneTimeDownloadLinkAsync(TestPdfDocumentId)
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(link.Url);
             StringAssert.Contains(link.Url.Host, "signnow.com");

@@ -3,7 +3,6 @@ using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Internal.Extensions;
 
 namespace AcceptanceTests
 {

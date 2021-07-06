@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Context;
@@ -31,9 +33,11 @@ namespace AcceptanceTests
         [DataTestMethod]
         [DataRow(Scope.All, DisplayName = "scope All")]
         [DataRow(Scope.User, DisplayName = "scope User")]
-        public void ShouldGetTokenByUserCredentials(Scope scope)
+        public async Task ShouldGetTokenByUserCredentials(Scope scope)
         {
-            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, scope).Result;
+            var token = await oAuthTest
+                .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, scope)
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(token);
             Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
@@ -45,30 +49,28 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void CannotIssueTokenWithWrongAuthCode()
+        public async Task CannotIssueTokenWithWrongAuthCode()
         {
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => oAuthTest.GetTokenAsync("wrong_auth_code", Scope.All).Result);
-#if NETFRAMEWORK
-            Assert.AreEqual("One or more errors occurred.", exception.Message);
-#else
-            Assert.AreEqual("One or more errors occurred. (internal api error)", exception.Message);
-#endif
-            Assert.AreEqual("internal api error", exception.InnerException?.Message);
+            var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
+                async () => await oAuthTest
+                    .GetTokenAsync("wrong_auth_code", Scope.All)
+                    .ConfigureAwait(false))
+                .ConfigureAwait(false);
+
+            Assert.AreEqual("internal api error", exception.Message);
         }
 
         [TestMethod]
-        public void CannotIssueTokenWithWrongClientSecret()
+        public async Task CannotIssueTokenWithWrongClientSecret()
         {
             oAuthTest = new OAuth2Service(_apiCredentials.ClientId, "wrong_client_secret");
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result);
-#if NETFRAMEWORK
-            Assert.AreEqual("One or more errors occurred.", exception.Message);
-#else
-            Assert.AreEqual("One or more errors occurred. (invalid_client)", exception.Message);
-#endif
-            Assert.AreEqual("invalid_client", exception.InnerException?.Message);
+            var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
+                async () => await oAuthTest
+                    .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All)
+                    .ConfigureAwait(false))
+                .ConfigureAwait(false);
+
+            Assert.AreEqual("invalid_client", exception.Message);
         }
 
         [DataTestMethod]
@@ -104,19 +106,23 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void ShouldRefreshCurrentToken()
+        public async Task ShouldRefreshCurrentToken()
         {
-            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result;
-            var freshToken = oAuthTest.RefreshTokenAsync(token).Result;
+            var token = await oAuthTest
+                .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All)
+                .ConfigureAwait(false);
+            var freshToken = await oAuthTest.RefreshTokenAsync(token).ConfigureAwait(false);
 
             Assert.IsNotNull(freshToken, "Token is null");
             Assert.AreNotSame(token.AccessToken, freshToken.AccessToken, "Token is not refreshed");
         }
 
         [TestMethod]
-        public void ShouldValidateAccessToken()
+        public async Task ShouldValidateAccessToken()
         {
-            var token = oAuthTest.GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All).Result;
+            var token = await oAuthTest
+                .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All)
+                .ConfigureAwait(false);
 
             Assert.IsTrue(oAuthTest.ValidateTokenAsync(token).Result);
 

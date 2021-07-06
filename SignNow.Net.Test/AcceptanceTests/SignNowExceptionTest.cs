@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,28 +11,24 @@ namespace AcceptanceTests
     public class SignNowExceptionTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public void ExceptionHandlingTest()
+        public async Task ExceptionHandlingTest()
         {
             var documentId = "mstestSignNowDotNetSDK000000000000000000";
             var errorMessage = "Unable to find a route to match the URI: document/" + documentId;
             var rawErrorResponse = "{\"404\":\"Unable to find a route to match the URI: document\\/" + documentId + "\"}";
 
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => Task.WaitAll(SignNowTestContext.Documents.DeleteDocumentAsync(documentId)));
+            var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
+                async () => await SignNowTestContext.Documents
+                    .DeleteDocumentAsync(documentId)
+                    .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-            Assert.AreEqual(errorMessage, exception.InnerException?.Message);
-            Assert.AreEqual(1, exception.InnerExceptions.Count);
-
-            foreach (var ex in exception.InnerExceptions)
-            {
-                var snException = (SignNowException) ex;
-                Assert.AreEqual(errorMessage, snException.Message);
-                Assert.AreEqual(HttpStatusCode.NotFound, snException.HttpStatusCode);
-                Assert.AreEqual(rawErrorResponse, snException.RawResponse);
-                Assert.IsTrue(snException.RawHeaders
-                    .ToDictionary(x => x.Key, x => x.Value)
-                    .ContainsKey("Connection"));
-            }
+            Assert.AreEqual(errorMessage, exception.Message);
+            Assert.AreEqual(HttpStatusCode.NotFound, exception.HttpStatusCode);
+            Assert.AreEqual(rawErrorResponse, exception.RawResponse);
+            Assert.IsTrue(exception.RawHeaders
+                .ToDictionary(x => x.Key, x => x.Value)
+                .ContainsKey("Connection"));
         }
     }
 }
