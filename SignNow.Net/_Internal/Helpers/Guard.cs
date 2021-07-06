@@ -1,4 +1,5 @@
 using System;
+using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Internal.Helpers
 {
@@ -19,23 +20,33 @@ namespace SignNow.Net.Internal.Helpers
         public static void ArgumentNotNull(object argument, string argumentName)
         {
             if (null == argument)
-            {
                 throw new ArgumentNullException(argumentName);
-            }
         }
 
         /// <summary>
         /// Ensures that the specified object property is not null.
         /// </summary>
         /// <param name="property">The property.</param>
-        /// <param name="message">Error message.</param>
+        /// <param name="argumentName">Name of the argument for validation.</param>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <exception cref="ArgumentException"></exception>
-        public static void PropertyNotNull(object property, string message)
+        public static void PropertyNotNull(object property, string argumentName, string message = default)
         {
             if (null == property)
-            {
-                throw new ArgumentException(message);
-            }
+                throw new ArgumentException(message, argumentName);
+        }
+
+        /// <summary>
+        /// Ensures that the specified string is not null, whitespace or empty.
+        /// </summary>
+        /// <param name="argument">Input string for validation.</param>
+        /// <param name="argumentName">Name of the argument for validation.</param>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <exception cref="ArgumentException">If <paramref name="argument"/> is null, empty or whitespace.</exception>
+        public static void ArgumentIsNotEmptyString(string argument, string argumentName, string message = default)
+        {
+            if (string.IsNullOrEmpty(argument) || string.IsNullOrWhiteSpace(argument))
+                throw new ArgumentException(message ?? ExceptionMessages.StringNotNullOrEmptyOrWhitespace, argumentName);
         }
     }
 }

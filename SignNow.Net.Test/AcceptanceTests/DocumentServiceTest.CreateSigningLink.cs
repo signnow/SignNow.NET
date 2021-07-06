@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
+using System.Threading.Tasks;
 using SignNow.Net.Exceptions;
 
 namespace AcceptanceTests
@@ -8,25 +9,31 @@ namespace AcceptanceTests
     public partial class DocumentServiceTest
     {
         [TestMethod]
-        public void SigningLinkCreatedSuccessfully()
+        public async Task SigningLinkCreatedSuccessfully()
         {
-            var signingLinks = SignNowTestContext.Documents.CreateSigningLinkAsync(TestPdfDocumentIdWithFields).Result;
+            var signingLinks = await SignNowTestContext.Documents
+                .CreateSigningLinkAsync(TestPdfDocumentIdWithFields)
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(signingLinks.Url);
             Assert.IsNotNull(signingLinks.AnonymousUrl);
         }
 
         [TestMethod]
-        public void SigningLinkExceptionIsCorrect()
+        public async Task ThrowsExceptionForWrongDocumentId()
         {
-            var exception = Assert
-                .ThrowsException<AggregateException>(
-                    () => SignNowTestContext.Documents.CreateSigningLinkAsync("Some Wrong Document Id").Result);
+            var exception = await Assert
+                .ThrowsExceptionAsync<ArgumentException>(
+                    async () => await SignNowTestContext.Documents
+                        .CreateSigningLinkAsync("Some Wrong Document Id")
+                        .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
             var expected = string
                 .Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, "Some Wrong Document Id");
 
-            Assert.AreEqual(expected, exception.InnerException?.Message);
+            StringAssert.Contains(exception.Message, expected);
+            Assert.AreEqual("Some Wrong Document Id", exception.ParamName);
         }
     }
 }

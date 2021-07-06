@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Examples.Authentication;
 using SignNow.Net.Examples.Documents;
+using SignNow.Net.Examples.Folders;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
@@ -23,6 +26,8 @@ namespace SignNow.Net.Examples
     [TestClass]
     public class ExamplesRunner
     {
+        private DateTime UnixEpoch => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         /// <summary>
         /// Base path to the `TestExamples` directory.
         /// Path should use Unix-like directory separator char. It requires for cross platform path compatibility.
@@ -101,9 +106,11 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="AuthenticationExamples.RequestAccessToken"/>
         /// </summary>
         [TestMethod]
-        public void RequestAccessTokenTest()
+        public async Task RequestAccessTokenTest()
         {
-            var requestAccessToken = AuthenticationExamples.RequestAccessToken(ApiBaseUrl, credentials).Result;
+            var requestAccessToken = await AuthenticationExamples
+                .RequestAccessToken(ApiBaseUrl, credentials)
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(requestAccessToken);
             Assert.IsFalse(string.IsNullOrEmpty(requestAccessToken.AccessToken));
@@ -118,10 +125,10 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.UploadDocumentWithFieldExtract"/>
         /// </summary>
         [TestMethod]
-        public void UploadDocumentWithFieldExtractTest()
+        public async Task UploadDocumentWithFieldExtractTest()
         {
-            var documentWithFields = DocumentExamples
-                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result;
+            var documentWithFields = await DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).ConfigureAwait(false);
 
             disposableDocumentId = documentWithFields?.Id;
 
@@ -136,16 +143,16 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.DownloadSignedDocument"/>
         /// </summary>
         [TestMethod]
-        public void DownloadSignedDocumentTest()
+        public async Task DownloadSignedDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithoutFields);
-            var document = testContext.Documents
-                .UploadDocumentAsync(fileStream, "SignedDocumentTest.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithoutFields);
+            var document = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "SignedDocumentTest.pdf").ConfigureAwait(false);
 
             disposableDocumentId = document.Id;
 
-            var documentSigned = DocumentExamples
-                .DownloadSignedDocument(document.Id, token).Result;
+            var documentSigned = await DocumentExamples
+                .DownloadSignedDocument(document.Id, token).ConfigureAwait(false);
 
             Assert.AreEqual("SignedDocumentTest.pdf", documentSigned.Filename);
             Assert.IsInstanceOfType(documentSigned.Document, typeof(Stream));
@@ -155,16 +162,17 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.CreateSigningLinkToTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateSigningLinkToTheDocumentTest()
+        public async Task CreateSigningLinkToTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateSigningLinkToTheDocument.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateSigningLinkToTheDocument.pdf")
+                .ConfigureAwait(false);
 
             disposableDocumentId = document?.Id;
 
-            var signingLink = DocumentExamples
-                .CreateSigningLinkToTheDocument(document?.Id, token).Result;
+            var signingLink = await DocumentExamples
+                .CreateSigningLinkToTheDocument(document?.Id, token).ConfigureAwait(false);
 
             Assert.IsNotNull(signingLink.Url);
             Assert.IsNotNull(signingLink.AnonymousUrl);
@@ -177,15 +185,16 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.CheckTheStatusOfTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CheckTheStatusOfTheDocumentTest()
+        public async Task CheckTheStatusOfTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf")
+                .ConfigureAwait(false);
 
             disposableDocumentId = document?.Id;
 
-            var documentStatus = DocumentExamples.CheckTheStatusOfTheDocument(document?.Id, token).Result;
+            var documentStatus = await DocumentExamples.CheckTheStatusOfTheDocument(document?.Id, token).ConfigureAwait(false);
 
             Assert.AreEqual(DocumentStatus.NoInvite, documentStatus);
         }
@@ -194,25 +203,28 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.MergeTwoDocuments"/>
         /// </summary>
         [TestMethod]
-        public void MergeTwoDocumentsTest()
+        public async Task MergeTwoDocumentsTest()
         {
-            using var file1Stream = File.OpenRead(PdfWithSignatureField);
-            using var file2Stream = File.OpenRead(PdfWithoutFields);
+            await using var file1Stream = File.OpenRead(PdfWithSignatureField);
+            await using var file2Stream = File.OpenRead(PdfWithoutFields);
 
-            var doc1 = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(file1Stream, "MergeTwoDocumentsTest1.pdf").Result;
-            var doc2 = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(file2Stream, "MergeTwoDocumentsTest2.pdf").Result;
+            var doc1 = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(file1Stream, "MergeTwoDocumentsTest1.pdf")
+                .ConfigureAwait(false);
+            var doc2 = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(file2Stream, "MergeTwoDocumentsTest2.pdf")
+                .ConfigureAwait(false);
 
-            var document1 = testContext.Documents.GetDocumentAsync(doc1.Id).Result;
-            var document2 = testContext.Documents.GetDocumentAsync(doc2.Id).Result;
+            var document1 = await testContext.Documents.GetDocumentAsync(doc1.Id).ConfigureAwait(false);
+            var document2 = await testContext.Documents.GetDocumentAsync(doc2.Id).ConfigureAwait(false);
 
             var documents = new List<SignNowDocument> { document1, document2 };
-            var finalDocument = DocumentExamples
-                .MergeTwoDocuments("MergeTwoDocumentsTestResult.pdf", documents, token).Result;
+            var finalDocument = await DocumentExamples
+                .MergeTwoDocuments("MergeTwoDocumentsTestResult.pdf", documents, token)
+                .ConfigureAwait(false);
 
-            testContext.Documents.DeleteDocumentAsync(doc1.Id);
-            testContext.Documents.DeleteDocumentAsync(doc2.Id);
+            await testContext.Documents.DeleteDocumentAsync(doc1.Id);
+            await testContext.Documents.DeleteDocumentAsync(doc2.Id);
 
             Assert.AreEqual("MergeTwoDocumentsTestResult.pdf", finalDocument.Filename);
             Assert.IsInstanceOfType(finalDocument.Document, typeof(Stream) );
@@ -222,16 +234,18 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="DocumentExamples.GetTheDocumentHistory"/>
         /// </summary>
         [TestMethod]
-        public void GetTheDocumentHistoryTest()
+        public async Task GetTheDocumentHistoryTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "GetTheDocumentHistory.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "GetTheDocumentHistory.pdf")
+                .ConfigureAwait(false);
 
             disposableDocumentId = document?.Id;
 
-            var documentHistory = DocumentExamples
-                .GetTheDocumentHistory(disposableDocumentId, token).Result;
+            var documentHistory = await DocumentExamples
+                .GetTheDocumentHistory(disposableDocumentId, token)
+                .ConfigureAwait(false);
 
             Assert.IsTrue(documentHistory.All(item => item.DocumentId == disposableDocumentId));
             Assert.IsTrue(documentHistory.Any(item => item.Origin == "original"));
@@ -242,18 +256,57 @@ namespace SignNow.Net.Examples
         /// Run the test for example: <see cref="DocumentExamples.CreateOneTimeLinkToDownloadTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateOneTimeLinkToDownloadTheDocumentTest()
+        public async Task CreateOneTimeLinkToDownloadTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateOneTimeLinkToDownloadTheDocumentTest.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateOneTimeLinkToDownloadTheDocumentTest.pdf")
+                .ConfigureAwait(false);
 
             disposableDocumentId = document?.Id;
 
-            var oneTimeLink = DocumentExamples
-                .CreateOneTimeLinkToDownloadTheDocument(disposableDocumentId, token).Result;
+            var oneTimeLink = await DocumentExamples
+                .CreateOneTimeLinkToDownloadTheDocument(disposableDocumentId, token)
+                .ConfigureAwait(false);
 
             StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
+        }
+
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.MoveTheDocumentToFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task MoveDocumentTest()
+        {
+            // Upload test document
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var testDocument = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "MoveDocumentTest.pdf");
+
+            // Create new Folder where you'd like to keep test document
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+            var folderToMove = await testContext.Folders
+                .CreateFolderAsync("FolderToMoveDocument", documentsFolder?.Id)
+                .ConfigureAwait(false);
+
+            // Move test document to folder created with previous step
+            await DocumentExamples
+                .MoveTheDocumentToFolder(testDocument.Id, folderToMove.Id, token)
+                .ConfigureAwait(false);
+
+            // Check if test document has been moved
+            var folderToMoveUpdated = await testContext.Folders
+                .GetFolderAsync(folderToMove.Id)
+                .ConfigureAwait(false);
+            Assert.AreEqual("FolderToMoveDocument", folderToMoveUpdated.Name);
+            Assert.AreEqual(1, folderToMoveUpdated.TotalDocuments);
+            Assert.AreEqual(testDocument.Id, folderToMoveUpdated.Documents.FirstOrDefault(d => d.Id == testDocument.Id)?.Id);
+
+            // Finally - delete document and folder
+            await testContext.Documents.DeleteDocumentAsync(testDocument.Id).ConfigureAwait(false);
+            await testContext.Folders.DeleteFolderAsync(folderToMoveUpdated.Id).ConfigureAwait(false);
         }
 
         #endregion
@@ -264,23 +317,25 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="InviteExamples.CreateFreeformInviteToSignTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateFreeformInviteToSignTheDocumentTest()
+        public async Task CreateFreeformInviteToSignTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithoutFields);
-            var document = testContext.Documents
-                .UploadDocumentAsync(fileStream, "CreateFreeformInviteToSignTheDocument.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithoutFields);
+            var document = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "CreateFreeformInviteToSignTheDocument.pdf")
+                .ConfigureAwait(false);
 
-            var signNowDoc = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
 
             disposableDocumentId = document?.Id;
 
-            var inviteResponse = InviteExamples
-                .CreateFreeformInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", token).Result;
+            var inviteResponse = await InviteExamples
+                .CreateFreeformInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", token)
+                .ConfigureAwait(false);
 
             Assert.IsFalse(string.IsNullOrEmpty(inviteResponse.Id));
 
-            var documentWithInvite = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var documentWithInvite = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             var createdInvite = documentWithInvite.InvitesStatus.FirstOrDefault();
 
             Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
@@ -293,23 +348,25 @@ namespace SignNow.Net.Examples
         /// Run test for example: <see cref="InviteExamples.CreateRoleBasedInviteToSignTheDocument"/>
         /// </summary>
         [TestMethod]
-        public void CreateRoleBasedInviteToSignTheDocumentTest()
+        public async Task CreateRoleBasedInviteToSignTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoleBasedInviteToSignTheDocument.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoleBasedInviteToSignTheDocument.pdf")
+                .ConfigureAwait(false);
 
-            var signNowDoc = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
 
             disposableDocumentId = document?.Id;
 
-            var inviteResponse = InviteExamples
-                .CreateRoleBasedInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", token).Result;
+            var inviteResponse = await InviteExamples
+                .CreateRoleBasedInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", token)
+                .ConfigureAwait(false);
 
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
 
-            var documentWithInvite = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var documentWithInvite = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             var createdInvite = documentWithInvite.FieldInvites.FirstOrDefault();
 
             Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
@@ -324,19 +381,21 @@ namespace SignNow.Net.Examples
         /// <see cref="InviteExamples.GenerateLinkForEmbeddedInvite"/>
         /// </summary>
         [TestMethod]
-        public void CreateEmbeddedSigningInviteToSignTheDocumentTest()
+        public async Task CreateEmbeddedSigningInviteToSignTheDocumentTest()
         {
-            using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var document = testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateEmbeddedSigningInviteToSignTheDocument.pdf").Result;
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateEmbeddedSigningInviteToSignTheDocument.pdf")
+                .ConfigureAwait(false);
 
-            var signNowDoc = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
 
             disposableDocumentId = document?.Id;
 
             // Create Embedded Signing Invite
-            var embeddedInviteResponse = InviteExamples
-                .CreateEmbeddedSigningInviteToSignTheDocument(signNowDoc, "testemail@signnow.com", token).Result;
+            var embeddedInviteResponse = await InviteExamples
+                .CreateEmbeddedSigningInviteToSignTheDocument(signNowDoc, "testemail@signnow.com", token)
+                .ConfigureAwait(false);
 
             Assert.AreEqual(1, embeddedInviteResponse.InviteData.Count);
             Assert.AreEqual(1, embeddedInviteResponse.InviteData[0].Order);
@@ -344,18 +403,18 @@ namespace SignNow.Net.Examples
             Assert.AreEqual("Pending", embeddedInviteResponse.InviteData[0].Status.ToString());
 
 
-            var documentWithEmbed = testContext.Documents.GetDocumentAsync(document.Id).Result;
+            var documentWithEmbed = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             Assert.IsTrue(documentWithEmbed.FieldInvites.First().IsEmbedded);
 
             // Generate link for Embedded Signing Invite
-            var embeddedLink = InviteExamples
-                .GenerateLinkForEmbeddedInvite(documentWithEmbed, 30, token).Result;
+            var embeddedLink = await InviteExamples
+                .GenerateLinkForEmbeddedInvite(documentWithEmbed, 30, token).ConfigureAwait(false);
 
             Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
             Console.WriteLine($@"Embedded link: {embeddedLink.Link.AbsoluteUri}");
 
             // Cancel embedded invite
-            var cancelled = InviteExamples.CancelEmbeddedInvite(documentWithEmbed, token);
+            await InviteExamples.CancelEmbeddedInvite(documentWithEmbed, token).ConfigureAwait(false);
         }
 
         #endregion
@@ -366,24 +425,23 @@ namespace SignNow.Net.Examples
         /// Run test for <see cref="UserExamples.CreateSignNowUser"/> and <see cref="UserExamples.SendVerificationEmailToUser"/>
         /// </summary>
         [TestMethod]
-        public void CreateSignNowUserTest()
+        public async Task CreateSignNowUserTest()
         {
-            DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
 
-            var createUserResponse = UserExamples.CreateSignNowUser(
+            var createUserResponse = await UserExamples.CreateSignNowUser(
                 "John",
                 $"Sample{timestamp}",
                 $"signnow.tutorial+sample_test{timestamp}@gmail.com",
                 "secretPassword",
                 token
-            ).Result;
+            ).ConfigureAwait(false);
 
             Assert.AreEqual($"signnow.tutorial+sample_test{timestamp}@gmail.com", createUserResponse.Email);
             Assert.IsFalse(createUserResponse.Verified);
 
             // Finally - send verification email to User
-            UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).GetAwaiter().GetResult();
+            await UserExamples.SendVerificationEmailToUser(createUserResponse.Email, token).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -438,20 +496,20 @@ namespace SignNow.Net.Examples
         [TestMethod]
         public async Task CreateTemplateFromDocumentTest()
         {
-            var document = DocumentExamples
-                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result;
+            var document = await DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).ConfigureAwait(false);
             disposableDocumentId = document?.Id;
 
             var templateName = "Template Name";
-            var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token);
-            var template = await testContext.Documents.GetDocumentAsync(result.Id);
+            var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token).ConfigureAwait(false);
+            var template = await testContext.Documents.GetDocumentAsync(result.Id).ConfigureAwait(false);
 
             Assert.IsFalse(document.IsTemplate);
             Assert.IsNotNull(template?.Id);
             Assert.AreEqual(templateName, template.Name);
             Assert.IsTrue(template.IsTemplate);
 
-            await testContext.Documents.DeleteDocumentAsync(template.Id);
+            await testContext.Documents.DeleteDocumentAsync(template.Id).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -460,21 +518,164 @@ namespace SignNow.Net.Examples
         [TestMethod]
         public async Task CreateDocumentFromTemplateTest()
         {
-            var testDocumentId = DocumentExamples
-                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).Result?.Id;
-            disposableDocumentId = testDocumentId;
+            var testDocument = await DocumentExamples
+                .UploadDocumentWithFieldExtract(PdfWithSignatureField, token)
+                .ConfigureAwait(false);
+            disposableDocumentId = testDocument.Id;
 
-            var templateId = (await testContext.Documents.CreateTemplateFromDocumentAsync(testDocumentId, "TemplateName")).Id;
+            var template = await testContext.Documents
+                .CreateTemplateFromDocumentAsync(testDocument.Id, "TemplateName")
+                .ConfigureAwait(false);
             var documentName = "Document Name";
-            var result = await DocumentExamples.CreateDocumentFromTheTemplate(templateId, documentName, token);
-            var document = await testContext.Documents.GetDocumentAsync(result.Id);
+            var result = await DocumentExamples
+                .CreateDocumentFromTheTemplate(template.Id, documentName, token)
+                .ConfigureAwait(false);
+            var document = await testContext.Documents
+                .GetDocumentAsync(result.Id)
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(document?.Id);
             Assert.IsFalse(document.IsTemplate);
             Assert.AreEqual(documentName, document.Name);
 
-            await testContext.Documents.DeleteDocumentAsync(document.Id);
-            await testContext.Documents.DeleteDocumentAsync(templateId);
+            await testContext.Documents.DeleteDocumentAsync(document.Id).ConfigureAwait(false);
+            await testContext.Documents.DeleteDocumentAsync(template.Id).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Folder Examples
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.GetAllFolders"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetAllFoldersTest()
+        {
+            var folders = await FolderExamples
+                .GetAllFolders(token)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folders, typeof(SignNowFolders));
+            Assert.AreEqual("Root", folders.Name);
+            Assert.IsTrue(folders.SystemFolder);
+
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Documents"));
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Archive"));
+            Assert.IsTrue(folders.Folders.Any(f => f.Name == "Templates"));
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.GetFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task GetFolderTest()
+        {
+            var folders = await FolderExamples.GetAllFolders(token).ConfigureAwait(false);
+            var folderId = folders.Folders.FirstOrDefault(f => f.Name == "Documents")?.Id;
+
+            var filterBySigningStatus = new GetFolderOptions
+            {
+                Filters = new FolderFilters(SigningStatus.Pending)
+            };
+
+            var folder = await FolderExamples
+                .GetFolder(folderId, filterBySigningStatus, token)
+                .ConfigureAwait(false);
+
+            Assert.IsTrue(folders.Documents.All(d => d.Status == DocumentStatus.Pending));
+            Assert.AreEqual(folders.TotalDocuments, folders.Documents.Count);
+            Assert.IsTrue(folder.SystemFolder);
+            Assert.AreEqual(folderId, folder.Id);
+            Assert.AreEqual(folders.Id, folder.ParentId);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.CreateFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task CreateFolderTest()
+        {
+            // Get Root folder and Documents folder
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
+            // Note: You should use different folder name for each example run
+            var myFolderName = $"CreateFolderExample_{timestamp}";
+
+            // Creating new folder
+            var createNewFolder = await FolderExamples
+                .CreateFolder(myFolderName, documentsFolder?.Id, token)
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(createNewFolder.Id);
+
+            // Check if new folder exists
+            var checkNewFolderExists = await testContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, new GetFolderOptions {IncludeDocumentsSubfolder = false})
+                .ConfigureAwait(false);
+
+            var myFolder = checkNewFolderExists.Folders.FirstOrDefault(f => f.Name == myFolderName);
+            Assert.AreEqual(myFolderName, myFolder?.Name);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.RenameFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task RenameFolderTest()
+        {
+            // Creates folder inside Documents folder for test
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+            var folderForRename = await testContext.Folders
+                .CreateFolderAsync("noname", documentsFolder?.Id)
+                .ConfigureAwait(false);
+
+            // Rename previously created folder
+            var renameFolder = await FolderExamples
+                .RenameFolder("ItsRenamedFolder", folderForRename.Id, token)
+                .ConfigureAwait(false);
+
+            var renamed = await testContext.Folders.GetFolderAsync(renameFolder.Id).ConfigureAwait(false);
+
+            // Check if folder renamed
+            Assert.AreEqual("ItsRenamedFolder", renamed.Name);
+            Assert.AreEqual(folderForRename.Id, renamed.Id);
+
+            // Finally - delete test folder
+            await testContext.Folders.DeleteFolderAsync(renamed.Id).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="FolderExamples.DeleteFolder"/>
+        /// </summary>
+        [TestMethod]
+        public async Task DeleteFolderTest()
+        {
+            // Create some folder for test inside the Documents folder
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+            var folderToDelete = await testContext.Folders
+                .CreateFolderAsync("DeleteMe", documentsFolder?.Id)
+                .ConfigureAwait(false);
+
+            // Check if test folder exists
+            var createdFolder = await testContext.Folders
+                .GetFolderAsync(folderToDelete.Id)
+                .ConfigureAwait(false);
+            Assert.AreEqual(folderToDelete.Id, createdFolder.Id);
+
+            // Delete folder
+            await FolderExamples.DeleteFolder(folderToDelete.Id, token).ConfigureAwait(false);
+
+            // Check if test folder has been deleted
+            var folders = await testContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, new GetFolderOptions {IncludeDocumentsSubfolder = false})
+                .ConfigureAwait(false);
+
+            Assert.IsFalse(folders.Folders.Any(f => f.Name == "DeleteMe"));
         }
 
         #endregion

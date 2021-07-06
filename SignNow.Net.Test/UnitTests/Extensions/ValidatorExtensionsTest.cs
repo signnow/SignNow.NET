@@ -18,12 +18,11 @@ namespace UnitTests
         [DataRow("0000000000000000000000000000000000000000 ", DisplayName = "40 chars with trailing space")]
         public void ShouldValidateDocumentId(string id)
         {
-            var exception = Assert.ThrowsException<ArgumentException>(
-                id.ValidateId);
+            var exception = Assert.ThrowsException<ArgumentException>(id.ValidateId);
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfId, id),
-                exception.Message);
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, ExceptionMessages.InvalidFormatOfId, id);
+            StringAssert.Contains(exception.Message, errorMessage);
+            Assert.AreEqual(id, exception.ParamName);
         }
 
         [DataTestMethod]
@@ -39,12 +38,11 @@ namespace UnitTests
         [DataRow("user1@noreply.com\r", DisplayName = "extra return line symbols")]
         public void ShouldFailNonValidEmails(string email)
         {
-            var exception = Assert.ThrowsException<ArgumentException>(
-                email.ValidateEmail);
+            var exception = Assert.ThrowsException<ArgumentException>(email.ValidateEmail);
 
-            Assert.AreEqual(
-                string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, email),
-                exception.Message);
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, ExceptionMessages.InvalidFormatOfEmail, email);
+            StringAssert.Contains(exception.Message, errorMessage);
+            Assert.AreEqual(email, exception.ParamName);
         }
 
         [DataTestMethod]

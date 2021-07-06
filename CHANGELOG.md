@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
 - `IUserService.GetUserDocumentsAsync` that allows to get all information of user's documents that were not modified yet
+- `Interfaces.ISignNowContext` extended with `IFolderService` that allows you works with Folders
+- `IFolderService.GetAllFoldersAsync` that allows you to get all user Folders with documents
+- `IFolderService.GetFolderAsync` that allows you to get all details of a specific folder including all documents in that folder.
+- `IFolderService.CreateFolderAsync` that allows you to create folder for a user.
+- `IFolderService.DeleteFolderAsync` that allows you to deletes a folder.
+- `IFolderService.RenameFolderAsync` that allows you to renames a folder.
+- `IDocumentService.MoveDocumentAsync` that allows you to move the document to a specified folder.
 
 ## [0.8.0] - 2021-04-26
 ## Added

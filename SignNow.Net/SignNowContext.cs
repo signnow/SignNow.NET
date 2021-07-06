@@ -6,6 +6,9 @@ using System;
 
 namespace SignNow.Net
 {
+    /// <summary>
+    /// Service container with all SignNow services
+    /// </summary>
     public class SignNowContext : AuthorizedWebClientBase, ISignNowContext
     {
         public IUserService Users { get; protected set; }
@@ -13,6 +16,8 @@ namespace SignNow.Net
         public ISignInvite Invites { get; protected set; }
 
         public IDocumentService Documents { get; protected set; }
+
+        public IFolderService Folders { get; protected set; }
 
         public SignNowContext(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
@@ -27,6 +32,7 @@ namespace SignNow.Net
             Users = new UserService(baseApiUrl, token, signNowClient);
             Invites = (ISignInvite) Users;
             Documents = new DocumentService(baseApiUrl, token, signNowClient);
+            Folders = new FolderService(baseApiUrl, token, signNowClient);
         }
     }
 }

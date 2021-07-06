@@ -1,7 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Test.Constants;
-using System;
 using System.IO;
+using System.Threading.Tasks;
+using SignNow.Net.Exceptions;
 
 namespace AcceptanceTests
 {
@@ -11,60 +12,64 @@ namespace AcceptanceTests
             "Document Upload result should contain non-null Id property value on successful upload";
 
         [TestMethod]
-        public void DocumentUploadWorksForPdf()
+        public async Task DocumentUploadWorksForPdf()
         {
-            using (var fileStream = File.OpenRead(PdfFilePath))
-            {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentAsync(fileStream, PdfFileName).Result;
+            using var fileStream = File.OpenRead(PdfFilePath);
+            var uploadResponse = await SignNowTestContext.Documents
+                .UploadDocumentAsync(fileStream, PdfFileName)
+                .ConfigureAwait(false);
 
-                DisposableDocumentId = uploadResponse.Id;
+            DisposableDocumentId = uploadResponse.Id;
 
-                Assert.IsNotNull(uploadResponse.Id, assertMsg);
-            }
+            Assert.IsNotNull(uploadResponse.Id, assertMsg);
         }
 
         [TestMethod]
-        public void DocumentUploadWithFieldExtractWorksForPdf()
+        public async Task DocumentUploadWithFieldExtractWorksForPdf()
         {
-            using (var fileStream = File.OpenRead(PdfFilePath))
-            {
-                var uploadResponse = SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, PdfFileName).Result;
+            using var fileStream = File.OpenRead(PdfFilePath);
+            var uploadResponse = await SignNowTestContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, PdfFileName)
+                .ConfigureAwait(false);
 
-                DisposableDocumentId = uploadResponse.Id;
+            DisposableDocumentId = uploadResponse.Id;
 
-                Assert.IsNotNull(uploadResponse.Id, assertMsg);
+            Assert.IsNotNull(uploadResponse.Id, assertMsg);
 
-                var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var document = await SignNowTestContext.Documents
+                .GetDocumentAsync(DisposableDocumentId)
+                .ConfigureAwait(false);
 
-                // Check if fields were extracted (One field with role should be in the document)
-                Assert.IsNotNull(document.Roles.Count);
-            }
+            // Check if fields were extracted (One field with role should be in the document)
+            Assert.IsNotNull(document.Roles.Count);
         }
 
         [TestMethod]
-        public void DocumentUploadExceptionIsCorrect()
+        public async Task DocumentUploadExceptionIsCorrect()
         {
-            using (var fileStream = File.OpenRead(TxtFilePath))
-            {
-                var exception = Assert
-                    .ThrowsException<AggregateException>(
-                        () => SignNowTestContext.Documents.UploadDocumentAsync(fileStream, TxtFileName).Result);
+            using var fileStream = File.OpenRead(TxtFilePath);
+            var exception = await Assert
+                .ThrowsExceptionAsync<SignNowException>(
+                    async () => await SignNowTestContext.Documents
+                        .UploadDocumentAsync(fileStream, TxtFileName)
+                        .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-                Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
-            }
+            Assert.AreEqual(ErrorMessages.InvalidFileType, exception.Message);
         }
 
         [TestMethod]
-        public void DocumentUploadWithFieldExtractExceptionIsCorrect()
+        public async Task DocumentUploadWithFieldExtractExceptionIsCorrect()
         {
-            using (var fileStream = File.OpenRead(TxtFilePath))
-            {
-                var exception = Assert
-                    .ThrowsException<AggregateException>(
-                        () => SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, TxtFileName).Result);
+            using var fileStream = File.OpenRead(TxtFilePath);
+            var exception = await Assert
+                .ThrowsExceptionAsync<SignNowException>(
+                    async () => await SignNowTestContext.Documents
+                        .UploadDocumentWithFieldExtractAsync(fileStream, TxtFileName)
+                        .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-                Assert.AreEqual(ErrorMessages.InvalidFileType, exception.InnerException?.Message);
-            }
+            Assert.AreEqual(ErrorMessages.InvalidFileType, exception.Message);
         }
     }
 }

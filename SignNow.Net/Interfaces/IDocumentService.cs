@@ -19,7 +19,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be viewed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -48,7 +47,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be removed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -57,7 +55,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to create signing link for</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing URL to sign the document using web browser.</returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -67,7 +64,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="type">Download document <see cref="DownloadType">type</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -77,8 +73,16 @@ namespace SignNow.Net.Interfaces
         /// <param name="documents">Collection of the <see cref="SignNowDocument">documents</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Operation result object containing File info with Stream file content.</returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Moves a document into specified folder.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to move to specified folder.</param>
+        /// <param name="folderId">of the folder where you'd like to keep this document.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a document history (action log) data
@@ -86,7 +90,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to retrieve history list</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>List of Document history items</returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<IReadOnlyList<DocumentHistoryResponse>> GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -95,7 +98,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to be downloaded with one-time link</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>link to download specified document in PDF format</returns>
-        /// <exception cref="System.ArgumentException">If document identity is not valid.</exception>
         Task<DownloadLinkResponse> CreateOneTimeDownloadLinkAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -105,8 +107,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="templateName">The new template name</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns a new template ID</returns>
-        /// <exception cref="System.ArgumentException">If `<paramref name="documentId"/>` is not valid.</exception>
-        /// <exception cref="System.ArgumentException">If `<paramref name="templateName"/>` is null.</exception>
         Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -116,8 +116,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentName">The name of new document</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns identity of new Document</returns>
-        /// <exception cref="System.ArgumentException">If `<paramref name="templateId"/>` is not valid.</exception>
-        /// <exception cref="System.ArgumentException">If `<paramref name="documentName"/>` is null.</exception>
         Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default);
     }
 }

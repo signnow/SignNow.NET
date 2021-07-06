@@ -17,9 +17,9 @@ namespace UnitTests
             var exception = Assert.ThrowsException<ArgumentException>(
                 () => invite.Email = "not-an-email.com");
 
-            Assert.AreEqual(
-                String.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, "not-an-email.com"),
-                exception.Message);
+            var errorMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.InvalidFormatOfEmail, "not-an-email.com");
+            StringAssert.Contains(exception.Message, errorMessage);
+            Assert.AreEqual("not-an-email.com", exception.ParamName);
         }
 
         [TestMethod]
@@ -31,6 +31,7 @@ namespace UnitTests
                 () => invite.SigningOrder = 0);
 
             StringAssert.Contains(exception.Message, "Value cannot be 0");
+            Assert.AreEqual("SigningOrder", exception.ParamName);
         }
     }
 }

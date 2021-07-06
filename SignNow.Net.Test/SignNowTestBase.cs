@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Bogus;
 using Moq;
 using Moq.Protected;
 using SignNow.Net.Interfaces;
@@ -13,7 +14,8 @@ namespace UnitTests
 {
     public abstract class SignNowTestBase
     {
-        public static Uri ApiBaseUrl => new Uri("https://api-eval.signnow.com/");
+        protected static Faker Faker => new Faker();
+        protected static Uri ApiBaseUrl => new Uri("https://api-eval.signnow.com/");
 
         private static readonly string BaseTestDataPath = "../../../TestData/"
             .Replace('/', Path.DirectorySeparatorChar);

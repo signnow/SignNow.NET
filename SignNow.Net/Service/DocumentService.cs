@@ -37,12 +37,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
         public async Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}");
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = requestUrl,
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}"),
                 Token = Token
             };
 
@@ -52,12 +52,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
         public async Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestFullUrl = new Uri(ApiBaseUrl, "/link");
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestFullUrl,
+                RequestUrl = new Uri(ApiBaseUrl, "/link"),
                 Content = new JsonHttpContent(new { document_id = documentId.ValidateId() }),
                 Token = Token
             };
@@ -68,13 +68,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
         public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestedDocument = $"/document/{documentId.ValidateId()}";
-
             var requestOptions = new DeleteHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}"),
                 Token = Token
             };
 
@@ -99,10 +98,9 @@ namespace SignNow.Net.Service
 
         private async Task<UploadDocumentResponse> UploadDocumentAsync(string requestRelativeUrl, Stream documentContent, string fileName, CancellationToken cancellationToken = default)
         {
-            var requestFullUrl = new Uri(ApiBaseUrl, requestRelativeUrl);
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestFullUrl,
+                RequestUrl = new Uri(ApiBaseUrl, requestRelativeUrl),
                 Content = new FileHttpContent(documentContent, fileName),
                 Token = Token
             };
@@ -113,6 +111,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
         public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default)
         {
             var query = "";
@@ -136,11 +135,9 @@ namespace SignNow.Net.Service
                     break;
             }
 
-            var requestedDocument = $"/document/{documentId.ValidateId()}/download{query}";
-
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/download{query}"),
                 Token = Token
             };
 
@@ -150,14 +147,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentNullException">If <see cref="documents"/> is null.</exception>
         public async Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(documents, nameof(documents));
 
-            var requestBody = new MergeDocumentRequest
-            {
-                Name = documentName
-            };
+            var requestBody = new MergeDocumentRequest { Name = documentName };
             requestBody.AddDocuments(documents);
 
             var requestOptions = new PostHttpRequestOptions
@@ -176,14 +171,31 @@ namespace SignNow.Net.Service
             return mergeResponse;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="IDocumentService.MoveDocumentAsync"/>
+        /// <exception cref="System.ArgumentException">If <paramref name="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>
+        public async Task MoveDocumentAsync(string documentId, string folderId, CancellationToken cancellationToken = default)
+        {
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/move"),
+                Content = new JsonHttpContent(new {folder_id = folderId.ValidateId()}),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IDocumentService.GetDocumentHistoryAsync"/>
+        /// <exception cref="System.ArgumentException">If <paramref name="documentId"/> is not valid.</exception>
         public async Task<IReadOnlyList<DocumentHistoryResponse>>
             GetDocumentHistoryAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/historyfull");
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = requestUrl,
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/historyfull"),
                 Token = Token
             };
 
@@ -193,12 +205,12 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <paramref name="documentId"/> is not valid.</exception>
         public async Task<DownloadLinkResponse> CreateOneTimeDownloadLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/download/link");
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestUrl,
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/download/link"),
                 Token = Token
             };
 
@@ -208,16 +220,17 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <paramref name="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <paramref name="templateName"/> is null.</exception>
         public async Task<CreateTemplateFromDocumentResponse> CreateTemplateFromDocumentAsync(string documentId, string templateName, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(templateName, nameof(templateName));
 
-            var requestUrl = new Uri(ApiBaseUrl, $"/template");
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestUrl,
-                Token = Token,
+                RequestUrl = new Uri(ApiBaseUrl, "/template"),
                 Content = new JsonHttpContent(new CreateTemplateFromDocumentRequest(templateName, documentId.ValidateId())),
+                Token = Token
             };
 
             return await SignNowClient
@@ -226,16 +239,17 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <paramref name="documentName"/> is null.</exception>
         public async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(documentName, nameof(documentName));
 
-            var requestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/copy");
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestUrl,
-                Token = Token,
-                Content = new JsonHttpContent(new CreateDocumentFromTemplateRequest(documentName))
+                RequestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/copy"),
+                Content = new JsonHttpContent(new CreateDocumentFromTemplateRequest(documentName)),
+                Token = Token
             };
 
             return await SignNowClient

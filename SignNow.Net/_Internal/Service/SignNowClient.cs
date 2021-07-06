@@ -188,7 +188,7 @@ namespace SignNow.Net.Internal.Service
         /// <returns>Request Message <see cref="System.Net.Http.HttpRequestMessage"/></returns>
         private static HttpRequestMessage CreateHttpRequest(RequestOptions requestOptions)
         {
-            Guard.PropertyNotNull(requestOptions.RequestUrl, ExceptionMessages.RequestUrlIsNull);
+            Guard.PropertyNotNull(requestOptions.RequestUrl, nameof(requestOptions.RequestUrl), ExceptionMessages.RequestUrlIsNull);
 
             var requestMessage = new HttpRequestMessage(requestOptions.HttpMethod, requestOptions.RequestUrl.ToString());
 

@@ -44,9 +44,16 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
+        - [Move document into specified folder][move_document example] 
     - [Template](#template)
         - [Create a template by flattening an existing document](#create-template)
         - [Create document from the template][create_document example]
+    - [Folders](#folders)
+        - [Get all folders](#get-all-folders)
+        - [Get folder by Id][get_folder example]
+        - [Create folder][create_folder example]
+        - [Rename folder][rename_folder example]
+        - [Delete folder][delete_folder example]
 6. [Contribution guidelines](#contribution-guidelines)
     - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
@@ -539,6 +546,30 @@ public static class DocumentExamples
 More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
 
+## <a name="folders"/>Folders
+### <a name="get-all-folders"/>Get all folders
+
+```csharp
+public static class FolderExamples
+{
+    /// <summary>
+    /// Get all folders of a user.
+    /// </summary>
+    /// <param name="token">Access token</param>
+    /// <returns>Returns all information about user's folders.</returns>
+    public static async Task<SignNowFolders> GetAllFolders(Token token)
+    {
+        var signNowContext = new SignNowContext(token);
+
+        return await signNowContext.Folders
+            .GetAllFoldersAsync()
+            .ConfigureAwait(false);
+    }
+}
+```
+
+More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example], [Create folder][create_folder example]
+
 ## <a name="contribution-guidelines"></a>Contribution guidelines
 
 ### <a name="xml-doc-generation"></a>XML doc generation
@@ -619,7 +650,15 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
+[move_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MoveTheDocumentToFolder.cs
 
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
 [create_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateDocumentFromTheTemplate.cs
+
+<!-- Folders -->
+[get_all_folders example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetAllFolders.cs
+[get_folder example]:               https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetFolder.cs
+[create_folder example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/CreateFolder.cs
+[rename_folder example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/RenameFolder.cs
+[delete_folder example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/DeleteFolder.cs
