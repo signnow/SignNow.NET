@@ -75,27 +75,28 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void HandleBrokenJsonResponseWhileDeserialization()
+        public async Task HandleBrokenJsonResponseWhileDeserialization()
         {
             var signNowClientMock = SignNowClientMock("{Broken response body", HttpStatusCode.BadRequest);
 
-            var exception = Assert
-                .ThrowsException<AggregateException>(
-                    () => signNowClientMock.RequestAsync(
-                        new GetHttpRequestOptions { RequestUrl = ApiBaseUrl },
-                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result
-                    );
+            var exception = await Assert
+                .ThrowsExceptionAsync<SignNowException>(
+                    async () => await signNowClientMock.RequestAsync(
+                            new GetHttpRequestOptions { RequestUrl = ApiBaseUrl },
+                            new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter()))
+                        .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-            StringAssert.Contains(exception.Message, "One or more errors occurred.");
-            StringAssert.Contains(exception.InnerException?.Message, "Newtonsoft.Json.JsonReaderException thrown while parsing Json body from https://api-eval.signnow.com/");
-            StringAssert.Contains(exception.InnerException?.InnerException?.Message, "Invalid Json syntax in response");
-            StringAssert.Contains(exception.InnerException?.InnerException?.InnerException?.Message, "Invalid character after parsing property name. Expected ':' but got: r. Path '', line 1, position 8.");
+            StringAssert.Contains(exception.Message, $"Newtonsoft.Json.JsonReaderException thrown while parsing Json body from {ApiBaseUrl}");
+            StringAssert.Contains(exception.InnerException?.Message, "Invalid Json syntax in response");
+            StringAssert.Contains(exception.InnerException?.InnerException?.Message, "Invalid character after parsing property name. Expected ':' but got: r. Path '', line 1, position 8.");
 
-            Assert.AreEqual("{Broken response body", ((SignNowException)exception.InnerException)?.RawResponse);
+            Assert.AreEqual("{Broken response body", exception.RawResponse);
+            Assert.AreEqual(HttpStatusCode.BadRequest, exception.HttpStatusCode);
         }
 
         [TestMethod]
-        public void ShouldHandleTimeoutExceptionFromHttpClient()
+        public async Task ShouldHandleTimeoutExceptionFromHttpClient()
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
@@ -113,18 +114,27 @@ namespace UnitTests
             // Override timeout for Client to minimal value
             httpClient.Timeout = TimeSpan.FromSeconds(1);
 
-            var exception = Assert
-                .ThrowsException<AggregateException>(
-                    () => signnowClient.RequestAsync(
+            var exception = await Assert
+                .ThrowsExceptionAsync<SignNowException>(
+                    async () => await signnowClient.RequestAsync(
                         new GetHttpRequestOptions { RequestUrl = new Uri(ApiBaseUrl + "user") },
-                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter())).Result);
+                        new HttpContentToObjectAdapter<Token>(new HttpContentToStringAdapter()))
+                        .ConfigureAwait(false))
+                .ConfigureAwait(false);
 
             var errorMessage = string.Format(CultureInfo.CurrentCulture,
                 ExceptionMessages.UnableToProcessRequest,
                 "GET", ApiBaseUrl + "user", "");
 
-            StringAssert.Matches(exception.InnerException?.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
+            StringAssert.Matches(exception.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
+
+            #if NET5_0
+            StringAssert.Contains(exception.InnerException?.Message, "The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.");
             StringAssert.Contains(exception.InnerException?.InnerException?.Message, "A task was canceled.");
+            #else
+            StringAssert.Contains(exception.InnerException?.Message, "A task was canceled.");
+            #endif
+
             Assert.AreEqual(TimeSpan.FromSeconds(1), httpClient.Timeout);
         }
     }

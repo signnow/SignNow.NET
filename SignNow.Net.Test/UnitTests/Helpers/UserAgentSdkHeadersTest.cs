@@ -28,7 +28,11 @@ namespace UnitTests
             var osdetails = $"({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch})";
             var runtimeinfo = $"{SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
 
-            var userAgentString = $"{SdkRuntime.ClientName}/v{SdkRuntime.Version.ToString()} ({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) {SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
+            var userAgentString = $"{SdkRuntime.ClientName}/v{SdkRuntime.Version} ({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) {SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
+
+            #if DEBUG
+            Console.WriteLine(userAgentString);
+            #endif
 
             StringAssert.Contains(SdkRuntime.ClientName, "SignNow .NET API Client");
             StringAssert.Matches(SdkRuntime.ClientName, new Regex(patternClient));
@@ -37,10 +41,52 @@ namespace UnitTests
             StringAssert.Matches(runtimeinfo, new Regex(patternRuntime));
 
             StringAssert.Matches(userAgentString, new Regex(patternUserAgent), "Format mismatch: <client>/<version> (<os>; <platform>; <arch>) <runtime_sdk>/<runtime_ver>");
+        }
 
-#if DEBUG
-            Console.WriteLine(userAgentString);
-#endif
+        [TestMethod]
+        public void OsDescriptionTest()
+        {
+            #if DEBUG
+            Console.WriteLine(SdkRuntime.OsDescription());
+            #endif
+
+            var expectedOs = "Darwin";
+
+            if (RuntimeInfo.OsName == "Linux")
+                expectedOs = "Linux";
+
+            if (RuntimeInfo.OsName == "Windows")
+                expectedOs = "Windows";
+
+            StringAssert.Contains(SdkRuntime.OsDescription(), expectedOs);
+        }
+
+        [TestMethod]
+        public void FrameworkNameTest()
+        {
+            #if DEBUG
+            Console.WriteLine(SdkRuntime.FrameworkName());
+            #endif
+
+            StringAssert.Contains(SdkRuntime.FrameworkName(), ".NET");
+        }
+
+        [TestMethod]
+        public void FrameworkVersionTest()
+        {
+            #if DEBUG
+            Console.WriteLine(SdkRuntime.FrameworkVersion());
+            #endif
+
+            var expectedVersion = "4.";
+
+            #if NETCOREAPP3_0 || NETCOREAPP3_1
+                expectedVersion = "3.";
+            #elif NET5_0
+                expectedVersion = "5.";
+            #endif
+
+            StringAssert.StartsWith(SdkRuntime.FrameworkVersion(), expectedVersion);
         }
     }
 }
