@@ -24,10 +24,6 @@ jobs:
       fail-fast: false
 
       matrix:
-        dotnet:
-          - '3.1.x'
-          - '5.0.x'
-
         framework:
           - 'net45'
           - 'netcoreapp3.1'
@@ -75,13 +71,22 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Setup .Net ${{ matrix.dotnet }}
+      - name: Setup .NET SDK Version for Target Framework
+        shell: pwsh
+        run: |
+          If ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
+            echo "name=DOTNET_SDK_VERSION::3.1.x" >> $GITHUB_ENV
+          } ElseIf ("${{ matrix.framework }}" -eq "net5") {
+            echo "name=DOTNET_SDK_VERSION::5.0.x" >> $GITHUB_ENV
+          }
+
+      - name: Setup .NET SDK v${{ env.DOTNET_SDK_VERSION }}
         if: (runner.os == 'macOS' || runner.os == 'Linux')
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
 
-      - name: Setup nuget cache
+      - name: Setup Nuget Cache
         uses: actions/cache@v2
         id: nuget-cache
         with:
@@ -89,9 +94,9 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Setup dotnet tool
+      - name: Setup dotnet tools
         env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ env.DOTNET_SDK_VERSION }}/x64
         run: |
           dotnet tool install --global InheritDocTool
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
@@ -99,25 +104,25 @@ jobs:
       - name: Restore Nuget packages
         run: dotnet restore -v:n
 
-      - name: Configure SignNow account
+      - name: Configure SignNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
 
-      - name: Build for .Net Standard 1.2
+      - name: Build for .NET Standard 1.2
         if: matrix.framework == 'netcoreapp3.1'
         shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework netstandard1.2
 
-      - name: Build for .Net Standard 2.0
+      - name: Build for .NET Standard 2.0
         if: matrix.framework == 'net5'
         shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework netstandard2.0
 
-      - name: Build for .Net 4.5
+      - name: Build for .NET 4.5
         if: (runner.os == 'Windows' && matrix.framework == 'net45')
         shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework net45
 
-      - name: Run Tests on ${{ matrix.framework }}
+      - name: Run Tests on ${{ matrix.framework }} with Coverage
         shell: pwsh
         run: |
           dotnet test SignNow.Net.Test `
