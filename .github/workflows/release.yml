@@ -50,11 +50,12 @@ jobs:
         shell: pwsh
         run: dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
-      - name: Get the Release Version
+      - name: Prepare Release Assets
         id: get-version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
           echo ::set-output name=RELEASE_NOTES::${.github/release-notes.sh CHANGELOG.md}
+          .github/release-notes.sh CHANGELOG.md > release-notes.txt
 
       - name: Create Release
         uses: ncipollo/release-action@v1
