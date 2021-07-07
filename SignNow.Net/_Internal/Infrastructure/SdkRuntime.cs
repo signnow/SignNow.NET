@@ -20,7 +20,7 @@ namespace SignNow.Net.Internal.Infrastructure
 
         static SdkRuntime()
         {
-            SdkRuntime.Version = ParseVersion();
+            Version = ParseVersion();
         }
 
         public static string OsDescription()
@@ -60,10 +60,10 @@ namespace SignNow.Net.Internal.Infrastructure
             return ".NET 4.8";
 #elif NET5_0
             return ".NET 5.0";
-#elif NETCOREAPP3_1
-            return ".NET Core 3.1";
 #elif NETCOREAPP3_0
             return ".NET Core 3.0";
+#elif NETCOREAPP3_1
+            return ".NET Core 3.1";
 #else
             return ".NET Core";
 #endif
@@ -78,7 +78,9 @@ namespace SignNow.Net.Internal.Infrastructure
 #if NETFRAMEWORK
             return Environment.Version.ToString();
 #else
-            return RuntimeInformation.FrameworkDescription.Replace(".NET Core ", String.Empty);
+            return RuntimeInformation.FrameworkDescription
+                .Replace(".NET ", String.Empty)
+                .Replace("Core ", String.Empty);
 #endif
         }
 

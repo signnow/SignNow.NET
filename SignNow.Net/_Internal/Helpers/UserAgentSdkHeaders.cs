@@ -14,7 +14,7 @@ namespace SignNow.Net.Internal.Helpers
         /// <returns></returns>
         public static string BuildUserAgentString()
         {
-            return $"{SdkRuntime.ClientName}/v{SdkRuntime.Version.ToString()} " +
+            return $"{SdkRuntime.ClientName}/v{SdkRuntime.Version} " +
                    $"({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) " +
                    $"{SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
         }

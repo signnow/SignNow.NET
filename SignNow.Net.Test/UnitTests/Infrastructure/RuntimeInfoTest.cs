@@ -26,26 +26,28 @@ namespace UnitTests
         [Ignore]
 #endif
         [DataTestMethod]
-        [DataRow("Darwin 1.2.0 Darwin Kernel Version 1.2.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.0", DisplayName = "Cheetah")]
-        [DataRow("Darwin 1.4.0 Darwin Kernel Version 1.4.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.1", DisplayName = "Puma")]
-        [DataRow("Darwin 6.5.0 Darwin Kernel Version 6.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.2", DisplayName = "Jaguar")]
-        [DataRow("Darwin 7.5.0 Darwin Kernel Version 7.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.3", DisplayName = "Panther")]
-        [DataRow("Darwin 8.5.0 Darwin Kernel Version 8.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.4", DisplayName = "Tiger")]
-        [DataRow("Darwin 9.5.0 Darwin Kernel Version 9.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.5", DisplayName = "Leopard")]
-        [DataRow("Darwin 10.5.0 Darwin Kernel Version 10.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.6", DisplayName = "Snow Leopard")]
-        [DataRow("Darwin 11.5.0 Darwin Kernel Version 11.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.7", DisplayName = "Lion")]
-        [DataRow("Darwin 12.5.0 Darwin Kernel Version 12.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.8", DisplayName = "Mountain Lion")]
-        [DataRow("Darwin 13.5.0 Darwin Kernel Version 13.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.9", DisplayName = "Mavericks")]
-        [DataRow("Darwin 14.5.0 Darwin Kernel Version 14.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.10", DisplayName = "Yosemite")]
-        [DataRow("Darwin 15.5.0 Darwin Kernel Version 15.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.11", DisplayName = "El Capitan")]
-        [DataRow("Darwin 16.5.0 Darwin Kernel Version 16.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.12", DisplayName = "Sierra")]
-        [DataRow("Darwin 17.5.0 Darwin Kernel Version 17.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.13", DisplayName = "High Sierra")]
-        [DataRow("Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.14", DisplayName = "Mojave")]
-        [DataRow("Darwin 19.0.0 Darwin Kernel Version 19.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "10.15", DisplayName = "Catalina")]
-        [DataRow("Darwin 20.0.0 Darwin Kernel Version 20.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "11.0", DisplayName = "Big Sur")]
-        [DataRow("Darwin 99.0.0 Darwin Kernel Version 99.0.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64", "", DisplayName = "Unknown")]
-        public void ShouldProperParseMacOsDetails(string kernelStr, string expected)
+        [DataRow("1.2.0", "10.0", DisplayName = "Cheetah")]
+        [DataRow("1.4.0", "10.1", DisplayName = "Puma")]
+        [DataRow("6.5.0", "10.2", DisplayName = "Jaguar")]
+        [DataRow("7.5.0", "10.3", DisplayName = "Panther")]
+        [DataRow("8.5.0", "10.4", DisplayName = "Tiger")]
+        [DataRow("9.5.0", "10.5", DisplayName = "Leopard")]
+        [DataRow("10.5.0", "10.6", DisplayName = "Snow Leopard")]
+        [DataRow("11.5.0", "10.7", DisplayName = "Lion")]
+        [DataRow("12.5.0", "10.8", DisplayName = "Mountain Lion")]
+        [DataRow("13.5.0", "10.9", DisplayName = "Mavericks")]
+        [DataRow("14.5.0", "10.10", DisplayName = "Yosemite")]
+        [DataRow("15.5.0", "10.11", DisplayName = "El Capitan")]
+        [DataRow("16.5.0", "10.12", DisplayName = "Sierra")]
+        [DataRow("17.5.0", "10.13", DisplayName = "High Sierra")]
+        [DataRow("18.5.0", "10.14", DisplayName = "Mojave")]
+        [DataRow("19.0.0", "10.15", DisplayName = "Catalina")]
+        [DataRow("20.0.0", "11.0", DisplayName = "Big Sur")]
+        [DataRow("21.0.0", "12.0", DisplayName = "Monterey")]
+        [DataRow("99.0.0", "", DisplayName = "Unknown")]
+        public void ShouldProperParseMacOsDetails(string kernelVer, string expected)
         {
+            var kernelStr = $"Darwin {kernelVer} Darwin Kernel Version {kernelVer}: Mon Mar  5 22:24:32 PST 2021; root:xnu-7195.121.3~9/RELEASE_X86_64";
             var actual = RuntimeInfo.GetMacOsVersion(kernelStr);
 
             Assert.AreEqual(actual, expected);

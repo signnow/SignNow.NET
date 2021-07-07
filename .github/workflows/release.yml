@@ -23,12 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup .Net 3.1
+      - name: Setup .NET 5
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.x
+          dotnet-version: '5.0.x'
 
-      - name: Setup nuget cache
+      - name: Setup Nuget Cache
         uses: actions/cache@v2
         id: nuget-cache
         with:
@@ -50,24 +50,20 @@ jobs:
         shell: pwsh
         run: dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
-      - name: Get the release version
+      - name: Prepare Release Assets
         id: get-version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-
-#      - name: Read CHANGELOG
-#        id: changelog
-#        run: |
-#          echo "::set-output name=body::$(cat CHANGELOG.md)
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=RELEASE_NOTES::${.github/release-notes.sh CHANGELOG.md}
+          .github/release-notes.sh CHANGELOG.md > release-notes.txt
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: SignNow .Net SDK v${{ steps.get-version.outputs.version }}
-          tag: ${{ steps.get-version.outputs.version }}
-          # @TODO: try to parse changelog and use ${{ steps.changelog.outputs.body }}
-          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          # This will update existing tags if any
+          name: SignNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
+          tag: ${{ steps.get-version.outputs.VERSION }}
+          body: ${{ steps.get-version.outputs.RELEASE_NOTES }}
           allowUpdates: true
           artifacts: ${{ github.workspace }}/SignNow.Net/bin/Publish/*.nupkg
           artifactContentType: application/octet-stream

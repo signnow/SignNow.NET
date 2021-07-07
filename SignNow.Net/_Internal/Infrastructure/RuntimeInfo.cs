@@ -42,8 +42,8 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <summary>
         /// Gets OS name from runtime
         /// </summary>
-        /// <returns></returns>
-        private static string GetOSName()
+        /// <returns>Windows, Linux, macOS or Unknown</returns>
+        public static string GetOSName()
         {
             var os = "Unknown";
 #if NETFRAMEWORK
@@ -232,6 +232,10 @@ namespace SignNow.Net.Internal.Infrastructure
                     version = "11.0";
                     break;
 
+                case (int)MacOsVersions.macOS1200:
+                    version = "12.0";
+                    break;
+
                 default:
                     break;
             }
@@ -260,7 +264,8 @@ namespace SignNow.Net.Internal.Infrastructure
             macOS1013,
             macOS1014,
             macOS1015,
-            macOS1100
+            macOS1100,
+            macOS1200
         }
     }
 }

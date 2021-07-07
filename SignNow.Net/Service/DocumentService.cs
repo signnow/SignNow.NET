@@ -37,7 +37,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         public async Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestOptions = new GetHttpRequestOptions
@@ -52,7 +52,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         public async Task<SigningLinkResponse> CreateSigningLinkAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestOptions = new PostHttpRequestOptions
@@ -68,7 +68,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         public async Task DeleteDocumentAsync(string documentId, CancellationToken cancellationToken = default)
         {
             var requestOptions = new DeleteHttpRequestOptions
@@ -111,7 +111,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentException">If <see cref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         public async Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentId, DownloadType type = DownloadType.PdfCollapsed, CancellationToken cancellationToken = default)
         {
             var query = "";
@@ -147,7 +147,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentNullException">If <see cref="documents"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="documents"/> is null.</exception>
         public async Task<DownloadDocumentResponse> MergeDocumentsAsync(string documentName, IEnumerable<SignNowDocument> documents, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(documents, nameof(documents));
