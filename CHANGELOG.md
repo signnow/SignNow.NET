@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-## Added
+### Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
 - `IUserService.GetUserDocumentsAsync` that allows to get all information of user's documents that were not modified yet
 - `Interfaces.ISignNowContext` extended with `IFolderService` that allows you works with Folders
@@ -17,21 +17,21 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `IDocumentService.MoveDocumentAsync` that allows you to move the document to a specified folder.
 
 ## [0.8.0] - 2021-04-26
-## Added
+### Added
 - `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
 - `IDocumentService.CreateDocumentFromTemplateAsync` that allows to create document from the template
 
 ## [0.7.0] - 2021-03-28
-## Added
+### Added
 - `ISignInvite.CreateInviteAsync` that allows to create embedded signing invite for a document
 - `ISignInvite.CancelEmbeddedInviteAsync` that allows to delete embedded signing invite for a document
 - `ISignInvite.GenerateEmbeddedInviteLinkAsync` that allows to create a link for the embedded signing invite for a document
 
-## Changed
+### Changed
 - Changed JsonConverter for `Model.SignNowInvite` properties
 
 ## [0.6.0-beta] - 2020-11-17
-## Added
+### Added
 - Carbon Copy for freeform invite and role-based invite [#106](https://github.com/signnow/SignNow.NET/issues/106)
 - `Service.DocumentService.MergeDocumentsAsync` that allows to merge two or more documents into one document
 - `Service.DocumentService.GetDocumentHistoryAsync` that allows to retrieve the history of the document actions
@@ -41,7 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Service.UserService.SendVerificationEmailAsync` that allows to sends verification email to a user
 - `Service.UserService.SendPasswordResetLinkAsync` that allows to sends password reset link to a user
 
-## Changed
+### Changed
 - Increased timeout for Http Client
 - Added Http method, Url and response time to error messages
 - Added support for Basic Auth param to `Model.Token`
