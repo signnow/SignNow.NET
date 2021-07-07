@@ -42,8 +42,8 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <summary>
         /// Gets OS name from runtime
         /// </summary>
-        /// <returns></returns>
-        private static string GetOSName()
+        /// <returns>Windows, Linux, macOS or Unknown</returns>
+        public static string GetOSName()
         {
             var os = "Unknown";
 #if NETFRAMEWORK

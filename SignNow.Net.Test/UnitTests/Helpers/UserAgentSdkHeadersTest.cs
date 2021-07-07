@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Globalization;
 using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
@@ -50,15 +51,11 @@ namespace UnitTests
             Console.WriteLine(SdkRuntime.OsDescription());
             #endif
 
-            var expectedOs = "Darwin";
+            var expectedOs = RuntimeInfo.GetOSName()
+                .Replace("macOS", "Darwin")
+                .ToUpperInvariant();
 
-            if (RuntimeInfo.OsName == "Linux")
-                expectedOs = "Linux";
-
-            if (RuntimeInfo.OsName == "Windows")
-                expectedOs = "Windows";
-
-            StringAssert.Contains(SdkRuntime.OsDescription(), expectedOs);
+            StringAssert.Contains(SdkRuntime.OsDescription().ToUpperInvariant(),  expectedOs);
         }
 
         [TestMethod]
