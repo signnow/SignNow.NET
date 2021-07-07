@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+## [0.9.0] - 2021-07-07
 ### Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
 - `IUserService.GetUserDocumentsAsync` that allows to get all information of user's documents that were not modified yet
@@ -137,7 +137,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/signnow/SignNow.NET/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/signnow/SignNow.NET/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...0.7.0
 [0.6.0-beta]: https://github.com/signnow/SignNow.NET/compare/0.5.2-beta...0.6.0-beta
