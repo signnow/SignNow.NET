@@ -266,7 +266,7 @@ namespace SignNow.Net.Service
 
             var requestOptions = new PutHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/prefill-texts"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/prefill-texts"),
                 Content = new JsonHttpContent(new PrefillTextFieldRequest(fields)),
                 Token = Token
             };
