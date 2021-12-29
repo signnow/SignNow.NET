@@ -117,5 +117,15 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns identity of new Document</returns>
         Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Adds values to fields that the Signers can later edit when they receive the document for signature.
+        /// Works only with Text field types.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to prefill values for.</param>
+        /// <param name="fields">Collection of the <see cref="PrefillTextField">fields</see></param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task PrefillTextFieldsAsync(string documentId, IEnumerable<PrefillTextField> fields, CancellationToken cancellationToken = default);
     }
 }

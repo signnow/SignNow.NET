@@ -256,5 +256,24 @@ namespace SignNow.Net.Service
                 .RequestAsync<CreateDocumentFromTemplateResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
+        public async Task PrefillTextFieldsAsync(string documentId, IEnumerable<PrefillTextField> fields, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(fields, nameof(fields));
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/prefill-texts"),
+                Content = new JsonHttpContent(new PrefillTextFieldRequest(fields)),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
