@@ -127,5 +127,14 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task PrefillTextFieldsAsync(string documentId, IEnumerable<PrefillTextField> fields, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates a document by adding/overwriting fields or elements (texts, checks, signatures, hyperlinks, attachments).
+        /// </summary>
+        /// <param name="documentId">Identity of the document to edit values for.</param>
+        /// <param name="fields">Fields – spaces in the document designated for signing and editing (filling in) by the recipient.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldContent> fields, CancellationToken cancellationToken = default);
     }
 }
