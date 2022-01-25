@@ -275,5 +275,24 @@ namespace SignNow.Net.Service
                 .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
+        public async Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(fields, nameof(fields));
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}"),
+                Content = new JsonHttpContent(new EditFieldRequest(fields)),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EditDocumentResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace SignNow.Net.Model
         /// Field attributes: name, label, x/y coordinates, width, height...
         /// </summary>
         [JsonProperty("json_attributes")]
-        internal FieldJsonAttributes JsonAttributes { get; set; }
+        public FieldJsonAttributes JsonAttributes { get; set; }
 
         /// <summary>
         /// Document owner email.

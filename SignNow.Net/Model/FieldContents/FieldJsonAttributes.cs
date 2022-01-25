@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Internal.Model
+namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
     /// Field's attributes.
     /// </summary>
-    internal class FieldJsonAttributes
+    public class FieldJsonAttributes
     {
         /// <summary>
         /// The page number of the document.

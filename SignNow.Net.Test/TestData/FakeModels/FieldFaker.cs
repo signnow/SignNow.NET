@@ -1,7 +1,7 @@
 using Bogus;
 using Bogus.Extensions;
-using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Test.FakeModels
 {

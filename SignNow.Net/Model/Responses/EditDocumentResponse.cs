@@ -11,6 +11,6 @@ namespace SignNow.Net.Model.Responses
         /// Identity of the document.
         /// </summary>
         [JsonProperty("id")]
-        public string DocumentId { get; set; }
+        public string Id { get; set; }
     }
 }
