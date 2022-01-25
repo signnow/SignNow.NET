@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [develop] - TBD
+- `IDocumentService.PrefillTextFieldsAsync` that allows to prefill document fields
+
 ## [0.9.0] - 2021-07-07
 ### Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
