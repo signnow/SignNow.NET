@@ -349,10 +349,10 @@ namespace SignNow.Net.Examples
             Assert.IsNull(documentEdited.Fields.FirstOrDefault()?.JsonAttributes.PrefilledText);
             Assert.AreEqual("Text_1", documentEdited.Fields.FirstOrDefault()?.JsonAttributes.Name);
 
-            var fields = new List<PrefillTextField>
+            var fields = new List<TextField>
             {
-                new PrefillTextField {
-                    FieldName = "Text_1",
+                new TextField {
+                    Name = "Text_1",
                     PrefilledText = "Test Prefill"
                 }
             };

@@ -3,6 +3,7 @@ using SignNow.Net.Model;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
@@ -123,10 +124,10 @@ namespace SignNow.Net.Interfaces
         /// Works only with Text field types.
         /// </summary>
         /// <param name="documentId">Identity of the document to prefill values for.</param>
-        /// <param name="fields">Collection of the <see cref="PrefillTextField">fields</see></param>
+        /// <param name="fields">Collection of the <see cref="TextField">fields</see></param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task PrefillTextFieldsAsync(string documentId, IEnumerable<PrefillTextField> fields, CancellationToken cancellationToken = default);
+        Task PrefillTextFieldsAsync(string documentId, IEnumerable<TextField> fields, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates a document by adding/overwriting fields or elements (texts, checks, signatures, hyperlinks, attachments).
