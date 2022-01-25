@@ -274,7 +274,6 @@ namespace SignNow.Net.Examples
             StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
         }
 
-
         /// <summary>
         /// Run test for example: <see cref="DocumentExamples.MoveTheDocumentToFolder"/>
         /// </summary>
@@ -312,6 +311,7 @@ namespace SignNow.Net.Examples
         }
 
         /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.EditDocumentTextFields"/>
         /// Run test for example: <see cref="DocumentExamples.PrefillTextFields"/>
         /// </summary>
         [TestMethod]
@@ -341,8 +341,8 @@ namespace SignNow.Net.Examples
                 }
             };
 
-            var editDocument = await testContext.Documents
-                .EditDocumentAsync(testDocument.Id, editFields)
+            var editDocument = await DocumentExamples
+                .EditDocumentTextFields(testDocument.Id, editFields, token)
                 .ConfigureAwait(false);
 
             var documentEdited = await testContext.Documents.GetDocumentAsync(editDocument.Id).ConfigureAwait(false);
@@ -351,7 +351,8 @@ namespace SignNow.Net.Examples
 
             var fields = new List<TextField>
             {
-                new TextField {
+                new TextField
+                {
                     Name = "Text_1",
                     PrefilledText = "Test Prefill"
                 }
@@ -554,7 +555,7 @@ namespace SignNow.Net.Examples
                 .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).ConfigureAwait(false);
             disposableDocumentId = document?.Id;
 
-            var templateName = "Template Name";
+            const string templateName = "Template Name";
             var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token).ConfigureAwait(false);
             var template = await testContext.Documents.GetDocumentAsync(result.Id).ConfigureAwait(false);
 
