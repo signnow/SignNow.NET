@@ -4,8 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [develop] - TBD
+## [Unreleased] - TBD
+### Added
 - `IDocumentService.PrefillTextFieldsAsync` that allows to prefill document fields
+- `IDocumentService.EditDocumentAsync` that allows to add/change various fields
+- `IFieldEditable` that represent editable Field attributes
+- `Model.EditFields.TextField` that allows you configure text field and add/change the document field
+
+### Changed
+- `FieldJsonAttributes` added to `ISignNowFields` that allows you to get Field attributes
 
 ## [0.9.0] - 2021-07-07
 ### Added
