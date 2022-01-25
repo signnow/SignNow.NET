@@ -5,13 +5,13 @@ namespace SignNow.Net.Interfaces
     public interface IFieldEditable
     {
         /// <summary>
-        /// Page number where Text field located.
+        /// The page number of the document.
         /// </summary>
         [JsonProperty("page_number")]
         int PageNumber { get; set; }
 
         /// <summary>
-        /// Type of the Field.
+        /// The type of the Field.
         /// </summary>
         [JsonProperty("type")]
         string Type { get; }
@@ -19,13 +19,13 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// The name of the Field.
         /// </summary>
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("name")]
         string Name { get; set; }
 
         /// <summary>
-        /// Signer role name.
+        /// The name role of the field.
         /// </summary>
-        [JsonProperty("role", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("role")]
         string Role { get; set;  }
 
         /// <summary>

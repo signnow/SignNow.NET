@@ -5,8 +5,19 @@ namespace SignNow.Net.Model.EditFields
 {
     public abstract class AbstractField: IFieldEditable
     {
+        private int pageNumber { get; set; }
+
         /// <inheritdoc />
-        public int PageNumber { get; set; }
+        public int PageNumber
+        {
+            get { return pageNumber; }
+            set
+            {
+                if (value < 0) { throw new ArgumentException("Value cannot be less than 0", nameof(PageNumber)); }
+
+                pageNumber = value;
+            }
+        }
 
         /// <inheritdoc />
         public virtual string Type => String.Empty;

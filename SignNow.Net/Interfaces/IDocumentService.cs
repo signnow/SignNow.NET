@@ -135,6 +135,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="fields">Fields – spaces in the document designated for signing and editing (filling in) by the recipient.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldContent> fields, CancellationToken cancellationToken = default);
+        Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default);
     }
 }
