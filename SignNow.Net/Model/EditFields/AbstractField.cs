@@ -20,7 +20,7 @@ namespace SignNow.Net.Model.EditFields
         }
 
         /// <inheritdoc />
-        public virtual string Type => String.Empty;
+        public virtual FieldType Type { get; }
 
         /// <inheritdoc />
         public string Name { get; set; }

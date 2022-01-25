@@ -5,7 +5,7 @@ namespace SignNow.Net.Model.EditFields
     public class TextField: AbstractField
     {
         /// <inheritdoc />
-        public override string Type => "text";
+        public override FieldType Type => FieldType.Text;
 
         /// <summary>
         /// Prefilled text value of the field.

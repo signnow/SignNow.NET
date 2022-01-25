@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SignNow.Net.Model;
 
 namespace SignNow.Net.Interfaces
 {
@@ -14,7 +16,8 @@ namespace SignNow.Net.Interfaces
         /// The type of the Field.
         /// </summary>
         [JsonProperty("type")]
-        string Type { get; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        FieldType Type { get; }
 
         /// <summary>
         /// The name of the Field.
