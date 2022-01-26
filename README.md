@@ -582,7 +582,7 @@ For XML documentation generation, install InheritDocTool:
 dotnet tool install -g InheritDocTool
 ```
 
-More about the InheritDoc [here](https://www.inheritdoc.io)
+More about the InheritDoc [here](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/examples#document-a-hierarchy-of-classes-and-interfaces)
 
 ### <a name="important-notes"></a>Important notes
 

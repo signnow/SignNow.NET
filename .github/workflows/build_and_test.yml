@@ -1,5 +1,3 @@
-# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
-
 name: Build and Test
 
 on:
@@ -7,64 +5,48 @@ on:
     paths-ignore:
       - '**.md'
       - 'SignNow.Net/SignNow.Net.Examples/**'
-
+    tags-ignore:
+      - '*'
   pull_request:
     branches:
       - 'master'
       - 'develop'
+    paths-ignore:
+      - '**.md'
 
 # Workflow
 jobs:
   build:
-
-    name: ${{ matrix.osname }} ${{ matrix.framework }}
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
 
       matrix:
-        framework:
-          - 'net45'
-          - 'netcoreapp3.1'
-          - 'net5'
-
-        name:
-          - ubuntu-18.04
-          - macOS-latest
-          - windows-latest
-
         include:
-          - name: ubuntu-18.04
-            os: ubuntu-18.04
-            osname: Linux
-
-          - name: macOS-latest
-            os: macOS-latest
-            osname: macOS
-
-          - name: windows-latest
-            os: windows-latest
-            osname: Windows
-
-        exclude:
-          - name: ubuntu-18.04
-            framework: 'net45'
-
-          - name: macOS-latest
-            framework: 'net45'
+          # Ubuntu
+          - { name: 'Linux .NET Core 3',    os: ubuntu-18.04,   framework: 'netcoreapp3.1' }
+          - { name: 'Linux .NET 5',         os: ubuntu-18.04,   framework: 'net5' }
+          # macOs
+          - { name: 'macOs .NET Core 3',    os: macOS-latest,   framework: 'netcoreapp3.1' }
+          - { name: 'macOs .NET 5',         os: macOS-latest,   framework: 'net5' }
+          # Windows
+          - { name: 'Windows .NET Core 3',  os: windows-latest, framework: 'netcoreapp3.1' }
+          - { name: 'Windows .NET 5',       os: windows-latest, framework: 'net5' }
+          - { name: 'Windows .NET 4.5',     os: windows-latest, framework: 'net45' }
 
     env:
       COREHOST_TRACE: false
-      # Disable sending usage data to Microsoft
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      # prevent the caching of the packages on the build machine
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      # removes logo and telemetry message from first run of dotnet cli
-      DOTNET_NOLOGO: true
-      # prevent the download of the XML documentation for the packages
-      NUGET_XMLDOC_MODE: skip
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1          # Disable sending usage data to Microsoft
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
+      DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
+      NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
       COVERAGE_PATH: SignNow.Net.Test/bin/Debug
+
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +54,6 @@ jobs:
           fetch-depth: 1
 
       - name: Setup .NET SDK Version for Target Framework
-        shell: pwsh
         run: |
           If ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
             Write-Output "DOTNET_SDK_VERSION=3.1.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -109,21 +90,17 @@ jobs:
 
       - name: Build for .NET Standard 1.2
         if: matrix.framework == 'netcoreapp3.1'
-        shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework netstandard1.2
 
       - name: Build for .NET Standard 2.0
         if: matrix.framework == 'net5'
-        shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework netstandard2.0
 
       - name: Build for .NET 4.5
         if: (runner.os == 'Windows' && matrix.framework == 'net45')
-        shell: pwsh
         run: dotnet build SignNow.Net --configuration Debug --framework net45
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
-        shell: pwsh
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
@@ -136,7 +113,6 @@ jobs:
           path: SignNow.Net.Test/bin/Debug/**/coverage*
 
       - name: Setup Code Coverage report flags
-        shell: pwsh
         run: |
           If ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
             Write-Output "TARGET_FRAMEWORK=netstandard12" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
