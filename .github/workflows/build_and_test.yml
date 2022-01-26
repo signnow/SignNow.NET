@@ -33,8 +33,8 @@ jobs:
           - { name: 'Linux .NET Core 3',    os: ubuntu-18.04,   framework: 'netcoreapp3.1' }
           - { name: 'Linux .NET 5',         os: ubuntu-18.04,   framework: 'net5' }
           # macOs
-          - { name: 'macOs .NET Core 3',    os: macOS-latest,   framework: 'netcoreapp3.1' }
-          - { name: 'macOs .NET 5',         os: macOS-latest,   framework: 'net5' }
+          - { name: 'macOS .NET Core 3',    os: macOS-latest,   framework: 'netcoreapp3.1' }
+          - { name: 'macOS .NET 5',         os: macOS-latest,   framework: 'net5' }
           # Windows
           - { name: 'Windows .NET Core 3',  os: windows-latest, framework: 'netcoreapp3.1' }
           - { name: 'Windows .NET 5',       os: windows-latest, framework: 'net5' }
