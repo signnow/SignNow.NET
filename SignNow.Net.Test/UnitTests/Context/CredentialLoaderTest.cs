@@ -55,26 +55,25 @@ namespace UnitTests
         }
 
         [TestMethod]
-        [SuppressMessage("Microsoft.Globalization", "CA1305:string.Format could vary based on locale", Justification = "Locale is not used for this test")]
         public void ItCanObtainProperFilePath()
         {
-            var TestCreds = new CredentialLoader(testUrl).GetCredentials();
+            var testCreds = new CredentialLoader(testUrl).GetCredentials();
 
-            const string message = "You have to specify json string with `{0}` text properties in the {1}";
+            const string Message = "You have to specify json string with `{0}` text properties in the {1}";
 
-            Assert.AreEqual("test", TestCreds.Login, string.Format(message, "login", testCredentialFile));
-            Assert.AreEqual("signnow", TestCreds.Password, string.Format(message, "password", testCredentialFile));
-            Assert.AreEqual("test001", TestCreds.ClientId, string.Format(message, "client_id", testCredentialFile));
-            Assert.AreEqual("test002", TestCreds.ClientSecret, string.Format(message, "client_secret", testCredentialFile));
+            Assert.AreEqual("test", testCreds.Login, string.Format(Message, "login", testCredentialFile));
+            Assert.AreEqual("signnow", testCreds.Password, string.Format(Message, "password", testCredentialFile));
+            Assert.AreEqual("test001", testCreds.ClientId, string.Format(Message, "client_id", testCredentialFile));
+            Assert.AreEqual("test002", testCreds.ClientSecret, string.Format(Message, "client_secret", testCredentialFile));
         }
 
         [TestMethod]
         public void ShowHintWhenCredentialsFileNotExists()
         {
-            var Credentials = new CredentialLoader(new Uri("https://api.signnow.local"));
+            var credentials = new CredentialLoader(new Uri("https://api.signnow.local"));
 
             var exception = Assert.ThrowsException<InvalidOperationException>(
-                () => Credentials.GetCredentials());
+                () => credentials.GetCredentials());
 
             StringAssert.Contains(exception.Message, "api.signnow.local.json");
             StringAssert.Contains(exception.Message, "{{'login':'login string','password':'password string','client_id':'app client id','client_secret':'app client secret'}}");

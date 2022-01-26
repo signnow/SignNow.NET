@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Internal.Model;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.FieldContents;
 
@@ -42,7 +42,7 @@ namespace SignNow.Net.Model
         /// Field attributes: name, label, x/y coordinates, width, height...
         /// </summary>
         [JsonProperty("json_attributes")]
-        internal FieldJsonAttributes JsonAttributes { get; set; }
+        public FieldJsonAttributes JsonAttributes { get; set; }
 
         /// <summary>
         /// Document owner email.
@@ -77,41 +77,49 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Text box, Dropdown box, Data-Time picker.
         /// </summary>
+        [EnumMember(Value = "text")]
         Text,
 
         /// <summary>
         /// Signature fields.
         /// </summary>
+        [EnumMember(Value = "signature")]
         Signature,
 
         /// <summary>
         /// Initials fields.
         /// </summary>
+        [EnumMember(Value = "initials")]
         Initials,
 
         /// <summary>
         /// Check box.
         /// </summary>
+        [EnumMember(Value = "checkbox")]
         Checkbox,
 
         /// <summary>
         /// Enumeration list.
         /// </summary>
+        [EnumMember(Value = "enumeration")]
         Enumeration,
 
         /// <summary>
         /// Radio button group with Radio elements included.
         /// </summary>
+        [EnumMember(Value = "radiobutton")]
         RadioButton,
 
         /// <summary>
         /// Document's attachment which can be downloaded by URL.
         /// </summary>
+        [EnumMember(Value = "attachments")]
         Attachment,
 
         /// <summary>
         /// Hyperlink field with Url and label.
         /// </summary>
+        [EnumMember(Value = "hyperlink")]
         Hyperlink
     }
 }

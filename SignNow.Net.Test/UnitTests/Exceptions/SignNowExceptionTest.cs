@@ -56,8 +56,8 @@ namespace UnitTests
 
             Assert.AreEqual(default, exception.HttpStatusCode);
             Assert.AreEqual(expectedMessage, exception.Message);
-            Assert.AreEqual(HttpStatusCode.Forbidden, ((SignNowException) exception.InnerException).HttpStatusCode);
-            Assert.AreEqual(innerExMessage, exception.InnerException.Message);
+            Assert.AreEqual(HttpStatusCode.Forbidden, ((SignNowException) exception.InnerException)?.HttpStatusCode);
+            Assert.AreEqual(innerExMessage, exception.InnerException?.Message);
         }
 
         [TestMethod]

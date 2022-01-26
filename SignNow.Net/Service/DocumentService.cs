@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Internal.Helpers;
 using System.Net.Http;
+using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
@@ -260,7 +261,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
-        public async Task PrefillTextFieldsAsync(string documentId, IEnumerable<PrefillTextField> fields, CancellationToken cancellationToken = default)
+        public async Task PrefillTextFieldsAsync(string documentId, IEnumerable<TextField> fields, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(fields, nameof(fields));
 
@@ -273,6 +274,25 @@ namespace SignNow.Net.Service
 
             await SignNowClient
                 .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
+        public async Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(fields, nameof(fields));
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}"),
+                Content = new JsonHttpContent(new EditFieldRequest(fields)),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EditDocumentResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

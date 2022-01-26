@@ -44,7 +44,9 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a one-time link to download the document as a PDF](#share-document-via-link)
         - [Get the history of a document](#document-history)
         - [Check the status of the document][check_sign_status example]
-        - [Move document into specified folder][move_document example] 
+        - [Move document into specified folder][move_document example]
+        - [Edit document][edit_document example]
+        - [Prefill document text fields][prefill_text_field example]
     - [Template](#template)
         - [Create a template by flattening an existing document](#create-template)
         - [Create document from the template][create_document example]
@@ -580,7 +582,7 @@ For XML documentation generation, install InheritDocTool:
 dotnet tool install -g InheritDocTool
 ```
 
-More about the InheritDoc [here](https://www.inheritdoc.io)
+More about the InheritDoc [here](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/examples#document-a-hierarchy-of-classes-and-interfaces)
 
 ### <a name="important-notes"></a>Important notes
 
@@ -611,7 +613,6 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [actions build link]: https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22
 [codecov badge]: https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report"
 [codecov link]: https://codecov.io/gh/signnow/SignNow.NET
-[codacy badge]: https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24 "Codacy Repository certification"
 [nuget badge]: https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version"
 [nuget link]: https://www.nuget.org/packages/SignNow.Net
 [nuget downloads badge]: https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square
@@ -651,6 +652,8 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
 [move_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MoveTheDocumentToFolder.cs
+[edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/EditDocumentTextFields.cs
+[prefill_text_field example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
 
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs

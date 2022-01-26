@@ -12,9 +12,9 @@ namespace AcceptanceTests
     public class FolderServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public void GetFolders()
+        public async Task GetFolders()
         {
-            var folders = SignNowTestContext.Folders.GetAllFoldersAsync().Result;
+            var folders = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
 
             Assert.IsInstanceOfType(folders, typeof(SignNowFolders));
             Assert.AreEqual("Root", folders.Name);
@@ -67,7 +67,7 @@ namespace AcceptanceTests
                 .GetFolderAsync(documentsFolder?.Id)
                 .ConfigureAwait(false);
 
-            Assert.AreEqual(0, checkFolderDeleted.Folders.Where(f => f.Name == testFolderName + "_renamed").Count());
+            Assert.AreEqual(0, checkFolderDeleted.Folders.Count(f => f.Name == testFolderName + "_renamed"));
         }
     }
 }

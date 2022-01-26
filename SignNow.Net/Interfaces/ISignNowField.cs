@@ -1,4 +1,5 @@
 using SignNow.Net.Model;
+using SignNow.Net.Model.FieldContents;
 
 namespace SignNow.Net.Interfaces
 {
@@ -16,5 +17,10 @@ namespace SignNow.Net.Interfaces
         /// Returns identity for element with content.
         /// </summary>
         string ElementId { get; }
+
+        /// <summary>
+        /// Field attributes: name, label, x/y coordinates, width, height...
+        /// </summary>
+        FieldJsonAttributes JsonAttributes { get; }
     }
 }

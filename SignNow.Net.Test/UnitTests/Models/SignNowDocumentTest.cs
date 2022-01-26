@@ -76,20 +76,20 @@ namespace UnitTests
                         })
                         .Generate(testObjQty))
                 .FinishWith((f, obj) => {
-                    var role    = obj.Roles.GetEnumerator();
-                    var field   = obj.fields.GetEnumerator();
-                    var text    = obj.Texts.GetEnumerator();
-                    var link    = obj.Hyperlinks.GetEnumerator();
-                    var sign    = obj.Signatures.GetEnumerator();
-                    var attach  = obj.Attachments.GetEnumerator();
-                    var checkbox = obj.Checkboxes.GetEnumerator();
-                    var radio   = obj.Radiobuttons.GetEnumerator();
+                    using var role    = obj.Roles.GetEnumerator();
+                    using var field   = obj.fields.GetEnumerator();
+                    using var text    = obj.Texts.GetEnumerator();
+                    using var link    = obj.Hyperlinks.GetEnumerator();
+                    using var sign    = obj.Signatures.GetEnumerator();
+                    using var attach  = obj.Attachments.GetEnumerator();
+                    using var checkbox = obj.Checkboxes.GetEnumerator();
+                    using var radio   = obj.Radiobuttons.GetEnumerator();
 
                     while (role.MoveNext() && field.MoveNext() && text.MoveNext()
                         && sign.MoveNext() && link.MoveNext() && checkbox.MoveNext()
                         && attach.MoveNext() && radio.MoveNext())
                     {
-                        field.Current.RoleId = role.Current.Id;
+                        field.Current.RoleId = role.Current?.Id;
                         field.Current.Owner = obj.Owner;
                         field.Current.JsonAttributes.Name = (FieldType)testType + "Name";
                         field.Current.JsonAttributes.Label = (FieldType)testType + "LabelName";
@@ -135,51 +135,51 @@ namespace UnitTests
                     case FieldType.Text:
                         var textValue = fieldValue as TextContent;
                         Assert.AreEqual(docWithFields.Owner, field.Owner, "Wrong field Owner");
-                        Assert.AreEqual("this is test text field value", textValue.GetValue());
-                        Assert.AreEqual("this is test text field value", textValue.ToString());
+                        Assert.AreEqual("this is test text field value", textValue?.GetValue());
+                        Assert.AreEqual("this is test text field value", textValue?.ToString());
                         break;
 
                     case FieldType.Signature:
                     case FieldType.Initials:
                         var signValue = fieldValue as SignatureContent;
-                        Assert.AreEqual(field.ElementId, signValue.Id, "Wrong signature ID");
+                        Assert.AreEqual(field.ElementId, signValue?.Id, "Wrong signature ID");
                         Assert.AreEqual("this is test signature field value", Encoding.UTF8.GetString((byte[])signValue.GetValue()));
-                        Assert.AreEqual("dGhpcyBpcyB0ZXN0IHNpZ25hdHVyZSBmaWVsZCB2YWx1ZQ==", signValue.ToString());
+                        Assert.AreEqual("dGhpcyBpcyB0ZXN0IHNpZ25hdHVyZSBmaWVsZCB2YWx1ZQ==", signValue?.ToString());
                         break;
 
                     case FieldType.Hyperlink:
                         var linkValue = fieldValue as HyperlinkContent;
-                        Assert.AreEqual(field.ElementId, linkValue.Id, "Wrong hyperlink ID");
-                        Assert.AreEqual($"label for {linkValue.UserId}", linkValue.Label);
-                        Assert.AreEqual($"https://signnow.com/{linkValue.UserId}", ((Uri)linkValue.GetValue()).OriginalString);
+                        Assert.AreEqual(field.ElementId, linkValue?.Id, "Wrong hyperlink ID");
+                        Assert.AreEqual($"label for {linkValue?.UserId}", linkValue?.Label);
+                        Assert.AreEqual($"https://signnow.com/{linkValue?.UserId}", ((Uri)linkValue.GetValue()).OriginalString);
                         Assert.AreEqual($"https://signnow.com/{linkValue.UserId}", linkValue?.ToString());
                         break;
 
                     case FieldType.Checkbox:
                         var checkboxValue = fieldValue as CheckboxContent;
-                        Assert.AreEqual(field.ElementId, checkboxValue.Id, "Wrong checkbox ID");
-                        Assert.AreEqual(field.JsonAttributes.PrefilledText == "1", checkboxValue.GetValue());
+                        Assert.AreEqual(field.ElementId, checkboxValue?.Id, "Wrong checkbox ID");
+                        Assert.AreEqual(field.JsonAttributes.PrefilledText == "1", checkboxValue?.GetValue());
                         Assert.AreEqual(field.JsonAttributes.PrefilledText, checkboxValue?.ToString());
                         break;
 
                     case FieldType.Attachment:
                         var attachmentValue = fieldValue as AttachmentContent;
                         Assert.AreEqual(field.ElementId, attachmentValue?.Id, "Wrong attachment ID");
-                        Assert.AreEqual(field.ElementId, attachmentValue.GetValue());
-                        Assert.AreEqual("TestFileName.pdf", attachmentValue.OriginalName);
+                        Assert.AreEqual(field.ElementId, attachmentValue?.GetValue());
+                        Assert.AreEqual("TestFileName.pdf", attachmentValue?.OriginalName);
                         break;
 
                     case FieldType.Enumeration:
                         var dropdownValue = fieldValue as TextContent;
                         Assert.AreEqual(field.ElementId, dropdownValue?.Id, "Wrong dropdown ID");
-                        Assert.AreEqual("this is test dropdown element value", dropdownValue.GetValue());
+                        Assert.AreEqual("this is test dropdown element value", dropdownValue?.GetValue());
                         Assert.AreEqual("this is test dropdown element value", dropdownValue?.ToString());
                         break;
 
                     case FieldType.RadioButton:
                         var radioValue = fieldValue as RadiobuttonContent;
                         Assert.AreEqual(field.ElementId, radioValue?.Id, "Wrong dropdown ID");
-                        Assert.AreEqual("this is test radiobutton field value", radioValue.GetValue());
+                        Assert.AreEqual("this is test radiobutton field value", radioValue?.GetValue());
                         Assert.AreEqual("this is test radiobutton field value", radioValue?.ToString());
                         break;
 

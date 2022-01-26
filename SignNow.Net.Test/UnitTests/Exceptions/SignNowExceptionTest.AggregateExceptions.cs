@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,7 +7,6 @@ using SignNow.Net.Exceptions;
 
 namespace UnitTests
 {
-    [SuppressMessage("Microsoft.Globalization", "CA1303:Message string literals should be taken from resource file", Justification = "In the unit tests below no reason to use resource file")]
     public partial class SignNowExceptionTest
     {
         [TestMethod]
@@ -16,10 +14,13 @@ namespace UnitTests
         {
             var testException = new SignNowException(TestMessage)
             {
-                HttpStatusCode = HttpStatusCode.BadRequest
+                HttpStatusCode = HttpStatusCode.BadRequest,
+                Data =
+                {
+                    ["HttpStatusCode"] = (int)HttpStatusCode.BadRequest,
+                    ["Request"] = "Test Request Body"
+                }
             };
-            testException.Data["HttpStatusCode"] = (int)HttpStatusCode.BadRequest;
-            testException.Data["Request"] = "Test Request Body";
 
             Assert.AreEqual(TestMessage, testException.Message);
             Assert.AreEqual(HttpStatusCode.BadRequest, testException.HttpStatusCode);
@@ -28,7 +29,6 @@ namespace UnitTests
         }
 
         [TestMethod]
-        [SuppressMessage("Microsoft.Globalization", "CA1305:StringBuilder.AppendFormat could vary based on locale", Justification = "Locale is not used for this test")]
         public void ExceptionShouldContainsExceptionsList()
         {
             var snExceptions = new List<SignNowException>();

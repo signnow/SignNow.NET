@@ -22,7 +22,7 @@ namespace UnitTests
             var jsonBody = embedLinkRequest.GetHttpContent().ReadAsStringAsync().Result;
             var actualEmbeddedLink = TestUtils.DeserializeFromJson<CreateEmbedLinkOptions>(jsonBody);
 
-            Assert.AreEqual("application/json", embedLinkRequest.GetHttpContent().Headers.ContentType.MediaType);
+            Assert.AreEqual("application/json", embedLinkRequest.GetHttpContent().Headers.ContentType?.MediaType);
             Assert.AreEqual(EmbeddedAuthType.Email, actualEmbeddedLink.AuthMethod);
             Assert.AreEqual(null, actualEmbeddedLink.LinkExpiration);
         }

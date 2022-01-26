@@ -9,7 +9,9 @@ using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Folders;
 using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
+using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Test.Context;
@@ -272,7 +274,6 @@ namespace SignNow.Net.Examples
             StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
         }
 
-
         /// <summary>
         /// Run test for example: <see cref="DocumentExamples.MoveTheDocumentToFolder"/>
         /// </summary>
@@ -307,6 +308,60 @@ namespace SignNow.Net.Examples
             // Finally - delete document and folder
             await testContext.Documents.DeleteDocumentAsync(testDocument.Id).ConfigureAwait(false);
             await testContext.Folders.DeleteFolderAsync(folderToMoveUpdated.Id).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Run test for example: <see cref="DocumentExamples.EditDocumentTextFields"/>
+        /// Run test for example: <see cref="DocumentExamples.PrefillTextFields"/>
+        /// </summary>
+        [TestMethod]
+        public async Task PrefillTextFieldsTest()
+        {
+            // Upload test document
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var testDocument = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "PrefillDocumentTest.pdf")
+                .ConfigureAwait(false);
+
+            var documentUploaded = await testContext.Documents.GetDocumentAsync(testDocument.Id).ConfigureAwait(false);
+            Assert.IsNull(documentUploaded.Fields.FirstOrDefault()?.JsonAttributes.PrefilledText);
+
+            // Add simple text field which will be prefilled next.
+            var editFields = new List<IFieldEditable>
+            {
+                new TextField
+                {
+                    PageNumber = 0,
+                    Name = "Text_1",
+                    Height = 40,
+                    Width = 200,
+                    X = 10,
+                    Y = 40,
+                    Role = "Signer 1"
+                }
+            };
+
+            var editDocument = await DocumentExamples
+                .EditDocumentTextFields(testDocument.Id, editFields, token)
+                .ConfigureAwait(false);
+
+            var documentEdited = await testContext.Documents.GetDocumentAsync(editDocument.Id).ConfigureAwait(false);
+            Assert.IsNull(documentEdited.Fields.FirstOrDefault()?.JsonAttributes.PrefilledText);
+            Assert.AreEqual("Text_1", documentEdited.Fields.FirstOrDefault()?.JsonAttributes.Name);
+
+            var fields = new List<TextField>
+            {
+                new TextField
+                {
+                    Name = "Text_1",
+                    PrefilledText = "Test Prefill"
+                }
+            };
+
+            await DocumentExamples.PrefillTextFields(testDocument.Id, fields, token).ConfigureAwait(false);
+
+            var documentFinal = await testContext.Documents.GetDocumentAsync(testDocument.Id).ConfigureAwait(false);
+            Assert.AreEqual("Test Prefill", documentFinal.Fields.FirstOrDefault()?.JsonAttributes.PrefilledText);
         }
 
         #endregion
@@ -500,7 +555,7 @@ namespace SignNow.Net.Examples
                 .UploadDocumentWithFieldExtract(PdfWithSignatureField, token).ConfigureAwait(false);
             disposableDocumentId = document?.Id;
 
-            var templateName = "Template Name";
+            const string templateName = "Template Name";
             var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, token).ConfigureAwait(false);
             var template = await testContext.Documents.GetDocumentAsync(result.Id).ConfigureAwait(false);
 

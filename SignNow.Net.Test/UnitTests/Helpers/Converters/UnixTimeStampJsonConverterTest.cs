@@ -36,9 +36,9 @@ namespace UnitTests
             };
 
             var actual = JsonConvert.SerializeObject(obj);
-            var expected = $"\"created\":\"1572968651\",\"updated\":\"1572968651\"";
+            const string Expected = "\"created\":\"1572968651\",\"updated\":\"1572968651\"";
 
-            StringAssert.Contains(actual, expected);
+            StringAssert.Contains(actual, Expected);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace UnitTests
             var converter = new UnixTimeStampJsonConverter();
 
             Assert.IsTrue(converter.CanConvert(typeof(DateTime)));
-            Assert.IsFalse(converter.CanConvert(typeof(Int64)));
+            Assert.IsFalse(converter.CanConvert(typeof(long)));
         }
 
         [TestMethod]

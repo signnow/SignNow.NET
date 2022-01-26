@@ -54,13 +54,13 @@ namespace UnitTests
             var expected = "filters=signing-status&filter-values=pending"
                         + "&sortby=created"
                         + "&order=asc"
-                        + "&limit=100"
-                        + "&offset=10"
-                        + "&entity_type=all"
-                        + "&subfolder-data=0"
-                        + "&with_team_documents=false"
-                        + "&include_documents_subfolders=false"
-                        + "&exclude_documents_relations=false";
+                        + $"&limit={queryOptions.Limit}"
+                        + $"&offset={queryOptions.Offset}"
+                        + $"&entity_type={queryOptions.EntityTypes.ToString().ToLower()}"
+                        + $"&subfolder-data={(int)queryOptions.SubfolderData}"
+                        + $"&with_team_documents={queryOptions.WithTeamDocuments.ToString().ToLower()}"
+                        + $"&include_documents_subfolders={queryOptions.IncludeDocumentsSubfolder.ToString().ToLower()}"
+                        + $"&exclude_documents_relations={queryOptions.ExcludeDocumentsRelations.ToString().ToLower()}";
 
             Assert.AreEqual(expected, queryOptions.ToQueryString());
         }
