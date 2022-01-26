@@ -2,6 +2,8 @@ name: Build and Test
 
 on:
   push:
+    branches:
+      - '**'
     paths-ignore:
       - '**.md'
       - 'SignNow.Net/SignNow.Net.Examples/**'
