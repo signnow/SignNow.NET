@@ -20,10 +20,8 @@ namespace UnitTests
         private static readonly string BaseTestDataPath = "../../../TestData/"
             .Replace('/', Path.DirectorySeparatorChar);
 
-#pragma warning disable CA1051 // Do not declare visible instance fields [SignNow.Net.Test]csharp(CA1051)
         protected static readonly string PdfFileName = "DocumentUpload.pdf";
         protected static readonly string TxtFileName = "DocumentUpload.txt";
-#pragma warning restore CA1051 // Do not declare visible instance fields
 
         protected static string PdfFilePath => Path.Combine($"{BaseTestDataPath}Documents", PdfFileName);
         protected static string TxtFilePath => Path.Combine($"{BaseTestDataPath}Documents", TxtFileName);

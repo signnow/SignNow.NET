@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
@@ -12,8 +11,7 @@ namespace FeatureTests
     public class FreeFormInviteTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        [SuppressMessage("[CA1308] Replace the call to 'ToLowerInvariant' with 'ToUpperInvariant'.", "CA1308")]
-        public void DocumentOwnerCanSendFreeFormInviteToUser()
+        public async Task DocumentOwnerCanSendFreeFormInviteToUser()
         {
             // Init all required data: User, Document, Invite
             var invitee = new UserSignNowFaker().Generate();
@@ -24,17 +22,13 @@ namespace FeatureTests
             DisposableDocumentId = UploadTestDocument(PdfFilePath);
 
             // Creating Invite request
-            var inviteResponseTask = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite);
-            Task.WaitAll(inviteResponseTask);
+            var inviteResponse = await SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).ConfigureAwait(false);
 
-            var inviteResponse = inviteResponseTask.Result;
-
-            Assert.IsFalse(inviteResponseTask.IsFaulted, "Invite request should be created.");
             Assert.AreEqual(invite.Recipient, invitee.Email, "Freeform invite request should contains proper user email.");
             Assert.AreEqual(inviteResponse.Id, inviteResponse.Id.ValidateId(), "Successful invite response should contains valid Invite ID.");
 
             // Check if invite was successful and the document contains invite request data
-            var documentInfo = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var documentInfo = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
             var inviteIdx = documentInfo.InviteRequests.FindIndex(request => request.Id == inviteResponse.Id);
             var documentInviteRequest = documentInfo.InviteRequests[inviteIdx];
 
@@ -75,12 +69,12 @@ namespace FeatureTests
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(1))
                 .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(1))
                 .FinishWith((f, obj) => {
-                    var invite = obj.InviteRequests.GetEnumerator();
-                    var sign = obj.Signatures.GetEnumerator();
+                    using var invite = obj.InviteRequests.GetEnumerator();
+                    using var sign = obj.Signatures.GetEnumerator();
 
                     while (invite.MoveNext() && sign.MoveNext())
                     {
-                        invite.Current.SignatureId = sign.Current.Id;
+                        invite.Current.SignatureId = sign.Current?.Id;
                         invite.Current.SignerEmail = signerEmail;
                         invite.Current.Owner = obj.Owner;
                         sign.Current.Email = signerEmail;
@@ -129,14 +123,14 @@ namespace FeatureTests
                 .RuleFor(doc => doc.InviteRequests, f => new FreeformInviteFaker().Generate(2))
                 .RuleFor(doc => doc.Signatures, f => new SignatureContentFaker().Generate(2))
                 .FinishWith((f, obj) => {
-                    var sig = obj.Signatures.GetEnumerator();
+                    using var sig = obj.Signatures.GetEnumerator();
 
                     foreach (var inv in obj.InviteRequests)
                     {
                         sig.MoveNext();
-                        inv.SignatureId = sig.Current.Id;
-                        inv.UserId = sig.Current.UserId;
-                        inv.SignerEmail = sig.Current.Email;
+                        inv.SignatureId = sig.Current?.Id;
+                        inv.UserId = sig.Current?.UserId;
+                        inv.SignerEmail = sig.Current?.Email;
                         inv.Owner = obj.Owner;
                         inv.IsCanceled = false;
                     }

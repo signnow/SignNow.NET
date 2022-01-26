@@ -13,7 +13,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldGuardArgumentNullException()
         {
-            Object nullableObj = null;
+            object nullableObj = null;
 
             var exception = Assert.ThrowsException<ArgumentNullException>(
                 () => Guard.ArgumentNotNull(nullableObj, nameof(nullableObj)));

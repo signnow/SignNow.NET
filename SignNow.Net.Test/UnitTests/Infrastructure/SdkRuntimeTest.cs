@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Infrastructure;
@@ -11,7 +10,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldReturnProperClientName()
         {
-            Equals(SdkRuntime.ClientName, "SignNow .NET API Client");
+            Assert.AreEqual(SdkRuntime.ClientName, "SignNow .NET API Client");
         }
 
         [TestMethod]

@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Globalization;
 using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
@@ -37,7 +36,7 @@ namespace UnitTests
 
             StringAssert.Contains(SdkRuntime.ClientName, "SignNow .NET API Client");
             StringAssert.Matches(SdkRuntime.ClientName, new Regex(patternClient));
-            StringAssert.Matches($"v{SdkRuntime.Version.ToString()}", new Regex(patternSdk));
+            StringAssert.Matches($"v{SdkRuntime.Version}", new Regex(patternSdk));
             StringAssert.Matches(osdetails, new Regex(patternOsDetails));
             StringAssert.Matches(runtimeinfo, new Regex(patternRuntime));
 

@@ -5,7 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Scope = "module")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1707:Identifiers should not contain underscores", Scope = "module")]
 
 // Suppression for various Mock usage
 [assembly: SuppressMessage("Microsoft.Usage", "CA1801:Review unused parameters.", Scope = "module")]
@@ -13,4 +13,10 @@ using System.Diagnostics.CodeAnalysis;
 
 // Suppression for string messages in tests
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
-[assembly: SuppressMessage("Build", "CA1307:The behavior of 'string.GetHashCode()' could vary based on the current user's locale settings. Replace this call in 'Microsoft.Extensions.Internal.HashCodeCombiner.Add(string)' with a call to 'string.GetHashCode(System.StringComparison)'.")]
+[assembly: SuppressMessage("Microsoft.Globalization", "CA1304:Specify CultureInfo")]
+[assembly: SuppressMessage("Microsoft.Globalization", "CA1305:Specify IFormatProvider")]
+[assembly: SuppressMessage("Microsoft.Globalization", "CA1307:Specify StringComparison for clarity")]
+[assembly: SuppressMessage("Microsoft.Globalization", "CA1308:Normalize strings to uppercase")]
+
+[assembly: SuppressMessage("Microsoft.Design", "CA1051:Do not declare visible instance fields")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1054:URI parameters should not be strings")]

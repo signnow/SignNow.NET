@@ -70,9 +70,9 @@ namespace UnitTests
         [TestMethod]
         public void ShouldProperCollectOsInfo()
         {
-            var patternOsName = @"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)";
+            const string PatternOsName = @"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)";
 
-            StringAssert.Matches(RuntimeInfo.OsName, new Regex(patternOsName));
+            StringAssert.Matches(RuntimeInfo.OsName, new Regex(PatternOsName));
         }
     }
 }

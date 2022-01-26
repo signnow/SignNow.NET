@@ -12,11 +12,11 @@ namespace FeatureTests
     public class EmbeddedSigningTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public void CreatesEmbeddedSigningInviteForDocument()
+        public async Task CreatesEmbeddedSigningInviteForDocument()
         {
             DisposableDocumentId = UploadTestDocumentWithFieldExtract(
                 PdfFilePath, "CreatesEmbeddedSigningInviteForDocument.pdf");
-            var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var document = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
 
             var invite = new EmbeddedSigningInvite(document);
             invite.AddEmbeddedSigningInvite(
@@ -28,15 +28,15 @@ namespace FeatureTests
                 });
 
             // Creates an Embedded Signing Invite
-            var embeddedSigningInvite = SignNowTestContext.Invites
+            var embeddedSigningInvite = await SignNowTestContext.Invites
                 .CreateInviteAsync(document.Id, invite)
-                .Result;
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(embeddedSigningInvite);
             Assert.AreEqual(1, embeddedSigningInvite.InviteData.Count);
 
             // Generate Link for Embedded Signing
-            var documentWithEmbed = SignNowTestContext.Documents.GetDocumentAsync(document.Id).Result;
+            var documentWithEmbed = await SignNowTestContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             Assert.IsTrue(documentWithEmbed.FieldInvites.First().IsEmbedded);
 
             var linkOptions = new CreateEmbedLinkOptions
@@ -45,20 +45,17 @@ namespace FeatureTests
                 LinkExpiration = 30
             };
 
-            var embeddedLink = SignNowTestContext.Invites
+            var embeddedLink = await SignNowTestContext.Invites
                 .GenerateEmbeddedInviteLinkAsync(document.Id, linkOptions)
-                .Result;
+                .ConfigureAwait(false);
 
             Assert.IsNotNull(embeddedLink);
             Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
 
             // Cancel embedded invite
-            var deleted = SignNowTestContext.Invites.CancelEmbeddedInviteAsync(documentWithEmbed.Id);
+            await SignNowTestContext.Invites.CancelEmbeddedInviteAsync(documentWithEmbed.Id).ConfigureAwait(false);
 
-            Task.WaitAll(deleted);
-            Assert.IsTrue(deleted.IsCompleted);
-
-            var documentWithoutEmbed = SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).Result;
+            var documentWithoutEmbed = await SignNowTestContext.Documents.GetDocumentAsync(documentWithEmbed.Id).ConfigureAwait(false);
 
             Assert.AreEqual(0, documentWithoutEmbed.FieldInvites.Count);
         }

@@ -19,39 +19,39 @@ namespace AcceptanceTests
         /// </summary>
         /// <param name="invite">FreeForm invite object.</param>
         /// <returns>InviteResponse</returns>
-        private static InviteResponse ProcessCreateInvite(FreeFormSignInvite invite)
+        private static async Task<InviteResponse> ProcessCreateInvite(FreeFormSignInvite invite)
         {
-            return SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).Result;
+            return await SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).ConfigureAwait(false);
         }
 
         [TestMethod]
-        public void ShouldGetUserInfo()
+        public async Task ShouldGetUserInfo()
         {
-            var userResponse = SignNowTestContext.Users.GetCurrentUserAsync().Result;
+            var userResponse = await SignNowTestContext.Users.GetCurrentUserAsync().ConfigureAwait(false);
 
             StringAssert.Matches(userResponse.Email, new Regex(emailPattern));
             Assert.IsTrue(userResponse.Active);
         }
 
         [TestMethod]
-        public void ShouldCreateFreeformSignInvite()
+        public async Task ShouldCreateFreeformSignInvite()
         {
             var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com")
             {
                 Message = $"SignNow.Net SDK invited you to sign the {PdfFileName}",
                 Subject = "SignNow.Net SDK Needs Your Signature"
             };
-            var inviteResponse = ProcessCreateInvite(invite);
+            var inviteResponse = await ProcessCreateInvite(invite).ConfigureAwait(false);
 
             StringAssert.Matches(invite.Recipient, new Regex(emailPattern));
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
         }
 
         [TestMethod]
-        public void ShouldCancelFreeformInvite()
+        public async Task ShouldCancelFreeformInvite()
         {
             var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com");
-            var inviteResponse = ProcessCreateInvite(invite);
+            var inviteResponse = await ProcessCreateInvite(invite).ConfigureAwait(false);
 
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
 
@@ -67,13 +67,15 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public void ThrowsExceptionForNullableInvite()
+        public async Task ThrowsExceptionForNullableInvite()
         {
-            var actual = Assert.ThrowsException<AggregateException>(
-                () => SignNowTestContext.Invites.CreateInviteAsync("", (SignInvite) null).Result);
+            var actual = await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+                async () => await SignNowTestContext.Invites
+                    .CreateInviteAsync("", (SignInvite) null).ConfigureAwait(false))
+                .ConfigureAwait(false);
 
-            StringAssert.Contains(actual.InnerException?.Message, ErrorMessages.ValueCannotBeNull);
-            StringAssert.Contains(actual.InnerException?.Message, "invite");
+            StringAssert.Contains(actual.Message, ErrorMessages.ValueCannotBeNull);
+            StringAssert.Contains(actual.ParamName, "invite");
         }
     }
 }

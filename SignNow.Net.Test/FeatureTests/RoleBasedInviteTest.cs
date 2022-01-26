@@ -11,10 +11,10 @@ namespace FeatureTests
     public class RoleBasedInviteTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public void DocumentOwnerCanSendRoleBasedInvite()
+        public async Task DocumentOwnerCanSendRoleBasedInvite()
         {
             DisposableDocumentId = UploadTestDocumentWithFieldExtract(PdfFilePath, "DocumentOwnerCanSendRoleBasedInvite.pdf");
-            var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var document = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
@@ -29,11 +29,11 @@ namespace FeatureTests
                 new SignerOptions("signer1@signnow.com", invite.DocumentRoles().First()));
 
             // Send invite request
-            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).Result;
+            var inviteResponse = await SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).ConfigureAwait(false);
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
 
             // Check role-based invite status in the document
-            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var documentUpdated = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
             var fieldInvites = documentUpdated.FieldInvites.First();
 
             Assert.AreEqual("Pending", fieldInvites.Status.ToString(), "Newly created Invite must have status: pending.");
@@ -42,10 +42,10 @@ namespace FeatureTests
         }
 
         [TestMethod]
-        public void DocumentOwnerShouldCancelFieldInvite()
+        public async Task DocumentOwnerShouldCancelFieldInvite()
         {
             DisposableDocumentId = UploadTestDocumentWithFieldExtract(PdfFilePath, "DocumentOwnerShouldCancelFieldInvite.pdf");
-            var document = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var document = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
 
             // Create role-based invite
             var invite = new RoleBasedInvite(document);
@@ -56,23 +56,21 @@ namespace FeatureTests
             );
 
             // Send invite request
-            var inviteResponse = SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).Result;
+            var inviteResponse = await SignNowTestContext.Invites.CreateInviteAsync(DisposableDocumentId, invite).ConfigureAwait(false);
             Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
 
             // Check role-based invite status in the document
-            var documentUpdated = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var documentUpdated = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
             var fieldInvites = documentUpdated.FieldInvites.First();
 
             Assert.AreEqual("Pending", fieldInvites.Status.ToString());
 
             // Cancel role-based invite for the document
-            var cancelResponse = SignNowTestContext.Invites.CancelInviteAsync(DisposableDocumentId);
-            Task.WaitAll(cancelResponse);
+            await SignNowTestContext.Invites.CancelInviteAsync(DisposableDocumentId).ConfigureAwait(false);
 
-            var documentCanceled = SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).Result;
+            var documentCanceled = await SignNowTestContext.Documents.GetDocumentAsync(DisposableDocumentId).ConfigureAwait(false);
 
             Assert.AreEqual(0, documentCanceled.FieldInvites.Count, "Field invites are not canceled.");
-            Assert.IsFalse(cancelResponse.IsFaulted, "Cancel response is not successful.");
         }
 
         [TestMethod]
@@ -94,8 +92,8 @@ namespace FeatureTests
                 .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
                 .RuleFor(d => d.fields, f => new FieldFaker().Generate(1))
                 .FinishWith((f, obj) => {
-                    var role = obj.Roles.GetEnumerator();
-                    var invite = obj.FieldInvites.GetEnumerator();
+                    using var role = obj.Roles.GetEnumerator();
+                    using var invite = obj.FieldInvites.GetEnumerator();
 
                     foreach(var fieldMeta in obj.Fields)
                     {
@@ -103,11 +101,11 @@ namespace FeatureTests
                         role.MoveNext();
                         invite.MoveNext();
 
-                        field.RoleName = role.Current.Name;
-                        field.RoleId = role.Current.Id;
+                        field.RoleName = role.Current?.Name;
+                        field.RoleId = role.Current?.Id;
                         field.Owner = obj.Owner;
                         field.Signer = signer1;
-                        invite.Current.RoleId = role.Current.Id;
+                        invite.Current.RoleId = role.Current?.Id;
                         invite.Current.SignerEmail = signer1;
                         invite.Current.Status = InviteStatus.Pending;
                     }
@@ -129,9 +127,9 @@ namespace FeatureTests
                 .RuleFor(d => d.FieldInvites, f => new FieldInviteFaker().Generate(1))
                 .RuleFor(d => d.Fields, f => new FieldFaker().Generate(1))
                 .FinishWith((f, obj) => {
-                    var role = obj.Roles.GetEnumerator();
-                    var invite = obj.FieldInvites.GetEnumerator();
-                    var sign = obj.Signatures.GetEnumerator();
+                    using var role = obj.Roles.GetEnumerator();
+                    using var invite = obj.FieldInvites.GetEnumerator();
+                    using var sign = obj.Signatures.GetEnumerator();
 
                     foreach (var fieldMeta in obj.Fields)
                     {
@@ -140,11 +138,11 @@ namespace FeatureTests
                         invite.MoveNext();
                         sign.MoveNext();
 
-                        field.RoleName = role.Current.Name;
-                        field.RoleId = role.Current.Id;
+                        field.RoleName = role.Current?.Name;
+                        field.RoleId = role.Current?.Id;
                         field.Owner = obj.Owner;
                         field.Signer = signer1;
-                        invite.Current.RoleId = role.Current.Id;
+                        invite.Current.RoleId = role.Current?.Id;
                         invite.Current.SignerEmail = signer1;
                         invite.Current.Status = InviteStatus.Fulfilled;
                         sign.Current.Email = signer1;

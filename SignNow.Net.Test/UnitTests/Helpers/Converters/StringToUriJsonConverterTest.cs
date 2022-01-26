@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -51,7 +50,6 @@ namespace UnitTests
         [DataRow("ftp://signnow.com",   DisplayName = "ftp location")]
         [DataRow("http://signnow.com/api/1.0/doc/1?param=42",        DisplayName = "location with path and query")]
         [DataRow(@"http:\/\/signnow.com\/api\/1.0\/doc\/1?param=42", DisplayName = "location with escaped path and query")]
-        [SuppressMessage("ReSharper", "CA1307")]
         public void ShouldDeserializeUriFromJsonString(string location)
         {
             var json = $"{{'data': '{location}'}}";

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -41,7 +40,6 @@ namespace UnitTests
         [DataTestMethod]
         [DataRow(true, DisplayName = "Boolean true")]
         [DataRow(false, DisplayName = "Boolean false")]
-        [SuppressMessage("[CA1308] Replace the call to 'ToLowerInvariant' with 'ToUpperInvariant'.", "CA1308")]
         public void ShouldSerializeBooleanTypeNative(bool param)
         {
             var obj = new User
