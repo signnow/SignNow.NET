@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels.EditFields;
@@ -22,6 +24,19 @@ namespace UnitTests
                 .ConfigureAwait(false);
 
             Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public async Task EditDocumentAsyncTest()
+        {
+            var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock("{\"id\":\"add9e5af17ad0876ed1ec327cc86209d0377181d\"}"));
+
+            var fields = new List<IFieldEditable>() { new TextFieldFaker().Generate() };
+            var response = await service
+                .EditDocumentAsync(Faker.Random.Hash(40), fields )
+                .ConfigureAwait(false);
+
+            Assert.AreEqual("add9e5af17ad0876ed1ec327cc86209d0377181d", response.Id);
         }
 
         [TestMethod]

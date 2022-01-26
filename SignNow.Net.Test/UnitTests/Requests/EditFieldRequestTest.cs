@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model.EditFields;
+using SignNow.Net.Test.FakeModels.EditFields;
 
 namespace UnitTests
 {
@@ -51,6 +54,21 @@ namespace UnitTests
             }}";
 
             Assert.That.JsonEqual(request, actual);
+        }
+
+        [TestMethod]
+        public void CreateEditFieldRequest()
+        {
+            var fields = new List<IFieldEditable>(new TextFieldFaker().Generate(5));
+            var timestamp = new DateTime(2022, 1,1);
+
+            var requestField = new EditFieldRequest(fields[0]) { ClientTime = timestamp };
+            var requestFields = new EditFieldRequest(fields) { ClientTime = timestamp };
+
+            Assert.AreEqual(1, requestField.Fields.Count);
+            Assert.AreEqual(5, requestFields.Fields.Count);
+            Assert.AreEqual(timestamp, requestField.ClientTime);
+            Assert.AreEqual(timestamp, requestFields.ClientTime);
         }
     }
 }

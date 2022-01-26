@@ -131,5 +131,21 @@ namespace UnitTests
 
             Assert.AreEqual("An invite already exists for this document.", exception.Message);
         }
+
+        [TestMethod]
+        public void ThrowsExceptionWhenRoleIdDoesNotExists()
+        {
+            var document = new SignNowDocumentFaker()
+                .RuleFor(o => o.Roles, new RoleFaker().Generate(2))
+                .Generate();
+
+            var invite = new EmbeddedSigningInvite(document);
+
+            var exception = Assert.ThrowsException<ArgumentException>(
+                () => invite.AddEmbeddedSigningInvite(new EmbeddedInvite() {RoleId = "test"}));
+
+            Assert.AreEqual("options", exception.ParamName);
+            Assert.IsTrue(exception.Message.StartsWith("RoleId does not exists"));
+        }
     }
 }
