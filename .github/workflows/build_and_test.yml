@@ -6,7 +6,7 @@ on:
       - '**.md'
       - 'SignNow.Net/SignNow.Net.Examples/**'
     tags-ignore:
-      - '*'
+      - '*.*'
   pull_request:
     branches:
       - 'master'
