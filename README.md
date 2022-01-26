@@ -613,7 +613,6 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [actions build link]: https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22
 [codecov badge]: https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report"
 [codecov link]: https://codecov.io/gh/signnow/SignNow.NET
-[codacy badge]: https://api.codacy.com/project/badge/Grade/1aea9e4b60eb4b6a8c458e16fc8bdb24 "Codacy Repository certification"
 [nuget badge]: https://img.shields.io/nuget/v/SignNow.Net.svg?style=flat-square "NuGet package latest SDK version"
 [nuget link]: https://www.nuget.org/packages/SignNow.Net
 [nuget downloads badge]: https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square

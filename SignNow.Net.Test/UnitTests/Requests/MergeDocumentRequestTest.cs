@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Test.FakeModels;
@@ -29,7 +28,6 @@ namespace UnitTests
         }
 
         [TestMethod]
-        [SuppressMessage("ReSharper", "CA1307")]
         public void CreatesJsonContext()
         {
             var documents = new SignNowDocumentFaker().Generate(10);

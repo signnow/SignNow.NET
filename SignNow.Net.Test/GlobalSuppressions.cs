@@ -1,4 +1,3 @@
-
 // This file is used by Code Analysis to maintain SuppressMessage
 // attributes that are applied to this project.
 // Project-level suppression either have no target or are given
@@ -14,3 +13,4 @@ using System.Diagnostics.CodeAnalysis;
 
 // Suppression for string messages in tests
 [assembly: SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
+[assembly: SuppressMessage("Build", "CA1307:The behavior of 'string.GetHashCode()' could vary based on the current user's locale settings. Replace this call in 'Microsoft.Extensions.Internal.HashCodeCombiner.Add(string)' with a call to 'string.GetHashCode(System.StringComparison)'.")]
