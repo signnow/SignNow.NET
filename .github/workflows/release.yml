@@ -50,7 +50,6 @@ jobs:
         id: get-version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-          echo ::set-output name=RELEASE_NOTES::$(.github/release-notes.sh CHANGELOG.md)
           .github/release-notes.sh CHANGELOG.md > release-notes.txt
 
       - name: Create Release
@@ -59,7 +58,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: SignNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
           tag: ${{ steps.get-version.outputs.VERSION }}
-          body: ${{ steps.get-version.outputs.RELEASE_NOTES }}
+          bodyFile: ${{ github.workspace }}/release-notes.txt
           allowUpdates: true
           artifacts: ${{ github.workspace }}/SignNow.Net/bin/Publish/*.nupkg
           artifactContentType: application/octet-stream

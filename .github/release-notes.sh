@@ -6,22 +6,12 @@
 set -eu
 set -o pipefail
 
-
 # Get Release notes for the latest release from CHANGELOG.md
 # How to use:
 #   release-notes.sh CHANGELOG.md
 
 startLine=$(cat $1 | grep -nE "^### " | head -n 1 | cut -d ":" -f 1)
-finishLine=$(($(cat $1 | grep -nE "^## " | head -n 2 | tail -n 1 | cut -d ":" -f 1) - 1))
+finishLine=$(($(cat $1 | grep -nE "^## \[\d+\." | head -n 2 | tail -n 1 | cut -d ":" -f 1) - 1))
 changelog=`sed -n "${startLine},${finishLine}p" $1`;
-
-: "${GITHUB_ACTIONS:=0}"
-
-if [ "$GITHUB_ACTIONS" = "true" ]
-then
-	changelog="${changelog//'%'/'%25'}"
-	changelog="${changelog//$'\n'/'%0A'}"
-	changelog="${changelog//$'\r'/'%0D'}"
-fi
 
 echo "${changelog}"
