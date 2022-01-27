@@ -76,8 +76,8 @@ jobs:
         id: nuget-cache
         with:
           path: ~/.nuget
-          key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-${{ matrix.framework }}-
+          key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Setup dotnet tools
         env:
@@ -87,7 +87,7 @@ jobs:
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
-        run: dotnet restore -v:n --locked-mode
+        run: dotnet restore -v:n
 
       - name: Configure SignNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
