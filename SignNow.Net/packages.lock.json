@@ -14,15 +14,6 @@
           "Microsoft.NetFramework.Analyzers": "[3.0.0]"
         }
       },
-      "Microsoft.NETFramework.ReferenceAssemblies": {
-        "type": "Direct",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "7D2TMufjGiowmt0E941kVoTIS+GTNzaPopuzM1/1LSaJAdJdBrVP0SkZW7AgDd0a2U1DjsIeaKG1wxGVBNLDMw==",
-        "dependencies": {
-          "Microsoft.NETFramework.ReferenceAssemblies.net45": "1.0.0"
-        }
-      },
       "Newtonsoft.Json": {
         "type": "Direct",
         "requested": "[12.0.3, )",
@@ -48,11 +39,6 @@
         "type": "Transitive",
         "resolved": "3.0.0",
         "contentHash": "Q0sB3JYld9JMa9/HKtioIxhqmOohEku1FkfSC/uf0usGcCIhm6GYWU565klP64jC2kzmjFIu/6fkHEIYRqZCQQ=="
-      },
-      "Microsoft.NETFramework.ReferenceAssemblies.net45": {
-        "type": "Transitive",
-        "resolved": "1.0.0",
-        "contentHash": "f7XMQsZFaoc3w8Vg3VQ3FHuU2C9vf0Ng5EAV4gzdNWDerPM/OmrzccLj15eI1wCLLXj4jk8+lKsbonzJeyXgQQ=="
       }
     },
     ".NETStandard,Version=v1.2": {
