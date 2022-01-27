@@ -4,4 +4,9 @@
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!--- Enabling the lock file for Nuget packages -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
 </Project>

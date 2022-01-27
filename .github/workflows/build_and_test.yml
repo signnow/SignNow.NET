@@ -76,8 +76,8 @@ jobs:
         id: nuget-cache
         with:
           path: ~/.nuget
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
+          key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-${{ matrix.framework }}-
 
       - name: Setup dotnet tools
         env:
@@ -87,7 +87,7 @@ jobs:
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
-        run: dotnet restore -v:n
+        run: dotnet restore -v:n --locked-mode
 
       - name: Configure SignNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
@@ -125,6 +125,12 @@ jobs:
           } Else {
             Write-Output "TARGET_FRAMEWORK=net45" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           }
+
+      - name: Test Release Notes parser
+        if: (runner.os == 'macOS' || runner.os == 'Linux')
+        shell: bash
+        run: |
+          .github/release-notes.sh CHANGELOG.md
 
       - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
