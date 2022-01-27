@@ -5,7 +5,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents response from SignNow API for Document history request.
+    /// Represents response from signNow API for Document history request.
     /// </summary>
     [JsonObject]
     public class DocumentHistoryResponse

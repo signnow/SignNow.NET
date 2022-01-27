@@ -18,7 +18,7 @@ namespace UnitTests
         protected static Token Token { get; set; }
 
         /// <summary>
-        /// Entry point for all SignNow services by <see cref="ISignNowContext"/>
+        /// Entry point for all signNow services by <see cref="ISignNowContext"/>
         /// </summary>
         public static ISignNowContext SignNowTestContext { get; set; }
 

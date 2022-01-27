@@ -9,7 +9,7 @@ namespace SignNow.Net.Examples.Invites
         /// <summary>
         /// Create a role-based invite to the document for signature.
         /// </summary>
-        /// <param name="document">SignNow document with fields you’d like to have signed</param>
+        /// <param name="document">signNow document with fields you’d like to have signed</param>
         /// <param name="email">The email of the invitee.</param>
         /// <param name="token">Access token</param>
         /// <returns><see cref="InviteResponse"/> without any Identity of invite request.</returns>

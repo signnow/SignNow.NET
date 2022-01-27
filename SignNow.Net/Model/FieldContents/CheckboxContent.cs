@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Checkbox`
+    /// Represents signNow field types: `Checkbox`
     /// </summary>
     public class CheckboxContent : BaseContent
     {

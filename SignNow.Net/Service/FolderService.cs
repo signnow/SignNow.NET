@@ -26,7 +26,7 @@ namespace SignNow.Net.Service
         /// <summary>
         /// Constructs folder service.
         /// </summary>
-        /// <param name="baseApiUrl">Base SignNow API URL.</param>
+        /// <param name="baseApiUrl">Base signNow API URL.</param>
         /// <param name="token">Access token.</param>
         /// <param name="client">Http client.</param>
         protected internal FolderService(Uri baseApiUrl, Token token, ISignNowClient client)

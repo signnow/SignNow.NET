@@ -8,7 +8,7 @@ namespace SignNow.Net.Internal.Extensions
     static class ValidatorExtensions
     {
         /// <summary>
-        /// Pattern for SignNow identity (Document, invite...)
+        /// Pattern for signNow identity (Document, invite...)
         /// The required format: 40 characters long, case-sensitive, letters and numbers, underscore allowed.
         /// </summary>
         private const string IdPattern = @"^[a-zA-Z0-9_]{40,40}$";
@@ -20,7 +20,7 @@ namespace SignNow.Net.Internal.Extensions
         private const string EmailPattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
 
         /// <summary>
-        /// Validates SignNow ID for documents, invites, etc...
+        /// Validates signNow ID for documents, invites, etc...
         /// </summary>
         /// <param name="id">Identity of the document or invite.</param>
         /// <exception cref="ArgumentException">Invalid format of ID.</exception>

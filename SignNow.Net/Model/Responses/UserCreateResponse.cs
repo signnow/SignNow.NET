@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents response from SignNow API for User create request.
+    /// Represents response from signNow API for User create request.
     /// </summary>
     public class UserCreateResponse
     {

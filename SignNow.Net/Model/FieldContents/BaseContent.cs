@@ -4,7 +4,7 @@ using SignNow.Net.Interfaces;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Basic SignNow field content.
+    /// Basic signNow field content.
     /// </summary>
     public abstract class BaseContent : ISignNowContent
     {

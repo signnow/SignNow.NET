@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Model.Responses
 {
     /// <summary>
-    /// Represents response from SignNow API for Create Template from Document request.
+    /// Represents response from signNow API for Create Template from Document request.
     /// </summary>
     [JsonObject]
     public class CreateTemplateFromDocumentResponse

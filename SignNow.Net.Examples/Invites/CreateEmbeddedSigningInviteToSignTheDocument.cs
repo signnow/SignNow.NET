@@ -8,7 +8,7 @@ namespace SignNow.Net.Examples.Invites
         /// <summary>
         /// Create an embedded signing invite to the document for signature.
         /// </summary>
-        /// <param name="document">SignNow document you’d like to have signed</param>
+        /// <param name="document">signNow document you'd like to have signed</param>
         /// <param name="email">The email of the invitee.</param>
         /// <param name="token">Access token</param>
         /// <returns>

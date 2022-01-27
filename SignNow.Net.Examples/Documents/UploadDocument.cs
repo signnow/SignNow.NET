@@ -26,7 +26,7 @@ namespace SignNow.Net.Examples.Documents
         }
 
         /// <summary>
-        /// Uploads a PDF document to SignNow and returns SignNowDocument object.
+        /// Uploads a PDF document to signNow and returns SignNowDocument object.
         /// </summary>
         /// <param name="pdfFilePath">Full qualified path to your PDF file.</param>
         /// <param name="token">Access token</param>

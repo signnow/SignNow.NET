@@ -89,7 +89,7 @@ jobs:
       - name: Restore Nuget packages
         run: dotnet restore -v:n
 
-      - name: Configure SignNow API
+      - name: Configure signNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
 
       - name: Build for .NET Standard 1.2

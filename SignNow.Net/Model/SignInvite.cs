@@ -119,7 +119,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Construct Role-based invite.
         /// </summary>
-        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <param name="document">signNow document for which an invitation to sign should be sent.</param>
         /// <exception cref="ArgumentNullException"><see cref="SignNowDocument"/> cannot be null.</exception>
         /// <exception cref="ArgumentException">Document <see cref="SignNowDocument.Roles"/> cannot be empty.</exception>
         public RoleBasedInvite(SignNowDocument document)
@@ -135,7 +135,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
-        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <param name="document">signNow document for which an invitation to sign should be sent.</param>
         /// <param name="cc">The email of copy receiver.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public RoleBasedInvite(SignNowDocument document, string cc): this(document)
@@ -144,7 +144,7 @@ namespace SignNow.Net.Model
         }
 
         /// <inheritdoc cref="RoleBasedInvite(SignNowDocument)"/>
-        /// <param name="document">SignNow document for which an invitation to sign should be sent.</param>
+        /// <param name="document">signNow document for which an invitation to sign should be sent.</param>
         /// <param name="cc">The emails list of copy receivers.</param>
         /// <exception cref="ArgumentException">for not valid <paramref name="cc"/> email address.</exception>
         public RoleBasedInvite(SignNowDocument document, IEnumerable<string> cc): this(document)
@@ -202,7 +202,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Initialize a new instance of Embedded Signing Invite.
         /// </summary>
-        /// <param name="document">SignNow document which you would like to sign with Embedded Invite.</param>
+        /// <param name="document">signNow document which you would like to sign with Embedded Invite.</param>
         /// <exception cref="ArgumentException">The <paramref name="document"/> can not be null.</exception>
         /// <exception cref="ArgumentException">When <paramref name="document"/> does not have <see cref="Role"/></exception>
         /// <exception cref="ArgumentException">When <see cref="FreeFormSignInvite"/> exists in a <paramref name="document"/></exception>

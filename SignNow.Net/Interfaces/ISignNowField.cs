@@ -4,12 +4,12 @@ using SignNow.Net.Model.FieldContents;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for all SignNow Fields.
+    /// Interface for all signNow Fields.
     /// </summary>
     public interface ISignNowField
     {
         /// <summary>
-        /// Get SignNow field type.
+        /// Get signNow field type.
         /// </summary>
         FieldType Type { get; }
 

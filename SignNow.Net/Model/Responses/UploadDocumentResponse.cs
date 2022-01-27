@@ -1,7 +1,7 @@
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents response from SignNow API for upload document request.
+    /// Represents response from signNow API for upload document request.
     /// </summary>
     public class UploadDocumentResponse
     {

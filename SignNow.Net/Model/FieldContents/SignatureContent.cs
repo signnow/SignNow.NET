@@ -6,7 +6,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Signature`, `Initials fields`.
+    /// Represents signNow field types: `Signature`, `Initials fields`.
     /// </summary>
     public class SignatureContent : BaseContent
     {

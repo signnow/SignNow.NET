@@ -4,7 +4,7 @@ using SignNow.Net.Interfaces;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Attachment`
+    /// Represents signNow field types: `Attachment`
     /// </summary>
     public class AttachmentContent : BaseContent
     {
@@ -15,7 +15,7 @@ namespace SignNow.Net.Model.FieldContents
         public string OriginalName { get; set; }
 
         /// <summary>
-        /// Filename with extension used in SignNow.
+        /// Filename with extension used in signNow.
         /// </summary>
         [JsonProperty("filename")]
         public string FileName { get; set; }

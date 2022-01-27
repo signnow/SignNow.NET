@@ -32,7 +32,7 @@ namespace SignNow.Net
         private string ClientSecret { get; set; }
 
         /// <summary>
-        /// SignNow OAuth request <see cref="Uri"/>
+        /// signNow OAuth request <see cref="Uri"/>
         /// </summary>
         private Uri OAuthRequestUrl { get; set; }
 
@@ -49,7 +49,7 @@ namespace SignNow.Net
         /// <summary>
         /// Constructs an <see cref="OAuth2Service"/>
         /// </summary>
-        /// <param name="apiBaseUrl">SignNow API <see cref="WebClientBase.ApiBaseUrl"/></param>
+        /// <param name="apiBaseUrl">signNow API <see cref="WebClientBase.ApiBaseUrl"/></param>
         /// <param name="clientId">Application <see cref="ClientId"/></param>
         /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
         /// <param name="signNowClient">Http Client</param>

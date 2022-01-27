@@ -12,8 +12,8 @@ namespace SignNow.Net.Examples.Documents
         /// <param name="token">Access token</param>
         /// <returns>
         /// Response with:
-        /// <para><see cref="SigningLinkResponse.Url"/> to sign the document via web browser using SignNow credentials.</para>
-        /// <para><see cref="SigningLinkResponse.AnonymousUrl"/> to sign the document via web browser without SignNow credentials.</para>
+        /// <para><see cref="SigningLinkResponse.Url"/> to sign the document via web browser using signNow credentials.</para>
+        /// <para><see cref="SigningLinkResponse.AnonymousUrl"/> to sign the document via web browser without signNow credentials.</para>
         /// </returns>
         public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, Token token)
         {

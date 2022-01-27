@@ -10,7 +10,7 @@ namespace UnitTests
         [TestMethod]
         public void ShouldReturnProperClientName()
         {
-            Assert.AreEqual(SdkRuntime.ClientName, "SignNow .NET API Client");
+            Assert.AreEqual(SdkRuntime.ClientName, "signNow .NET API Client");
         }
 
         [TestMethod]

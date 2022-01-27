@@ -1,4 +1,4 @@
-# SignNow.NET
+# signNow.NET
 
 [![Build status][actions build badge]][actions build link]
 [![Codecov][codecov badge]][codecov link]
@@ -6,9 +6,9 @@
 [![NuGet Downloads][nuget downloads badge]][nuget downloads link]
 [![License][license badge]](LICENSE)
 
-## About SignNow
+## About signNow
 
-SignNow.Net is the official .NET 4.5+ and .NET Standard class library for the SignNow API. SignNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
+signNow.Net is the official .NET 4.5+ and .NET Standard class library for the signNow API. signNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
 
 Get your account at <https://www.signnow.com/developers>
 
@@ -32,11 +32,11 @@ Get your account at <https://www.signnow.com/developers>
         - [Get modified documents][get_modified_docs example]
         - [Get user documents][get_user_docs example]
     - [Document](#document)
-        - [Upload a document to SignNow](#upload-document)
+        - [Upload a document to signNow](#upload-document)
         - [Upload a document & Extract Fields][upload_doc_extract example]
-        - [Download a document from SignNow](#download-document)
+        - [Download a document from signNow](#download-document)
         - [Retrieve a document resource][get_document example]
-        - [Merge two or more SignNow documents into one](#merge-documents)
+        - [Merge two or more signNow documents into one](#merge-documents)
         - [Create a signing link to the document for signature](#create-signing-link)
         - [Create a freeform invite to the document for signature](#create-freeform-invite)
         - [Create a role-based invite to the document for signature](#create-role-based-invite)
@@ -63,7 +63,7 @@ Get your account at <https://www.signnow.com/developers>
 
 ## <a name="get-started"></a>Get started
 
-To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the SignNow REST Endpoints API guide: [SignNow API Reference][api reference link].
+To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the signNow REST Endpoints API guide: [signNow API Reference][api reference link].
 
 #### API and Application
 
@@ -100,7 +100,7 @@ Install-Package SignNow.Net -Version <package-version>
 
 ## <a name="documentation"></a>Documentation
 
-Read about the available SignNow features in [SignNow API Docs][api docs link].
+Read about the available signNow features in [signNow API Docs][api docs link].
 
 ## <a name="features"></a>Features
 
@@ -116,7 +116,7 @@ public static class AuthenticationExamples
     /// <summary>
     /// An example of obtaining an access token via OAuth 2.0 service.
     /// </summary>
-    /// <param name="apiBase">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+    /// <param name="apiBase">signNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
     /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
     /// <param name="userCredentials"><see cref="CredentialModel"/> with User email and User password</param>
     public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel clientInfo, CredentialModel userCredentials)
@@ -183,15 +183,15 @@ More examples: [Create User][create_user example], [Retrieve User information][g
 
 ## <a name="document"></a>Document
 
-### <a name="upload-document"></a>Upload a document to SignNow
+### <a name="upload-document"></a>Upload a document to signNow
 
-All the features in SignNow require a `document_id`. Once you upload a document to SignNow, you get the `document_id` from a successful response.
+All the features in signNow require a `document_id`. Once you upload a document to signNow, you get the `document_id` from a successful response.
 
 ```csharp
 public static class DocumentExamples
 {
     /// <summary>
-    /// Uploads a PDF document to SignNow and returns SignNowDocument object.
+    /// Uploads a PDF document to signNow and returns SignNowDocument object.
     /// </summary>
     /// <param name="pdfFilePath">Full qualified path to your PDF file.</param>
     /// <param name="token">Access token</param>
@@ -217,11 +217,11 @@ public static class DocumentExamples
 
 More examples: [Upload document][upload_document example], [Upload document with field extract][upload_doc_extract example]
 
-### <a name="download-document"></a>Download a document from SignNow
+### <a name="download-document"></a>Download a document from signNow
 
 Choose the type of download for your document:
 
-- `PdfOriginal` - download a document in a state it's been when uploaded to SignNow, before any changes
+- `PdfOriginal` - download a document in a state it's been when uploaded to signNow, before any changes
 - `PdfCollapsed` - download a document in PDF file format
 - `ZipCollapsed` - download a document in ZIP archive
 - `PdfWithHistory` - download a document with its history, a full log of changes on a separate page.
@@ -250,9 +250,9 @@ public static class DocumentExamples
 
 More examples: [Download signed document][download_signed_doc example]
 
-### <a name="merge-documents"></a>Merge two or more SignNow documents into one
+### <a name="merge-documents"></a>Merge two or more signNow documents into one
 
-Merges two or more SignNow documents into one single PDF file.
+Merges two or more signNow documents into one single PDF file.
 
 Steps:
 
@@ -309,9 +309,9 @@ public static partial class DocumentExamples
     /// <returns>
     /// Response with:
     /// <para> <see cref="SigningLinkResponse.Url"/>
-    /// to sign the document via web browser using SignNow credentials. </para>
+    /// to sign the document via web browser using signNow credentials. </para>
     /// <para> <see cref="SigningLinkResponse.AnonymousUrl"/>
-    /// to sign the document via web browser without SignNow credentials. </para>
+    /// to sign the document via web browser without signNow credentials. </para>
     /// </returns>
     public static async Task<SigningLinkResponse>
         CreateSigningLinkToTheDocument(string documentId, Token token)
@@ -335,7 +335,7 @@ More examples: [Create signing link][create_sign_lnk example], [Check signing st
 Simply upload a document and send it for signature right away. No need for adding fields and configuring roles.
 Just add the signer's email address and customize the message in your email.
 The document will be available for signing via a button in the email.
-Clicking the button opens a document in SignNow editor. Signers can click anywhere on a document to add their signature.
+Clicking the button opens a document in signNow editor. Signers can click anywhere on a document to add their signature.
 
 Remember: if your document contains even one fillable field, you have to create a role-based invite to get it signed.
 
@@ -345,7 +345,7 @@ public static partial class InviteExamples
     /// <summary>
     /// Create a freeform invite to the document for signature.
     /// </summary>
-    /// <param name="document">SignNow document you’d like to have signed</param>
+    /// <param name="document">signNow document you’d like to have signed</param>
     /// <param name="email">The email of the invitee.</param>
     /// <param name="token">Access token</param>
     /// <returns>
@@ -381,9 +381,9 @@ Role-based invites allow you to build e-signature workflows. The document can be
 Upload a document or create one from a template.
 
 The document will be available for signing via a button in the email. You can customize email messages for every signer.
-Clicking the button opens a document in SignNow editor. Signers can sign only the fields designated for their role.
+Clicking the button opens a document in signNow editor. Signers can sign only the fields designated for their role.
 
-You can add more roles either in SignNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
+You can add more roles either in signNow web app while editing the fields, or with `ISignInvite` interface from SDK while specifying parameters of the `SignerOptions` object.
 
 ```csharp
 public static partial class InviteExamples
@@ -391,7 +391,7 @@ public static partial class InviteExamples
     /// <summary>
     /// Create a role-based invite to the document for signature.
     /// </summary>
-    /// <param name="document">SignNow document with fields you’d like to have signed</param>
+    /// <param name="document">signNow document with fields you’d like to have signed</param>
     /// <param name="email">The email of the invitee.</param>
     /// <param name="token">Access token</param>
     /// <returns><see cref="InviteResponse"/> without any Identity of invite request.</returns>
@@ -435,7 +435,7 @@ public static partial class InviteExamples
     /// <summary>
     /// Create an embedded signing invite to the document for signature.
     /// </summary>
-    /// <param name="document">SignNow document you’d like to have signed</param>
+    /// <param name="document">signNow document you’d like to have signed</param>
     /// <param name="email">The email of the invitee.</param>
     /// <param name="token">Access token</param>
     /// <returns>
@@ -520,7 +520,7 @@ More examples: [Get document history][document_history example]
 ## <a name="template"></a>Template
 ### <a name="create-template"></a>Create Template by flattening the existing Document
 
-Set required templateName and documentId parameters to create the SignNow Template.
+Set required templateName and documentId parameters to create the signNow Template.
 
 ```csharp
 public static class DocumentExamples
@@ -602,9 +602,9 @@ This SDK is distributed under the MIT License, see [LICENSE][license link] for m
 
 #### API Contact Information
 
-If you have questions about the SignNow API, please visit [SignNow API Reference][api reference link] or email api@signnow.com.<br>
+If you have questions about the signNow API, please visit [signNow API Reference][api reference link] or email api@signnow.com.<br>
 
-**Support**: To contact SignNow support, please email support@signnow.com or api@signnow.com.<br>
+**Support**: To contact signNow support, please email support@signnow.com or api@signnow.com.<br>
 
 **Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit <https://www.signnow.com/contact>.
 
@@ -617,7 +617,7 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [nuget link]: https://www.nuget.org/packages/SignNow.Net
 [nuget downloads badge]: https://img.shields.io/nuget/dt/SignNow.Net.svg?style=flat-square
 [nuget downloads link]: https://www.nuget.org/packages/SignNow.Net "NuGet Downloads"
-[license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "SignNow .Net SDK License"
+[license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "signNow .Net SDK License"
 [license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
 [api docs link]: https://docs.signnow.com
 [api reference link]: https://docs.signnow.com/sn/ref

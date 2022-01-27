@@ -149,7 +149,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/signnow/SignNow.NET/compare/0.9.0...1.0.0
 [0.9.0]: https://github.com/signnow/SignNow.NET/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/signnow/SignNow.NET/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/signnow/SignNow.NET/compare/0.6.0-beta...0.7.0

@@ -10,7 +10,7 @@ namespace SignNow.Net.Examples.Invites
         /// <summary>
         /// Create Link for Embedded Signing Invite
         /// </summary>
-        /// <param name="document">SignNow document you’d like to have signed</param>
+        /// <param name="document">signNow document you'd like to have signed</param>
         /// <param name="expires">In how many minutes the link expires, ranges from 15 to 45 minutes or null</param>
         /// <param name="token">access token</param>
         /// <returns></returns>
