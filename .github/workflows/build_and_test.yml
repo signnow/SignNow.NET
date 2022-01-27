@@ -113,7 +113,7 @@ jobs:
       - name: Save Code Coverage Results
         uses: actions/upload-artifact@v2
         with:
-          name: CoverageReports.zip
+          name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: SignNow.Net.Test/bin/Debug/**/coverage*
 
       - name: Setup Code Coverage report flags
