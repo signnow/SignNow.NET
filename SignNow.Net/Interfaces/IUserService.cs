@@ -7,7 +7,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for any operations with a User in SignNow;
+    /// Interface for any operations with a User in signNow;
     /// i.e. create a user, authenticate a user, retrieve user's documents etc.
     /// </summary>
     public interface IUserService

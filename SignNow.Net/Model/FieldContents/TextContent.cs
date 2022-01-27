@@ -4,7 +4,7 @@ using SignNow.Net.Interfaces;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Text box`, `Dropdown box`, `Date-Time picker`
+    /// Represents signNow field types: `Text box`, `Dropdown box`, `Date-Time picker`
     /// </summary>
     public class TextContent : BaseContent
     {

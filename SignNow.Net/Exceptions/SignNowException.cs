@@ -33,7 +33,7 @@ namespace SignNow.Net.Exceptions
         }
 
         /// <summary>
-        /// Contains all the details of original Json response from SignNow API
+        /// Contains all the details of original Json response from signNow API
         /// </summary>
         public string RawResponse
         {

@@ -10,7 +10,7 @@ using SignNow.Net.Model.FieldContents;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents SignNow document object.
+    /// Represents signNow document object.
     /// Document is the fundamental unit of every e-Signature operation.
     /// <para>It contains:</para>
     /// <list type="bullet">

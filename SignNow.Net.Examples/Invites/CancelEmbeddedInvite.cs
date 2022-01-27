@@ -8,7 +8,7 @@ namespace SignNow.Net.Examples.Invites
         /// <summary>
         /// Cancel an embedded signing invite
         /// </summary>
-        /// <param name="document">SignNow document you’d like to cancel embedded invite</param>
+        /// <param name="document">signNow document you’d like to cancel embedded invite</param>
         /// <param name="token">Access token</param>
         /// <returns></returns>
         public static async Task CancelEmbeddedInvite(SignNowDocument document, Token token)

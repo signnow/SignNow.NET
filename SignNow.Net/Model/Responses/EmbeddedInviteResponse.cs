@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents response from SignNow API for create embedded invite request.
+    /// Represents response from signNow API for create embedded invite request.
     /// </summary>
     public class EmbeddedInviteData
     {

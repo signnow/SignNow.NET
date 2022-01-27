@@ -22,14 +22,16 @@ jobs:
       - name: Setup .NET 5
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: |
+            3.1.x
+            5.0.x
 
       - name: Setup Nuget Cache
         uses: actions/cache@v2
         id: nuget-cache
         with:
           path: ~/.nuget
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/SignNow*/*.csproj') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
       - name: Setup dotnet tool
@@ -56,7 +58,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: SignNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
+          name: signNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
           tag: ${{ steps.get-version.outputs.VERSION }}
           bodyFile: ${{ github.workspace }}/release-notes.txt
           allowUpdates: true
@@ -64,8 +66,8 @@ jobs:
           artifactContentType: application/octet-stream
 
       - name: Publish Nuget Package
+        working-directory: ${{ github.workspace }}/SignNow.Net/bin/Publish
         run: |
-          cd ${{ github.workspace }}/SignNow.Net/bin/Publish
           dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
               -k ${{ secrets.NUGET_TOKEN }} \
               -s https://api.nuget.org/v3/index.json

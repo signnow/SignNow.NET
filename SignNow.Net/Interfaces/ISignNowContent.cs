@@ -3,8 +3,8 @@ using SignNow.Net.Model.FieldContents;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for all SignNow content types retrieval.
-    /// Resources that implement this interface can be used as SignNow Content (Field Content).
+    /// Interface for all signNow content types retrieval.
+    /// Resources that implement this interface can be used as signNow Content (Field Content).
     /// <para>Possible concrete classes:</para>
     /// <list type="bullet">
     /// <item><description><see cref="AttachmentContent" /></description></item>

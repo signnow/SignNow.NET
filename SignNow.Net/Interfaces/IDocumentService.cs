@@ -9,7 +9,7 @@ using SignNow.Net.Model.Responses;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for any operations with a Document in SignNow
+    /// Interface for any operations with a Document in signNow
     /// can be used to create, download, retrieve, delete a document etc.
     /// </summary>
     public interface IDocumentService
@@ -23,7 +23,7 @@ namespace SignNow.Net.Interfaces
         Task<SignNowDocument> GetDocumentAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Uploads a file to the SignNow account and creates a document.
+        /// Uploads a file to the signNow account and creates a document.
         /// This method accepts .doc, .docx, .pdf, and .png file types.
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
@@ -33,7 +33,7 @@ namespace SignNow.Net.Interfaces
         Task<UploadDocumentResponse> UploadDocumentAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Uploads a file to the SignNow account, creates a document and extracts simple field tags if any.
+        /// Uploads a file to the signNow account, creates a document and extracts simple field tags if any.
         /// This method accepts .doc, .docx and .pdf file types.
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
@@ -43,7 +43,7 @@ namespace SignNow.Net.Interfaces
         Task<UploadDocumentResponse>UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Removes a document from SignNow account.
+        /// Removes a document from signNow account.
         /// </summary>
         /// <param name="documentId">Identity of the document to be removed.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>

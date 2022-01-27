@@ -8,7 +8,7 @@ using SignNow.Net.Model.FieldContents;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// SignNow fields metadata.
+    /// signNow fields metadata.
     /// </summary>
     public class Field: ISignNowField
     {
@@ -70,7 +70,7 @@ namespace SignNow.Net.Model
     }
 
     /// <summary>
-    /// Represents all types of SignNow fields.
+    /// Represents all types of signNow fields.
     /// </summary>
     public enum FieldType
     {

@@ -7,7 +7,7 @@ using System;
 namespace SignNow.Net
 {
     /// <summary>
-    /// Service container with all SignNow services
+    /// Service container with all signNow services
     /// </summary>
     public class SignNowContext : AuthorizedWebClientBase, ISignNowContext
     {

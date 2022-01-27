@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// The access token you can use to make requests on behalf of this SignNow account.
+    /// The access token you can use to make requests on behalf of this signNow account.
     /// </summary>
     public class Token
     {

@@ -3,7 +3,7 @@ using System.IO;
 namespace SignNow.Net.Model
 {
     /// <summary>
-    /// Represents response from SignNow API for Document download request.
+    /// Represents response from signNow API for Document download request.
     /// </summary>
     public class DownloadDocumentResponse
     {

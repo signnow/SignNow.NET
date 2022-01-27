@@ -4,17 +4,17 @@ using System.Runtime.InteropServices;
 namespace SignNow.Net.Internal.Infrastructure
 {
     /// <summary>
-    /// Represents SignNow SDK general info (name, version...)
+    /// Represents signNow SDK general info (name, version...)
     /// </summary>
     internal static class SdkRuntime
     {
         /// <summary>
-        /// Returns SignNow SDK client name
+        /// Returns signNow SDK client name
         /// </summary>
-        public const string ClientName = "SignNow .NET API Client";
+        public const string ClientName = "signNow .NET API Client";
 
         /// <summary>
-        /// Returns SignNow SDK version.
+        /// Returns signNow SDK version.
         /// </summary>
         public static Version Version { get; set; }
 

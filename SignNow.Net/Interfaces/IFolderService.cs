@@ -7,7 +7,7 @@ using SignNow.Net.Model.Responses;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for any operations with a folders in SignNow
+    /// Interface for any operations with a folders in signNow
     /// </summary>
     /// <remarks>
     /// Folders serve for storing user's documents. <br />

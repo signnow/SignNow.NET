@@ -5,7 +5,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Hyperlink`
+    /// Represents signNow field types: `Hyperlink`
     /// </summary>
     public class HyperlinkContent : BaseContent
     {

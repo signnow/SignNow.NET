@@ -49,7 +49,7 @@ namespace SignNow.Net.Examples
         private readonly Token token;
 
         /// <summary>
-        /// SignNow service container used for ExampleRunner
+        /// signNow service container used for ExampleRunner
         /// </summary>
         private readonly SignNowContext testContext;
 
@@ -59,7 +59,7 @@ namespace SignNow.Net.Examples
         private string disposableDocumentId;
 
         /// <summary>
-        /// SignNow API base Url (sandbox)
+        /// signNow API base Url (sandbox)
         /// </summary>
         private static Uri ApiBaseUrl => new Uri("https://api-eval.signnow.com/");
 

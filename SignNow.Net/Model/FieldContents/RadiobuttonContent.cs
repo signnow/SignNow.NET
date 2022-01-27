@@ -8,7 +8,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 namespace SignNow.Net.Model.FieldContents
 {
     /// <summary>
-    /// Represents SignNow field types: `Radiobutton`
+    /// Represents signNow field types: `Radiobutton`
     /// </summary>
     public class RadiobuttonContent : BaseContent
     {
@@ -61,7 +61,7 @@ namespace SignNow.Net.Model.FieldContents
     }
 
     /// <summary>
-    /// Represents SignNow element for field types: `Radiobutton`
+    /// Represents signNow element for field types: `Radiobutton`
     /// </summary>
     public class RadioContent : ISignNowContent
     {

@@ -8,7 +8,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Interfaces
 {
     /// <summary>
-    /// Interface for any operations with an Invite in SignNow:
+    /// Interface for any operations with an Invite in signNow:
     /// creating or canceling the invite to sign a document, checking status of the invite, etc.
     /// </summary>
     public interface ISignInvite

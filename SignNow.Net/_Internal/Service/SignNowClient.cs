@@ -53,7 +53,7 @@ namespace SignNow.Net.Internal.Service
         private HttpClient HttpClient { get; }
 
         /// <summary>
-        /// Initialize a new instance of SignNow Client
+        /// Initialize a new instance of signNow Client
         /// </summary>
         /// <param name="httpClient">
         /// If <c>null</c>, an HTTP client will be created with default parameters.

@@ -10,7 +10,7 @@ namespace SignNow.Net.Examples.Authentication
         /// <summary>
         /// An example of obtaining an access token via OAuth 2.0 service.
         /// </summary>
-        /// <param name="apiBase">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="apiBase">signNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
         /// <param name="credentials"><see cref="CredentialModel"/> with Application Client ID, Client Secret, Login and Password</param>
         public static async Task<Token> RequestAccessToken(Uri apiBase, CredentialModel credentials)
         {
@@ -31,7 +31,7 @@ namespace SignNow.Net.Examples.Authentication
         /// <summary>
         /// Verify access token example
         /// </summary>
-        /// <param name="apiBaseUrl">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="apiBaseUrl">signNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
         /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
         /// <param name="token">Access token</param>
         /// <returns></returns>
@@ -46,7 +46,7 @@ namespace SignNow.Net.Examples.Authentication
         /// <summary>
         /// Refresh access token example
         /// </summary>
-        /// <param name="apiBaseUrl">SignNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
+        /// <param name="apiBaseUrl">signNow API base URL. Sandbox: "https://api-eval.signnow.com", Production: "https://api.signnow.com"</param>
         /// <param name="clientInfo"><see cref="CredentialModel"/> with Application Client ID and Client Secret</param>
         /// <param name="token">Access token</param>
         /// <returns></returns>
