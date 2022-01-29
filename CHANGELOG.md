@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Added
+- The `Thumbnail` property on `Model.SignNowDocument`, which allows you to get document thumbnails in small, medium and large image sizes
 
 ## [1.0.0] - 2022-02-26
 ### Added
