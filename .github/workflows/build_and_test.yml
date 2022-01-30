@@ -47,6 +47,8 @@ jobs:
       DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
       NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
       COVERAGE_PATH: SignNow.Net.Test/bin/Debug
+      # Do not generate summary otherwise it leads to duplicate errors in build log
+      DOTNET_BUILD_ARGS: SignNow.Net --configuration Debug /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
 
     defaults:
       run:
@@ -94,15 +96,15 @@ jobs:
 
       - name: Build for .NET Standard 1.2
         if: matrix.framework == 'netcoreapp3.1'
-        run: dotnet build SignNow.Net --configuration Debug --framework netstandard1.2
+        run: dotnet build ${{ env.DOTNET_BUILD_ARGS }} --framework netstandard1.2
 
       - name: Build for .NET Standard 2.0
         if: matrix.framework == 'net5'
-        run: dotnet build SignNow.Net --configuration Debug --framework netstandard2.0
+        run: dotnet build ${{ env.DOTNET_BUILD_ARGS }} --framework netstandard2.0
 
       - name: Build for .NET 4.5
         if: (runner.os == 'Windows' && matrix.framework == 'net45')
-        run: dotnet build SignNow.Net --configuration Debug --framework net45
+        run: dotnet build ${{ env.DOTNET_BUILD_ARGS }} --framework net45
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |

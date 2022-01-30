@@ -96,6 +96,7 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
     /// <summary>
     /// Document signing statuses.
     /// </summary>
+#pragma warning disable CA1720 // Identifier 'Signed' contains type name
     public enum SigningStatus
     {
         [EnumMember(Value = "waiting-for-me")]
@@ -116,6 +117,7 @@ namespace SignNow.Net.Model.Requests.GetFolderQuery
         [EnumMember(Value = "does-not-created")]
         DoesNotCreated
     }
+#pragma warning restore CA1720 // Identifier 'Signed' contains type name
 
     public enum HasFieldsAndRoles
     {
