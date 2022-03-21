@@ -12,15 +12,18 @@ set -o pipefail
 # You must to use the `markdown` H2 tag for the release version
 # and `markdown` H3 tag for the description
 #
-# Script will return the content between the first and second string occurences that start with `## [`
+# Script will return the content between the first and second string occurrences
+# that start with H2 markdown tag with release version: example: `## [1.0.0]`
 #
 # How to use:
 #   release-notes.sh CHANGELOG.md
 
-# Searching for line which starts from markdowd H3 tag: ###
-startLine=$(cat < "$1" | grep -nE "^### " | head -n 1 | cut -d ":" -f 1)
-# Searching for line (second line) which ends on markdowd H2 tag with leading square bracket: ## [
-finishLine=$(($(cat < "$1" | grep -nE "^## \[" | head -n 2 | tail -n 1 | cut -d ":" -f 1) - 1))
+
+# Searching for line which starts from markdown H2 tag: ## [1.0.0]
+VERSION_PATTERN="^## \[[0-9]+\\.[0-9]+\\.[0-9]+]"
+
+startLine=$(($(cat < "$1" | grep -nE "$VERSION_PATTERN" | head -n 1 | tail -n 1 | cut -d ":" -f 1) + 1))
+finishLine=$(($(cat < "$1" | grep -nE "$VERSION_PATTERN" | head -n 2 | tail -n 1 | cut -d ":" -f 1) - 1))
 changelog=$(sed -n "${startLine},${finishLine}p" "$1");
 
 echo "${changelog}"

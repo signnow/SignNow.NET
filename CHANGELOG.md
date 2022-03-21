@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Added
 - The `Thumbnail` property on `Model.SignNowDocument`, which allows you to get document thumbnails in small, medium and large image sizes
 
+### Fixed
+- Fixed fails when parsing error response from auth service [#134](https://github.com/signnow/SignNow.NET/issues/134)
+
+
 ## [1.0.0] - 2022-02-26
 ### Added
 - `IDocumentService.PrefillTextFieldsAsync` that allows you to prefill document fields
