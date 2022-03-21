@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SignNow.Net.Internal.Model
 {
-    public class ErrorResponseContext
+    internal class ErrorResponseContext
     {
         /// <summary>
         /// Error Message
@@ -15,17 +16,22 @@ namespace SignNow.Net.Internal.Model
         /// <summary>
         /// Error Code
         /// </summary>
-        public int Code { get; set; }
+        public string Code { get; set; }
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "The class is used for JSON deserialization")]
-    class ErrorResponse
+    internal class ErrorResponse
     {
         /// <summary>
         /// Error Message in some response cases
         /// </summary>
         [JsonProperty("error")]
-        public string Error { get; set; }
+        public object Error { get; set; }
+
+        /// <summary>
+        /// Error code in some response cases
+        /// </summary>
+        [JsonProperty("code")]
+        public string Code { get; set; }
 
         /// <summary>
         /// Error Message for non-valid URL
@@ -34,42 +40,54 @@ namespace SignNow.Net.Internal.Model
         public string Error404 { get; set; }
 
         [JsonProperty("errors")]
-        [SuppressMessage("Microsoft.Usage", "CA2227:Change Errors to be readonly", Justification = "Json deserialization will not work without set")]
         public List<ErrorResponseContext> Errors { get; set; }
+
+        public string GetErrorCode()
+        {
+            if (Error is JArray { Count: 1 } error)
+            {
+                return error[0].ToObject<ErrorResponseContext>()?.Code;
+            }
+
+            if (Errors is { Count: 1 }) { return Errors[0].Code; }
+
+            if (Errors != null && Errors.Count > 1)
+            {
+                var strBuilder = new StringBuilder();
+                foreach (ErrorResponseContext item in Errors)
+                {
+                    strBuilder.AppendLine(item.Code);
+                }
+                return strBuilder.ToString();
+            }
+
+            return Code ?? String.Empty;
+        }
 
         public string GetErrorMessage()
         {
-            var message = string.Empty;
-
-            if (!string.IsNullOrEmpty(Error))
+            switch (Error)
             {
-                message = Error;
+                case string err:
+                    return err;
+                case JArray { Count: 1 } error:
+                    return error[0].ToObject<ErrorResponseContext>()?.Message;
             }
 
-            if (!string.IsNullOrEmpty(Error404))
-            {
-                message = Error404;
-            }
+            if (Errors is { Count: 1 }) { return Errors[0].Message; }
 
-            if (Errors != null)
-            {
-                if (Errors.Count == 1)
-                    message = Errors[0].Message;
 
-                // Aggregate all Messages
-                if (Errors.Count > 1)
+            if (Errors != null && Errors.Count > 1)
+            {
+                var strBuilder = new StringBuilder();
+                foreach (ErrorResponseContext item in Errors)
                 {
-                    var strBuilder = new StringBuilder();
-
-                    foreach (ErrorResponseContext item in Errors)
-                    {
-                        strBuilder.AppendLine(item.Message);
-                    }
-                    message = strBuilder.ToString();
+                    strBuilder.AppendLine(item.Message);
                 }
+                return strBuilder.ToString();
             }
 
-            return message;
+            return Error404 ?? String.Empty;
         }
     }
 }

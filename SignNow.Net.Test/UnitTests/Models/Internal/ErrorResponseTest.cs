@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Model;
@@ -9,50 +11,39 @@ namespace UnitTests
     public class ErrorResponseTest
     {
         [TestMethod]
-        public void ShouldProcessErrorMessage()
+        [DynamicData(nameof(ErrorContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
+        public void ShouldProcessErrorMessage(string testName, string errorContext, string expectedMsg, string expectedCode)
         {
-            var json = @"{
-                'error': 'context of error'
-            }";
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorContext);
 
-            var json404 = @"{
-                '404': 'context of error404'
-            }";
-
-            var jsonError = @"{
-                'errors': [
-                    {
-                        'message': 'context of single errors item',
-                        'code': 127
-                    }
-                ]
-            }";
-
-            var jsonErrors = @"{
-                'errors': [
-                    {
-                        'code': 41,
-                        'message': 'context of first errors item'
-                    },
-                    {
-                        'code': 42,
-                        'message': 'context of second errors item'
-                    }
-                ]
-            }";
-
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(json);
-            var errorResponse404 = JsonConvert.DeserializeObject<ErrorResponse>(json404);
-            var errorResponseError = JsonConvert.DeserializeObject<ErrorResponse>(jsonError);
-            var errorResponseErrors = JsonConvert.DeserializeObject<ErrorResponse>(jsonErrors);
-
-            Assert.AreEqual("context of error", errorResponse.GetErrorMessage());
-            Assert.AreEqual("context of error404", errorResponse404.GetErrorMessage());
-            Assert.AreEqual("context of single errors item", errorResponseError.GetErrorMessage());
-            Assert.AreEqual(
-                $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine}",
-                errorResponseErrors.GetErrorMessage()
-                );
+            Assert.AreEqual(expectedMsg, errorResponse.GetErrorMessage());
+            Assert.AreEqual(expectedCode, errorResponse.GetErrorCode());
         }
+
+        public static IEnumerable<object[]> ErrorContentProvider()
+        {
+            // Test DisplayName | test object
+            yield return new object[] { "Invalid token", @"{""error"":""invalid_token"",""code"": 1537}", "invalid_token", "1537" };
+            yield return new object[] { "404", @"{""404"": ""context of error404""}", "context of error404", "" };
+            yield return new object[]
+            {
+                "One error as Array", @"{""errors"":[{""code"":""127"",""message"":""context of single errors item""}]}",
+                "context of single errors item", "127"
+            };
+            yield return new object[]
+            {
+                "Many errors as Array",
+                @"{""errors"":[{""code"":""127"",""message"":""first error""}, {""code"":""128"",""message"":""second error""}]}",
+                $"first error{Environment.NewLine}second error{Environment.NewLine}", $"127{Environment.NewLine}128{Environment.NewLine}"
+            };
+            yield return new object[]
+            {
+                "Internal Api Error", @"{""error"":[{""code"":""HY000"",""message"":""Internal Api Error""}]}",
+                "Internal Api Error", "HY000"
+            };
+        }
+
+        public static string TestDisplayName(MethodInfo methodInfo, object[] data) =>
+            TestUtils.DynamicDataDisplayName(methodInfo, data);
     }
 }
