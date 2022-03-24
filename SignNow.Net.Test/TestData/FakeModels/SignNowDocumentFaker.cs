@@ -24,6 +24,11 @@ namespace SignNow.Net.Test.FakeModels
         ///   "updated": "1580849001",
         ///   "owner": "Richie.Dickens60@gmail.com",
         ///   "template": true,
+        ///   "thumbnail": {
+        ///     "small": "https://via.placeholder.com/85x110/cccccc/9c9c9c.png?text=signNow%20test",
+        ///     "medium": "https://via.placeholder.com/340x440/cccccc/9c9c9c.png?text=signNow%20test",
+        ///     "large": "https://via.placeholder.com/890x1151/cccccc/9c9c9c.png?text=signNow%20test"
+        ///   },
         ///   "roles": [],
         ///   "signatures": [],
         ///   "fields": [],
@@ -55,6 +60,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.Updated = f.Date.Recent().ToUniversalTime();
                 o.Owner = f.Internet.Email();
                 o.IsTemplate = f.Random.Bool();
+                o.Thumbnail = new ThumbnailFaker();
             });
         }
     }

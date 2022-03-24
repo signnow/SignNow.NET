@@ -11,7 +11,7 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <summary>
         /// Returns signNow SDK client name
         /// </summary>
-        public const string ClientName = "signNow .NET API Client";
+        public const string ClientName = "SignNow .NET API Client";
 
         /// <summary>
         /// Returns signNow SDK version.

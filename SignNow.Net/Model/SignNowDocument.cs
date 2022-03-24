@@ -92,6 +92,12 @@ namespace SignNow.Net.Model
         public bool IsTemplate { get; set; }
 
         /// <summary>
+        /// Thumbnails with different document preview image sizes.
+        /// </summary>
+        [JsonProperty("thumbnail")]
+        public Thumbnail Thumbnail { get; internal set; }
+
+        /// <summary>
         /// The document signer roles.
         /// </summary>
         [JsonProperty("roles")]
