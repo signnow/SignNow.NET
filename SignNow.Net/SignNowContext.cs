@@ -27,6 +27,8 @@ namespace SignNow.Net
         /// <inheritdoc cref="IFolderService"/>
         public IFolderService Folders { get; protected set; }
 
+        public IEventSubscriptionService Events { get; protected set; }
+
         /// <summary>
         /// Create all the services using single instance of <see cref="ISignNowClient"/> and other dependencies.
         /// </summary>
@@ -53,6 +55,7 @@ namespace SignNow.Net
             OAuth = new OAuth2Service(ApiBaseUrl, "", "", SignNowClient);
             Users = new UserService(ApiBaseUrl, Token, SignNowClient);
             Invites = (ISignInvite) Users;
+            Events = new EventSubscriptionService(ApiBaseUrl, token, signNowClient);
             Documents = new DocumentService(ApiBaseUrl, Token, SignNowClient);
             Folders = new FolderService(ApiBaseUrl, Token, SignNowClient);
         }
