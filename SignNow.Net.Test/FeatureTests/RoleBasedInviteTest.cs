@@ -39,6 +39,9 @@ namespace FeatureTests
             Assert.AreEqual("Pending", fieldInvites.Status.ToString(), "Newly created Invite must have status: pending.");
             Assert.AreEqual("Signer 1", fieldInvites.RoleName, "Signer role mismatch.");
             Assert.AreEqual("signer1@signnow.com", fieldInvites.SignerEmail, "Signer email mismatch.");
+
+            // Could not delete document with pending invites. Invites must be cancelled first
+            await SignNowTestContext.Invites.CancelInviteAsync(documentUpdated.Id).ConfigureAwait(false);
         }
 
         [TestMethod]

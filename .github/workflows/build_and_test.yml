@@ -30,8 +30,8 @@ jobs:
       matrix:
         include:
           # Ubuntu
-          - { name: 'Linux .NET Core 3',    os: ubuntu-18.04,   framework: 'netcoreapp3.1' }
-          - { name: 'Linux .NET 5',         os: ubuntu-18.04,   framework: 'net5' }
+          - { name: 'Linux .NET Core 3',    os: ubuntu-22.04,   framework: 'netcoreapp3.1' }
+          - { name: 'Linux .NET 5',         os: ubuntu-22.04,   framework: 'net5' }
           # macOs
           - { name: 'macOS .NET Core 3',    os: macOS-latest,   framework: 'netcoreapp3.1' }
           - { name: 'macOS .NET 5',         os: macOS-latest,   framework: 'net5' }
@@ -55,7 +55,7 @@ jobs:
         shell: pwsh
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -69,12 +69,12 @@ jobs:
 
       - name: Setup .NET SDK
         if: (runner.os == 'macOS' || runner.os == 'Linux')
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
 
       - name: Setup Nuget Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: nuget-cache
         with:
           path: ~/.nuget
@@ -113,7 +113,7 @@ jobs:
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: SignNow.Net.Test/bin/Debug/**/coverage*
@@ -136,10 +136,10 @@ jobs:
 
       - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           name: ${{ runner.os }}-codecov-${{ matrix.framework }}
           flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
+          files: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
           fail_ci_if_error: false
