@@ -38,6 +38,9 @@ namespace FeatureTests
             Assert.IsNull(documentInviteRequest.IsCanceled, "Invite status should not be canceled by default.");
             Assert.AreEqual(InviteStatus.Pending, documentInviteRequest.Status);
             Assert.AreEqual(DocumentStatus.Pending, documentInfo.Status);
+
+            // Could not delete document with pending invites. Invites must be cancelled first
+            await SignNowTestContext.Invites.CancelInviteAsync(documentInviteRequest).ConfigureAwait(false);
         }
 
         [TestMethod]

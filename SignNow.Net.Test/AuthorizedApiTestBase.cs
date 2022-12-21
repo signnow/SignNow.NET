@@ -125,7 +125,7 @@ namespace UnitTests
             }
 
             using (var client = new HttpClient())
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl}/document/{documentId}"))
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl.AbsoluteUri.Trim('/')}/document/{documentId}"))
             {
                 requestMessage.Headers.Add("Authorization", Token.GetAuthorizationHeaderValue());
                 var response = client.SendAsync(requestMessage).Result;
