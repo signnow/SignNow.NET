@@ -1,8 +1,6 @@
-using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Exceptions;
 
 namespace SignNow.Net.Model.Requests
 {
@@ -21,19 +19,7 @@ namespace SignNow.Net.Model.Requests
         /// In how many minutes the link expires, ranges from 15 to 45 minutes or null.
         /// </summary>
         [JsonProperty("link_expiration")]
-        public uint? LinkExpiration
-        {
-            get { return linkExpiration; }
-            set
-            {
-                if (value < 15 || value > 45)
-                {
-                    throw new ArgumentException(ExceptionMessages.AllowedRangeMustBeFrom15to45, nameof(LinkExpiration));
-                }
-
-                linkExpiration = value;
-            }
-        }
+        public uint? LinkExpiration { get; set; }
 
         /// <summary>
         /// Signature invite you'd like to embed.

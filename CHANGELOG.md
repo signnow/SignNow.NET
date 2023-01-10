@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Fixed fails when parsing error response from auth service [#134](https://github.com/signnow/SignNow.NET/issues/134)
 
+### Changed
+- Removed built-in validation for `LinkExpiration`
+
 
 ## [1.0.0] - 2022-02-26
 ### Added
