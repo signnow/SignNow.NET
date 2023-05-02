@@ -23,7 +23,10 @@ namespace SignNow.Net.Examples.Authentication
             string userLogin = credentials.Login;
             string userPassword = credentials.Password;
 
-            var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
+            var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret)
+            {
+                ExpirationTime = 60
+            };
 
             return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All)
                 .ConfigureAwait(false);
