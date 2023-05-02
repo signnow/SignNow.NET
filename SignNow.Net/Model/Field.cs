@@ -87,6 +87,12 @@ namespace SignNow.Net.Model
         Signature,
 
         /// <summary>
+        /// Stamp fields.
+        /// </summary>
+        [EnumMember(Value = "stamp")]
+        Stamp,
+
+        /// <summary>
         /// Initials fields.
         /// </summary>
         [EnumMember(Value = "initials")]

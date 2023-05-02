@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;
 
 namespace SignNow.Net.Model
@@ -46,6 +47,42 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("order")]
         public int SigningOrder => SignerRole.SigningOrder;
+
+        /// <summary>
+        /// Prefilled text in the Signature field, available for editing by signer.
+        /// </summary>
+        [JsonProperty("prefill_signature_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string SignatureNamePrefill { get; set; }
+
+        /// <summary>
+        /// PPrefilled text in the Signature field, disabled for editing by signer.
+        /// </summary>
+        [JsonProperty("required_preset_signature_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string SignatureNameRequiredPreset { get; set; }
+
+        /// <summary>
+        /// Whether or not the signer can use their saved signature.
+        /// Possible values:
+        /// `false` - signer can use a saved signature,
+        /// `true`  - signer has to add a new signature.
+        /// </summary>
+        [JsonProperty("force_new_signature", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(BoolToIntJsonConverter))]
+        public bool? ForceNewSignature { get; set; }
+
+        /// <summary>
+        /// Whether or not to allow recipients reassign this invite to another email address.
+        /// </summary>
+        [JsonProperty("reassign", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(BoolToIntJsonConverter))]
+        public bool? AllowToReassign { get; set; }
+
+        /// <summary>
+        /// Whether or not to allow recipients decline the invite.
+        /// </summary>
+        [JsonProperty("decline_by_signature", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(BoolToIntJsonConverter))]
+        public bool? DeclineBySignature { get; set; }
 
         /// <summary>
         /// Authentication type for case, when password used to open the Document.

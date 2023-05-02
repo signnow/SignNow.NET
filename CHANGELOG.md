@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
 
+## [1.1.1] - 2023-05-02
+### Added
+- Properties for sign invite that allows you to prefill text in the Signature field, allows for signers to use their saved signature, allows recipients reassign this invite to another email address,  allow recipients decline the invite.
+- Add support for field type `stamp` [#149](https://github.com/signnow/SignNow.NET/issues/149)
 
 ## [1.1.0] - 2023-01-23
 ### Added

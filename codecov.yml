@@ -1,7 +1,7 @@
 codecov:
   notify:
     require_ci_to_pass: yes # require the build to pass before submitting notifications
-    after_n_builds: 7       # how many build to wait for before submitting notifications, therefore skipping status checks
+    after_n_builds: 5       # how many build to wait for before submitting notifications, therefore skipping status checks
 
 coverage:
   precision: 2
