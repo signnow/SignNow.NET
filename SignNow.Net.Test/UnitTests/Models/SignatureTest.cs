@@ -2,8 +2,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Model.FieldContents;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class SignatureTest

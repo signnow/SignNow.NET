@@ -8,8 +8,9 @@ using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     public partial class SignInviteTest
     {

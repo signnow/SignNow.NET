@@ -5,11 +5,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 
 namespace UnitTests
 {
-    [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase
     {
         /// <summary>

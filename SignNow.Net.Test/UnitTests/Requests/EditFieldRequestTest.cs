@@ -6,7 +6,7 @@ using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model.EditFields;
 using SignNow.Net.Test.FakeModels.EditFields;
 
-namespace UnitTests
+namespace UnitTests.Requests
 {
     [TestClass]
     public class EditFieldRequestTest

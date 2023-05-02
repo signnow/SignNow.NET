@@ -5,7 +5,7 @@ using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
-namespace UnitTests
+namespace UnitTests.Helpers.Converters
 {
     [TestClass]
     public class StringToBoolJsonConverterTest

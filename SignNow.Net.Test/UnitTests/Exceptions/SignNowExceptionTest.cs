@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using System.Net;
 
-namespace UnitTests
+namespace UnitTests.Exceptions
 {
     [TestClass]
     public partial class SignNowExceptionTest

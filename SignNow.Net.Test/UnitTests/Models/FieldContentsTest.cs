@@ -3,10 +3,9 @@ using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.FieldContents;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class FieldContentsTest : SignNowTestBase

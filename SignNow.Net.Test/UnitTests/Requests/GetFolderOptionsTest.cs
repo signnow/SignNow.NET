@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.GetFolderQuery;
 
-namespace UnitTests
+namespace UnitTests.Requests
 {
     [TestClass]
     public class GetFolderOptionsTest : SignNowTestBase

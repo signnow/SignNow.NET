@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Model;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class ErrorResponseTest

@@ -4,7 +4,7 @@ using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using Method = System.Net.Http.HttpMethod;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class RequestOptionsTest

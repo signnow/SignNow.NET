@@ -15,7 +15,7 @@ using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Service;
 using SignNow.Net.Model;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class SignNowClientTest : SignNowTestBase

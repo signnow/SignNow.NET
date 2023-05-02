@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Infrastructure;
 
-namespace UnitTests
+namespace UnitTests.Infrastructure
 {
     [TestClass]
     public class SdkRuntimeTest

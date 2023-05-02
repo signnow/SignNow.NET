@@ -10,7 +10,7 @@ using SignNow.Net.Service;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class UserServiceTest : SignNowTestBase

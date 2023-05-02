@@ -15,5 +15,8 @@ namespace SignNow.Net.Test.Context
 
         [JsonProperty("client_secret")]
         public string ClientSecret { get; set; }
+
+        [JsonProperty("authorization_code", NullValueHandling = NullValueHandling.Ignore)]
+        public string AuthorizationCode { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels.EditFields;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class DocumentServiceTest : SignNowTestBase

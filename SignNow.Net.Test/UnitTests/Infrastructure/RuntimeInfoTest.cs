@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
-namespace UnitTests
+namespace UnitTests.Infrastructure
 {
     [TestClass]
     public class RuntimeInfoTest

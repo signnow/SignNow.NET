@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class EmbeddedInviteTest

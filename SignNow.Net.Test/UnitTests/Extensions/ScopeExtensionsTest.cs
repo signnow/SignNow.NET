@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 
-namespace UnitTests
+namespace UnitTests.Extensions
 {
     [TestClass]
     public class ScopeExtensionsTest

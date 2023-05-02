@@ -3,7 +3,7 @@ using System;
 using SignNow.Net.Internal.Infrastructure;
 using System.Text.RegularExpressions;
 
-namespace UnitTests
+namespace UnitTests.Helpers
 {
     [TestClass]
     public class UserAgentSdkHeadersTest

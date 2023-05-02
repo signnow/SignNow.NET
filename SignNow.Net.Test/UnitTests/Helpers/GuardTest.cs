@@ -5,7 +5,7 @@ using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Constants;
 
-namespace UnitTests
+namespace UnitTests.Helpers
 {
     [TestClass]
     public class GuardTest
