@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 using UnitTests;
 
@@ -133,6 +133,27 @@ namespace AcceptanceTests
                 Scope = Scope.All.ToString()
             };
             Assert.IsFalse(oAuthTest.ValidateTokenAsync(wrongToken).Result);
+        }
+
+        [TestMethod]
+        public async Task GetAccessTokenUsingAuthorizationCode()
+        {
+            if (String.IsNullOrEmpty(_apiCredentials.AuthorizationCode))
+            {
+                Assert.Inconclusive("There is no authorization_code to run this test");
+            }
+
+            var token = await oAuthTest
+                .GetTokenAsync(_apiCredentials.AuthorizationCode, Scope.All)
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(token);
+            Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.RefreshToken));
+            Assert.AreEqual("Bearer", token.TokenType.ToString());
+            Assert.AreEqual(Scope.All.AsString(), token.Scope);
+            Assert.IsTrue(token.ExpiresIn > 0);
+            Assert.IsTrue(token.LastLogin > 0);
         }
     }
 }

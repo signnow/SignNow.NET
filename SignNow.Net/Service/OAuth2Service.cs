@@ -4,7 +4,6 @@ using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
-using SignNow.Net.Service;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
 
-namespace SignNow.Net
+namespace SignNow.Net.Service
 {
     /// <summary>
     /// OAuth2 implementation of <see cref="IOAuth2Service"/>

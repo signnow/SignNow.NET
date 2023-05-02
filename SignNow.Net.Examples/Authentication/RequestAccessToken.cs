@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples.Authentication
