@@ -45,13 +45,25 @@ namespace UnitTests
             var document = new SignNowDocumentFaker()
                 .RuleFor(o => o.Roles, new RoleFaker().Generate(2));
 
-            var roleBasedInvite = new RoleBasedInvite(document);
+            var roleBasedInvite = new RoleBasedInvite(document)
+            {
+                Message = "test-message",
+                Subject = "test-subject"
+            };
             // Set user to documents' role
             var roles = roleBasedInvite.DocumentRoles();
 
             Assert.AreEqual(2, roles.Count);
 
-            var signer1Options = new SignerOptions("signer1@signnow.com", roles.First());
+            var signer1Options = new SignerOptions("signer1@signnow.com", roles.First())
+                {
+                    AllowToReassign = false,
+                    DeclineBySignature = true,
+                    SignatureNamePrefill = "User-signature-name",
+                    SignatureNameRequiredPreset = "required-signature-preset",
+                    ForceNewSignature = false
+                };
+
             var signer2Options = new SignerOptions("signer2@signnow.com", roles.Last())
                 {
                     ExpirationDays = 15
@@ -71,7 +83,12 @@ namespace UnitTests
                         'email':'signer1@signnow.com',
                         'role':'Signer 1',
                         'role_id':'{roles.First().Id}',
-                        'order':1
+                        'order':1,
+                        'prefill_signature_name': 'User-signature-name',
+                        'required_preset_signature_name': 'required-signature-preset',
+                        'force_new_signature': 0,
+                        'reassign': 0,
+                        'decline_by_signature': 1
                     }},
                     {{
                         'email':'signer2@signnow.com',
@@ -83,8 +100,8 @@ namespace UnitTests
                         'expiration_days':15
                     }}
                 ],
-                'subject':null,
-                'message':null,
+                'subject': 'test-subject',
+                'message': 'test-message',
                 'cc':[],
                 'from':'sender@signnow.com'
             }}";
