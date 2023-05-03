@@ -30,7 +30,9 @@ namespace SignNow.Net.Internal.Service
             get
             {
                 if (string.IsNullOrEmpty(sdkUserAgentString))
+                {
                     sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
+                }
 
                 return sdkUserAgentString;
             }
@@ -44,7 +46,9 @@ namespace SignNow.Net.Internal.Service
             get
             {
                 if (string.IsNullOrEmpty(xUserAgentString))
+                {
                     xUserAgentString = UserAgentSdkHeaders.RawOsDescription();
+                }
 
                 return xUserAgentString;
             }

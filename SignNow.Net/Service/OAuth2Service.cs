@@ -55,7 +55,8 @@ namespace SignNow.Net.Service
         /// <param name="clientId">Application <see cref="ClientId"/></param>
         /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
         /// <param name="signNowClient">Http Client</param>
-        protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
+        protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient)
+            : base(apiBaseUrl, null, signNowClient)
         {
             ClientId = clientId;
             ClientSecret = clientSecret;

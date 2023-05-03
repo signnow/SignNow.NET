@@ -15,13 +15,13 @@ using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Service
 {
-    public class UserService : AuthorizedWebClientBase, IUserService, ISignInvite
+    public class UserService : WebClientBase, IUserService, ISignInvite
     {
         public UserService(Token token) : this(ApiUrl.ApiBaseUrl, token)
         {
         }
 
-        private UserService(Uri baseApiUrl, Token token) : base(baseApiUrl, token)
+        private UserService(Uri baseApiUrl, Token token) : base(baseApiUrl, token, null)
         {
         }
 

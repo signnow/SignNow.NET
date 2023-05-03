@@ -15,7 +15,7 @@ namespace SignNow.Net.Service
     /// <summary>
     /// Folder service allows you to view, create, rename and delete folders for users.
     /// </summary>
-    public class FolderService : AuthorizedWebClientBase, IFolderService
+    public class FolderService : WebClientBase, IFolderService
     {
         /// <inheritdoc cref="FolderService(Uri, Token, ISignNowClient)"/>
         public FolderService(Token token) : this(ApiUrl.ApiBaseUrl, token, null) { }

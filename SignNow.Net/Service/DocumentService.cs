@@ -15,7 +15,7 @@ using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
 {
-    public class DocumentService : AuthorizedWebClientBase, IDocumentService
+    public class DocumentService : WebClientBase, IDocumentService
     {
         /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
         public DocumentService(Token token) : this(ApiUrl.ApiBaseUrl, token)
