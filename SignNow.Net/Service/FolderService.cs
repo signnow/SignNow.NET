@@ -17,20 +17,14 @@ namespace SignNow.Net.Service
     /// </summary>
     public class FolderService : WebClientBase, IFolderService
     {
-        /// <inheritdoc cref="FolderService(Uri, Token, ISignNowClient)"/>
-        public FolderService(Token token) : this(ApiUrl.ApiBaseUrl, token, null) { }
-
-        /// <inheritdoc cref="FolderService(Uri, Token, ISignNowClient)"/>
-        public FolderService(Uri baseApiUrl, Token token) : this(baseApiUrl, token, null) { }
-
         /// <summary>
         /// Constructs folder service.
         /// </summary>
         /// <param name="baseApiUrl">Base signNow API URL.</param>
         /// <param name="token">Access token.</param>
-        /// <param name="client">Http client.</param>
-        protected internal FolderService(Uri baseApiUrl, Token token, ISignNowClient client)
-            : base(baseApiUrl, token, client) { }
+        /// <param name="signNowClient">signNow Http client</param>
+        public FolderService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
+            : base(baseApiUrl, token, signNowClient) { }
 
         /// <inheritdoc cref="IFolderService.GetAllFoldersAsync"/>
         public async Task<SignNowFolders> GetAllFoldersAsync(CancellationToken cancellationToken = default)

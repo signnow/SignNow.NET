@@ -18,7 +18,7 @@ namespace UnitTests.Services
         [TestMethod]
         public void ThrowsExceptionOnInviteIsNull()
         {
-            var service = new UserService(new Token());
+            var service = new UserService(ApiBaseUrl, new Token());
             var response = service.CancelInviteAsync(null as FreeformInvite).Exception;
 
             Assert.IsNotNull(response);

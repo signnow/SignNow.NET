@@ -27,7 +27,7 @@ namespace AcceptanceTests
         [TestInitialize]
         public void SetUp()
         {
-            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, _apiCredentials.ClientSecret);
+            oAuthTest = new OAuth2Service(ApiBaseUrl, _apiCredentials.ClientId, _apiCredentials.ClientSecret);
         }
 
         [DataTestMethod]
@@ -63,7 +63,7 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task CannotIssueTokenWithWrongClientSecret()
         {
-            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, "wrong_client_secret");
+            oAuthTest = new OAuth2Service(ApiBaseUrl, _apiCredentials.ClientId, "wrong_client_secret");
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
                 async () => await oAuthTest
                     .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All)

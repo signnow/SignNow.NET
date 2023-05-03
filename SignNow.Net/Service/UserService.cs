@@ -17,15 +17,13 @@ namespace SignNow.Net.Service
 {
     public class UserService : WebClientBase, IUserService, ISignInvite
     {
-        public UserService(Token token) : this(ApiUrl.ApiBaseUrl, token)
-        {
-        }
-
-        private UserService(Uri baseApiUrl, Token token) : base(baseApiUrl, token, null)
-        {
-        }
-
-        protected internal UserService(Uri baseApiUrl, Token token, ISignNowClient client) : base(baseApiUrl, token, client)
+        /// <summary>
+        /// Constructs User service.
+        /// </summary>
+        /// <param name="baseApiUrl">Base signNow API URL</param>
+        /// <param name="token">Access token</param>
+        /// <param name="signNowClient">signNow Http client</param>
+        public UserService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null) : base(baseApiUrl, token, signNowClient)
         {
         }
 

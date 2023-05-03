@@ -17,23 +17,14 @@ namespace SignNow.Net.Service
 {
     public class DocumentService : WebClientBase, IDocumentService
     {
-        /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
-        public DocumentService(Token token) : this(ApiUrl.ApiBaseUrl, token)
-        {
-        }
-
-        /// <inheritdoc cref="DocumentService(Uri, Token, ISignNowClient)"/>
-        public DocumentService(Uri baseApiUrl, Token token) : this(baseApiUrl, token, null)
-        {
-        }
-
         /// <summary>
         /// Creates new instance of <see cref="DocumentService"/>
         /// </summary>
-        /// <param name="baseApiUrl"><see cref="ApiUrl.ApiBaseUrl"/></param>
-        /// <param name="token"><see cref="Token"/></param>
-        /// <param name="signNowClient"><see cref="ISignNowClient"/></param>
-        protected internal DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient) : base(baseApiUrl, token, signNowClient)
+        /// <param name="baseApiUrl">Base signNow API URL</param>
+        /// <param name="token">Access token</param>
+        /// <param name="signNowClient">signNow Http client</param>
+        public DocumentService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
+            : base(baseApiUrl, token, signNowClient)
         {
         }
 

@@ -54,7 +54,7 @@ namespace UnitTests.Services
         [TestMethod]
         public async Task ThrowsExceptionForWrongParams()
         {
-            var service = new DocumentService(new Token());
+            var service = new DocumentService(ApiBaseUrl, new Token());
 
             var documentIdException = await Assert.ThrowsExceptionAsync<ArgumentException>(
                 async () => await service

@@ -8,7 +8,7 @@ using Bogus;
 using Moq;
 using Moq.Protected;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Service;
+using SignNow.Net.Service;
 
 namespace UnitTests
 {

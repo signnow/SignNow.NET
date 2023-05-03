@@ -38,18 +38,13 @@ namespace SignNow.Net.Service
         /// </summary>
         public int ExpirationTime { get; set; } = 60;
 
-        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
-        public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
-        {
-        }
-
         /// <summary>
         /// Constructs an <see cref="OAuth2Service"/>
         /// </summary>
         /// <param name="apiBaseUrl">signNow API <see cref="WebClientBase.ApiBaseUrl"/></param>
         /// <param name="clientId">Application <see cref="ClientId"/></param>
         /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
-        /// <param name="signNowClient">Http Client</param>
+        /// <param name="signNowClient">signNow Http client</param>
         public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient = null)
             : base(apiBaseUrl, null, signNowClient)
         {

@@ -12,8 +12,8 @@ using Moq;
 using Moq.Protected;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Helpers;
-using SignNow.Net.Internal.Service;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 
 namespace UnitTests.Services
 {

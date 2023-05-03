@@ -4,7 +4,6 @@ using SignNow.Net.Model;
 using SignNow.Net.Service;
 using System;
 using System.Net.Http;
-using SignNow.Net.Internal.Service;
 
 namespace SignNow.Net
 {
