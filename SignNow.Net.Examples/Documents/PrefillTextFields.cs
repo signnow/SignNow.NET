@@ -13,13 +13,10 @@ namespace SignNow.Net.Examples.Documents
         /// </summary>
         /// <param name="documentId">Identity of the document to prefill values for.</param>
         /// <param name="fields">Collection of the <see cref="TextField">fields</see></param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task PrefillTextFields(string documentId, IEnumerable<TextField> fields, Token token)
+        public static async Task PrefillTextFields(string documentId, IEnumerable<TextField> fields, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Documents
                 .PrefillTextFieldsAsync(documentId, fields)
                 .ConfigureAwait(false);

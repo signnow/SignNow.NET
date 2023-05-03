@@ -13,6 +13,9 @@ namespace SignNow.Net
     /// </summary>
     public class SignNowContext : WebClientBase, ISignNowContext
     {
+        /// <inheritdoc cref="IOAuth2Service"/>
+        public OAuth2Service OAuth { get; protected set; }
+
         /// <inheritdoc cref="IUserService"/>
         public IUserService Users { get; protected set; }
 
@@ -52,10 +55,36 @@ namespace SignNow.Net
         private SignNowContext(Uri baseApiUrl, Token token, ISignNowClient signNowClient)
             : base(baseApiUrl, token, signNowClient)
         {
+            OAuth = new OAuth2Service(ApiBaseUrl, "", "", SignNowClient);
             Users = new UserService(ApiBaseUrl, Token, SignNowClient);
             Invites = (ISignInvite) Users;
             Documents = new DocumentService(ApiBaseUrl, Token, SignNowClient);
             Folders = new FolderService(ApiBaseUrl, Token, SignNowClient);
+        }
+
+        /// <summary>
+        /// Setup application client ID/Secret for authorization.
+        /// </summary>
+        /// <param name="clientId">Application client ID</param>
+        /// <param name="clientSecret">Application client Secret</param>
+        public void SetAppCredentials(string clientId, string clientSecret)
+        {
+            OAuth.ClientId = clientId;
+            OAuth.ClientSecret = clientSecret;
+        }
+
+        public Token GetAccessToken(string login, string password, Scope scope)
+        {
+            Token = OAuth.GetTokenAsync(login, password, scope).Result;
+            SyncTokens();
+            return Token;
+        }
+
+        private void SyncTokens()
+        {
+            ((UserService)Users).Token = Token;
+            ((DocumentService)Documents).Token = Token;
+            ((FolderService)Folders).Token = Token;
         }
     }
 }

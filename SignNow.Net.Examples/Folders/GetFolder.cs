@@ -11,12 +11,10 @@ namespace SignNow.Net.Examples.Folders
         /// </summary>
         /// <param name="folderId">ID of the folder to get details of</param>
         /// <param name="options">Options like: sort, filter, limit, etc...</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task<SignNowFolders> GetFolder(string folderId, GetFolderOptions options, Token token)
+        public static async Task<SignNowFolders> GetFolder(string folderId, GetFolderOptions options, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Folders
                 .GetFolderAsync(folderId, options)
                 .ConfigureAwait(false);

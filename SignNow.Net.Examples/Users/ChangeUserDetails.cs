@@ -13,12 +13,10 @@ namespace SignNow.Net.Examples.Users
         /// <param name="lastname">new User lastname</param>
         /// <param name="oldPwd">Old User password</param>
         /// <param name="pwd">New User password</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task<UserUpdateResponse> ChangeUserDetails(string firstname, string lastname, string oldPwd, string pwd, Token token)
+        public static async Task<UserUpdateResponse> ChangeUserDetails(string firstname, string lastname, string oldPwd, string pwd, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             var userUpdateOptions = new UpdateUserOptions
             {
                 FirstName = firstname,
@@ -35,12 +33,10 @@ namespace SignNow.Net.Examples.Users
         /// Sends password reset link via email example
         /// </summary>
         /// <param name="email">User email</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task SendsPasswordResetLink(string email, Token token)
+        public static async Task SendsPasswordResetLink(string email, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Users.SendPasswordResetLinkAsync(email)
                 .ConfigureAwait(false);
         }

@@ -9,11 +9,9 @@ namespace SignNow.Net.Examples.Documents
         /// Downloads signed document
         /// </summary>
         /// <param name="documentId">ID of signed document</param>
-        /// <param name="token">Access token</param>
-        public static async Task<DownloadDocumentResponse> DownloadSignedDocument(string documentId, Token token)
+        /// <param name="signNowContext">signNow container with services.</param>
+        public static async Task<DownloadDocumentResponse> DownloadSignedDocument(string documentId, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed)
                 .ConfigureAwait(false);

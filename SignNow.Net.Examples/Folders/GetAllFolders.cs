@@ -8,12 +8,10 @@ namespace SignNow.Net.Examples.Folders
         /// <summary>
         /// Get all folders of a user.
         /// </summary>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns>Returns all information about user's folders.</returns>
-        public static async Task<SignNowFolders> GetAllFolders(Token token)
+        public static async Task<SignNowFolders> GetAllFolders(SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Folders
                 .GetAllFoldersAsync()
                 .ConfigureAwait(false);

@@ -19,19 +19,19 @@ namespace SignNow.Net.Service
     public class OAuth2Service : WebClientBase, IOAuth2Service
     {
         /// <summary>
+        /// signNow OAuth request <see cref="Uri"/>
+        /// </summary>
+        private Uri OAuthRequestUrl { get; set; }
+
+        /// <summary>
         /// Application client identity.
         /// </summary>
-        private string ClientId { get; set; }
+        public string ClientId { get; set; }
 
         /// <summary>
         /// Application client secret.
         /// </summary>
-        private string ClientSecret { get; set; }
-
-        /// <summary>
-        /// signNow OAuth request <see cref="Uri"/>
-        /// </summary>
-        private Uri OAuthRequestUrl { get; set; }
+        public string ClientSecret { get; set; }
 
         /// <summary>
         /// The amount of time till the token expires in seconds
@@ -43,11 +43,6 @@ namespace SignNow.Net.Service
         {
         }
 
-        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
-        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : this(apiBaseUrl, clientId, clientSecret, null)
-        {
-        }
-
         /// <summary>
         /// Constructs an <see cref="OAuth2Service"/>
         /// </summary>
@@ -55,7 +50,7 @@ namespace SignNow.Net.Service
         /// <param name="clientId">Application <see cref="ClientId"/></param>
         /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
         /// <param name="signNowClient">Http Client</param>
-        protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient)
+        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient = null)
             : base(apiBaseUrl, null, signNowClient)
         {
             ClientId = clientId;

@@ -10,15 +10,12 @@ namespace SignNow.Net.Examples.Invites
         /// </summary>
         /// <param name="document">signNow document you’d like to have signed</param>
         /// <param name="email">The email of the invitee.</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns>
         /// <see cref="InviteResponse"/> which contains an Identity of invite request.
         /// </returns>
-        public static async Task<InviteResponse> CreateFreeformInviteToSignTheDocument(SignNowDocument document, string email, Token token)
+        public static async Task<InviteResponse> CreateFreeformInviteToSignTheDocument(SignNowDocument document, string email, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             // Create freeform invite
             var invite = new FreeFormSignInvite(email)
             {

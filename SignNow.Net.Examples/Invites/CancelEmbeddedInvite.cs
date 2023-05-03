@@ -9,13 +9,10 @@ namespace SignNow.Net.Examples.Invites
         /// Cancel an embedded signing invite
         /// </summary>
         /// <param name="document">signNow document you’d like to cancel embedded invite</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task CancelEmbeddedInvite(SignNowDocument document, Token token)
+        public static async Task CancelEmbeddedInvite(SignNowDocument document, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Invites
                 .CancelEmbeddedInviteAsync(document.Id)
                 .ConfigureAwait(false);

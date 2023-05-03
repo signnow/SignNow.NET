@@ -10,12 +10,12 @@ namespace SignNow.Net.Service
         /// <summary>
         /// signNow HTTP Client.
         /// </summary>
-        protected ISignNowClient SignNowClient { get; private set; }
+        protected static ISignNowClient SignNowClient { get; private set; }
 
         /// <summary>
         /// User Access token.
         /// </summary>
-        protected Token Token { get; set; }
+        public Token Token { get; set; }
 
         /// <summary>
         /// Base signNow api URL.

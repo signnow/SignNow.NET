@@ -11,13 +11,10 @@ namespace SignNow.Net.Examples.Documents
         /// </summary>
         /// <param name="templateId">Identity of the template</param>
         /// <param name="documentName">The name of new document</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns><see cref="CreateDocumentFromTemplateResponse"/>New document ID</returns>
-        public static async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTheTemplate(string templateId, string documentName, Token token)
+        public static async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTheTemplate(string templateId, string documentName, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .CreateDocumentFromTemplateAsync(templateId, documentName)
                 .ConfigureAwait(false);

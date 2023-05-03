@@ -15,13 +15,10 @@ namespace SignNow.Net.Examples.Documents
         /// </summary>
         /// <param name="documentId">Identity of the document to add/edit fields for.</param>
         /// <param name="fields">Collection of the <see cref="IFieldEditable">fields</see></param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task<EditDocumentResponse> EditDocumentTextFields(string documentId, IEnumerable<IFieldEditable> fields, Token token)
+        public static async Task<EditDocumentResponse> EditDocumentTextFields(string documentId, IEnumerable<IFieldEditable> fields, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .EditDocumentAsync(documentId, fields)
                 .ConfigureAwait(false);

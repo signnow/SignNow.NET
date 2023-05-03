@@ -10,11 +10,9 @@ namespace SignNow.Net.Examples.Documents
         /// </summary>
         /// <param name="documentId">Id of the document to move</param>
         /// <param name="folderId">Id of the folder where you'd like to keep this document</param>
-        /// <param name="token">Access token</param>
-        public static async Task MoveTheDocumentToFolder(string documentId, string folderId, Token token)
+        /// <param name="signNowContext">signNow container with services.</param>
+        public static async Task MoveTheDocumentToFolder(string documentId, string folderId, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Documents
                 .MoveDocumentAsync(documentId, folderId)
                 .ConfigureAwait(false);
