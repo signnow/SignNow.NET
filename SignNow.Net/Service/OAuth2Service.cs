@@ -36,7 +36,7 @@ namespace SignNow.Net.Service
         /// <summary>
         /// The amount of time till the token expires in seconds
         /// </summary>
-        public int ExpirationTime { get; set; } = 60;
+        public int ExpirationTime { get; set; }
 
         /// <summary>
         /// Constructs an <see cref="OAuth2Service"/>

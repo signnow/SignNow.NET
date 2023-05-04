@@ -21,8 +21,7 @@ namespace UnitTests.Requests
                 ""username"": ""login@signnow.com"",
                 ""password"": ""user_password"",
                 ""grant_type"": ""password"",
-                ""scope"": ""*"",
-                ""expiration_time"": 60
+                ""scope"": ""*""
             }";
 
             Assert.That.JsonEqual(expected, requestOptions);
@@ -40,8 +39,7 @@ namespace UnitTests.Requests
             var expected = @"{
                 ""grant_type"": ""refresh_token"",
                 ""scope"": ""*"",
-                ""refresh_token"": ""user_refresh_token"",
-                ""expiration_time"": 60
+                ""refresh_token"": ""user_refresh_token""
             }";
 
             Assert.That.JsonEqual(expected, requestOptions);
@@ -59,8 +57,7 @@ namespace UnitTests.Requests
             var expected = @"{
                 ""grant_type"": ""authorization_code"",
                 ""scope"": ""*"",
-                ""code"": ""user_authorization_code"",
-                ""expiration_time"": 60
+                ""code"": ""user_authorization_code""
             }";
 
             Assert.That.JsonEqual(expected, requestOptions);

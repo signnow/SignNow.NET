@@ -51,7 +51,7 @@ namespace SignNow.Net.Internal.Requests
         /// The amount of time till the token expires in seconds.
         /// </summary>
         [JsonProperty("expiration_time", NullValueHandling = NullValueHandling.Ignore)]
-        public int ExpirationTime { get; set; } = 60;
+        public int? ExpirationTime { get; set; }
 
         public HttpContent GetHttpContent()
         {
