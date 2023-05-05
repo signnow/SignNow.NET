@@ -240,8 +240,7 @@ namespace UnitTests.Services
                 ]
             }";
 
-            var signNowClientMock = SignNowClientMock(jsonError, HttpStatusCode.BadRequest);
-            var userService = new UserService(ApiBaseUrl, new Token(), signNowClientMock);
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(jsonError, HttpStatusCode.BadRequest));
 
             var exception = Assert
                 .ThrowsException<AggregateException>(
