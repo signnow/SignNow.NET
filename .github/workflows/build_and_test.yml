@@ -97,7 +97,6 @@ jobs:
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |
           dotnet test SignNow.Net.Test `
-            --no-build --no-restore `
             --configuration Debug --framework ${{ matrix.framework }} `
             /p:CollectCoverage=true
 
