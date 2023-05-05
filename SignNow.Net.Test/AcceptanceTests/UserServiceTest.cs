@@ -14,16 +14,6 @@ namespace AcceptanceTests
         private readonly string emailPattern = @"(?<userid>\S+)@(?<domain>\w+.\w+)";
         private readonly string inviteIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
 
-        /// <summary>
-        /// Reusable method to upload test document and create invite request.
-        /// </summary>
-        /// <param name="invite">FreeForm invite object.</param>
-        /// <returns>InviteResponse</returns>
-        private static async Task<InviteResponse> ProcessCreateInvite(FreeFormSignInvite invite)
-        {
-            return await SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).ConfigureAwait(false);
-        }
-
         [TestMethod]
         public async Task ShouldGetUserInfo()
         {
@@ -41,7 +31,7 @@ namespace AcceptanceTests
                 Message = $"SignNow.Net SDK invited you to sign the {PdfFileName}",
                 Subject = "SignNow.Net SDK Needs Your Signature"
             };
-            var inviteResponse = await ProcessCreateInvite(invite).ConfigureAwait(false);
+            var inviteResponse = await SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).ConfigureAwait(false);
 
             StringAssert.Matches(invite.Recipient, new Regex(emailPattern));
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
@@ -51,7 +41,7 @@ namespace AcceptanceTests
         public async Task ShouldCancelFreeformInvite()
         {
             var invite = new FreeFormSignInvite("signnow.tutorial+test@gmail.com");
-            var inviteResponse = await ProcessCreateInvite(invite).ConfigureAwait(false);
+            var inviteResponse = await SignNowTestContext.Invites.CreateInviteAsync(TestPdfDocumentId, invite).ConfigureAwait(false);
 
             StringAssert.Matches(inviteResponse.Id, new Regex(inviteIdPattern));
 

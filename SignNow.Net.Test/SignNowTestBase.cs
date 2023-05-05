@@ -32,7 +32,7 @@ namespace UnitTests
         /// <param name="jsonResponse">Json response that you want to be returned</param>
         /// <param name="code">Http status that you expect</param>
         /// <returns></returns>
-        protected static ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
+        protected ISignNowClient SignNowClientMock(string jsonResponse, HttpStatusCode code = HttpStatusCode.OK)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
@@ -47,7 +47,7 @@ namespace UnitTests
                 .Verifiable();
 
             // use real http client with mocked handler here
-            return new SignNowClient(new HttpClient(handlerMock.Object, false));
+            return new SignNowClient(new HttpClient(handlerMock.Object, true));
         }
     }
 }

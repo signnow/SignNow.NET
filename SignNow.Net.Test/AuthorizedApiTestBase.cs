@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 
 namespace UnitTests
@@ -11,11 +12,6 @@ namespace UnitTests
     [TestClass]
     public class AuthorizedApiTestBase : SignNowTestBase
     {
-        /// <summary>
-        /// Token for all authorized API tests
-        /// </summary>
-        protected static Token Token { get; set; }
-
         /// <summary>
         /// Entry point for all signNow services by <see cref="SignNowContext"/>
         /// </summary>
@@ -49,8 +45,9 @@ namespace UnitTests
             var apiCreds = loader.GetCredentials();
 
             Client = new HttpClient();
+            var snClient = new SignNowClient(Client);
 
-            SignNowTestContext = new SignNowContext(ApiBaseUrl, null, Client);
+            SignNowTestContext = new SignNowContext(ApiBaseUrl, null, snClient);
             SignNowTestContext.SetAppCredentials(apiCreds.ClientId, apiCreds.ClientSecret);
             SignNowTestContext.GetAccessToken(apiCreds.Login, apiCreds.Password, Scope.All);
 
