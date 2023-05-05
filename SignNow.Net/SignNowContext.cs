@@ -35,23 +35,19 @@ namespace SignNow.Net
         {
         }
 
+        /// <summary>Create all the services with user provided Http Client</summary>
         /// <param name="baseApiUrl">Base signNow api URL</param>
         /// <inheritdoc cref="SignNowContext(Token)"/>
-        public SignNowContext(Uri baseApiUrl, Token token) : this(baseApiUrl, token, signNowClient: null)
-        {
-        }
-
-        /// <summary>Create all the services with user provided Http Client</summary>
-        /// <inheritdoc cref="SignNowContext(Uri, Token)"/>
         /// <param name="client">User provided Http Client</param>
         public SignNowContext(Uri baseApiUrl, Token token, HttpClient client)
             : this(baseApiUrl, token, new SignNowClient(client))
         {
         }
 
-        /// <inheritdoc cref="SignNowContext(Uri, Token)"/>
+        /// <param name="baseApiUrl">Base signNow api URL</param>
+        /// <inheritdoc cref="SignNowContext(Token)"/>
         /// <param name="signNowClient">signNow HTTP Client</param>
-        private SignNowContext(Uri baseApiUrl, Token token, ISignNowClient signNowClient)
+        public SignNowContext(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
             : base(baseApiUrl, token, signNowClient)
         {
             OAuth = new OAuth2Service(ApiBaseUrl, "", "", SignNowClient);

@@ -9,7 +9,7 @@ namespace SignNow.Net.Service
         /// <summary>
         /// signNow HTTP Client.
         /// </summary>
-        protected static ISignNowClient SignNowClient { get; private set; }
+        protected ISignNowClient SignNowClient { get; private set; }
 
         /// <summary>
         /// User Access token.
