@@ -8,7 +8,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker <see cref="Field"/>
     /// </summary>
-    internal class FieldFaker : Faker<Field>
+    public sealed class FieldFaker : Faker<Field>
     {
         /// <summary>
         /// Creates new instance of <see cref="Field"/> fake object.
@@ -68,7 +68,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker <see cref="FieldJsonAttributes"/>
     /// </summary>
-    internal class FieldJsonAttributesFaker : Faker<FieldJsonAttributes>
+    public sealed class FieldJsonAttributesFaker : Faker<FieldJsonAttributes>
     {
         /// <summary>
         /// Creates new instance of <see cref="Field"/> fake object.

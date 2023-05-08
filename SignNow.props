@@ -1,8 +1,6 @@
 <Project>
-
   <PropertyGroup>
-
-    <Version>1.1.1</Version>
+    <Version>1.1.1-dev</Version>
     <Authors>signNow</Authors>
     <Company>signNow</Company>
     <Description>signNow.Net is a .NET 4.5+ and .NET standard class library for the signNow API. (Official Library)
@@ -16,13 +14,16 @@ signNow allows you to embed legally-binding e-signatures into your app, CRM or c
     <RepositoryUrl>https://github.com/signnow/SignNow.NET</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../release-notes.txt"))</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
 
-  </PropertyGroup>
-
-  <PropertyGroup>
     <LangVersion>8.0</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <PackageOutputPath>bin\Publish\</PackageOutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)/../README.md" Pack="true" PackagePath="/"/>
+    <None Include="$(MSBuildProjectDirectory)/../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 </Project>

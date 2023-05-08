@@ -11,12 +11,10 @@ namespace SignNow.Net.Examples.Documents
         /// </summary>
         /// <param name="documentName">New Document name with extension</param>
         /// <param name="documentsList">List of the documents to be merged</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task<DownloadDocumentResponse> MergeTwoDocuments(string documentName, IEnumerable<SignNowDocument> documentsList, Token token)
+        public static async Task<DownloadDocumentResponse> MergeTwoDocuments(string documentName, IEnumerable<SignNowDocument> documentsList, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .MergeDocumentsAsync(documentName, documentsList)
                 .ConfigureAwait(false);

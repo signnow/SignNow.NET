@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.EditFields;
 using SignNow.Net.Test.FakeModels.EditFields;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class TextFieldTest

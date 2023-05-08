@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using Bogus;
 using SignNow.Net.Model.FieldContents;
@@ -9,7 +10,7 @@ namespace SignNow.Net.Test.FakeModels
     /// Faker for <see cref="BaseContent"/>
     /// </summary>
     /// <typeparam name="T"><see cref="BaseContent"/></typeparam>
-    internal class BaseContentFaker<T> : Faker<T> where T : BaseContent
+    public class BaseContentFaker<T> : Faker<T> where T : BaseContent
     {
         /// <summary>
         /// Used for generation <see cref="BaseContent"/> with inheritance.
@@ -38,7 +39,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="TextContent"/>
     /// </summary>
-    internal class TextContentFaker : BaseContentFaker<TextContent>
+    public sealed class TextContentFaker : BaseContentFaker<TextContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="TextContent"/> fake object.
@@ -68,7 +69,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="HyperlinkContent"/>
     /// </summary>
-    internal class HyperlinkContentFaker : BaseContentFaker<HyperlinkContent>
+    public sealed class HyperlinkContentFaker : BaseContentFaker<HyperlinkContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="HyperlinkContent"/> fake object.
@@ -100,7 +101,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="CheckboxContent"/>
     /// </summary>
-    internal class CheckboxContentFaker : BaseContentFaker<CheckboxContent>
+    public sealed class CheckboxContentFaker : BaseContentFaker<CheckboxContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="CheckboxContent"/> fake object.
@@ -128,7 +129,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="AttachmentContent"/>
     /// </summary>
-    internal class AttachmentContentFaker : BaseContentFaker<AttachmentContent>
+    public sealed class AttachmentContentFaker : BaseContentFaker<AttachmentContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="AttachmentContent"/> fake object.
@@ -161,7 +162,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="EnumerationContent"/>
     /// </summary>
-    internal class EnumerationContentFaker : Faker<EnumerationContent>
+    public sealed class EnumerationContentFaker : Faker<EnumerationContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="EnumerationContent"/> fake object.
@@ -194,7 +195,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="RadiobuttonContent"/>
     /// </summary>
-    internal class RadiobuttonContentFaker : BaseContentFaker<RadiobuttonContent>
+    public sealed class RadiobuttonContentFaker : BaseContentFaker<RadiobuttonContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="RadiobuttonContent"/> fake object.
@@ -237,7 +238,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.Y             = f.Random.Int(0, 1024);
                 o.Radio         = new RadioContentFaker()
                     .Rules((fkr, itm) => itm.PageNumber = o.PageNumber)
-                    .Generate(f.Random.Int(2, 10));
+                    .Generate(f.Random.Int(2, 10)).ToList();
             })
             .FinishWith((f, obj) => obj.Radio.FindLast(itm => !itm.Checked).Checked = true);
         }
@@ -246,7 +247,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="RadioContent"/>
     /// </summary>
-    internal class RadioContentFaker : Faker<RadioContent>
+    public sealed class RadioContentFaker : Faker<RadioContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="RadioContent"/> fake object.
@@ -287,7 +288,7 @@ namespace SignNow.Net.Test.FakeModels
     /// <summary>
     /// Faker for <see cref="SignatureContent"/>
     /// </summary>
-    internal class SignatureContentFaker : BaseContentFaker<SignatureContent>
+    public sealed class SignatureContentFaker : BaseContentFaker<SignatureContent>
     {
         /// <summary>
         /// Creates new instance of <see cref="SignatureContent"/> fake object.

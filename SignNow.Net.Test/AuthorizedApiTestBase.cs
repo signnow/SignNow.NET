@@ -3,8 +3,8 @@ using System.IO;
 using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 
 namespace UnitTests
@@ -13,14 +13,11 @@ namespace UnitTests
     public class AuthorizedApiTestBase : SignNowTestBase
     {
         /// <summary>
-        /// Token for all authorized API tests
+        /// Entry point for all signNow services by <see cref="SignNowContext"/>
         /// </summary>
-        protected static Token Token { get; set; }
+        public static SignNowContext SignNowTestContext { get; set; }
 
-        /// <summary>
-        /// Entry point for all signNow services by <see cref="ISignNowContext"/>
-        /// </summary>
-        public static ISignNowContext SignNowTestContext { get; set; }
+        public static HttpClient Client { get; set; }
 
         /// <summary>
         /// Uploaded test document identity which will be deleted after run TestCase.
@@ -46,10 +43,13 @@ namespace UnitTests
         {
             var loader = new CredentialLoader(ApiBaseUrl);
             var apiCreds = loader.GetCredentials();
-            var oauth = new OAuth2Service(ApiBaseUrl, apiCreds.ClientId, apiCreds.ClientSecret);
 
-            Token = oauth.GetTokenAsync(apiCreds.Login, apiCreds.Password, Scope.All).Result;
-            SignNowTestContext = new SignNowContext(ApiBaseUrl, Token);
+            Client = new HttpClient();
+            var snClient = new SignNowClient(Client);
+
+            SignNowTestContext = new SignNowContext(ApiBaseUrl, null, snClient);
+            SignNowTestContext.SetAppCredentials(apiCreds.ClientId, apiCreds.ClientSecret);
+            SignNowTestContext.GetAccessToken(apiCreds.Login, apiCreds.Password, Scope.All);
 
             TestPdfDocumentId = UploadTestDocument(PdfFilePath);
             TestPdfDocumentIdWithFields = UploadTestDocumentWithFieldExtract(PdfFilePath);
@@ -95,20 +95,18 @@ namespace UnitTests
                 fileName = PdfFileName;
             }
 
-            using (var fileStream = File.OpenRead(filePath))
-            {
-                var uploadTask = extractFields
-                    ? SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, fileName)
-                    : SignNowTestContext.Documents.UploadDocumentAsync(fileStream, fileName);
+            using var fileStream = File.OpenRead(filePath);
+            var uploadTask = extractFields
+                ? SignNowTestContext.Documents.UploadDocumentWithFieldExtractAsync(fileStream, fileName)
+                : SignNowTestContext.Documents.UploadDocumentAsync(fileStream, fileName);
 
-                var uploadResponse = uploadTask.Result;
-                docId = uploadResponse?.Id;
+            var uploadResponse = uploadTask.Result;
+            docId = uploadResponse?.Id;
 
-                Assert.IsNotNull(
-                    uploadResponse?.Id,
-                    "Document Upload result should contain non-null Id property value on successful upload"
-                );
-            }
+            Assert.IsNotNull(
+                uploadResponse?.Id,
+                "Document Upload result should contain non-null Id property value on successful upload"
+            );
 
             return docId;
         }
@@ -117,20 +115,14 @@ namespace UnitTests
         /// Cleanup Document uploaded by Unit tests.
         /// </summary>
         /// <param name="documentId">Identity of the document to be removed.</param>
-        protected static void DeleteTestDocument(string documentId)
+        private static void DeleteTestDocument(string documentId)
         {
             if (string.IsNullOrEmpty(documentId))
             {
                 return;
             }
 
-            using (var client = new HttpClient())
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"{ApiBaseUrl.AbsoluteUri.Trim('/')}/document/{documentId}"))
-            {
-                requestMessage.Headers.Add("Authorization", Token.GetAuthorizationHeaderValue());
-                var response = client.SendAsync(requestMessage).Result;
-                response.EnsureSuccessStatusCode();
-            }
+            SignNowTestContext.Documents.DeleteDocumentAsync(documentId);
         }
     }
 }

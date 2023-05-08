@@ -9,12 +9,10 @@ namespace SignNow.Net.Examples.Users
         /// Sends verification email to a user example
         /// </summary>
         /// <param name="email">User email</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task SendVerificationEmailToUser(string email, Token token)
+        public static async Task SendVerificationEmailToUser(string email, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Users
                 .SendVerificationEmailAsync(email)
                 .ConfigureAwait(false);

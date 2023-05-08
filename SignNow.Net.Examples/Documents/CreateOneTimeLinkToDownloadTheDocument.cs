@@ -9,14 +9,11 @@ namespace SignNow.Net.Examples.Documents
         /// Create a one-time use URL for anyone to download the document as a PDF.
         /// </summary>
         /// <param name="documentId">Identity of the document</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns><see cref="DownloadLinkResponse"/></returns>
         public static async Task<DownloadLinkResponse>
-            CreateOneTimeLinkToDownloadTheDocument(string documentId, Token token)
+            CreateOneTimeLinkToDownloadTheDocument(string documentId, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .CreateOneTimeDownloadLinkAsync(documentId)
                 .ConfigureAwait(false);

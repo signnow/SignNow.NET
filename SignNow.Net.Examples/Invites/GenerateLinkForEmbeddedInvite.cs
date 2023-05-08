@@ -12,14 +12,11 @@ namespace SignNow.Net.Examples.Invites
         /// </summary>
         /// <param name="document">signNow document you'd like to have signed</param>
         /// <param name="expires">In how many minutes the link expires, ranges from 15 to 45 minutes or null</param>
-        /// <param name="token">access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
         public static async Task<EmbeddedInviteLinkResponse>
-            GenerateLinkForEmbeddedInvite(SignNowDocument document, int expires, Token token)
+            GenerateLinkForEmbeddedInvite(SignNowDocument document, int expires, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             var options = new CreateEmbedLinkOptions
             {
                 FieldInvite = document.FieldInvites.First(),

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 using UnitTests;
 
@@ -27,7 +27,7 @@ namespace AcceptanceTests
         [TestInitialize]
         public void SetUp()
         {
-            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, _apiCredentials.ClientSecret);
+            oAuthTest = new OAuth2Service(ApiBaseUrl, _apiCredentials.ClientId, _apiCredentials.ClientSecret);
         }
 
         [DataTestMethod]
@@ -63,7 +63,7 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task CannotIssueTokenWithWrongClientSecret()
         {
-            oAuthTest = new OAuth2Service(_apiCredentials.ClientId, "wrong_client_secret");
+            oAuthTest = new OAuth2Service(ApiBaseUrl, _apiCredentials.ClientId, "wrong_client_secret");
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
                 async () => await oAuthTest
                     .GetTokenAsync(_apiCredentials.Login, _apiCredentials.Password, Scope.All)
@@ -133,6 +133,27 @@ namespace AcceptanceTests
                 Scope = Scope.All.ToString()
             };
             Assert.IsFalse(oAuthTest.ValidateTokenAsync(wrongToken).Result);
+        }
+
+        [TestMethod]
+        public async Task GetAccessTokenUsingAuthorizationCode()
+        {
+            if (String.IsNullOrEmpty(_apiCredentials.AuthorizationCode))
+            {
+                Assert.Inconclusive("There is no authorization_code to run this test");
+            }
+
+            var token = await oAuthTest
+                .GetTokenAsync(_apiCredentials.AuthorizationCode, Scope.All)
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(token);
+            Assert.IsFalse(string.IsNullOrEmpty(token.AccessToken));
+            Assert.IsFalse(string.IsNullOrEmpty(token.RefreshToken));
+            Assert.AreEqual("Bearer", token.TokenType.ToString());
+            Assert.AreEqual(Scope.All.AsString(), token.Scope);
+            Assert.IsTrue(token.ExpiresIn > 0);
+            Assert.IsTrue(token.LastLogin > 0);
         }
     }
 }

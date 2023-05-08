@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Added
+- Added Readme and License files to Nuget package
+- `OAuth2Service`: added ability to configure token expiration time
+- Added OAuth2 service to SignNow service container
+- All the services can use custom HttpClient via constructor of class [#148](https://github.com/signnow/SignNow.NET/issues/148)
+
+### Changed
+- `OAuth2Service` moved to `SignNow.Net.Services` namespace
 
 ## [1.1.1] - 2023-05-02
 ### Added

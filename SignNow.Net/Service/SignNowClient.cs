@@ -1,22 +1,25 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
-using System;
-using System.Net;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
 
-namespace SignNow.Net.Internal.Service
+#if NET45
+using System.Net;
+#endif
+
+namespace SignNow.Net.Service
 {
-    internal class SignNowClient : ISignNowClient
+    public class SignNowClient : ISignNowClient
     {
         private static string sdkUserAgentString = string.Empty;
 
@@ -30,7 +33,9 @@ namespace SignNow.Net.Internal.Service
             get
             {
                 if (string.IsNullOrEmpty(sdkUserAgentString))
+                {
                     sdkUserAgentString = UserAgentSdkHeaders.BuildUserAgentString();
+                }
 
                 return sdkUserAgentString;
             }
@@ -44,7 +49,9 @@ namespace SignNow.Net.Internal.Service
             get
             {
                 if (string.IsNullOrEmpty(xUserAgentString))
+                {
                     xUserAgentString = UserAgentSdkHeaders.RawOsDescription();
+                }
 
                 return xUserAgentString;
             }
@@ -128,7 +135,7 @@ namespace SignNow.Net.Internal.Service
         /// <returns></returns>
         public async Task<HttpResponseMessage> ProcessRequest(RequestOptions requestOptions, HttpCompletionOption completionOption = default, CancellationToken cancellationToken = default)
         {
-            using var request = CreateHttpRequest(requestOptions);
+            var request = CreateHttpRequest(requestOptions);
 
             return await HttpClient
                 .SendAsync(request, completionOption, cancellationToken)

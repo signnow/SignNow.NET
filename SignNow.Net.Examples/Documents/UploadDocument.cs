@@ -10,11 +10,9 @@ namespace SignNow.Net.Examples.Documents
         /// Uploads a PDF with fillable field (Signature field)
         /// </summary>
         /// <param name="pdfFilePath">Full qualified path to your PDF with field tags.</param>
-        /// <param name="token">Access token</param>
-        public static async Task<SignNowDocument> UploadDocumentWithFieldExtract(string pdfFilePath, Token token)
+        /// <param name="signNowContext">signNow container with services.</param>
+        public static async Task<SignNowDocument> UploadDocumentWithFieldExtract(string pdfFilePath, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             await using var fileStream = File.OpenRead(pdfFilePath);
             // Upload the document with field extract
             var uploadResponse = signNowContext.Documents
@@ -29,11 +27,9 @@ namespace SignNow.Net.Examples.Documents
         /// Uploads a PDF document to signNow and returns SignNowDocument object.
         /// </summary>
         /// <param name="pdfFilePath">Full qualified path to your PDF file.</param>
-        /// <param name="token">Access token</param>
-        public static async Task<SignNowDocument> UploadDocument(string pdfFilePath, Token token)
+        /// <param name="signNowContext">signNow container with services.</param>
+        public static async Task<SignNowDocument> UploadDocument(string pdfFilePath, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
             var pdfFileName = "document-example.pdf";
 
             await using var fileStream = File.OpenRead(pdfFilePath);

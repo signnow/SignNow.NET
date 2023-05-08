@@ -3,7 +3,7 @@ using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Requests
 {
     [TestClass]
     public class EmbeddedSigningLinkRequestTest

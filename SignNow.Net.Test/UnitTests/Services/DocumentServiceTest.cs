@@ -10,7 +10,7 @@ using SignNow.Net.Model;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels.EditFields;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class DocumentServiceTest : SignNowTestBase
@@ -54,7 +54,7 @@ namespace UnitTests
         [TestMethod]
         public async Task ThrowsExceptionForWrongParams()
         {
-            var service = new DocumentService(new Token());
+            var service = new DocumentService(ApiBaseUrl, new Token());
 
             var documentIdException = await Assert.ThrowsExceptionAsync<ArgumentException>(
                 async () => await service

@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 
-namespace UnitTests
+namespace UnitTests.Extensions
 {
     [TestClass]
     public class ValidatorExtensionsTest

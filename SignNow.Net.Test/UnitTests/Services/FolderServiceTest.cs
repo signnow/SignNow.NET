@@ -5,7 +5,7 @@ using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class FolderServiceTest : SignNowTestBase

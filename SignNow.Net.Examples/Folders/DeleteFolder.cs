@@ -9,12 +9,10 @@ namespace SignNow.Net.Examples.Folders
         /// Delete folder example
         /// </summary>
         /// <param name="folderId">Id of the folder to delete</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task DeleteFolder(string folderId, Token token)
+        public static async Task DeleteFolder(string folderId, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             await signNowContext.Folders
                 .DeleteFolderAsync(folderId)
                 .ConfigureAwait(false);

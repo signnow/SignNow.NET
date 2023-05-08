@@ -1,9 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class UserTest : SignNowTestBase

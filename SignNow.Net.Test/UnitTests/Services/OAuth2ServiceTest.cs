@@ -3,16 +3,15 @@ using System.Net;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using SignNow.Net;
+using SignNow.Net.Service;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Helpers.Converters;
-using SignNow.Net.Internal.Service;
 using SignNow.Net.Model;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     /// <summary>
     /// Test <see cref="OAuth2Service"/> object with
@@ -35,7 +34,7 @@ namespace UnitTests
         [TestInitialize]
         public void SetUp()
         {
-            OAuth2 = new OAuth2Service("clientId", "clientSecret");
+            OAuth2 = new OAuth2Service(ApiBaseUrl,"clientId", "clientSecret");
         }
 
         [DataTestMethod]

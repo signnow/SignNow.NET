@@ -1,20 +1,17 @@
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Constants;
-using SignNow.Net.Internal.Extensions;
-using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
-using SignNow.Net.Service;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Internal.Requests;
 
-namespace SignNow.Net
+namespace SignNow.Net.Service
 {
     /// <summary>
     /// OAuth2 implementation of <see cref="IOAuth2Service"/>
@@ -22,29 +19,24 @@ namespace SignNow.Net
     public class OAuth2Service : WebClientBase, IOAuth2Service
     {
         /// <summary>
-        /// Application client identity.
-        /// </summary>
-        private string ClientId { get; set; }
-
-        /// <summary>
-        /// Application client secret.
-        /// </summary>
-        private string ClientSecret { get; set; }
-
-        /// <summary>
         /// signNow OAuth request <see cref="Uri"/>
         /// </summary>
         private Uri OAuthRequestUrl { get; set; }
 
-        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
-        public OAuth2Service(string clientId, string clientSecret) : this(ApiUrl.ApiBaseUrl, clientId, clientSecret)
-        {
-        }
+        /// <summary>
+        /// Application client identity.
+        /// </summary>
+        public string ClientId { get; set; }
 
-        /// <inheritdoc cref="OAuth2Service(Uri, string, string, ISignNowClient)" />
-        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret) : this(apiBaseUrl, clientId, clientSecret, null)
-        {
-        }
+        /// <summary>
+        /// Application client secret.
+        /// </summary>
+        public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// The amount of time till the token expires in seconds
+        /// </summary>
+        public int ExpirationTime { get; set; }
 
         /// <summary>
         /// Constructs an <see cref="OAuth2Service"/>
@@ -52,8 +44,9 @@ namespace SignNow.Net
         /// <param name="apiBaseUrl">signNow API <see cref="WebClientBase.ApiBaseUrl"/></param>
         /// <param name="clientId">Application <see cref="ClientId"/></param>
         /// <param name="clientSecret">Application <see cref="ClientSecret"/></param>
-        /// <param name="signNowClient">Http Client</param>
-        protected OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient) : base(apiBaseUrl, signNowClient)
+        /// <param name="signNowClient">signNow Http client</param>
+        public OAuth2Service(Uri apiBaseUrl, string clientId, string clientSecret, ISignNowClient signNowClient = null)
+            : base(apiBaseUrl, null, signNowClient)
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
@@ -84,28 +77,28 @@ namespace SignNow.Net
         /// <inheritdoc cref="IOAuth2Service.GetTokenAsync(string, string, Scope, CancellationToken)" />
         public async Task<Token> GetTokenAsync(string login, string password, Scope scope, CancellationToken cancellationToken = default)
         {
-            var body = new Dictionary<string, string>
+            var requestOptions = new GetAccessTokenRequest()
             {
-               { "grant_type", "password" },
-               { "username", login },
-               { "password", password },
-               { "scope", scope.AsString() }
+                GrantType = GrantType.Password,
+                Username = login,
+                Password = password,
+                TokenScope = scope
             };
 
-            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
+            return await ExecuteTokenRequest(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="IOAuth2Service.GetTokenAsync(string, Scope, CancellationToken)" />
         public async Task<Token> GetTokenAsync(string code, Scope scope, CancellationToken cancellationToken = default)
         {
-            var body = new Dictionary<string, string>
+            var requestOptions = new GetAccessTokenRequest()
             {
-               { "grant_type", "authorization_code" },
-               { "code", code },
-               { "scope", scope.AsString() }
+                GrantType = GrantType.AuthorizationCode,
+                AuthorizationCode = code,
+                TokenScope = scope
             };
 
-            var token = await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
+            var token = await ExecuteTokenRequest(requestOptions, cancellationToken).ConfigureAwait(false);
 
             var tokenLifetime = token.ExpiresIn - (int) UnixTimeStampConverter.ToUnixTimestamp(DateTime.UtcNow);
             if (tokenLifetime > 0) token.ExpiresIn = tokenLifetime ;
@@ -118,13 +111,13 @@ namespace SignNow.Net
         {
             Guard.ArgumentNotNull(token, nameof(token));
 
-            var body = new Dictionary<string, string>
+            var requestOptions = new GetAccessTokenRequest()
             {
-                { "grant_type", "refresh_token" },
-                { "refresh_token", token.RefreshToken }
+                GrantType = GrantType.RefreshToken,
+                RefreshToken = token.RefreshToken,
             };
 
-            return await ExecuteTokenRequest(body, cancellationToken).ConfigureAwait(false);
+            return await ExecuteTokenRequest(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="IOAuth2Service.ValidateTokenAsync" />
@@ -153,17 +146,17 @@ namespace SignNow.Net
         /// <summary>
         /// Processing Http request for Token issue.
         /// </summary>
-        /// <param name="body">Dictionary with requested params.</param>
+        /// <param name="tokenRequest">Access Token request options.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns><see cref="Token"/> response</returns>
-        private async Task<Token> ExecuteTokenRequest(Dictionary<string, string> body, CancellationToken cancellationToken = default)
+        private async Task<Token> ExecuteTokenRequest(GetAccessTokenRequest tokenRequest, CancellationToken cancellationToken = default)
         {
             var plainTextBytes = Encoding.UTF8.GetBytes($"{ClientId}:{ClientSecret}");
             var appToken = Convert.ToBase64String(plainTextBytes);
             var options = new PostHttpRequestOptions
             {
                 Token = new Token { AppToken = appToken, TokenType = TokenType.Basic },
-                Content = new FormUrlEncodedHttpContent(body),
+                Content = tokenRequest,
                 RequestUrl = OAuthRequestUrl
             };
 

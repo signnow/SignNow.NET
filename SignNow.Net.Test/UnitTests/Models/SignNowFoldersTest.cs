@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Model;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public class SignNowFoldersTest : SignNowTestBase

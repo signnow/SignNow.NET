@@ -11,13 +11,10 @@ namespace SignNow.Net.Examples.Invites
         /// </summary>
         /// <param name="document">signNow document with fields you’d like to have signed</param>
         /// <param name="email">The email of the invitee.</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns><see cref="InviteResponse"/> without any Identity of invite request.</returns>
-        public static async Task<InviteResponse> CreateRoleBasedInviteToSignTheDocument(SignNowDocument document, string email, Token token)
+        public static async Task<InviteResponse> CreateRoleBasedInviteToSignTheDocument(SignNowDocument document, string email, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             // Create role-based invite
             var invite = new RoleBasedInvite(document)
             {

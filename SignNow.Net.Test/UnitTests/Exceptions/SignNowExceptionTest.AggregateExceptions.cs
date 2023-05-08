@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 
-namespace UnitTests
+namespace UnitTests.Exceptions
 {
     public partial class SignNowExceptionTest
     {

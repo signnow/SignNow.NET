@@ -10,14 +10,11 @@ namespace SignNow.Net.Examples.Documents
         /// Get Document History example
         /// </summary>
         /// <param name="documentId">Identity of the document</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns><see cref="DocumentHistoryResponse"/></returns>
         public static async Task<IReadOnlyList<DocumentHistoryResponse>>
-            GetTheDocumentHistory(string documentId, Token token)
+            GetTheDocumentHistory(string documentId, SignNowContext signNowContext)
         {
-            // using token from the Authorization step
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Documents
                 .GetDocumentHistoryAsync(documentId)
                 .ConfigureAwait(false);

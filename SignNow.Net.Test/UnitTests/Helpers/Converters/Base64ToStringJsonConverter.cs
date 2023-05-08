@@ -4,7 +4,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model.FieldContents;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Helpers.Converters
 {
     [TestClass]
     public class StringBase64ToByteArrayJsonConverterTest

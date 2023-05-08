@@ -6,10 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
-using SignNow.Net.Test;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
-namespace UnitTests
+namespace UnitTests.Models
 {
     [TestClass]
     public partial class SignInviteTest : SignNowTestBase

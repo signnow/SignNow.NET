@@ -13,14 +13,12 @@ namespace SignNow.Net.Examples.Users
         /// <param name="lastname">User lastname</param>
         /// <param name="email">User email</param>
         /// <param name="password">User password</param>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns>
         /// Response with: User identity, email
         /// </returns>
-        public static async Task<UserCreateResponse> CreateSignNowUser(string firstname, string lastname, string email, string password, Token token)
+        public static async Task<UserCreateResponse> CreateSignNowUser(string firstname, string lastname, string email, string password, SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             var userRequest = new CreateUserOptions
             {
                 Email = email,
@@ -37,12 +35,10 @@ namespace SignNow.Net.Examples.Users
         /// <summary>
         /// Retrieve User Information example
         /// </summary>
-        /// <param name="token">Access token</param>
+        /// <param name="signNowContext">signNow container with services.</param>
         /// <returns></returns>
-        public static async Task<User> RetrieveUserInformation(Token token)
+        public static async Task<User> RetrieveUserInformation(SignNowContext signNowContext)
         {
-            var signNowContext = new SignNowContext(token);
-
             return await signNowContext.Users.GetCurrentUserAsync()
                 .ConfigureAwait(false);
         }

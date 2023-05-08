@@ -10,7 +10,7 @@ using SignNow.Net.Service;
 using SignNow.Net.Test.Constants;
 using SignNow.Net.Test.FakeModels;
 
-namespace UnitTests
+namespace UnitTests.Services
 {
     [TestClass]
     public class UserServiceTest : SignNowTestBase
@@ -18,7 +18,7 @@ namespace UnitTests
         [TestMethod]
         public void ThrowsExceptionOnInviteIsNull()
         {
-            var service = new UserService(new Token());
+            var service = new UserService(ApiBaseUrl, new Token());
             var response = service.CancelInviteAsync(null as FreeformInvite).Exception;
 
             Assert.IsNotNull(response);
@@ -240,8 +240,7 @@ namespace UnitTests
                 ]
             }";
 
-            var signNowClientMock = SignNowClientMock(jsonError, HttpStatusCode.BadRequest);
-            var userService = new UserService(ApiBaseUrl, new Token(), signNowClientMock);
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(jsonError, HttpStatusCode.BadRequest));
 
             var exception = Assert
                 .ThrowsException<AggregateException>(

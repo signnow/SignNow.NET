@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Service;
 using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples.Authentication
@@ -22,7 +23,10 @@ namespace SignNow.Net.Examples.Authentication
             string userLogin = credentials.Login;
             string userPassword = credentials.Password;
 
-            var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret);
+            var oauth = new OAuth2Service(apiBaseUrl, clientId, clientSecret)
+            {
+                ExpirationTime = 60
+            };
 
             return await oauth.GetTokenAsync(userLogin, userPassword, Scope.All)
                 .ConfigureAwait(false);
