@@ -12,7 +12,7 @@ signNow.Net is the official .NET 4.5+ and .NET Standard class library for the si
 
 Get your account at <https://www.signnow.com/developers>
 
-## <a name="table-of-contents"></a>Table of Contents
+## Table of Contents
 
 1. [Get started](#get-started)
 2. [Platform dependencies](#platform-dependencies)
@@ -61,7 +61,7 @@ Get your account at <https://www.signnow.com/developers>
     - [Important notes](#important-notes)
 7. [License](#license)
 
-## <a name="get-started"></a>Get started
+## Get started
 
 To start using the API  you will need an API key. You can get one here <https://www.signnow.com/api>. For a full list of accepted parameters, refer to the signNow REST Endpoints API guide: [signNow API Reference][api reference link].
 
@@ -73,7 +73,7 @@ To start using the API  you will need an API key. You can get one here <https://
 | Application: | <https://app-eval.signnow.com> | <https://app.signnow.com> |
 | Entry page:  | <https://eval.signnow.com>     |                           |
 
-## <a name="platform-dependencies"></a>Platform Dependencies
+## Platform Dependencies
 
 #### Windows
 
@@ -84,7 +84,7 @@ To start using the API  you will need an API key. You can get one here <https://
 
 - .Net Core 3.0 and newer
 
-## <a name="installation"></a>Installation
+## Installation
 
 ### Install .Net package
 
@@ -98,15 +98,15 @@ dotnet add package SignNow.Net --version <package-version>
 Install-Package SignNow.Net -Version <package-version>
 ```
 
-## <a name="documentation"></a>Documentation
+## Documentation
 
 Read about the available signNow features in [signNow API Docs][api docs link].
 
-## <a name="features"></a>Features
+## Features
 
-## <a name="authorization"></a>Authorization
+## Authorization
 
-#### <a name="get-token"></a>Request Access Token
+#### Request Access Token
 
 Get your access token via OAuth 2.0 service.
 
@@ -139,9 +139,9 @@ public static class AuthenticationExamples
 
 More examples: [Request Access token][request_access_token example], [Verify Access Token][verify_access_token example], [Refresh Access Token][refresh_access_token example]
 
-## <a name="user"></a>User
+## User
 
-### <a name="create-user"></a>Creates an account for a user
+### Creates an account for a user
 
 By default verification email is not sent to newly created User.
 To send it - use `IUserService.SendVerificationEmailAsync(string email)`
@@ -181,9 +181,9 @@ public static partial class UserExamples
 
 More examples: [Create User][create_user example], [Retrieve User information][get_user_info example], [Sends verification email to a user][send_verification example], [Change User details][update_user example], [Sends password reset link via email][reset_password example], [Get modified documents][get_modified_docs example], [Get user documents][get_user_docs example]
 
-## <a name="document"></a>Document
+## Document
 
-### <a name="upload-document"></a>Upload a document to signNow
+### Upload a document to signNow
 
 All the features in signNow require a `document_id`. Once you upload a document to signNow, you get the `document_id` from a successful response.
 
@@ -217,7 +217,7 @@ public static class DocumentExamples
 
 More examples: [Upload document][upload_document example], [Upload document with field extract][upload_doc_extract example]
 
-### <a name="download-document"></a>Download a document from signNow
+### Download a document from signNow
 
 Choose the type of download for your document:
 
@@ -250,7 +250,7 @@ public static class DocumentExamples
 
 More examples: [Download signed document][download_signed_doc example]
 
-### <a name="merge-documents"></a>Merge two or more signNow documents into one
+### Merge two or more signNow documents into one
 
 Merges two or more signNow documents into one single PDF file.
 
@@ -288,7 +288,7 @@ public static partial class DocumentExamples
 
 More examples: [Merge document][merge_documents example]
 
-### <a name="create-signing-link"></a>Create a signing link to the document for signature
+### Create a signing link to the document for signature
 
 Signing link - a single-use link to a document that requires a signature. When the document is signed (or the signer declines to sign it), the link is no longer valid.
 Having followed the link, signers can click anywhere on the document to sign it.
@@ -328,7 +328,7 @@ public static partial class DocumentExamples
 
 More examples: [Create signing link][create_sign_lnk example], [Check signing status][check_sign_status example]
 
-### <a name="create-freeform-invite"></a>Create a freeform invite to the document for signature
+### Create a freeform invite to the document for signature
 
 *Freeform invite* - an invitation to sign a document which doesn't contain any fillable fields.
 
@@ -372,7 +372,7 @@ public static partial class InviteExamples
 
 More examples: [Create freeform invite][create_ff_invite example]
 
-### <a name="create-role-based-invite"></a>Create a role-based invite to the document for signature
+### Create a role-based invite to the document for signature
 
 *Role-based invite* - an invitation to sign a document which contains at least one fillable field assigned to one role.
 
@@ -427,7 +427,7 @@ public static partial class InviteExamples
 
 More examples: [Create role-based invite][create_rb_invite example]
 
-### <a name="create-embedded-invite"></a>Create embedded signing invite to the document for signature
+### Create embedded signing invite to the document for signature
 
 ```csharp
 public static partial class InviteExamples
@@ -465,7 +465,7 @@ public static partial class InviteExamples
 
 More examples: [Generate embedded signing link][generate_embedded_link example], [Cancel embedded signing invite][cancel_embedded_invite example]
 
-### <a name="share-document-via-link"></a>Create a one-time link to download the document as a PDF
+### Create a one-time link to download the document as a PDF
 
 ```csharp
 public static partial class DocumentExamples
@@ -491,7 +491,7 @@ public static partial class DocumentExamples
 
 More examples: [Create a One-time Use Download URL][create_one_time_link example]
 
-### <a name="document-history"></a>Get the history of a document
+### Get the history of a document
 
 ```csharp
 public static partial class DocumentExamples
@@ -517,8 +517,8 @@ public static partial class DocumentExamples
 
 More examples: [Get document history][document_history example]
 
-## <a name="template"></a>Template
-### <a name="create-template"></a>Create Template by flattening the existing Document
+## Template
+### Create Template by flattening the existing Document
 
 Set required templateName and documentId parameters to create the signNow Template.
 
@@ -548,8 +548,8 @@ public static class DocumentExamples
 More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
 
-## <a name="folders"/>Folders
-### <a name="get-all-folders"/>Get all folders
+## Folders
+### Get all folders
 
 ```csharp
 public static class FolderExamples
@@ -572,9 +572,9 @@ public static class FolderExamples
 
 More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example], [Create folder][create_folder example]
 
-## <a name="contribution-guidelines"></a>Contribution guidelines
+## Contribution guidelines
 
-### <a name="xml-doc-generation"></a>XML doc generation
+### XML doc generation
 
 For XML documentation generation, install InheritDocTool:
 
@@ -584,7 +584,7 @@ dotnet tool install -g InheritDocTool
 
 More about the InheritDoc [here](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/examples#document-a-hierarchy-of-classes-and-interfaces)
 
-### <a name="important-notes"></a>Important notes
+### Important notes
 
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
 
@@ -596,7 +596,7 @@ Thanks to all contributors who got interested in this project. We're excited to 
 
 - When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
 
-## <a name="license"></a>License
+## License
 
 This SDK is distributed under the MIT License, see [LICENSE][license link] for more information.
 

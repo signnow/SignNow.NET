@@ -18,7 +18,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="createEvent">Event details.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<EventSubscription> CreateEventSubscriptionAsync(EventSubscription createEvent, CancellationToken cancellationToken = default);
+        Task CreateEventSubscriptionAsync(EventSubscription createEvent, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets information about all subscriptions to Events made with a specific application.

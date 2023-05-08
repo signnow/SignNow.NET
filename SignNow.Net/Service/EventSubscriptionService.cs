@@ -3,35 +3,55 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Constants;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Service
 {
-    public class EventSubscriptionService : AuthorizedWebClientBase, IEventSubscriptionService
+    public class EventSubscriptionService : WebClientBase, IEventSubscriptionService
     {
         /// <summary>
         /// Creates new instance of <see cref="EventSubscriptionService"/>
         /// </summary>
-        /// <param name="apiBaseUrl"><see cref="ApiUrl.ApiBaseUrl"/></param>
-        /// <param name="token"><see cref="Token"/></param>
-        public EventSubscriptionService(Uri apiBaseUrl, Token token) : this(apiBaseUrl, token, null)
-        {
-        }
-
-        /// <inheritdoc cref="EventSubscriptionService(Uri, Token)"/>
-        /// <param name="signNowClient"><see cref="ISignNowClient"/></param>
-        protected internal EventSubscriptionService(Uri apiBaseUrl, Token token, ISignNowClient signNowClient) : base(apiBaseUrl, token, signNowClient)
+        /// <param name="baseApiUrl">Base signNow API URL</param>
+        /// <param name="token">Access token</param>
+        /// <param name="signNowClient">signNow Http client</param>
+        public EventSubscriptionService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
+            : base(baseApiUrl, token, signNowClient)
         {
         }
 
         /// <inheritdoc />
-        public async Task<EventSubscription> CreateEventSubscriptionAsync(EventSubscription createEvent, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public async Task CreateEventSubscriptionAsync(EventSubscription createEvent, CancellationToken cancellationToken = default)
+        {
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/api/v2/events"),
+                Content = new JsonHttpContent(new CreateEventSubscriptionRequest(createEvent)),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
 
         /// <inheritdoc />
         public async Task<IEnumerable<EventSubscription>> GetEventSubscriptionAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var basicToken = Token;
+            basicToken.TokenType = TokenType.Basic;
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/api/v2/events"),
+                Token = basicToken
+            };
+
+            return await SignNowClient
+                .RequestAsync<List<EventSubscription>>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />

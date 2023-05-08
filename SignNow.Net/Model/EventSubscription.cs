@@ -24,8 +24,8 @@ namespace SignNow.Net.Model
         [JsonProperty("entity_id")]
         public int EntityId { get; set; }
 
-        // [JsonProperty("entity_unique_id")]
-        // public string EntityUid { get; set; }
+        [JsonProperty("entity_unique_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string EntityUid { get; set; }
 
         /// <summary>
         /// Always only "callback"
@@ -35,6 +35,9 @@ namespace SignNow.Net.Model
 
         [JsonProperty("json_attributes")]
         public EventAttributes JsonAttributes { get; set; }
+
+        [JsonProperty("application_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string ApplicationName { get; set; }
 
         /// <summary>
         /// Timestamp document was created.

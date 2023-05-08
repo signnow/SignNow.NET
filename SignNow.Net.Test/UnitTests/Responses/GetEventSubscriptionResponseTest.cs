@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net._Internal.Response;
 
-namespace UnitTests
+namespace UnitTests.Responses
 {
     [TestClass]
     public class GetEventSubscriptionResponseTest
@@ -62,6 +62,8 @@ namespace UnitTests
             Assert.AreEqual(15, response.Meta.Pagination.PerPage);
             Assert.AreEqual(2, response.Meta.Pagination.CurrentPage);
             Assert.AreEqual(10, response.Meta.Pagination.TotalPages);
+            Assert.AreEqual("https://api-eval.signnow.com/api/v2/events?page=1", response.Meta.Pagination.Links.Previous.AbsoluteUri);
+            Assert.AreEqual("https://api-eval.signnow.com/api/v2/events?page=3", response.Meta.Pagination.Links.Next.AbsoluteUri);
         }
     }
 }

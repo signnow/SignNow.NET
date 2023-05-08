@@ -27,6 +27,7 @@ namespace SignNow.Net
         /// <inheritdoc cref="IFolderService"/>
         public IFolderService Folders { get; protected set; }
 
+        /// <inheritdoc cref="IEventSubscriptionService"/>
         public IEventSubscriptionService Events { get; protected set; }
 
         /// <summary>
@@ -55,9 +56,9 @@ namespace SignNow.Net
             OAuth = new OAuth2Service(ApiBaseUrl, "", "", SignNowClient);
             Users = new UserService(ApiBaseUrl, Token, SignNowClient);
             Invites = (ISignInvite) Users;
-            Events = new EventSubscriptionService(ApiBaseUrl, token, signNowClient);
             Documents = new DocumentService(ApiBaseUrl, Token, SignNowClient);
             Folders = new FolderService(ApiBaseUrl, Token, SignNowClient);
+            Events = new EventSubscriptionService(ApiBaseUrl, Token, SignNowClient);
         }
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace SignNow.Net
             ((UserService)Users).Token = Token;
             ((DocumentService)Documents).Token = Token;
             ((FolderService)Folders).Token = Token;
+            ((EventSubscriptionService)Events).Token = Token;
         }
     }
 }
