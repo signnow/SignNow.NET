@@ -5,10 +5,11 @@ using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class MergeDocumentRequest : IContent
+    internal class MergeDocumentRequest : JsonHttpContent
     {
         /// <summary>
         /// The name of the document that will be created and written to.
@@ -32,17 +33,6 @@ namespace SignNow.Net.Internal.Requests
             {
                 DocumentIds.Add(doc.Id.ValidateId());
             }
-        }
-
-        /// <summary>
-        /// Creates Json Http Content from object
-        /// </summary>
-        /// <returns>HttpContent</returns>
-        public HttpContent GetHttpContent()
-        {
-            return new StringContent(
-                JsonConvert.SerializeObject(this),
-                Encoding.UTF8, "application/json");
         }
     }
 }

@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class CreateDocumentFromTemplateRequest
+    internal class CreateDocumentFromTemplateRequest : JsonHttpContent
     {
         /// <summary>
         /// The new document name.

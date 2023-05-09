@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class EditFieldRequest
+    internal class EditFieldRequest : JsonHttpContent
     {
         [JsonProperty("client_timestamp")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]

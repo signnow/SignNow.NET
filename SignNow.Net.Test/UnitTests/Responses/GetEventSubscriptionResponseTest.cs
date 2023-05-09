@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net._Internal.Response;
+using SignNow.Net.Model;
 
 namespace UnitTests.Responses
 {
@@ -47,7 +48,7 @@ namespace UnitTests.Responses
 
             var subscription = response.Data[0];
             Assert.AreEqual("8b784c586c6942c1bb04cf250400683779b1c49f", subscription.Id);
-            Assert.AreEqual("document.complete", subscription.Event);
+            Assert.AreEqual(EventType.DocumentComplete, subscription.Event);
             Assert.AreEqual(40336962, subscription.EntityId);
             Assert.AreEqual("5261f4a5c5fe47eaa68276366af40c259758fb30", subscription.EntityUid);
             Assert.AreEqual("callback", subscription.Action);

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Model.Requests
 {
-    public class UpdateUserOptions
+    public class UpdateUserOptions : JsonHttpContent
     {
         /// <summary>
         /// User firstname.

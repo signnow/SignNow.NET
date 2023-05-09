@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using Newtonsoft.Json;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class EmbeddedSigningRequest : IContent
+    internal class EmbeddedSigningRequest : JsonHttpContent
     {
         /// <summary>
         /// Collections of <see cref="EmbeddedInvite"/> request options.
@@ -20,15 +18,6 @@ namespace SignNow.Net.Internal.Requests
         public EmbeddedSigningRequest(EmbeddedSigningInvite invite)
         {
             Invites = invite.EmbeddedSignInvites;
-        }
-
-        /// <summary>
-        /// Creates Json Http Content from object
-        /// </summary>
-        /// <returns>HttpContent</returns>
-        public HttpContent GetHttpContent()
-        {
-            return new StringContent(JsonConvert.SerializeObject(this), Encoding.UTF8, "application/json");
         }
     }
 }
