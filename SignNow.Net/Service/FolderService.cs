@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
@@ -70,7 +69,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/folder"),
-                Content = new JsonHttpContent(new {name = name, parent_id = parentId.ValidateId()}),
+                Content = new CreateOrRenameFolderRequest { Name = name, ParentId = parentId.ValidateId() },
                 Token = Token
             };
 
@@ -104,7 +103,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
-                Content = new JsonHttpContent(new {name = name}),
+                Content = new CreateOrRenameFolderRequest { Name = name },
                 Token = Token
             };
 

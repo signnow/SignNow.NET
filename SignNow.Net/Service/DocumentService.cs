@@ -49,7 +49,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/link"),
-                Content = new JsonHttpContent(new { document_id = documentId.ValidateId() }),
+                Content = new CreateSigningLinkRequest{ DocumentId = documentId.ValidateId() },
                 Token = Token
             };
 
@@ -149,7 +149,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/document/merge"),
-                Content = new JsonHttpContent(requestBody),
+                Content = requestBody,
                 Token = Token
             };
 
@@ -170,7 +170,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/move"),
-                Content = new JsonHttpContent(new {folder_id = folderId.ValidateId()}),
+                Content = new MoveDocumentRequest { FolderId = folderId.ValidateId() },
                 Token = Token
             };
 
@@ -220,7 +220,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/template"),
-                Content = new JsonHttpContent(new CreateTemplateFromDocumentRequest(templateName, documentId.ValidateId())),
+                Content = new CreateTemplateFromDocumentRequest(templateName, documentId.ValidateId()),
                 Token = Token
             };
 
@@ -239,7 +239,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/copy"),
-                Content = new JsonHttpContent(new CreateDocumentFromTemplateRequest(documentName)),
+                Content = new CreateDocumentFromTemplateRequest(documentName),
                 Token = Token
             };
 
@@ -258,7 +258,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/prefill-texts"),
-                Content = new JsonHttpContent(new PrefillTextFieldRequest(fields)),
+                Content = new PrefillTextFieldRequest(fields),
                 Token = Token
             };
 
@@ -277,7 +277,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}"),
-                Content = new JsonHttpContent(new EditFieldRequest(fields)),
+                Content = new EditFieldRequest(fields),
                 Token = Token
             };
 
