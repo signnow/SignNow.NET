@@ -7,13 +7,6 @@ namespace SignNow.Net.Model.Requests
 {
     public abstract class JsonHttpContent : IContent
     {
-        // private readonly object contentBody;
-
-        // public JsonHttpContent(object contentBody)
-        // {
-        //     this.contentBody = contentBody;
-        // }
-
         /// <summary>
         /// Creates Json Http Content from object
         /// </summary>

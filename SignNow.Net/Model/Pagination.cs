@@ -27,11 +27,11 @@ namespace SignNow.Net.Model
 
     public class PageLinks
     {
-        [JsonProperty("previous")]
+        [JsonProperty("previous", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringToUriJsonConverter))]
         public Uri Previous { get; set; }
 
-        [JsonProperty("next")]
+        [JsonProperty("next", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringToUriJsonConverter))]
         public Uri Next { get; set; }
     }

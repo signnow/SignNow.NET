@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
 {
@@ -24,9 +26,10 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Gets information about all subscriptions to Events made with a specific application.
         /// </summary>
+        /// <param name="options">Query options</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<IEnumerable<EventSubscription>> GetEventSubscriptionAsync(CancellationToken cancellationToken = default);
+        Task<EventSubscriptionResponse> GetEventSubscriptionsAsync(IQueryToString options = default, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Allows changing an existing Event subscription.

@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
+using SignNow.Net.Interfaces;
 using SignNow.Net.Model.Requests.GetFolderQuery;
 
 namespace SignNow.Net.Model.Requests
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public class GetFolderOptions
+    public class GetFolderOptions : IQueryToString
     {
         private const string FiltersSchema = "filters={0}&filter-values={1}";
         private const string SortSchema = "sortby={0}&order={1}";

@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using SignNow.Net.Model;
 
-namespace SignNow.Net._Internal.Response
+namespace SignNow.Net.Model.Responses
 {
-    internal class GetEventSubscriptionResponse
+    public class EventSubscriptionResponse
     {
         [JsonProperty("data")]
         public List<EventSubscription> Data { get; internal set; }
@@ -13,7 +12,7 @@ namespace SignNow.Net._Internal.Response
         public MetaInfo Meta { get; internal set; }
     }
 
-    internal class MetaInfo
+    public class MetaInfo
     {
         [JsonProperty("pagination")]
         public Pagination Pagination { get; internal set; }

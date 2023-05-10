@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
 {
@@ -37,19 +38,24 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<EventSubscription>> GetEventSubscriptionAsync(CancellationToken cancellationToken = default)
+        public async Task<EventSubscriptionResponse> GetEventSubscriptionsAsync(IQueryToString options, CancellationToken cancellationToken = default)
         {
             var basicToken = Token;
             basicToken.TokenType = TokenType.Basic;
 
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, "/api/v2/events"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/api/v2/events{filters}"),
                 Token = basicToken
             };
 
             return await SignNowClient
-                .RequestAsync<List<EventSubscription>>(requestOptions, cancellationToken)
+                .RequestAsync<EventSubscriptionResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 

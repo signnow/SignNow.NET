@@ -1,11 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net._Internal.Response;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Responses;
 
 namespace UnitTests.Responses
 {
     [TestClass]
-    public class GetEventSubscriptionResponseTest
+    public class EventSubscriptionResponseTest
     {
         [TestMethod]
         public void ShouldProperDeserialize()
@@ -42,7 +42,7 @@ namespace UnitTests.Responses
                 }
             }";
 
-            var response = TestUtils.DeserializeFromJson<GetEventSubscriptionResponse>(jsonResponse);
+            var response = TestUtils.DeserializeFromJson<EventSubscriptionResponse>(jsonResponse);
 
             Assert.AreEqual(1, response.Data.Count);
 
