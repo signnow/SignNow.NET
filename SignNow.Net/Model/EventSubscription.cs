@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model
@@ -10,13 +11,14 @@ namespace SignNow.Net.Model
         /// Unique identifier of Event.
         /// </summary>
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; internal set; }
 
         /// <summary>
         /// Event type
         /// </summary>
         [JsonProperty("event")]
-        public string Event { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EventType Event { get; set; }
 
         /// <summary>
         /// The unique ID of the event: "document_id", "user_id", "document_group_id", "template_id"
@@ -25,7 +27,7 @@ namespace SignNow.Net.Model
         public int EntityId { get; set; }
 
         [JsonProperty("entity_unique_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string EntityUid { get; set; }
+        public string EntityUid { get; internal set; }
 
         /// <summary>
         /// Always only "callback"
@@ -73,7 +75,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Unique ID of external system. It is stored in "api_integrations" database table.
         /// </summary>
-        [JsonProperty("integration_id")]
+        [JsonProperty("integration_id", NullValueHandling = NullValueHandling.Ignore)]
         public string IntegrationId { get; set; }
 
         /// <summary>
@@ -86,13 +88,13 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Optional headers. You can add any parameters to "headers"
         /// </summary>
-        [JsonProperty("headers")]
+        [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
         public EventAttributeHeaders Headers { get; set; }
 
         /// <summary>
         /// Enables the HMAC security logic
         /// </summary>
-        [JsonProperty("secret_key")]
+        [JsonProperty("secret_key", NullValueHandling = NullValueHandling.Ignore)]
         public string SecretKey { get; set; }
     }
 

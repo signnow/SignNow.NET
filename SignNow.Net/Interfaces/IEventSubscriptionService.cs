@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Interfaces
 {
@@ -18,7 +19,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="createEvent">Event details.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task CreateEventSubscriptionAsync(EventSubscription createEvent, CancellationToken cancellationToken = default);
+        Task CreateEventSubscriptionAsync(CreateEventSubscription createEvent, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets information about all subscriptions to Events made with a specific application.

@@ -11,17 +11,16 @@ namespace UnitTests.Requests
         [TestMethod]
         public void ShouldProperCreateJsonRequest()
         {
-            var option = new CreateEventSubscription
+            var option = new CreateEventSubscription(
+                EventType.DocumentComplete,
+                "827a6dc8a83805f5961234304d2166b75ba19cf3",
+                new Uri("http://localhost/callback"))
             {
-                Event = EventType.DocumentComplete,
-                EntityId = "827a6dc8a83805f5961234304d2166b75ba19cf3",
-                Attributes = new EventAttributes
+                SecretKey = "12345",
+                Attributes =
                 {
-                    UseTls12 = true,
-                    CallbackUrl = new Uri("http://localhost/callback")
-                },
-                SecretKey = "12345"
-
+                    UseTls12 = true
+                }
             };
 
             var actual = $@"{{
@@ -29,9 +28,10 @@ namespace UnitTests.Requests
                 ""event"": ""document.complete"",
                 ""entity_id"": ""827a6dc8a83805f5961234304d2166b75ba19cf3"",
                 ""attributes"": {{
+                    ""delete_access_token"": true,
+                    ""callback"": ""http://localhost/callback"",
                     ""use_tls_12"": true,
-                    ""docid_queryparam"": false,
-                    ""callback_url"": ""http://localhost/callback""
+                    ""docid_queryparam"": false
                 }},
                 ""secret_key"": ""12345""
             }}";
