@@ -766,6 +766,22 @@ namespace SignNow.Net.Examples
             Assert.AreEqual(myCallbackUrl, myLatestEvent.JsonAttributes.CallbackUrl);
         }
 
+        /// <summary>
+        /// Gets information about all subscriptions to events made with a specific application
+        /// </summary>
+        /// <see cref="https://docs.signnow.com/docs/signnow/reference/operations/list-api-v-2-events"/>
+        [TestMethod]
+        public async Task GetEventSubscriptionsList()
+        {
+            var eventSubscriptionList = await testContext.Events
+                .GetEventSubscriptionsAsync()
+                .ConfigureAwait(false);
+
+            var firstEvent = eventSubscriptionList.Data.First();
+            Assert.IsTrue(firstEvent.Id.Length == 40);
+            Assert.AreEqual("callback", firstEvent.Action);
+        }
+
         #endregion
     }
 }
