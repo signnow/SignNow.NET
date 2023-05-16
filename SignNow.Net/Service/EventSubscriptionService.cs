@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
@@ -63,6 +64,20 @@ namespace SignNow.Net.Service
         public async Task<EventSubscription> UpdateEventSubscriptionAsync(CancellationToken cancellationToken = default) => throw new NotImplementedException();
 
         /// <inheritdoc />
-        public async Task DeleteEventSubscriptionAsync(CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public async Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default)
+        {
+            var basicToken = Token;
+            basicToken.TokenType = TokenType.Basic;
+
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/api/v2/events/{eventId.ValidateId()}"),
+                Token = basicToken
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

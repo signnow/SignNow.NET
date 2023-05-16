@@ -41,8 +41,9 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Unsubscribes an external service (callback_url) from specific Events of User or Document
         /// </summary>
+        /// <param name="eventId">Specific event identity</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task DeleteEventSubscriptionAsync(CancellationToken cancellationToken = default);
+        Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
     }
 }
