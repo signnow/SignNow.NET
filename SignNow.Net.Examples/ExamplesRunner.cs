@@ -749,6 +749,8 @@ namespace SignNow.Net.Examples
                 .ConfigureAwait(false);
 
             // Check for successful created event subscription
+            // Gets information about all subscriptions to events made with a specific application
+            // <see cref="https://docs.signnow.com/docs/signnow/reference/operations/list-api-v-2-events"/>
             var eventSubscriptionList = await testContext.Events
                 .GetEventSubscriptionsAsync(new PagePaginationOptions { Page = 1, PerPage = 1})
                 .ConfigureAwait(false);
@@ -764,22 +766,12 @@ namespace SignNow.Net.Examples
             var myLatestEvent = myLatestCreatedEvent.Data.First();
             Assert.AreEqual(EventType.DocumentComplete, myLatestEvent.Event);
             Assert.AreEqual(myCallbackUrl, myLatestEvent.JsonAttributes.CallbackUrl);
-        }
 
-        /// <summary>
-        /// Gets information about all subscriptions to events made with a specific application
-        /// </summary>
-        /// <see cref="https://docs.signnow.com/docs/signnow/reference/operations/list-api-v-2-events"/>
-        [TestMethod]
-        public async Task GetEventSubscriptionsList()
-        {
-            var eventSubscriptionList = await testContext.Events
-                .GetEventSubscriptionsAsync()
+            // Unsubscribes an external service (callback_url) from specific events of user or document
+            // <see cref="https://docs.signnow.com/docs/signnow/reference/operations/delete-a-api-v-2-event"/>
+            await testContext.Events
+                .DeleteEventSubscriptionAsync(myLatestEvent.Id)
                 .ConfigureAwait(false);
-
-            var firstEvent = eventSubscriptionList.Data.First();
-            Assert.IsTrue(firstEvent.Id.Length == 40);
-            Assert.AreEqual("callback", firstEvent.Action);
         }
 
         #endregion
