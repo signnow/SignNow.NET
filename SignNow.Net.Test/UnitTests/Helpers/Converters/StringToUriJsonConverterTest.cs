@@ -103,12 +103,24 @@ namespace UnitTests.Helpers.Converters
         {
             var testObj = new PageLinks();
 
-            var expected = $@"{{
-                ""previous"": null,
-                ""next"": null
+            Assert.That.JsonEqual("{}", testObj);
+
+            testObj.Next = new Uri("https://signnow.com/api/v2/events?page=2");
+
+            var expectedNext = $@"{{
+                ""next"": ""https://signnow.com/api/v2/events?page=2""
             }}";
 
-            Assert.That.JsonEqual(expected, testObj);
+            Assert.That.JsonEqual(expectedNext, testObj);
+
+            testObj.Next = null;
+            testObj.Previous = new Uri("https://signnow.com/api/v2/events?page=2");
+
+            var expectedPrevious = $@"{{
+                ""previous"": ""https://signnow.com/api/v2/events?page=2""
+            }}";
+
+            Assert.That.JsonEqual(expectedPrevious, testObj);
         }
     }
 }
