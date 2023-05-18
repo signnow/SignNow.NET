@@ -29,14 +29,13 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.CreateUserAsync" />
         public async Task<UserCreateResponse> CreateUserAsync(CreateUserOptions createUser, CancellationToken cancellation = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
                 Content = createUser,
-                Token = basicToken
+                Token = Token
             };
 
             return await SignNowClient.RequestAsync<UserCreateResponse>(requestOptions, cancellation)
@@ -46,6 +45,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.GetCurrentUserAsync" />
         public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
@@ -58,6 +58,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.UpdateUserAsync" />
         public async Task<UserUpdateResponse> UpdateUserAsync(UpdateUserOptions updateUser, CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
@@ -74,14 +75,13 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
         public async Task SendVerificationEmailAsync(string email, CancellationToken cancellationToken = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/verifyemail"),
                 Content = new SendVerificationEmailRequest { Email = email.ValidateEmail() },
-                Token = basicToken
+                Token = Token
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken)
@@ -92,14 +92,13 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
         public async Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/forgotpassword"),
                 Content = new SendVerificationEmailRequest { Email = email.ValidateEmail() },
-                Token = basicToken
+                Token = Token
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken)
@@ -116,6 +115,7 @@ namespace SignNow.Net.Service
             var sender = GetCurrentUserAsync(cancellationToken).Result;
             invite.From = sender.Email;
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/invite"),
@@ -132,13 +132,12 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
 
-            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
-
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestUrl,
-                Token = Token,
-                Content = new EmbeddedSigningRequest(invite)
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites"),
+                Content = new EmbeddedSigningRequest(invite),
+                Token = Token
             };
 
             return await SignNowClient
@@ -154,11 +153,12 @@ namespace SignNow.Net.Service
 
             var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites/{options.FieldInvite.Id}/link");
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestUrl,
-                Token = Token,
-                Content = new EmbeddedSigningLinkRequest(options)
+                Content = new EmbeddedSigningLinkRequest(options),
+                Token = Token
             };
 
             return await SignNowClient
@@ -169,6 +169,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="ISignInvite.CancelEmbeddedInviteAsync" />
         public async Task CancelEmbeddedInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new DeleteHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites"),
@@ -206,6 +207,7 @@ namespace SignNow.Net.Service
         /// <returns></returns>
         private async Task ProcessCancelInviteAsync(string requestedDocument, CancellationToken cancellationToken)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
@@ -247,6 +249,7 @@ namespace SignNow.Net.Service
 
             var documentsResponse = new List<SignNowDocument>();
 
+            Token.TokenType = TokenType.Bearer;
             while (hasMorePages)
             {
                 var requestOptions = new GetHttpRequestOptions

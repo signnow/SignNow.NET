@@ -32,11 +32,20 @@ namespace SignNow.Net.Interfaces
         Task<EventSubscriptionResponse> GetEventSubscriptionsAsync(IQueryToString options = default, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Allows users to get detailed info about one event subscription by its ID.
+        /// </summary>
+        /// <param name="eventId">Identity of event</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns><see cref="EventSubscription"/> model</returns>
+        Task<EventSubscription> GetEventSubscriptionInfoAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Allows changing an existing Event subscription.
         /// </summary>
+        /// <param name="updateEvent">Event details for update</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<EventSubscription> UpdateEventSubscriptionAsync(CancellationToken cancellationToken = default);
+        Task<EventUpdateResponse> UpdateEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Unsubscribes an external service (callback_url) from specific Events of User or Document
