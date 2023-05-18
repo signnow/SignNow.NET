@@ -14,8 +14,10 @@ using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.EventSubscriptionBase;
 using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Test.Context;
+using UnitTests;
 
 namespace SignNow.Net.Examples
 {
@@ -738,11 +740,11 @@ namespace SignNow.Net.Examples
             // Upload document with fields
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = await testContext.Documents
-                .UploadDocumentAsync(fileStream, "DocumentForEventSubscriptionCreate.pdf")
+                .UploadDocumentWithFieldExtractAsync(fileStream, "DocumentForEventSubscriptionCreate.pdf")
                 .ConfigureAwait(false);
 
             // Using signNowContext lets create event subscription
-            var myCallbackUrl = new Uri("http://localhost/callbackHandler");
+            var myCallbackUrl = new Uri("https://signnow.com/callbackHandler");
             await testContext.Events
                 .CreateEventSubscriptionAsync(
                     new CreateEventSubscription(EventType.DocumentComplete, document.Id, myCallbackUrl))
@@ -766,6 +768,22 @@ namespace SignNow.Net.Examples
             var myLatestEvent = myLatestCreatedEvent.Data.First();
             Assert.AreEqual(EventType.DocumentComplete, myLatestEvent.Event);
             Assert.AreEqual(myCallbackUrl, myLatestEvent.JsonAttributes.CallbackUrl);
+
+            // Changing an existing event subscription
+            // <see cref="https://docs.signnow.com/docs/signnow/reference/operations/update-a-api-v-2-event"/>
+            var eventForUpdate = myLatestCreatedEvent.Data.First();
+            eventForUpdate.JsonAttributes.CallbackUrl = new Uri("https://signnow.com/myNewCallbackHandler");
+
+            var changedEvent = await testContext.Events
+                .UpdateEventSubscriptionAsync(new UpdateEventSubscription(eventForUpdate))
+                .ConfigureAwait(false);
+
+            var updatedEvent = await testContext.Events
+                .GetEventSubscriptionInfoAsync(changedEvent.Id)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(myLatestEvent.Id, updatedEvent.Id);
+            Assert.AreEqual("https://signnow.com/myNewCallbackHandler", updatedEvent.JsonAttributes.CallbackUrl.AbsoluteUri);
 
             // Unsubscribes an external service (callback_url) from specific events of user or document
             // <see cref="https://docs.signnow.com/docs/signnow/reference/operations/delete-a-api-v-2-event"/>
