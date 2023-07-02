@@ -25,10 +25,8 @@ namespace SignNow.Net.Internal.Requests
         // [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose HttpContent object before losing scope", Justification = "It should be disposed via HttpContent.Dispose()")]
         public HttpContent GetHttpContent()
         {
-            var content = new MultipartFormDataContent($"----{Guid.NewGuid():N}-----")
-            {
-                { new StreamContent(_streamContent), "file", _fileName }
-            };
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(_streamContent), "file", _fileName);
 
             if (_textTags != null)
             {

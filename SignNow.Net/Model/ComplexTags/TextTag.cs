@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace SignNow.Net.Model.ComplexTextTags
+namespace SignNow.Net.Model.ComplexTags
 {
-    public class TextTag : ComplexTagBase
+    public class TextTag : ComplexTagWithLabel
     {
         /// <inheritdoc />
         public override FieldType Type { get; set; } = FieldType.Text;

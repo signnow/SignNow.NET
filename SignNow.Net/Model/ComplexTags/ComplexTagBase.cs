@@ -2,9 +2,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SignNow.Net.Interfaces;
 
-namespace SignNow.Net.Model.ComplexTextTags
+namespace SignNow.Net.Model.ComplexTags
 {
-    public abstract class ComplexTagBase : ITextTags
+    public abstract class ComplexTagBase
     {
         /// <summary>
         /// The name of the Tag

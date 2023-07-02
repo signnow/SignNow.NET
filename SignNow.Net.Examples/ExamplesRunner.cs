@@ -80,7 +80,7 @@ namespace SignNow.Net.Examples
         /// <summary>
         /// Delete test document after test.
         /// </summary>
-        public void DeleteTestDocument(string disposableDocumentId)
+        private void DeleteTestDocument(string disposableDocumentId)
         {
             if (string.IsNullOrEmpty(disposableDocumentId))
             {
