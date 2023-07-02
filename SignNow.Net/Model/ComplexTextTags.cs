@@ -8,11 +8,11 @@ namespace SignNow.Net.Model
     public class ComplexTextTags : ITextTags
     {
         [JsonIgnore]
-        public List<ComplexTagBase> Properties { get; set; } = new List<ComplexTagBase>();
+        public List<ComplexTag> Properties { get; set; } = new List<ComplexTag>();
 
         public ComplexTextTags() { }
 
-        public ComplexTextTags(ComplexTagBase tag)
+        public ComplexTextTags(ComplexTag tag)
         {
             Properties.Add(tag);
         }

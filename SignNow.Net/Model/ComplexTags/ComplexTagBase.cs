@@ -4,7 +4,17 @@ using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.ComplexTags
 {
-    public abstract class ComplexTagBase
+    public abstract class ComplexTag
+    {
+        /// <summary>
+        /// Field type
+        /// </summary>
+        [JsonProperty("type")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public virtual FieldType Type { get; protected set; }
+    }
+
+    public abstract class ComplexTagBase : ComplexTag
     {
         /// <summary>
         /// The name of the Tag
@@ -25,13 +35,6 @@ namespace SignNow.Net.Model.ComplexTags
         public bool Required { get; set; }
 
         /// <summary>
-        /// Field type
-        /// </summary>
-        [JsonProperty("type")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public virtual FieldType Type { get; protected set; }
-
-        /// <summary>
         /// How many pixels wide the field is
         /// </summary>
         [JsonProperty("width")]
@@ -47,7 +50,7 @@ namespace SignNow.Net.Model.ComplexTags
     public abstract class ComplexTagWithLabel : ComplexTagBase
     {
         /// <summary>
-        /// optional) - hint for the signer inside a fillable field about the field type,
+        /// (optional) - hint for the signer inside a fillable field about the field type,
         /// e.g. first_name or text_1;
         /// once the field is filled in, the value automatically appears in all the fields with the same label
         /// </summary>
