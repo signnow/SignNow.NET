@@ -29,7 +29,19 @@ namespace SignNow.Net.Model.ComplexTags
         /// </summary>
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public virtual FieldType Type { get; set; }
+        public virtual FieldType Type { get; protected set; }
+
+        /// <summary>
+        /// How many pixels wide the field is
+        /// </summary>
+        [JsonProperty("width")]
+        public int Width { get; set; }
+
+        /// <summary>
+        /// How many pixels high the field is
+        /// </summary>
+        [JsonProperty("height")]
+        public int Height { get; set; }
     }
 
     public abstract class ComplexTagWithLabel : ComplexTagBase

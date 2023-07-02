@@ -5,7 +5,7 @@ namespace SignNow.Net.Model.ComplexTags
     public class TextTag : ComplexTagWithLabel
     {
         /// <inheritdoc />
-        public override FieldType Type { get; set; } = FieldType.Text;
+        public override FieldType Type { get; protected set; } = FieldType.Text;
 
         /// <summary>
         /// Editable text (optional)that appears in the field when the signer opens the document, e.g. Lucy
