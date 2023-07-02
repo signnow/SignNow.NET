@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.ComplexTags
@@ -8,6 +9,8 @@ namespace SignNow.Net.Model.ComplexTags
     public class HyperlinkTag : ComplexTag
     {
         /// <inheritdoc />
+        [JsonProperty("type")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public override FieldType Type { get; protected set; } = FieldType.Hyperlink;
 
         /// <summary>
