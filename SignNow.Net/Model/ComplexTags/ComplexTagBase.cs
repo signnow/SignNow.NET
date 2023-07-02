@@ -30,11 +30,6 @@ namespace SignNow.Net.Model.ComplexTags
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public virtual FieldType Type { get; set; }
-
-        public string ToStringContent()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
     public abstract class ComplexTagWithLabel : ComplexTagBase
