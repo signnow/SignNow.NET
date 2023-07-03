@@ -106,5 +106,20 @@ namespace SignNow.Net.Service
                 .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<EventHistoryListResponse> GetEventHistoryAsync(string eventId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/dashboard/event-subscriptions/{eventId.ValidateId()}/callbacks"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EventHistoryListResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

@@ -54,5 +54,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Allows users to get the list of webhook events (events history) by the event subscription ID.
+        /// </summary>
+        /// <param name="eventId">Specific event identity</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Events History page</returns>
+        Task<EventHistoryListResponse> GetEventHistoryAsync(string eventId, CancellationToken cancellationToken = default);
     }
 }
