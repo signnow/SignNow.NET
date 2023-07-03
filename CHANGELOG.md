@@ -5,19 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+
+
+## [1.2.0] - 2023-07-03
 ### Added
 - Added Readme and License files to Nuget package
 - `OAuth2Service`: added ability to configure token expiration time
 - Added OAuth2 service to SignNow service container
 - All the services can use custom HttpClient via constructor of class [#148](https://github.com/signnow/SignNow.NET/issues/148)
+- Complex Text Tags support while upload document with Fields
 
 ### Changed
 - `OAuth2Service` moved to `SignNow.Net.Services` namespace
+
 
 ## [1.1.1] - 2023-05-02
 ### Added
 - Properties for sign invite that allows you to prefill text in the Signature field, allows for signers to use their saved signature, allows recipients reassign this invite to another email address,  allow recipients decline the invite.
 - Add support for field type `stamp` [#149](https://github.com/signnow/SignNow.NET/issues/149)
+
 
 ## [1.1.0] - 2023-01-23
 ### Added
@@ -40,6 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - `FieldJsonAttributes` added to `ISignNowFields` that allows you to get Field attributes
 
+
 ## [0.9.0] - 2021-07-07
 ### Added
 - `IUserService.GetModifiedDocumentsAsync` that allows to get all modified documents for User
@@ -52,10 +59,12 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `IFolderService.RenameFolderAsync` that allows you to renames a folder.
 - `IDocumentService.MoveDocumentAsync` that allows you to move the document to a specified folder.
 
+
 ## [0.8.0] - 2021-04-26
 ### Added
 - `IDocumentService.CreateTemplateFromDocumentAsync` that allows to create template by flattening an existing document
 - `IDocumentService.CreateDocumentFromTemplateAsync` that allows to create document from the template
+
 
 ## [0.7.0] - 2021-03-28
 ### Added
@@ -65,6 +74,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Changed
 - Changed JsonConverter for `Model.SignNowInvite` properties
+
 
 ## [0.6.0-beta] - 2020-11-17
 ### Added
@@ -86,6 +96,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [0.5.2-beta] - 2020-05-22
 ### Fixed
 - Fixed `Models.FieldContents.RadiobuttonContent` converting error [#104](https://github.com/signnow/SignNow.NET/issues/104)
+
 
 ## [0.5.1-beta] - 2020-04-18
 ### Changed
@@ -172,8 +183,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create role-based invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-role-based-invite
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
-
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.1.0...HEAD
+<!-- Links to compare changes from previous version vs new version -->
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.2.0...HEAD
+[1.1.1]: https://github.com/signnow/SignNow.NET/compare/1.1.1...1.2.0
+[1.1.1]: https://github.com/signnow/SignNow.NET/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/signnow/SignNow.NET/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/signnow/SignNow.NET/compare/0.9.0...1.0.0
 [0.9.0]: https://github.com/signnow/SignNow.NET/compare/0.8.0...0.9.0
