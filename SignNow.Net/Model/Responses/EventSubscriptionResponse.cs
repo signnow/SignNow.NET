@@ -11,10 +11,4 @@ namespace SignNow.Net.Model.Responses
         [JsonProperty("meta")]
         public MetaInfo Meta { get; internal set; }
     }
-
-    public class MetaInfo
-    {
-        [JsonProperty("pagination")]
-        public Pagination Pagination { get; internal set; }
-    }
 }
