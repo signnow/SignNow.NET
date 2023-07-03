@@ -91,8 +91,10 @@ jobs:
       - name: Configure signNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
 
-      - name: Build Solution
-        run: dotnet build ${{ env.DOTNET_BUILD_ARGS }}
+      - name: Build and Pack Solution
+        run: |
+          dotnet build ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |

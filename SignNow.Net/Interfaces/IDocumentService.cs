@@ -38,9 +38,10 @@ namespace SignNow.Net.Interfaces
         /// </summary>
         /// <param name="documentContent">Document content stream</param>
         /// <param name="fileName">Uploaded document file name</param>
+        /// <param name="tags">Simple Text Tag</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Operation result object containing ID of the new document.</returns>
-        Task<UploadDocumentResponse>UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, CancellationToken cancellationToken = default);
+        Task<UploadDocumentResponse>UploadDocumentWithFieldExtractAsync(Stream documentContent, string fileName, ITextTags tags = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes a document from signNow account.
