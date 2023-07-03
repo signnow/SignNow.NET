@@ -6,7 +6,7 @@ using SignNow.Net.Internal.Helpers.Converters;
 namespace SignNow.Net.Model.ComplexTags
 
 {
-    public class HyperlinkTag : ComplexTag
+    public class HyperlinkTag : ComplexTagWithLabel
     {
         /// <inheritdoc />
         [JsonProperty("type")]
@@ -25,14 +25,9 @@ namespace SignNow.Net.Model.ComplexTags
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("link")]
         [JsonConverter(typeof(StringToUriJsonConverter))]
         public Uri Link { get; set; }
-
-        /// <summary>
-        /// Hyperlink label
-        /// </summary>
-        [JsonProperty("label")]
-        public string Label { get; set; }
 
         /// <summary>
         /// Hyperlink hint

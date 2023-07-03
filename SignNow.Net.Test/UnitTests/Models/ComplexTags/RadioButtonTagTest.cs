@@ -25,7 +25,7 @@ namespace UnitTests.Models.ComplexTags
             radioButton.AddOption("value-2", 0, 14, 1);
             radioButton.AddOption("value-3", 0, 28);
 
-            var actual = @"{
+            var expected = @"{
                 ""type"":""radiobutton"",
                 ""name"":""Group_name"",
                 ""page_number"": 0,
@@ -73,7 +73,7 @@ namespace UnitTests.Models.ComplexTags
                 ""height"": 13
             }";
 
-            Assert.That.JsonEqual(actual, radioButton);
+            Assert.That.JsonEqual(expected, radioButton);
         }
     }
 }
