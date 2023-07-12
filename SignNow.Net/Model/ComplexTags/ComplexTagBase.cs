@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Interfaces;
 
 namespace SignNow.Net.Model.ComplexTags
 {
