@@ -20,6 +20,9 @@ namespace SignNow.Net.Model.ComplexTags
         [JsonConverter(typeof(BoolToStringYNJsonConverter))]
         public bool LockSigningDate { get; set; }
 
+        /// <summary>
+        /// Data validation format for a field
+        /// </summary>
         [JsonProperty("validator_id", Order = 2)]
         public string Validator { get; set; }
     }
