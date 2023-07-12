@@ -24,6 +24,7 @@ namespace SignNow.Net.Model.ComplexTags
         /// Data validation format for a field
         /// </summary>
         [JsonProperty("validator_id", Order = 2)]
-        public string Validator { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DataValidator Validator { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model;
 using SignNow.Net.Model.ComplexTags;
 
 namespace UnitTests.Models.ComplexTags
@@ -208,7 +209,7 @@ namespace UnitTests.Models.ComplexTags
                 Height = 15,
                 Width = 100,
                 LockSigningDate = true,
-                Validator = "13435fa6c2a17f83177fcbb5c4a9376ce85befeb"
+                Validator = DataValidator.DateUS
             };
 
             var expected = @"{
