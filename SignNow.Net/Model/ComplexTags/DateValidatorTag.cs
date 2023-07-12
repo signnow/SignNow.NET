@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.ComplexTags
 {
@@ -16,6 +17,7 @@ namespace SignNow.Net.Model.ComplexTags
         /// Lock Signing Date option
         /// </summary>
         [JsonProperty("lsd", Order = 1)]
+        [JsonConverter(typeof(BoolToStringYNJsonConverter))]
         public bool LockSigningDate { get; set; }
 
         [JsonProperty("validator_id", Order = 2)]
