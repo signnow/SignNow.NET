@@ -518,6 +518,7 @@ public static partial class DocumentExamples
 More examples: [Get document history][document_history example]
 
 ## Template
+
 ### Create Template by flattening the existing Document
 
 Set required templateName and documentId parameters to create the signNow Template.
@@ -547,9 +548,9 @@ public static class DocumentExamples
 
 More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
+## Folders
 
-## <a name="folders"/>Folders
-### <a name="get-all-folders"/>Get all folders
+### Get all folders
 
 ```csharp
 public static class FolderExamples
@@ -589,11 +590,8 @@ More about the InheritDoc [here](https://docs.microsoft.com/en-us/dotnet/csharp/
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
 
 - We accept pull requests from the community. Please, send your pull requests to the **DEVELOP branch** which is the consolidated work-in-progress branch. We don't accept requests to the Master branch.
-
 - Please, check in with the documentation first before you open a new Issue.
-
 - When suggesting new functionality, give as many details as possible. Add a test or code example if you can.
-
 - When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
 
 ## License
@@ -602,9 +600,9 @@ This SDK is distributed under the MIT License, see [LICENSE][license link] for m
 
 #### API Contact Information
 
-If you have questions about the signNow API, please visit [signNow API Reference][api reference link] or email api@signnow.com.<br/>
+If you have questions about the signNow API, please visit [signNow API Reference][api reference link] or email api@signnow.com.
 
-**Support**: To contact signNow support, please email support@signnow.com or api@signnow.com.<br/>
+**Support**: To contact signNow support, please email support@signnow.com or api@signnow.com.
 
 **Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit <https://www.signnow.com/contact>.
 
