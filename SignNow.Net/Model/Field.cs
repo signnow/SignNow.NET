@@ -119,7 +119,7 @@ namespace SignNow.Net.Model
         /// <summary>
         /// Document's attachment which can be downloaded by URL.
         /// </summary>
-        [EnumMember(Value = "attachments")]
+        [EnumMember(Value = "attachment")]
         Attachment,
 
         /// <summary>

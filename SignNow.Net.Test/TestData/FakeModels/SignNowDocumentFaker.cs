@@ -23,6 +23,7 @@ namespace SignNow.Net.Test.FakeModels
         ///   "created": "1580771931",
         ///   "updated": "1580849001",
         ///   "owner": "Richie.Dickens60@gmail.com",
+        ///   "owner_name": "Richie Dickens",
         ///   "template": true,
         ///   "thumbnail": {
         ///     "small": "https://via.placeholder.com/85x110/cccccc/9c9c9c.png?text=signNow%20test",
@@ -59,6 +60,7 @@ namespace SignNow.Net.Test.FakeModels
                 o.Created = f.Date.Recent().ToUniversalTime();
                 o.Updated = f.Date.Recent().ToUniversalTime();
                 o.Owner = f.Internet.Email();
+                o.OwnerName = f.Person.FullName;
                 o.IsTemplate = f.Random.Bool();
                 o.Thumbnail = new ThumbnailFaker();
             });

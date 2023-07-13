@@ -1,8 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>1.2.0-dev</Version>
+    <Version>1.2.1</Version>
     <Authors>signNow</Authors>
     <Company>signNow</Company>
+    <Title>SignNow.NET</Title>
     <Description>signNow.Net is a .NET 4.5+ and .NET standard class library for the signNow API. (Official Library)
 signNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.</Description>
     <Copyright>airSlate Inc.</Copyright>
