@@ -23,7 +23,7 @@ namespace UnitTests.Models.ComplexTags
             };
 
             var expected = @"{
-                ""type"": ""attachments"",
+                ""type"": ""attachment"",
                 ""label"": ""label_name"",
                 ""tag_name"": ""attached document"",
                 ""role"": ""Role_1"",
