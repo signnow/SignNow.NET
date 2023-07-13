@@ -86,6 +86,12 @@ namespace SignNow.Net.Model
         public string Owner { get; set; }
 
         /// <summary>
+        /// Document owner name
+        /// </summary>
+        [JsonProperty("owner_name")]
+        public string OwnerName { get; set; }
+
+        /// <summary>
         /// Is document a template or not.
         /// </summary>
         [JsonProperty("template")]
