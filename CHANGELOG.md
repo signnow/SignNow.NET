@@ -5,8 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
-## Added
+
+
+## [1.2.1] - 2023-07-13
+### Added
 - Added `DateValidatorTag` to Complex Tags
+- Added `OwnerName` property to SignNowDocument model
+
+### Fixed
+- Fixed Json property name for attachment complex tag
 
 
 ## [1.2.0] - 2023-07-03
