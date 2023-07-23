@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model;
 using SignNow.Net.Model.ComplexTags;
 
 namespace UnitTests.Models.ComplexTags
@@ -22,7 +23,7 @@ namespace UnitTests.Models.ComplexTags
             };
 
             var expected = @"{
-                ""type"": ""attachments"",
+                ""type"": ""attachment"",
                 ""label"": ""label_name"",
                 ""tag_name"": ""attached document"",
                 ""role"": ""Role_1"",
@@ -191,6 +192,36 @@ namespace UnitTests.Models.ComplexTags
                 ""required"": true,
                 ""width"": 400,
                 ""height"": 150
+            }";
+
+            Assert.That.JsonEqual(expected, tag);
+        }
+
+        [TestMethod]
+        public void ShouldSerializeDateValidatorTag()
+        {
+            var tag = new DateValidatorTag
+            {
+                TagName = "DateValidatorTagExample",
+                Role = "Role1",
+                Label = "Date of Birth",
+                Required = true,
+                Height = 15,
+                Width = 100,
+                LockSigningDate = true,
+                Validator = DataValidator.DateUS
+            };
+
+            var expected = @"{
+                ""type"": ""text"",
+                ""label"": ""Date of Birth"",
+                ""tag_name"": ""DateValidatorTagExample"",
+                ""role"": ""Role1"",
+                ""required"": true,
+                ""width"": 100,
+                ""height"": 15,
+                ""lsd"": ""y"",
+                ""validator_id"": ""13435fa6c2a17f83177fcbb5c4a9376ce85befeb""
             }";
 
             Assert.That.JsonEqual(expected, tag);
