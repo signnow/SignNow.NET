@@ -1,9 +1,9 @@
 using System.IO;
 using System.Net.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.ComplexTags;
+using SignNow.Net.Model.Requests;
 
 namespace UnitTests
 {

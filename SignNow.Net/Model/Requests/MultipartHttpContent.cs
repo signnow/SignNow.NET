@@ -1,15 +1,14 @@
 using System.IO;
 using System.Net.Http;
 using SignNow.Net.Interfaces;
-using System;
 using System.Text;
 
-namespace SignNow.Net.Internal.Requests
+namespace SignNow.Net.Model.Requests
 {
     /// <summary>
     /// A container for content encoded using <c>multipart/form-data</c> MIME type.
     /// </summary>
-    internal class MultipartHttpContent : IContent
+    public class MultipartHttpContent : IContent
     {
         private readonly Stream _streamContent;
         private readonly string _fileName;
