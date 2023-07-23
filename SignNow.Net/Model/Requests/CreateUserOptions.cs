@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace SignNow.Net.Model.Requests
 {
-    public class CreateUserOptions
+    public class CreateUserOptions : JsonHttpContent
     {
         /// <summary>
         /// User email.

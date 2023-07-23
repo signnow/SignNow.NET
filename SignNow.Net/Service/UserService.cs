@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
@@ -23,21 +21,21 @@ namespace SignNow.Net.Service
         /// <param name="baseApiUrl">Base signNow API URL</param>
         /// <param name="token">Access token</param>
         /// <param name="signNowClient">signNow Http client</param>
-        public UserService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null) : base(baseApiUrl, token, signNowClient)
+        public UserService(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
+            : base(baseApiUrl, token, signNowClient)
         {
         }
 
         /// <inheritdoc cref="IUserService.CreateUserAsync" />
         public async Task<UserCreateResponse> CreateUserAsync(CreateUserOptions createUser, CancellationToken cancellation = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
-                Content = new JsonHttpContent(createUser),
-                Token = basicToken
+                Content = createUser,
+                Token = Token
             };
 
             return await SignNowClient.RequestAsync<UserCreateResponse>(requestOptions, cancellation)
@@ -47,6 +45,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.GetCurrentUserAsync" />
         public async Task<User> GetCurrentUserAsync(CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
@@ -59,10 +58,11 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IUserService.UpdateUserAsync" />
         public async Task<UserUpdateResponse> UpdateUserAsync(UpdateUserOptions updateUser, CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user"),
-                Content = new JsonHttpContent(updateUser),
+                Content = updateUser,
                 Token = Token
             };
 
@@ -75,16 +75,13 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
         public async Task SendVerificationEmailAsync(string email, CancellationToken cancellationToken = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
-
-            var requestBody = new {email = email.ValidateEmail()};
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/verifyemail"),
-                Content = new JsonHttpContent(requestBody),
-                Token = basicToken
+                Content = new SendVerificationEmailRequest { Email = email.ValidateEmail() },
+                Token = Token
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken)
@@ -95,16 +92,13 @@ namespace SignNow.Net.Service
         /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
         public async Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default)
         {
-            var basicToken = Token;
-            basicToken.TokenType = TokenType.Basic;
-
-            var requestBody = new {email = email.ValidateEmail()};
+            Token.TokenType = TokenType.Basic;
 
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/forgotpassword"),
-                Content = new JsonHttpContent(requestBody),
-                Token = basicToken
+                Content = new SendVerificationEmailRequest { Email = email.ValidateEmail() },
+                Token = Token
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken)
@@ -119,14 +113,13 @@ namespace SignNow.Net.Service
             Guard.ArgumentNotNull(invite, nameof(invite));
 
             var sender = GetCurrentUserAsync(cancellationToken).Result;
-            var inviteContent = JObject.FromObject(invite);
-                inviteContent.Add("from", sender.Email);
+            invite.From = sender.Email;
 
-            var requestFullUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/invite");
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestFullUrl,
-                Content = new JsonHttpContent(inviteContent),
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/invite"),
+                Content = invite,
                 Token = Token
             };
 
@@ -139,13 +132,12 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
 
-            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
-
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = requestUrl,
-                Token = Token,
-                Content = new EmbeddedSigningRequest(invite)
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites"),
+                Content = new EmbeddedSigningRequest(invite),
+                Token = Token
             };
 
             return await SignNowClient
@@ -161,11 +153,12 @@ namespace SignNow.Net.Service
 
             var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites/{options.FieldInvite.Id}/link");
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = requestUrl,
-                Token = Token,
-                Content = new EmbeddedSigningLinkRequest(options)
+                Content = new EmbeddedSigningLinkRequest(options),
+                Token = Token
             };
 
             return await SignNowClient
@@ -176,11 +169,10 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="ISignInvite.CancelEmbeddedInviteAsync" />
         public async Task CancelEmbeddedInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            var requestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites");
-
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new DeleteHttpRequestOptions
             {
-                RequestUrl = requestUrl,
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-invites"),
                 Token = Token
             };
 
@@ -195,14 +187,16 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentNotNull(invite, nameof(invite));
 
-            await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken).ConfigureAwait(false);
+            await ProcessCancelInviteAsync($"/invite/{invite.Id}/cancel", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="ISignInvite.CancelInviteAsync(string, CancellationToken)" />
         /// <exception cref="ArgumentException">Invalid format of <paramref name="documentId"/>.</exception>
         public async Task CancelInviteAsync(string documentId, CancellationToken cancellationToken = default)
         {
-            await ProcessCancelInviteAsync($"/document/{documentId.ValidateId()}/fieldinvitecancel", cancellationToken).ConfigureAwait(false);
+            await ProcessCancelInviteAsync($"/document/{documentId.ValidateId()}/fieldinvitecancel", cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -213,6 +207,7 @@ namespace SignNow.Net.Service
         /// <returns></returns>
         private async Task ProcessCancelInviteAsync(string requestedDocument, CancellationToken cancellationToken)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, requestedDocument),
@@ -254,6 +249,7 @@ namespace SignNow.Net.Service
 
             var documentsResponse = new List<SignNowDocument>();
 
+            Token.TokenType = TokenType.Bearer;
             while (hasMorePages)
             {
                 var requestOptions = new GetHttpRequestOptions

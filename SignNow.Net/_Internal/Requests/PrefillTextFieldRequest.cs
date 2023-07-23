@@ -4,10 +4,11 @@ using System.Text;
 using Newtonsoft.Json;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.EditFields;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class PrefillTextFieldRequest : IContent
+    internal class PrefillTextFieldRequest : JsonHttpContent
     {
         /// <summary>
         /// Collections of <see cref="TextField"/> request options.
@@ -26,15 +27,6 @@ namespace SignNow.Net.Internal.Requests
         public PrefillTextFieldRequest(TextField field)
         {
             Fields.Add(new PrefillText { FieldName = field.Name, PrefilledText = field.PrefilledText });
-        }
-
-        /// <summary>
-        /// Creates Json Http Content from object
-        /// </summary>
-        /// <returns>HttpContent</returns>
-        public HttpContent GetHttpContent()
-        {
-            return new StringContent(JsonConvert.SerializeObject(this), Encoding.UTF8, "application/json");
         }
     }
 

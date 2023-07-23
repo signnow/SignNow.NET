@@ -1,13 +1,10 @@
-using System.Net.Http;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
 {
-    internal class EmbeddedSigningLinkRequest : IContent
+    internal class EmbeddedSigningLinkRequest : JsonHttpContent
     {
         private CreateEmbedLinkOptions LinkOptions { get; set; }
 
@@ -27,11 +24,6 @@ namespace SignNow.Net.Internal.Requests
         public EmbeddedSigningLinkRequest(CreateEmbedLinkOptions options)
         {
             LinkOptions = options;
-        }
-
-        public HttpContent GetHttpContent()
-        {
-            return new StringContent(JsonConvert.SerializeObject(this), Encoding.UTF8, "application/json");
         }
     }
 }

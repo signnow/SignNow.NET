@@ -5,10 +5,11 @@ using Newtonsoft.Json;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
+using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Model
 {
-    public abstract class SignInvite
+    public abstract class SignInvite : JsonHttpContent
     {
         /// <summary>
         /// The subject of the email.
@@ -29,6 +30,9 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }
+
+        [JsonProperty("from", NullValueHandling = NullValueHandling.Ignore)]
+        public string From { get; internal set; }
 
         /// <summary>
         /// The list with emails of copy receivers.

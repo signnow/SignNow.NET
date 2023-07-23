@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Constants;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
@@ -29,6 +28,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc cref="IFolderService.GetAllFoldersAsync"/>
         public async Task<SignNowFolders> GetAllFoldersAsync(CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/folder"),
@@ -49,6 +49,7 @@ namespace SignNow.Net.Service
                 ? string.Empty
                 : $"?{query}";
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new GetHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}{filters}"),
@@ -67,10 +68,11 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentIsNotEmptyString(name, $"{nameof(name)} cannot be null, empty or whitespace");
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/folder"),
-                Content = new JsonHttpContent(new {name = name, parent_id = parentId.ValidateId()}),
+                Content = new CreateOrRenameFolderRequest { Name = name, ParentId = parentId.ValidateId() },
                 Token = Token
             };
 
@@ -83,6 +85,7 @@ namespace SignNow.Net.Service
         /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>
         public async Task DeleteFolderAsync(string folderId, CancellationToken cancellationToken = default)
         {
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new DeleteHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
@@ -101,10 +104,11 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentNotNull(name, $"{nameof(name)} cannot be null, empty or whitespace");
 
+            Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/user/folder/{folderId.ValidateId()}"),
-                Content = new JsonHttpContent(new {name = name}),
+                Content = new CreateOrRenameFolderRequest { Name = name },
                 Token = Token
             };
 
