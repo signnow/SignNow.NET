@@ -220,7 +220,7 @@ namespace UnitTests.Models.ComplexTags
                 ""required"": true,
                 ""width"": 100,
                 ""height"": 15,
-                ""lsd"": ""y"",
+                ""lock_to_sign_date"": true,
                 ""validator_id"": ""13435fa6c2a17f83177fcbb5c4a9376ce85befeb""
             }";
 
