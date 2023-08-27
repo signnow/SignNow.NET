@@ -60,5 +60,17 @@ namespace SignNow.Net.Model.FieldContents
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Use the current date when the recipient is signing the document as a Date field value.
+        /// </summary>
+        [JsonProperty("lock_to_sign_date", NullValueHandling = NullValueHandling.Ignore)]
+        public bool LockToSignDate { get; set; }
+
+        /// <summary>
+        /// ID of regular expression validator supported by signNow.
+        /// </summary>
+        [JsonProperty("validator_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string ValidatorId { get; set; }
     }
 }

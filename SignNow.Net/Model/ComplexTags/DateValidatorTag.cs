@@ -16,8 +16,7 @@ namespace SignNow.Net.Model.ComplexTags
         /// <summary>
         /// Lock Signing Date option
         /// </summary>
-        [JsonProperty("lsd", Order = 1)]
-        [JsonConverter(typeof(BoolToStringYNJsonConverter))]
+        [JsonProperty("lock_to_sign_date", Order = 1)]
         public bool LockSigningDate { get; set; }
 
         /// <summary>

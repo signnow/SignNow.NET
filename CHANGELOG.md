@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased] - TBD
 ### Added
 - `IEventSubscription` interface for any operation with Events
-- Webhooks 2.0 API are implemented
+- Webhooks 2.0 API partially implemented
+- `ValidatorId` and `LockToSignDate` properties added to the signNow document model (`FieldJsonAttributes`)
 
 ### Changed
 - Token type is always set to `Bearer` or `Basic` explicitly in every service
