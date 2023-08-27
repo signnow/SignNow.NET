@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+
+
+## [1.2.2] - 2023-08-27
 ### Added
 - `IEventSubscription` interface for any operation with Events
 - Webhooks 2.0 API partially implemented
@@ -12,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Changed
 - Token type is always set to `Bearer` or `Basic` explicitly in every service
+
+### Fixed
+- `LockToSignDate` property serialization for Date validator tag
 
 
 ## [1.2.1] - 2023-07-13
@@ -200,7 +206,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 <!-- Links to compare changes from previous version vs new version -->
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.2.2...HEAD
+[1.2.2]: https://github.com/signnow/SignNow.NET/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/signnow/SignNow.NET/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/signnow/SignNow.NET/compare/1.1.1...1.2.0
 [1.1.1]: https://github.com/signnow/SignNow.NET/compare/1.1.0...1.1.1
