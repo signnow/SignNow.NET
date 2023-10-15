@@ -69,7 +69,7 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("client_timestamp")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
-        public DateTime ClientTimestamp { get; set; }
+        public DateTime? ClientTimestamp { get; set; }
 
         /// <summary>
         /// Timestamp of document creation.
@@ -94,6 +94,6 @@ namespace SignNow.Net.Model
         /// Field attributes (e.g. font, style, size etc.)
         /// </summary>
         [JsonProperty("json_attributes")]
-        public string JsonAttributes { get; set; }
+        public dynamic JsonAttributes { get; set; }
     }
 }
