@@ -17,17 +17,17 @@ jobs:
       NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup .NET 5
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             3.1.x
             5.0.x
 
       - name: Setup Nuget Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: nuget-cache
         with:
           path: ~/.nuget
