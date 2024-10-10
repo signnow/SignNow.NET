@@ -32,7 +32,7 @@ jobs:
           # Ubuntu
           - { name: 'Linux .NET 5',         os: ubuntu-22.04,   framework: 'net5' }
           # macOs
-          - { name: 'macOS .NET 5',         os: macOS-latest,   framework: 'net5' }
+          - { name: 'macOS .NET 5',         os: macos-13,       framework: 'net5' }
           # Windows
           - { name: 'Windows .NET Core 3',  os: windows-latest, framework: 'netcoreapp3.1' }
           - { name: 'Windows .NET 5',       os: windows-latest, framework: 'net5' }
