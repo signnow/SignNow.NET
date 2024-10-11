@@ -44,6 +44,9 @@ namespace UnitTests.Infrastructure
         [DataRow("19.0.0", "10.15", DisplayName = "Catalina")]
         [DataRow("20.0.0", "11.0", DisplayName = "Big Sur")]
         [DataRow("21.0.0", "12.0", DisplayName = "Monterey")]
+        [DataRow("22.0.0", "13.0", DisplayName = "Ventura")]
+        [DataRow("23.0.0", "14.0", DisplayName = "Sonoma")]
+        [DataRow("24.0.0", "15.0", DisplayName = "Sequoia")]
         [DataRow("99.0.0", "", DisplayName = "Unknown")]
         public void ShouldProperParseMacOsDetails(string kernelVer, string expected)
         {
