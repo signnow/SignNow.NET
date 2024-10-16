@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Added
+- Resend Invite feature [#153](https://github.com/signnow/SignNow.NET/issues/153)
 
 
 ## [1.2.3] - 2023-10-15
