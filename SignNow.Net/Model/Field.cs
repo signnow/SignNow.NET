@@ -57,6 +57,12 @@ namespace SignNow.Net.Model
         internal string Signer { get; set; }
 
         /// <summary>
+        /// Field request ID
+        /// </summary>
+        [JsonProperty("field_request_id")]
+        public string FieldRequestId { get; internal set; }
+
+        /// <summary>
         /// Identity of specific element for corresponding field type.
         /// </summary>
         [JsonProperty("element_id")]

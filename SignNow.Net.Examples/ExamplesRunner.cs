@@ -545,6 +545,13 @@ namespace SignNow.Net.Examples
             var documentWithInvite = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
             var createdInvite = documentWithInvite.FieldInvites.FirstOrDefault();
 
+            var fieldInvite = documentWithInvite.Fields.FirstOrDefault();
+            Assert.IsNotNull(fieldInvite?.FieldRequestId);
+
+            await testContext.Invites
+                .ResendEmailInviteAsync(fieldInvite?.FieldRequestId)
+                .ConfigureAwait(false);
+
             Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
             Assert.AreEqual("Signer 1", createdInvite?.RoleName, "Signer role mismatch.");
             Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
