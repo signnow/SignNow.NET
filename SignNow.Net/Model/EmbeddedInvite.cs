@@ -16,7 +16,7 @@ namespace SignNow.Net.Model
         private uint signingOrder { get; set; }
 
         private string prefillSignatureName { get; set; }
-        private bool forceNewSignature { get; set; }
+        private bool? forceNewSignature { get; set; }
 
         private string requiredPresetSignatureName { get; set; }
 
@@ -122,7 +122,7 @@ namespace SignNow.Net.Model
         /// <exception cref="ArgumentException">Cannot be used together with Required preset for Signature name</exception>
         [JsonProperty("force_new_signature", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(BoolToIntJsonConverter))]
-        public bool ForceNewSignature
+        public bool? ForceNewSignature
         {
             get { return forceNewSignature; }
             set
@@ -136,7 +136,7 @@ namespace SignNow.Net.Model
 
                 forceNewSignature = value;
 
-                if (value)
+                if (value != null && (bool) value)
                 {
                     isPrefilledSignatureName = true;
                 }
@@ -185,6 +185,6 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("redirect_target", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringEnumConverter))]
-        public RedirectTarget RedirectTarget { get; set; }
+        public RedirectTarget? RedirectTarget { get; set; }
     }
 }
