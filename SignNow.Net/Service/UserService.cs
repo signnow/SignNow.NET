@@ -235,6 +235,20 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="ISignInvite.ResendEmailInviteAsync" />
+        /// /// <exception cref="ArgumentException">Invalid format of <paramref name="fieldInviteId"/>.</exception>
+        public async Task ResendEmailInviteAsync(string fieldInviteId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/fieldinvite/{fieldInviteId.ValidateId()}/resend"),
+                Token = Token
+            };
+
+            await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Returns an enumerable of user's documents.
         /// </summary>

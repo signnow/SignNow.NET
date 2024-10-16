@@ -34,6 +34,7 @@ namespace SignNow.Net.Test.FakeModels
         ///   },
         ///   "originator": "owner@gmail.com",
         ///   "fulfiller": "signer1@gmail.com",
+        ///   "field_request_id": "cbf5df90807e41d79bfda22b7ab6f57b2ed51ee3",
         ///   "element_id": null
         /// }
         /// </code>
@@ -57,6 +58,7 @@ namespace SignNow.Net.Test.FakeModels
                     });
                 o.Owner = f.Internet.Email();
                 o.Signer = f.Internet.Email();
+                o.FieldRequestId = f.Random.Hash(40);
                 // A nullable Id? with 80% probability of being null.
                 o.ElementId = (string)f.Random.Hash(40).OrNull(f, .8f);
             })

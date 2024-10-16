@@ -22,5 +22,10 @@ namespace SignNow.Net.Interfaces
         /// Field attributes: name, label, x/y coordinates, width, height...
         /// </summary>
         FieldJsonAttributes JsonAttributes { get; }
+
+        /// <summary>
+        /// Field request ID
+        /// </summary>
+        string FieldRequestId { get; }
     }
 }

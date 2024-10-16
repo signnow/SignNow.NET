@@ -236,6 +236,18 @@ namespace SignNow.Net.Internal.Infrastructure
                     version = "12.0";
                     break;
 
+                case (int)MacOsVersions.macOS1300:
+                    version = "13.0";
+                    break;
+
+                case (int)MacOsVersions.macOS1400:
+                    version = "14.0";
+                    break;
+
+                case (int)MacOsVersions.macOS1500:
+                    version = "15.0";
+                    break;
+
                 default:
                     break;
             }
@@ -265,7 +277,10 @@ namespace SignNow.Net.Internal.Infrastructure
             macOS1014,
             macOS1015,
             macOS1100,
-            macOS1200
+            macOS1200,
+            macOS1300,
+            macOS1400,
+            macOS1500
         }
     }
 }
