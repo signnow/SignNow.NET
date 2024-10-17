@@ -1,13 +1,8 @@
-using Newtonsoft.Json;
+using SignNow.Net.Model.Responses.GenericResponses;
 
 namespace SignNow.Net.Model.Responses
 {
-    public class EventUpdateResponse
+    public class EventUpdateResponse : IdResponse
     {
-        /// <summary>
-        /// Event subscription identity
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
     }
 }

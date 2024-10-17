@@ -1,18 +1,13 @@
 using Newtonsoft.Json;
+using SignNow.Net.Model.Responses.GenericResponses;
 
 namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents response from signNow API for create invite request.
     /// </summary>
-    public class InviteResponse
+    public class InviteResponse : IdResponse
     {
-        /// <summary>
-        /// Identity of freeform invite request.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
         /// <summary>
         /// Role-based invite status
         /// </summary>

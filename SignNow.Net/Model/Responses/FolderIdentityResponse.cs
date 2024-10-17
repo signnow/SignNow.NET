@@ -1,10 +1,8 @@
+using SignNow.Net.Model.Responses.GenericResponses;
+
 namespace SignNow.Net.Model.Responses
 {
-    public class FolderIdentityResponse
+    public class FolderIdentityResponse : IdResponse
     {
-        /// <summary>
-        /// Identity of then newly created/renamed folder.
-        /// </summary>
-        public string Id { get; set; }
     }
 }
