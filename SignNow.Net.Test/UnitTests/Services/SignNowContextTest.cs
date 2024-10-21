@@ -19,6 +19,7 @@ namespace UnitTests.Services
             Assert.IsInstanceOfType(context.Invites, typeof(UserService));
             Assert.IsInstanceOfType(context.Users, typeof(UserService));
             Assert.IsInstanceOfType(context.Folders, typeof(FolderService));
+            Assert.IsInstanceOfType(context.DocumentGroup, typeof(DocumentGroupService));
         }
 
         [TestMethod]

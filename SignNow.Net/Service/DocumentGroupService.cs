@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Responses;
 
@@ -27,7 +28,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/documentgroup"),
-                // Content = new CreateSigningLinkRequest{ DocumentId = documentId.ValidateId() },
+                Content = new CreateDocumentGroupRequest(documents),
                 Token = Token
             };
 
