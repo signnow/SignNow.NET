@@ -28,7 +28,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/documentgroup"),
-                Content = new CreateDocumentGroupRequest(documents),
+                Content = new CreateDocumentGroupRequest(documents) {GroupName = groupName},
                 Token = Token
             };
 

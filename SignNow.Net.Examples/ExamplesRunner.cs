@@ -929,5 +929,35 @@ namespace SignNow.Net.Examples
         }
 
         #endregion
+
+        #region DocumentGroup Examples
+
+        [TestMethod]
+        public async Task CreateDocumentGroup()
+        {
+            // Upload test documents
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var testDocument1 = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "ForDocumentGroupFile-1.pdf");
+            var testDocument2 = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "ForDocumentGroupFile-2.pdf");
+
+            var documents = new List<SignNowDocument>();
+
+            for (int i = 1; i < 2; i++)
+            {
+                var upload = await testContext.Documents
+                    .UploadDocumentAsync(fileStream, $"ForDocumentGroupFile-{i}.pdf");
+                var doc = await testContext.Documents.GetDocumentAsync(upload.Id).ConfigureAwait(false);
+                documents.Add(doc);
+            }
+
+            var documentGroup = await testContext.DocumentGroup.CreateDocumentGroupAsync(
+                "CreateDocumentGroupTest", documents).ConfigureAwait(false);
+
+            Assert.IsTrue(documentGroup.Id.Length == 40);
+        }
+
+        #endregion
     }
 }
