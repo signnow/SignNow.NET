@@ -28,5 +28,14 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<DocumentGroupInfoResponse> GetDocumentGroupInfoAsync(string documentGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns back all document groups the user owns.
+        /// The call is paginated by last_updated, so offset and limit query parameters are required
+        /// </summary>
+        /// <param name="options">Limit and offset query options</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<DocumentGroupsResponse> GetDocumentGroupsAsync(IQueryToString options, CancellationToken cancellationToken = default);
     }
 }

@@ -6,6 +6,7 @@ using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
@@ -50,6 +51,44 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<DocumentGroupInfoResponse>(requestOption, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="ArgumentException">Limit must be greater than 0 but less than or equal to 50.</exception>
+        /// <exception cref="ArgumentException">Offset must be 0 or greater.</exception>
+        public async Task<DocumentGroupsResponse> GetDocumentGroupsAsync(IQueryToString options, CancellationToken cancellationToken = default)
+        {
+            if (options.GetType() != typeof(LimitOffsetOptions))
+            {
+                throw new ArgumentException("Query params does not have 'limit' and 'offset' options. Use \"LimitOffsetOptions\" class.", nameof(options));
+            }
+
+            var opts = (LimitOffsetOptions)options;
+            if (opts.Limit <= 0 || opts.Limit > 50)
+            {
+                throw new ArgumentException("Limit must be greater than 0 but less than or equal to 50.");
+            }
+
+            if (opts.Offset < 0)
+            {
+                throw new ArgumentException("Offset must be 0 or greater.");
+            }
+
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentgroups{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

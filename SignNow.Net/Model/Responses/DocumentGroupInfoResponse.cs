@@ -138,6 +138,12 @@ namespace SignNow.Net.Model.Responses
         public Thumbnail Thumbnail { get; set; }
 
         /// <summary>
+        /// Document settings.
+        /// </summary>
+        [JsonProperty("settings", NullValueHandling = NullValueHandling.Ignore)]
+        public IReadOnlyDictionary<string, object> Settings { get; set; }
+
+        /// <summary>
         /// An ID of document origin.
         /// </summary>
         [JsonProperty("origin_document_id")]
@@ -158,13 +164,13 @@ namespace SignNow.Net.Model.Responses
         /// <summary>
         /// Is the document can be removed from document group.
         /// </summary>
-        [JsonProperty("allow_to_remove")]
+        [JsonProperty("allow_to_remove", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsAllowedToRemove { get; set; }
     }
 
     public class FreeFormInviteInfo : IdResponse
     {
-        [JsonProperty("last_id")]
+        [JsonProperty("last_id", NullValueHandling = NullValueHandling.Ignore)]
         public string LastId { get; set; }
     }
 }
