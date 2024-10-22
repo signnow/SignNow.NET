@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Responses;
@@ -34,6 +35,21 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<DocumentGroupCreateResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DocumentGroupInfoResponse> GetDocumentGroupInfoAsync(string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOption = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupInfoResponse>(requestOption, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

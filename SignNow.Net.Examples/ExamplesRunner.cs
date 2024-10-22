@@ -944,7 +944,7 @@ namespace SignNow.Net.Examples
 
             var documents = new List<SignNowDocument>();
 
-            for (int i = 1; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var upload = await testContext.Documents
                     .UploadDocumentAsync(fileStream, $"ForDocumentGroupFile-{i}.pdf");
