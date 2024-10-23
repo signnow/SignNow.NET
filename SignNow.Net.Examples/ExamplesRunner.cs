@@ -937,10 +937,6 @@ namespace SignNow.Net.Examples
         {
             // Upload test documents
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
-            var testDocument1 = await testContext.Documents
-                .UploadDocumentAsync(fileStream, "ForDocumentGroupFile-1.pdf");
-            var testDocument2 = await testContext.Documents
-                .UploadDocumentAsync(fileStream, "ForDocumentGroupFile-2.pdf");
 
             var documents = new List<SignNowDocument>();
 

@@ -67,12 +67,12 @@ namespace SignNow.Net.Service
             var opts = (LimitOffsetOptions)options;
             if (opts.Limit <= 0 || opts.Limit > 50)
             {
-                throw new ArgumentException("Limit must be greater than 0 but less than or equal to 50.");
+                throw new ArgumentException("Limit must be greater than 0 but less than or equal to 50.", nameof(options));
             }
 
             if (opts.Offset < 0)
             {
-                throw new ArgumentException("Offset must be 0 or greater.");
+                throw new ArgumentException("Offset must be 0 or greater.", nameof(options));
             }
 
             var query = options?.ToQueryString();
