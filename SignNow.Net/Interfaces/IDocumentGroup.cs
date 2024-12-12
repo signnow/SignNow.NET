@@ -37,5 +37,14 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<DocumentGroupsResponse> GetDocumentGroupsAsync(IQueryToString options, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Renames document group
+        /// </summary>
+        /// <param name="newName">New name for the document group.</param>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task RenameDocumentGroupAsync(string newName, string documentGroupId, CancellationToken cancellationToken = default);
     }
 }
