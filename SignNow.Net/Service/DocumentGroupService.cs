@@ -128,5 +128,22 @@ namespace SignNow.Net.Service
                 .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
+        public async Task DeleteDocumentGroupAsync(string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}"),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

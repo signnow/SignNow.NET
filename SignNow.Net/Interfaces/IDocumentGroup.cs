@@ -58,5 +58,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task MoveDocumentGroupAsync(string documentGroupId, string folderId, bool withSharedDocuments = false, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes a document group. Documents within the group are not deleted. Document groups cannot be deleted while they have a group invite pending.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task DeleteDocumentGroupAsync(string documentGroupId, CancellationToken cancellationToken = default);
     }
 }
