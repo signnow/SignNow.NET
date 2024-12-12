@@ -110,5 +110,23 @@ namespace SignNow.Net.Service
                 .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity or folder identity is not valid.</exception>
+        public async Task MoveDocumentGroupAsync(string documentGroupId, string folderId, bool withSharedDocuments = false, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/move"),
+                Content = new MoveDocumentGroupRequest { FolderId = folderId.ValidateId(), WithSharedDocuments = withSharedDocuments },
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }

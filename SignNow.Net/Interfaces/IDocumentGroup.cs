@@ -46,5 +46,17 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task RenameDocumentGroupAsync(string newName, string documentGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Allows users to move a document group to another folder. When a document group is moved,
+        /// all its documents are moved to the same folder except documents in the Deleted folder (Deleted from Trash)
+        /// and documents that are located in the Shared folders.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="folderId">ID of the folder to move the document group to. Allowed folder types: Documents, Archive, Shared Documents folders.</param>
+        /// <param name="withSharedDocuments">Whether to move shared documents that are in this document group. With this parameter, a document group can only be moved to trash.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task MoveDocumentGroupAsync(string documentGroupId, string folderId, bool withSharedDocuments = false, CancellationToken cancellationToken = default);
     }
 }
