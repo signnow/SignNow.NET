@@ -40,6 +40,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
         public async Task<DocumentGroupInfoResponse> GetDocumentGroupInfoAsync(string documentGroupId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
@@ -88,6 +89,24 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
+                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
+        public async Task RenameDocumentGroupAsync(string newName, string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}"),
+                Content = new RenameDocumentGroupRequest { GroupName = newName},
+                Token = Token
+            };
+
+            await SignNowClient
                 .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }

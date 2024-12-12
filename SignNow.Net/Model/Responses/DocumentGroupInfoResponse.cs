@@ -141,6 +141,7 @@ namespace SignNow.Net.Model.Responses
         /// Document settings.
         /// </summary>
         [JsonProperty("settings", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(KeyValueOrEmptyArrayConverter))]
         public IReadOnlyDictionary<string, object> Settings { get; set; }
 
         /// <summary>
