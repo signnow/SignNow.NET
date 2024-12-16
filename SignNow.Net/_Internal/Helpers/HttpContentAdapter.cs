@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SignNow.Net.Internal.Helpers
 {
-    class HttpContentToObjectAdapter<TObject> : IHttpContentAdapter<TObject>
+    internal class HttpContentToObjectAdapter<TObject> : IHttpContentAdapter<TObject>
     {
         readonly IHttpContentAdapter<string> contentToStringAdapter;
 
@@ -26,7 +26,7 @@ namespace SignNow.Net.Internal.Helpers
         }
     }
 
-    class HttpContentToStringAdapter : IHttpContentAdapter<string>
+    internal class HttpContentToStringAdapter : IHttpContentAdapter<string>
     {
         /// <inheritdoc />
         /// <returns>Content as a <see cref="string"/></returns>
@@ -36,7 +36,7 @@ namespace SignNow.Net.Internal.Helpers
         }
     }
 
-    class HttpContentToDownloadDocumentResponseAdapter : IHttpContentAdapter<DownloadDocumentResponse>
+    internal class HttpContentToDownloadDocumentResponseAdapter : IHttpContentAdapter<DownloadDocumentResponse>
     {
         public async Task<DownloadDocumentResponse> Adapt(HttpContent content)
         {
@@ -45,7 +45,7 @@ namespace SignNow.Net.Internal.Helpers
             var document = new DownloadDocumentResponse
             {
                 Filename = content.Headers.ContentDisposition?.FileName?.Replace("\"", ""),
-                Length = content.Headers.ContentLength ?? default,
+                Length = content.Headers.ContentLength ?? 0,
                 MediaType = content.Headers.ContentType?.MediaType,
                 Document = rawStream
             };
@@ -54,7 +54,7 @@ namespace SignNow.Net.Internal.Helpers
         }
     }
 
-    class HttpContentToStreamAdapter : IHttpContentAdapter<Stream>
+    internal class HttpContentToStreamAdapter : IHttpContentAdapter<Stream>
     {
         /// <inheritdoc />
         /// <returns>Content as a <see cref="Stream"/></returns>
