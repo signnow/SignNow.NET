@@ -108,7 +108,7 @@ namespace SignNow.Net.Service
             };
 
             await SignNowClient
-                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -126,7 +126,25 @@ namespace SignNow.Net.Service
             };
 
             await SignNowClient
-                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
+        public async Task CopyDocumentGroupAsync(string documentGroupId, string newName, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/copy"),
+                Content = new CopyDocumentGroupRequest { DocumentGroupName = newName },
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -143,7 +161,7 @@ namespace SignNow.Net.Service
             };
 
             await SignNowClient
-                .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 

@@ -61,6 +61,15 @@ namespace SignNow.Net.Interfaces
         Task MoveDocumentGroupAsync(string documentGroupId, string folderId, bool withSharedDocuments = false, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Copy a document group in any status and set a new name to it.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="newName">The name of the new document group copy.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task CopyDocumentGroupAsync(string documentGroupId, string newName, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Deletes a document group. Documents within the group are not deleted. Document groups cannot be deleted while they have a group invite pending.
         /// </summary>
         /// <param name="documentGroupId">ID of the Document Group.</param>

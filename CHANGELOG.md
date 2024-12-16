@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Added
 - Resend Invite feature [#153](https://github.com/signnow/SignNow.NET/issues/153)
 - Options for Embedded invite [#160](https://github.com/signnow/SignNow.NET/issues/160)
+- DocumentGroup feature [#161](https://github.com/signnow/SignNow.NET/issues/161)
 
 ### Changed
 - `DownloadDocumentResponse` model extended with `MediaType` property

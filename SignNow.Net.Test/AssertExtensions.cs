@@ -39,10 +39,8 @@ namespace UnitTests
             using var stringReader = new StringReader(json);
             using var stringWriter = new StringWriter();
             using var jsonReader = new JsonTextReader(stringReader);
-            using var jsonWriter = new JsonTextWriter(stringWriter)
-            {
-                Formatting = Formatting.Indented
-            };
+            using var jsonWriter = new JsonTextWriter(stringWriter);
+            jsonWriter.Formatting = Formatting.Indented;
             jsonWriter.WriteToken(jsonReader);
 
             return stringWriter.ToString();
