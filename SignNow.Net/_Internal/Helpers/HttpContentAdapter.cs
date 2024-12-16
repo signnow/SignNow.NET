@@ -46,6 +46,7 @@ namespace SignNow.Net.Internal.Helpers
             {
                 Filename = content.Headers.ContentDisposition?.FileName?.Replace("\"", ""),
                 Length = content.Headers.ContentLength ?? default,
+                MediaType = content.Headers.ContentType?.MediaType,
                 Document = rawStream
             };
 
