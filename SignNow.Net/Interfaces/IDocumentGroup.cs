@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
@@ -66,5 +67,14 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task DeleteDocumentGroupAsync(string documentGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Download all documents of the document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="options">Options for download for Document Group.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<DownloadDocumentResponse> DownloadDocumentGroupAsync(string documentGroupId, DownloadOptions options, CancellationToken cancellationToken = default);
     }
 }

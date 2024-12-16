@@ -7,6 +7,7 @@ using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
@@ -143,6 +144,24 @@ namespace SignNow.Net.Service
 
             await SignNowClient
                 .RequestAsync<DocumentGroupsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
+        public async Task<DownloadDocumentResponse> DownloadDocumentGroupAsync(string documentGroupId, DownloadOptions options, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documentgroup/{documentGroupId.ValidateId()}/downloadall"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DownloadDocumentResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }
