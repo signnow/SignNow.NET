@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SignNow.Net.Model.Requests.DocumentGroup
 {
@@ -7,10 +8,12 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
     {
         /// <inheritdoc cref="SignNow.Net.Model.Requests.DocumentGroup.DownloadType"/>
         [JsonProperty("type")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public DownloadType DownloadType { get; set; } = DownloadType.Zip;
 
         /// <inheritdoc cref="SignNow.Net.Model.Requests.DocumentGroup.DocumentHistoryType"/>
         [JsonProperty("with_history")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public DocumentHistoryType WithHistory { get; set; } = DocumentHistoryType.NoHistory;
 
         /// <summary>
