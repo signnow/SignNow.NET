@@ -32,17 +32,17 @@ Get your account at <https://www.signnow.com/developers>
         - [Get modified documents][get_modified_docs example]
         - [Get user documents][get_user_docs example]
     - [Document](#document)
-        - [Upload a document to signNow](#upload-document)
+        - [Upload a document to signNow][upload_document example]
         - [Upload a document & Extract Fields][upload_doc_extract example]
-        - [Download a document from signNow](#download-document)
+        - [Download a document from signNow][download_signed_doc example]
         - [Retrieve a document resource][get_document example]
-        - [Merge two or more signNow documents into one](#merge-documents)
-        - [Create a signing link to the document for signature](#create-signing-link)
-        - [Create a freeform invite to the document for signature](#create-freeform-invite)
-        - [Create a role-based invite to the document for signature](#create-role-based-invite)
-        - [Create embedded signing invite to the document for signature](#create-embedded-invite)
-        - [Create a one-time link to download the document as a PDF](#share-document-via-link)
-        - [Get the history of a document](#document-history)
+        - [Merge two or more signNow documents into one][merge_documents example]
+        - [Create a signing link to the document for signature][create_sign_lnk example]
+        - [Create a freeform invite to the document for signature][create_ff_invite example]
+        - [Create a role-based invite to the document for signature][create_rb_invite example]
+        - [Create embedded signing invite to the document for signature][generate_embedded_link example]
+        - [Create a one-time link to download the document as a PDF][create_one_time_link example]
+        - [Get the history of a document][document_history example]
         - [Check the status of the document][check_sign_status example]
         - [Move document into specified folder][move_document example]
         - [Edit document][edit_document example]
@@ -638,9 +638,9 @@ If you have questions about the signNow API, please visit [signNow API Reference
 [get_user_docs example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserDocuments.cs#15
 
 <!-- Documents -->
-[upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#33
-[upload_doc_extract example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#14
-[upload_document_complex_tags]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/ExamplesRunner.cs#L364
+[upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs
+[upload_doc_extract example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithTags.cs
+[upload_document_complex_tags]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithComplexTags.cs
 [download_signed_doc example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
 [get_document example]:             https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [merge_documents example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MergeTwoDocuments.cs
@@ -653,7 +653,7 @@ If you have questions about the signNow API, please visit [signNow API Reference
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
 [move_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MoveTheDocumentToFolder.cs
-[edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/EditDocumentTextFields.cs
+[edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
 [prefill_text_field example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
 
 <!-- Templates -->

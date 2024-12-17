@@ -1,20 +1,32 @@
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 
-namespace SignNow.Net.Examples.Documents
+namespace SignNow.Net.Examples
 {
-    public static partial class DocumentExamples
+    public partial class DocumentExamples
     {
-        /// <summary>
-        /// Downloads signed document
-        /// </summary>
-        /// <param name="documentId">ID of signed document</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        public static async Task<DownloadDocumentResponse> DownloadSignedDocument(string documentId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task DownloadSignedDocumentAsync()
         {
-            return await signNowContext.Documents
-                .DownloadDocumentAsync(documentId, DownloadType.PdfCollapsed)
+            // Upload document
+            await using var fileStream = File.OpenRead(PdfWithoutFields);
+            var document = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "SignedDocumentTest.pdf")
                 .ConfigureAwait(false);
+
+            // Download signed document
+            var documentSigned = await testContext.Documents
+                .DownloadDocumentAsync(document.Id, DownloadType.PdfCollapsed)
+                .ConfigureAwait(false);
+
+            // Check if document is downloaded
+            Assert.AreEqual("SignedDocumentTest.pdf", documentSigned.Filename);
+            Assert.IsInstanceOfType(documentSigned.Document, typeof(Stream));
+
+            // Clean up
+            DeleteTestDocument(document.Id);
         }
     }
 }

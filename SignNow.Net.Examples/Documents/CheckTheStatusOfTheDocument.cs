@@ -1,28 +1,31 @@
+using System.IO;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 
-namespace SignNow.Net.Examples.Documents
+namespace SignNow.Net.Examples
 {
-    public static partial class DocumentExamples
+    public partial class DocumentExamples
     {
-        /// <summary>
-        /// Check the Status of the Document
-        /// <para>Can be one of:</para>
-        /// <list type="bullet">
-        /// <item><description><see cref="DocumentStatus.NoInvite"/></description></item>
-        /// <item><description><see cref="DocumentStatus.Pending"/></description></item>
-        /// <item><description><see cref="DocumentStatus.Completed"/></description></item>
-        /// </list>
-        /// </summary>
-        /// <param name="documentId">Identity of the document</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns><see cref="DocumentStatus"/></returns>
-        public static async Task<DocumentStatus> CheckTheStatusOfTheDocument(string documentId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CheckTheStatusOfTheDocumentAsync()
         {
-            var document = await signNowContext.Documents
-                .GetDocumentAsync(documentId).ConfigureAwait(false);
+            // upload a document with a signature field
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CheckTheStatusOfTheDocument.pdf")
+                .ConfigureAwait(false);
 
-            return document.Status;
+            // get the document
+            var documentStatus = await testContext.Documents
+                .GetDocumentAsync(document?.Id)
+                .ConfigureAwait(false);
+
+            // check the status of the document
+            Assert.AreEqual(DocumentStatus.NoInvite, documentStatus.Status);
+
+            // delete the test document
+            DeleteTestDocument(document?.Id);
         }
     }
 }
