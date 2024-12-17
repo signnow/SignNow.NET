@@ -1,21 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Examples.Documents;
-using SignNow.Net.Examples.Folders;
-using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
-using SignNow.Net.Model.ComplexTags;
-using SignNow.Net.Model.EditFields;
-using SignNow.Net.Model.Requests;
-using SignNow.Net.Model.Requests.EventSubscriptionBase;
-using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Test.Context;
-using UnitTests;
 
 namespace SignNow.Net.Examples
 {
@@ -98,69 +87,11 @@ namespace SignNow.Net.Examples
         }
 
 
-
-        // #region User Examples
-
-
-
-        // #endregion
-
         // #region Templates Examples
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="DocumentExamples.CreateTemplateFromTheDocument"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateTemplateFromDocumentTest()
-        // {
-        //     var document = await DocumentExamples
-        //         .UploadDocumentWithFieldExtract(PdfWithSignatureField, testContext).ConfigureAwait(false);
-        //
-        //     const string templateName = "Template Name";
-        //     var result = await DocumentExamples.CreateTemplateFromTheDocument(document?.Id, templateName, testContext).ConfigureAwait(false);
-        //     var template = await testContext.Documents.GetDocumentAsync(result.Id).ConfigureAwait(false);
-        //
-        //     Assert.IsFalse(document?.IsTemplate);
-        //     Assert.IsNotNull(template?.Id);
-        //     Assert.AreEqual(templateName, template.Name);
-        //     Assert.IsTrue(template.IsTemplate);
-        //
-        //     await testContext.Documents.DeleteDocumentAsync(template.Id).ConfigureAwait(false);
-        //     DeleteTestDocument(document?.Id);
-        // }
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="DocumentExamples.CreateDocumentFromTheTemplate"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateDocumentFromTemplateTest()
-        // {
-        //     var testDocument = await DocumentExamples
-        //         .UploadDocumentWithFieldExtract(PdfWithSignatureField, testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     var template = await testContext.Documents
-        //         .CreateTemplateFromDocumentAsync(testDocument.Id, "TemplateName")
-        //         .ConfigureAwait(false);
-        //     var documentName = "Document Name";
-        //     var result = await DocumentExamples
-        //         .CreateDocumentFromTheTemplate(template.Id, documentName, testContext)
-        //         .ConfigureAwait(false);
-        //     var document = await testContext.Documents
-        //         .GetDocumentAsync(result.Id)
-        //         .ConfigureAwait(false);
-        //
-        //     Assert.IsNotNull(document?.Id);
-        //     Assert.IsFalse(document.IsTemplate);
-        //     Assert.AreEqual(documentName, document.Name);
-        //
-        //     await testContext.Documents.DeleteDocumentAsync(document.Id).ConfigureAwait(false);
-        //     await testContext.Documents.DeleteDocumentAsync(template.Id).ConfigureAwait(false);
-        //     DeleteTestDocument(testDocument?.Id);
-        // }
-        //
+
+
         // #endregion
-        //
+
         // #region Folder Examples
         //
         // /// <summary>

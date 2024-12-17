@@ -48,7 +48,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Edit document][edit_document example]
         - [Prefill document text fields][prefill_text_field example]
     - [Template](#template)
-        - [Create a template by flattening an existing document](#create-template)
+        - [Create a template by flattening an existing document][create_template example]
         - [Create document from the template][create_document example]
     - [Document Group](#document-group)
         - [Create a document group](#create-document-group)

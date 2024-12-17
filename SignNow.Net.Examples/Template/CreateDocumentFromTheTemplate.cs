@@ -1,23 +1,47 @@
+using System.IO;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
-using SignNow.Net.Model.Responses;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SignNow.Net.Examples.Documents
+namespace SignNow.Net.Examples
 {
-    public static partial class DocumentExamples
+    [TestClass]
+    public partial class TemplateExamples: ExamplesRunner
     {
-        /// <summary>
-        /// Creates document from template.
-        /// </summary>
-        /// <param name="templateId">Identity of the template</param>
-        /// <param name="documentName">The name of new document</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns><see cref="CreateDocumentFromTemplateResponse"/>New document ID</returns>
-        public static async Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTheTemplate(string templateId, string documentName, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateDocumentFromTemplateAsync()
         {
-            return await signNowContext.Documents
-                .CreateDocumentFromTemplateAsync(templateId, documentName)
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+
+            // Upload a document with a signature field
+            var testDocument = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "DocumentWithSignatureTextTag.pdf")
                 .ConfigureAwait(false);
+
+            // Create a template from the uploaded document
+            var template = await testContext.Documents
+                .CreateTemplateFromDocumentAsync(testDocument.Id, "TemplateName")
+                .ConfigureAwait(false);
+
+            // Creates a new document copy out of template
+            var documentName = "Document Name";
+            var result = await testContext.Documents
+                .CreateDocumentFromTemplateAsync(template.Id, documentName)
+                .ConfigureAwait(false);
+
+            // Get the new document created from template
+            var document = await testContext.Documents
+                .GetDocumentAsync(result.Id)
+                .ConfigureAwait(false);
+
+            // Check that the document is not a template
+            Assert.IsNotNull(document?.Id);
+            Assert.IsFalse(document.IsTemplate);
+            Assert.AreEqual(documentName, document.Name);
+
+            // clean up
+            await testContext.Documents.DeleteDocumentAsync(document.Id).ConfigureAwait(false);
+            await testContext.Documents.DeleteDocumentAsync(template.Id).ConfigureAwait(false);
+            DeleteTestDocument(testDocument?.Id);
         }
     }
 }
