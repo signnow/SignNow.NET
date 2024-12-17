@@ -1,23 +1,38 @@
+using System.Linq;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
-using SignNow.Net.Model.Responses;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SignNow.Net.Examples.Folders
+namespace SignNow.Net.Examples
 {
-    public static partial class FolderExamples
+    public partial class FolderExamples
     {
-        /// <summary>
-        /// Rename folder example
-        /// </summary>
-        /// <param name="name">A new folder's name</param>
-        /// <param name="folderId">Id of the folder to rename</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns></returns>
-        public static async Task<FolderIdentityResponse> RenameFolder(string name, string folderId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task RenameFolderAsync()
         {
-            return await signNowContext.Folders
-                .RenameFolderAsync(name, folderId)
+            // Creates folder inside Documents folder for test
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+
+            // Get Documents folder
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            // create a folder for test
+            var folderForRename = await testContext.Folders
+                .CreateFolderAsync("noname", documentsFolder?.Id)
                 .ConfigureAwait(false);
+
+            // Rename previously created folder
+            var renameFolder = await testContext.Folders
+                .RenameFolderAsync("ItsRenamedFolder", folderForRename.Id)
+                .ConfigureAwait(false);
+
+            var renamed = await testContext.Folders.GetFolderAsync(renameFolder.Id).ConfigureAwait(false);
+
+            // Check if folder renamed
+            Assert.AreEqual("ItsRenamedFolder", renamed.Name);
+            Assert.AreEqual(folderForRename.Id, renamed.Id);
+
+            // Finally - delete test folder
+            await testContext.Folders.DeleteFolderAsync(renamed.Id).ConfigureAwait(false);
         }
     }
 }

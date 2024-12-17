@@ -1,21 +1,37 @@
+using System.Linq;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model.Requests;
 
-namespace SignNow.Net.Examples.Folders
+namespace SignNow.Net.Examples
 {
-    public static partial class FolderExamples
+    public partial class FolderExamples
     {
-        /// <summary>
-        /// Delete folder example
-        /// </summary>
-        /// <param name="folderId">Id of the folder to delete</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns></returns>
-        public static async Task DeleteFolder(string folderId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task DeleteFolderAsync()
         {
-            await signNowContext.Folders
-                .DeleteFolderAsync(folderId)
+            // Create some folder for test inside the Documents folder
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+            var folderToDelete = await testContext.Folders
+                .CreateFolderAsync("DeleteMe", documentsFolder?.Id)
                 .ConfigureAwait(false);
+
+            // Check if test folder exists
+            var createdFolder = await testContext.Folders
+                .GetFolderAsync(folderToDelete.Id)
+                .ConfigureAwait(false);
+            Assert.AreEqual(folderToDelete.Id, createdFolder.Id);
+
+            // Delete folder
+            await testContext.Folders.DeleteFolderAsync(folderToDelete.Id).ConfigureAwait(false);
+
+            // Check if test folder has been deleted
+            var folders = await testContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, new GetFolderOptions {IncludeDocumentsSubfolder = false})
+                .ConfigureAwait(false);
+
+            Assert.IsFalse(folders.Folders.Any(f => f.Name == "DeleteMe"));
         }
     }
 }
