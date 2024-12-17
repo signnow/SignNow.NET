@@ -20,7 +20,7 @@ Get your account at <https://www.signnow.com/developers>
 4. [Documentation](#documentation)
 5. [Features](#features)
     - [Authorization](#authorization)
-        - [Request Access Token](#get-token)
+        - [Request Access Token][request_access_token example]
         - [Verify Access Token][verify_access_token example]
         - [Refresh Access Token][refresh_access_token example]
     - [User](#user)
@@ -50,6 +50,8 @@ Get your account at <https://www.signnow.com/developers>
     - [Template](#template)
         - [Create a template by flattening an existing document](#create-template)
         - [Create document from the template][create_document example]
+    - [Document Group](#document-group)
+      - [Create a document group](#create-document-group)
     - [Folders](#folders)
         - [Get all folders](#get-all-folders)
         - [Get folder by Id][get_folder example]
@@ -618,13 +620,13 @@ If you have questions about the signNow API, please visit [signNow API Reference
 [license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "signNow .Net SDK License"
 [license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
 [api docs link]: https://docs.signnow.com
-[api reference link]: https://docs.signnow.com/sn/ref
+[api reference link]: https://docs.signnow.com/docs/signnow/reference
 
 <!-- All examples URLs should be there -->
 <!-- Authorization -->
-[request_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#L16
-[verify_access_token example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#39
-[refresh_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#54
+[request_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/GenerateAccessToken.cs
+[verify_access_token example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/VerifyAccessToken.cs
+[refresh_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/RefreshAccessToken.cs
 
 <!-- Users -->
 [create_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
