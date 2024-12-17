@@ -1,22 +1,29 @@
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SignNow.Net.Examples.Users
+namespace SignNow.Net.Examples
 {
-    public static partial class UserExamples
+    public partial class UserExamples
     {
-        /// <summary>
-        /// Get User modified documents example
-        /// </summary>
-        /// <param name="perPage">How many document objects to display per page in response.</param>
-        /// <param name="token">Access token.</param>
-        /// <returns></returns>
-        public static async Task<IEnumerable<SignNowDocument>> GetUserModifiedDocuments(int perPage, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task GetUserModifiedDocumentsAsync()
         {
-            return await signNowContext.Users
-                .GetModifiedDocumentsAsync(perPage)
+            // get user modified documents
+            var signNowDocuments = await testContext.Users
+                .GetModifiedDocumentsAsync(perPage:25)
                 .ConfigureAwait(false);
+
+            // check if user is the owner of the modified documents
+            var modifiedDocuments = signNowDocuments.ToList();
+            foreach (var document in modifiedDocuments)
+            {
+                Assert.AreEqual(credentials.Login, document.Owner);
+            }
+
+            Assert.IsNotNull(modifiedDocuments.Count);
+            Console.WriteLine($@"Total modified documents: {modifiedDocuments.Count}");
         }
     }
 }

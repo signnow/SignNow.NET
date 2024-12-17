@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Folders;
-using SignNow.Net.Examples.Users;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using SignNow.Net.Model.ComplexTags;
@@ -30,7 +29,7 @@ namespace SignNow.Net.Examples
     [TestClass]
     public abstract class ExamplesRunner
     {
-        private DateTime UnixEpoch => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        protected DateTime UnixEpoch => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         /// <summary>
         /// Base path to the `TestExamples` directory.
@@ -101,74 +100,11 @@ namespace SignNow.Net.Examples
 
 
         // #region User Examples
-        //
-        // /// <summary>
-        // /// Run test for <see cref="UserExamples.CreateSignNowUser"/> and <see cref="UserExamples.SendVerificationEmailToUser"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateSignNowUserTest()
-        // {
-        //     var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
-        //
-        //     var createUserResponse = await UserExamples.CreateSignNowUser(
-        //         "John",
-        //         $"Sample{timestamp}",
-        //         $"signnow.tutorial+sample_test{timestamp}@gmail.com",
-        //         "secretPassword",
-        //         testContext
-        //     ).ConfigureAwait(false);
-        //
-        //     Assert.AreEqual($"signnow.tutorial+sample_test{timestamp}@gmail.com", createUserResponse.Email);
-        //     Assert.IsFalse(createUserResponse.Verified);
-        //
-        //     // Finally - send verification email to User
-        //     await UserExamples.SendVerificationEmailToUser(createUserResponse.Email, testContext).ConfigureAwait(false);
-        // }
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="UserExamples.GetUserModifiedDocuments"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task GetUserModifiedDocumentsTest()
-        // {
-        //     var perPage = 25;
-        //     var SignNowDocumentsAsync = await UserExamples
-        //         .GetUserModifiedDocuments(perPage, testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     var modifiedDocuments = SignNowDocumentsAsync.ToList();
-        //     foreach (var document in modifiedDocuments)
-        //     {
-        //         Assert.AreEqual(credentials.Login, document.Owner);
-        //     }
-        //
-        //     Assert.IsNotNull(modifiedDocuments.Count);
-        //     Console.WriteLine($@"Total modified documents: {modifiedDocuments.Count}");
-        // }
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="UserExamples.GetUserDocuments"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task GetUserDocumentsTest()
-        // {
-        //     var perPage = 25;
-        //     var SignNowDocumentsAsync = await UserExamples
-        //         .GetUserDocuments(perPage, testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     var userDocuments = SignNowDocumentsAsync.ToList();
-        //     foreach (var document in userDocuments)
-        //     {
-        //         Assert.AreEqual(credentials.Login, document.Owner);
-        //     }
-        //
-        //     Assert.IsNotNull(userDocuments.Count);
-        //     Console.WriteLine($@"Total modified documents: {userDocuments.Count}");
-        // }
-        //
+
+
+
         // #endregion
-        //
+
         // #region Templates Examples
         //
         // /// <summary>

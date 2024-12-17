@@ -1,45 +1,39 @@
+using System;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Requests;
 
-namespace SignNow.Net.Examples.Users
+namespace SignNow.Net.Examples
 {
-    public static partial class UserExamples
+    [TestClass]
+    public partial class UserExamples : ExamplesRunner
     {
-        /// <summary>
-        /// Creates an account for a user example
-        /// </summary>
-        /// <param name="firstname">User firstname</param>
-        /// <param name="lastname">User lastname</param>
-        /// <param name="email">User email</param>
-        /// <param name="password">User password</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns>
-        /// Response with: User identity, email
-        /// </returns>
-        public static async Task<UserCreateResponse> CreateSignNowUser(string firstname, string lastname, string email, string password, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateSignNowUserAsync()
         {
+            var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
+            var email = $"signnow.tutorial+create_user_test{timestamp}@gmail.com";
+
             var userRequest = new CreateUserOptions
             {
                 Email = email,
-                FirstName = firstname,
-                LastName = lastname,
-                Password = password
+                FirstName = "John",
+                LastName = "Wick",
+                Password = "password"
             };
 
-            return await signNowContext.Users
+            // Create a new user
+            var createUserResponse = await testContext.Users
                 .CreateUserAsync(userRequest)
                 .ConfigureAwait(false);
-        }
 
-        /// <summary>
-        /// Retrieve User Information example
-        /// </summary>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns></returns>
-        public static async Task<User> RetrieveUserInformation(SignNowContext signNowContext)
-        {
-            return await signNowContext.Users.GetCurrentUserAsync()
+            // Check if the user was created and not verified
+            Assert.AreEqual(email, createUserResponse.Email);
+            Assert.IsFalse(createUserResponse.Verified);
+
+            // Finally - send verification email to User
+            await testContext.Users
+                .SendVerificationEmailAsync(email)
                 .ConfigureAwait(false);
         }
     }

@@ -24,7 +24,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Verify Access Token][verify_access_token example]
         - [Refresh Access Token][refresh_access_token example]
     - [User](#user)
-        - [Creates an account for a user](#create-user)
+        - [Creates an account for a user][create_user example]
         - [Retrieve User Information][get_user_info example]
         - [Sends verification email to a user][send_verification example]
         - [Change User details][update_user example]
@@ -630,12 +630,12 @@ If you have questions about the signNow API, please visit [signNow API Reference
 
 <!-- Users -->
 [create_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
-[get_user_info example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs#42
-[send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/SendVerificationEmailToUser.cs
-[update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#18
-[reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#40
-[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs#15
-[get_user_docs example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserDocuments.cs#15
+[get_user_info example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
+[update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs
+[get_user_docs example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserDocuments.cs
 
 <!-- Documents -->
 [upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs
