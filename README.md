@@ -51,7 +51,7 @@ Get your account at <https://www.signnow.com/developers>
         - [Create a template by flattening an existing document](#create-template)
         - [Create document from the template][create_document example]
     - [Document Group](#document-group)
-      - [Create a document group](#create-document-group)
+        - [Create a document group](#create-document-group)
     - [Folders](#folders)
         - [Get all folders](#get-all-folders)
         - [Get folder by Id][get_folder example]
@@ -645,16 +645,18 @@ If you have questions about the signNow API, please visit [signNow API Reference
 [get_document example]:             https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [merge_documents example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MergeTwoDocuments.cs
 [create_sign_lnk example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
-[create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
-[create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
-[generate_embedded_link example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/GenerateLinkForEmbeddedInvite.cs
-[cancel_embedded_invite example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CancelEmbeddedInvite.cs
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
 [move_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MoveTheDocumentToFolder.cs
 [edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
 [prefill_text_field example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
+
+<!-- Invites -->
+[create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
+[create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
+[generate_embedded_link example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/GCreateEmbeddedSigningInviteToSignTheDocument.cs
+[cancel_embedded_invite example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateEmbeddedSigningInviteToSignTheDocument.cs
 
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs

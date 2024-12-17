@@ -1,24 +1,33 @@
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 
-namespace SignNow.Net.Examples.Invites
+namespace SignNow.Net.Examples
 {
-    public static partial class InviteExamples
+    public partial class InviteExamples
     {
-        /// <summary>
-        /// Create a role-based invite to the document for signature.
-        /// </summary>
-        /// <param name="document">signNow document with fields you’d like to have signed</param>
-        /// <param name="email">The email of the invitee.</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns><see cref="InviteResponse"/> without any Identity of invite request.</returns>
-        public static async Task<InviteResponse> CreateRoleBasedInviteToSignTheDocument(SignNowDocument document, string email, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateRoleBasedInviteToSignTheDocumentAsync()
         {
-            // Create role-based invite
-            var invite = new RoleBasedInvite(document)
+            // Upload a document with a signature field
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoleBasedInviteToSignTheDocument.pdf")
+                .ConfigureAwait(false);
+
+            // Get the document by Id
+            var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
+
+            // check if the document doesn't have any invites
+            Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
+
+            // Create a role-based invite to the document for signature
+            var email = "noreply@signnow.com";
+            var invite = new RoleBasedInvite(signNowDoc)
             {
-                Message = $"{email} invited you to sign the document {document.Name}",
+                Message = $"{email} invited you to sign the document {signNowDoc.Name}",
                 Subject = "The subject of the Email"
             };
 
@@ -34,9 +43,39 @@ namespace SignNow.Net.Examples.Invites
             invite.AddRoleBasedInvite(signer);
 
             // Creating Invite request
-            return await signNowContext.Invites
-                .CreateInviteAsync(document.Id, invite)
+            var inviteResponse = await testContext.Invites
+                .CreateInviteAsync(signNowDoc.Id, invite)
                 .ConfigureAwait(false);
+
+            // check if the invite has been created successfully
+            Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
+
+            // Get the document by Id to check the status of the invite
+            var documentWithInvite = await testContext.Documents.GetDocumentAsync(signNowDoc.Id).ConfigureAwait(false);
+            var createdInvite = documentWithInvite.FieldInvites.FirstOrDefault();
+
+            // check if the document has an invite
+            var fieldInvite = documentWithInvite.Fields.FirstOrDefault();
+            Assert.IsNotNull(fieldInvite?.FieldRequestId);
+
+            // Resend the invite - just for the sake of the example
+            await testContext.Invites
+                .ResendEmailInviteAsync(fieldInvite?.FieldRequestId)
+                .ConfigureAwait(false);
+
+            // check if the document has an invite
+            Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
+            Assert.AreEqual("Signer 1", createdInvite?.RoleName, "Signer role mismatch.");
+            Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
+
+            // cancel the invite to delete the document
+            await testContext.Invites
+                .CancelInviteAsync(documentWithInvite.Id)
+                .ConfigureAwait(false);
+
+            // clean up
+            DeleteTestDocument(signNowDoc.Id);
         }
     }
 }

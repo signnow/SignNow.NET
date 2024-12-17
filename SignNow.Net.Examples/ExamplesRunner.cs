@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Examples.Documents;
 using SignNow.Net.Examples.Folders;
-using SignNow.Net.Examples.Invites;
 using SignNow.Net.Examples.Users;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
@@ -101,117 +100,6 @@ namespace SignNow.Net.Examples
 
 
 
-        // #region Invites Examples
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="InviteExamples.CreateFreeformInviteToSignTheDocument"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateFreeformInviteToSignTheDocumentTest()
-        // {
-        //     await using var fileStream = File.OpenRead(PdfWithoutFields);
-        //     var document = await testContext.Documents
-        //         .UploadDocumentAsync(fileStream, "CreateFreeformInviteToSignTheDocument.pdf")
-        //         .ConfigureAwait(false);
-        //
-        //     var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //     Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
-        //
-        //     var inviteResponse = await InviteExamples
-        //         .CreateFreeformInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     Assert.IsFalse(string.IsNullOrEmpty(inviteResponse.Id));
-        //
-        //     var documentWithInvite = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //     var createdInvite = documentWithInvite.InvitesStatus.FirstOrDefault();
-        //
-        //     Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
-        //     Assert.AreEqual(inviteResponse.Id, createdInvite?.Id);
-        //     Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
-        //     Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
-        // }
-        //
-        // /// <summary>
-        // /// Run test for example: <see cref="InviteExamples.CreateRoleBasedInviteToSignTheDocument"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateRoleBasedInviteToSignTheDocumentTest()
-        // {
-        //     await using var fileStream = File.OpenRead(PdfWithSignatureField);
-        //     var document = await testContext.Documents
-        //         .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoleBasedInviteToSignTheDocument.pdf")
-        //         .ConfigureAwait(false);
-        //
-        //     var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //     Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
-        //
-        //     var inviteResponse = await InviteExamples
-        //         .CreateRoleBasedInviteToSignTheDocument(signNowDoc, "noreply@signnow.com", testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     Assert.IsNull(inviteResponse.Id,"Successful Role-Based invite response doesnt contains Invite ID.");
-        //
-        //     var documentWithInvite = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //     var createdInvite = documentWithInvite.FieldInvites.FirstOrDefault();
-        //
-        //     var fieldInvite = documentWithInvite.Fields.FirstOrDefault();
-        //     Assert.IsNotNull(fieldInvite?.FieldRequestId);
-        //
-        //     await testContext.Invites
-        //         .ResendEmailInviteAsync(fieldInvite?.FieldRequestId)
-        //         .ConfigureAwait(false);
-        //
-        //     Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
-        //     Assert.AreEqual("Signer 1", createdInvite?.RoleName, "Signer role mismatch.");
-        //     Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
-        //     Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
-        // }
-        //
-        // /// <summary>
-        // /// Run test for example:
-        // /// <see cref="InviteExamples.CreateEmbeddedSigningInviteToSignTheDocument"/>
-        // /// <see cref="InviteExamples.GenerateLinkForEmbeddedInvite"/>
-        // /// </summary>
-        // [TestMethod]
-        // public async Task CreateEmbeddedSigningInviteToSignTheDocumentTest()
-        // {
-        //     await using var fileStream = File.OpenRead(PdfWithSignatureField);
-        //     var document = await testContext.Documents
-        //         .UploadDocumentWithFieldExtractAsync(fileStream, "CreateEmbeddedSigningInviteToSignTheDocument.pdf")
-        //         .ConfigureAwait(false);
-        //
-        //     var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //
-        //     // Create Embedded Signing Invite
-        //     var embeddedInviteResponse = await InviteExamples
-        //         .CreateEmbeddedSigningInviteToSignTheDocument(signNowDoc, "testemail@signnow.com", testContext)
-        //         .ConfigureAwait(false);
-        //
-        //     Assert.AreEqual(1, embeddedInviteResponse.InviteData.Count);
-        //     Assert.AreEqual(1, embeddedInviteResponse.InviteData[0].Order);
-        //     Assert.AreEqual("testemail@signnow.com", embeddedInviteResponse.InviteData[0].Email);
-        //     Assert.AreEqual("Pending", embeddedInviteResponse.InviteData[0].Status.ToString());
-        //
-        //
-        //     var documentWithEmbed = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
-        //     Assert.IsTrue(documentWithEmbed.FieldInvites.First().IsEmbedded);
-        //
-        //     // Generate link for Embedded Signing Invite
-        //     var embeddedLink = await InviteExamples
-        //         .GenerateLinkForEmbeddedInvite(documentWithEmbed, 30, testContext).ConfigureAwait(false);
-        //
-        //     Assert.IsInstanceOfType(embeddedLink.Link, typeof(Uri));
-        //     Console.WriteLine($@"Embedded link: {embeddedLink.Link.AbsoluteUri}");
-        //
-        //     // Cancel embedded invite
-        //     await InviteExamples.CancelEmbeddedInvite(documentWithEmbed, testContext).ConfigureAwait(false);
-        //     DeleteTestDocument(document.Id);
-        //     DeleteTestDocument(documentWithEmbed.Id);
-        // }
-        //
-        // #endregion
-        //
         // #region User Examples
         //
         // /// <summary>
