@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       COREHOST_TRACE: false
@@ -15,6 +15,11 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
       DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
       NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
+      DOTNET_SDK_VERSION: 5.0.x
+
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
       - uses: actions/checkout@v4
@@ -36,9 +41,9 @@ jobs:
 
       - name: Setup dotnet tool
         env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ matrix.dotnet }}/x64
+          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ env.DOTNET_SDK_VERSION }}/x64
         run: |
-          dotnet tool install --global InheritDocTool
+          dotnet tool install --global InheritDocTool --version 2.5.2
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
@@ -46,12 +51,12 @@ jobs:
 
       - name: Prepare Release Assets
         id: get-version
+        shell: bash
         run: |
           echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           .github/release-notes.sh CHANGELOG.md > release-notes.txt
 
       - name: Creates Nuget package
-        shell: pwsh
         run: dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: Create Release
