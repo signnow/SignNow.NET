@@ -17,18 +17,18 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         /// pdf file that contains all the documents of the group
         /// </summary>
         [EnumMember(Value = "merged")]
-        Merged,
+        MergedPdf,
 
         /// <summary>
         /// pdf file with all the documents + attachments, all with the document group stamp, with history.
         /// </summary>
         [EnumMember(Value = "certificate")]
-        Certificate,
+        PdfWithCertificate,
 
         /// <summary>
         /// returns zip file with document group that has ID on each page at the documents, attachments and history file in case history has been requested.
         /// </summary>
         [EnumMember(Value = "email")]
-        Email
+        ZipForEmail
     }
 }

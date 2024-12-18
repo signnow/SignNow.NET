@@ -23,7 +23,7 @@ namespace UnitTests.Requests
         {
             var options = new DownloadOptions
             {
-                DownloadType = DownloadType.Certificate,
+                DownloadType = DownloadType.PdfWithCertificate,
                 WithHistory = DocumentHistoryType.AfterEachDocument,
                 DocumentOrder = new List<string> { "03c74b3083f34ebf8ef40a3039dfb32c85a08437", "03739a736d324f9794c2e93ec7c5bda817af3f7f" }
             };
@@ -38,7 +38,7 @@ namespace UnitTests.Requests
         {
             var options = new DownloadOptions
             {
-                DownloadType = DownloadType.Email,
+                DownloadType = DownloadType.ZipForEmail,
                 WithHistory = DocumentHistoryType.AfterMergedPdf,
                 DocumentOrder = null
             };
@@ -54,7 +54,7 @@ namespace UnitTests.Requests
             var json = "{\"type\":\"merged\",\"with_history\":\"no\",\"document_order\":[\"03c74b3083f34ebf8ef40a3039dfb32c85a08437\",\"03c74b3083f34ebf8ef40a3039dfb32c85a08438\"]}";
             var options = JsonConvert.DeserializeObject<DownloadOptions>(json);
 
-            Assert.AreEqual(DownloadType.Merged, options.DownloadType);
+            Assert.AreEqual(DownloadType.MergedPdf, options.DownloadType);
             Assert.AreEqual(DocumentHistoryType.NoHistory, options.WithHistory);
             CollectionAssert.AreEqual(new List<string> { "03c74b3083f34ebf8ef40a3039dfb32c85a08437", "03c74b3083f34ebf8ef40a3039dfb32c85a08438" }, options.DocumentOrder);
         }

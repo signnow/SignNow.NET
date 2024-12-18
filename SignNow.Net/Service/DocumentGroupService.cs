@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
@@ -156,7 +158,7 @@ namespace SignNow.Net.Service
 
             var requestOptions = new DeleteHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}"),
                 Token = Token
             };
 
@@ -173,13 +175,13 @@ namespace SignNow.Net.Service
 
             var requestOptions = new PostHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documentgroup/{documentGroupId.ValidateId()}/downloadall"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/downloadall"),
                 Content = options,
                 Token = Token
             };
 
             return await SignNowClient
-                .RequestAsync<DownloadDocumentResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

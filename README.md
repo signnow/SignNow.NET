@@ -52,6 +52,13 @@ Get your account at <https://www.signnow.com/developers>
         - [Create document from the template][create_document example]
     - [Document Group](#document-group)
         - [Create a document group](#create-document-group)
+        - [Delete document group][doc_group_operations example]
+        - [Rename document group][doc_group_operations example]
+        - [Create a copy of document group][doc_group_operations example]
+        - [Download document group][doc_group_operations example]
+        - [Move document group][doc_group_operations example]
+        - [Get document group info][doc_group_operations example]
+        - [Get all document groups the user owns][doc_group_operations example]
     - [Folders](#folders)
         - [Get all folders](#get-all-folders)
         - [Get folder by Id][get_folder example]
@@ -70,7 +77,7 @@ To start using the API  you will need an API key. You can get one here <https://
 #### API and Application
 
 | Resources    | Sandbox                        | Production                |
-| ------------ | ------------------------------ | ------------------------- |
+|--------------|--------------------------------|---------------------------|
 | API:         | api-eval.signnow.com:443       | api.signnow.com:443       |
 | Application: | <https://app-eval.signnow.com> | <https://app.signnow.com> |
 | Entry page:  | <https://eval.signnow.com>     |                           |
@@ -550,6 +557,53 @@ public static class DocumentExamples
 
 More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
+
+## Document Group
+
+### Create document group
+
+Creates a document group from a list of document ids
+
+All documents:
+
+- Must be owned by the person creating the document group.
+- Cannot be templates.
+- Cannot already be a part of another document group (delete document group first to add them).
+- At least one of the documents must have fields.
+
+```csharp
+public async Task<DocumentGroupInfoResponse> CreateDocumentGroupAsync()
+{
+     // using token from the Authorization step
+    var signNowContext = new SignNowContext(token);
+    
+    // Upload test documents
+    await using var fileStream = File.OpenRead("./PdfWithSignatureField.pdf");
+
+    var documents = new List<SignNowDocument>();
+
+    for (int i = 0; i < 2; i++)
+    {
+        var upload = await signNowContext.Documents
+            .UploadDocumentAsync(fileStream, $"ForDocumentGroupFile-{i}.pdf");
+        var doc = await signNowContext.Documents.GetDocumentAsync(upload.Id).ConfigureAwait(false);
+        documents.Add(doc);
+    }
+
+    // Create document group from uploaded documents
+    var documentGroup = await signNowContext.DocumentGroup
+        .CreateDocumentGroupAsync("CreateDocumentGroupExample", documents)
+        .ConfigureAwait(false);
+
+    // Get document group by id
+    return await signNowContext.DocumentGroup
+        .GetDocumentGroupInfoAsync(documentGroup.Id)
+        .ConfigureAwait(false);
+}
+```
+More examples: [Document group operations][doc_group_operations example]
+
+
 ## Folders
 
 ### Get all folders
@@ -575,6 +629,7 @@ public static class FolderExamples
 
 More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example], [Create folder][create_folder example]
 
+
 ## Contribution guidelines
 
 ### XML doc generation
@@ -595,6 +650,7 @@ Thanks to all contributors who got interested in this project. We're excited to 
 - Please, check in with the documentation first before you open a new Issue.
 - When suggesting new functionality, give as many details as possible. Add a test or code example if you can.
 - When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
+
 
 ## License
 
@@ -661,6 +717,9 @@ If you have questions about the signNow API, please visit [signNow API Reference
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
 [create_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateDocumentFromTheTemplate.cs
+
+<!-- Document group -->
+[doc_group_operations example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupOperations.cs
 
 <!-- Folders -->
 [get_all_folders example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetAllFolders.cs
