@@ -20,11 +20,11 @@ Get your account at <https://www.signnow.com/developers>
 4. [Documentation](#documentation)
 5. [Features](#features)
     - [Authorization](#authorization)
-        - [Request Access Token](#get-token)
+        - [Request Access Token][request_access_token example]
         - [Verify Access Token][verify_access_token example]
         - [Refresh Access Token][refresh_access_token example]
     - [User](#user)
-        - [Creates an account for a user](#create-user)
+        - [Creates an account for a user][create_user example]
         - [Retrieve User Information][get_user_info example]
         - [Sends verification email to a user][send_verification example]
         - [Change User details][update_user example]
@@ -32,24 +32,33 @@ Get your account at <https://www.signnow.com/developers>
         - [Get modified documents][get_modified_docs example]
         - [Get user documents][get_user_docs example]
     - [Document](#document)
-        - [Upload a document to signNow](#upload-document)
+        - [Upload a document to signNow][upload_document example]
         - [Upload a document & Extract Fields][upload_doc_extract example]
-        - [Download a document from signNow](#download-document)
+        - [Download a document from signNow][download_signed_doc example]
         - [Retrieve a document resource][get_document example]
-        - [Merge two or more signNow documents into one](#merge-documents)
-        - [Create a signing link to the document for signature](#create-signing-link)
-        - [Create a freeform invite to the document for signature](#create-freeform-invite)
-        - [Create a role-based invite to the document for signature](#create-role-based-invite)
-        - [Create embedded signing invite to the document for signature](#create-embedded-invite)
-        - [Create a one-time link to download the document as a PDF](#share-document-via-link)
-        - [Get the history of a document](#document-history)
+        - [Merge two or more signNow documents into one][merge_documents example]
+        - [Create a signing link to the document for signature][create_sign_lnk example]
+        - [Create a freeform invite to the document for signature][create_ff_invite example]
+        - [Create a role-based invite to the document for signature][create_rb_invite example]
+        - [Create embedded signing invite to the document for signature][generate_embedded_link example]
+        - [Create a one-time link to download the document as a PDF][create_one_time_link example]
+        - [Get the history of a document][document_history example]
         - [Check the status of the document][check_sign_status example]
         - [Move document into specified folder][move_document example]
         - [Edit document][edit_document example]
         - [Prefill document text fields][prefill_text_field example]
     - [Template](#template)
-        - [Create a template by flattening an existing document](#create-template)
+        - [Create a template by flattening an existing document][create_template example]
         - [Create document from the template][create_document example]
+    - [Document Group](#document-group)
+        - [Create a document group](#create-document-group)
+        - [Delete document group][doc_group_operations example]
+        - [Rename document group][doc_group_operations example]
+        - [Create a copy of document group][doc_group_operations example]
+        - [Download document group][doc_group_operations example]
+        - [Move document group][doc_group_operations example]
+        - [Get document group info][doc_group_operations example]
+        - [Get all document groups the user owns][doc_group_operations example]
     - [Folders](#folders)
         - [Get all folders](#get-all-folders)
         - [Get folder by Id][get_folder example]
@@ -68,7 +77,7 @@ To start using the API  you will need an API key. You can get one here <https://
 #### API and Application
 
 | Resources    | Sandbox                        | Production                |
-| ------------ | ------------------------------ | ------------------------- |
+|--------------|--------------------------------|---------------------------|
 | API:         | api-eval.signnow.com:443       | api.signnow.com:443       |
 | Application: | <https://app-eval.signnow.com> | <https://app.signnow.com> |
 | Entry page:  | <https://eval.signnow.com>     |                           |
@@ -548,6 +557,53 @@ public static class DocumentExamples
 
 More examples: [Create a template by flattening an existing document][create_template example], [Create document from the template][create_document example]
 
+
+## Document Group
+
+### Create document group
+
+Creates a document group from a list of document ids
+
+All documents:
+
+- Must be owned by the person creating the document group.
+- Cannot be templates.
+- Cannot already be a part of another document group (delete document group first to add them).
+- At least one of the documents must have fields.
+
+```csharp
+public async Task<DocumentGroupInfoResponse> CreateDocumentGroupAsync()
+{
+     // using token from the Authorization step
+    var signNowContext = new SignNowContext(token);
+    
+    // Upload test documents
+    await using var fileStream = File.OpenRead("./PdfWithSignatureField.pdf");
+
+    var documents = new List<SignNowDocument>();
+
+    for (int i = 0; i < 2; i++)
+    {
+        var upload = await signNowContext.Documents
+            .UploadDocumentAsync(fileStream, $"ForDocumentGroupFile-{i}.pdf");
+        var doc = await signNowContext.Documents.GetDocumentAsync(upload.Id).ConfigureAwait(false);
+        documents.Add(doc);
+    }
+
+    // Create document group from uploaded documents
+    var documentGroup = await signNowContext.DocumentGroup
+        .CreateDocumentGroupAsync("CreateDocumentGroupExample", documents)
+        .ConfigureAwait(false);
+
+    // Get document group by id
+    return await signNowContext.DocumentGroup
+        .GetDocumentGroupInfoAsync(documentGroup.Id)
+        .ConfigureAwait(false);
+}
+```
+More examples: [Document group operations][doc_group_operations example]
+
+
 ## Folders
 
 ### Get all folders
@@ -573,6 +629,7 @@ public static class FolderExamples
 
 More examples: [Get all folders][get_all_folders example], [Get folder][get_folder example], [Create folder][create_folder example]
 
+
 ## Contribution guidelines
 
 ### XML doc generation
@@ -593,6 +650,7 @@ Thanks to all contributors who got interested in this project. We're excited to 
 - Please, check in with the documentation first before you open a new Issue.
 - When suggesting new functionality, give as many details as possible. Add a test or code example if you can.
 - When reporting a bug, please, provide full system information. If possible, add a test that helps us reproduce the bug. It will speed up the fix significantly.
+
 
 ## License
 
@@ -618,45 +676,50 @@ If you have questions about the signNow API, please visit [signNow API Reference
 [license badge]: https://img.shields.io/github/license/signnow/SignNow.NET?style=flat-square "signNow .Net SDK License"
 [license link]: https://github.com/signnow/SignNow.NET/blob/develop/LICENSE
 [api docs link]: https://docs.signnow.com
-[api reference link]: https://docs.signnow.com/sn/ref
+[api reference link]: https://docs.signnow.com/docs/signnow/reference
 
 <!-- All examples URLs should be there -->
 <!-- Authorization -->
-[request_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#L16
-[verify_access_token example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#39
-[refresh_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Authentication/RequestAccessToken.cs#54
+[request_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/GenerateAccessToken.cs
+[verify_access_token example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/VerifyAccessToken.cs
+[refresh_access_token example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/OAuth2/RefreshAccessToken.cs
 
 <!-- Users -->
 [create_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
-[get_user_info example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs#42
-[send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/SendVerificationEmailToUser.cs
-[update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#18
-[reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs#40
-[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs#15
-[get_user_docs example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserDocuments.cs#15
+[get_user_info example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[send_verification example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/CreateSignNowUser.cs
+[update_user example]:              https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[reset_password example]:           https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/ChangeUserDetails.cs
+[get_modified_docs example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserModifiedDocuments.cs
+[get_user_docs example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Users/GetUserDocuments.cs
 
 <!-- Documents -->
-[upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#33
-[upload_doc_extract example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs#14
-[upload_document_complex_tags]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/ExamplesRunner.cs#L364
+[upload_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocument.cs
+[upload_doc_extract example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithTags.cs
+[upload_document_complex_tags]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/UploadDocumentWithComplexTags.cs
 [download_signed_doc example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/DownloadSignedDocument.cs
 [get_document example]:             https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [merge_documents example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MergeTwoDocuments.cs
 [create_sign_lnk example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateSigningLinkToTheDocument.cs
-[create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
-[create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
-[generate_embedded_link example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/GenerateLinkForEmbeddedInvite.cs
-[cancel_embedded_invite example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CancelEmbeddedInvite.cs
 [check_sign_status example]:        https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CheckTheStatusOfTheDocument.cs
 [create_one_time_link example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateOneTimeLinkToDownloadTheDocument.cs
 [document_history example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/GetTheDocumentHistory.cs
 [move_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/MoveTheDocumentToFolder.cs
-[edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/EditDocumentTextFields.cs
+[edit_document example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
 [prefill_text_field example]:       https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/PrefillTextFields.cs
+
+<!-- Invites -->
+[create_ff_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateFreeformInviteToSignTheDocument.cs
+[create_rb_invite example]:         https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateRoleBasedInviteToSignTheDocument.cs
+[generate_embedded_link example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/GCreateEmbeddedSigningInviteToSignTheDocument.cs
+[cancel_embedded_invite example]:   https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Invites/CreateEmbeddedSigningInviteToSignTheDocument.cs
 
 <!-- Templates -->
 [create_template example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateTemplateFromTheDocument.cs
 [create_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateDocumentFromTheTemplate.cs
+
+<!-- Document group -->
+[doc_group_operations example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupOperations.cs
 
 <!-- Folders -->
 [get_all_folders example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetAllFolders.cs

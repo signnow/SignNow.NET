@@ -1,18 +1,13 @@
 using Newtonsoft.Json;
+using SignNow.Net.Model.Responses.GenericResponses;
 
 namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents response from signNow API for User create request.
     /// </summary>
-    public class UserCreateResponse
+    public class UserCreateResponse : IdResponse
     {
-        /// <summary>
-        /// User identity.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
         /// <summary>
         /// User is verified or not.
         /// </summary>

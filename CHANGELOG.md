@@ -5,9 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+
+## [1.3.0] - 2024-12-18
 ### Added
 - Resend Invite feature [#153](https://github.com/signnow/SignNow.NET/issues/153)
 - Options for Embedded invite [#160](https://github.com/signnow/SignNow.NET/issues/160)
+- DocumentGroup feature [#161](https://github.com/signnow/SignNow.NET/issues/161)
+
+### Changed
+- `DownloadDocumentResponse` model extended with `MediaType` property
+
+### Fixed
+- Fixed force logout after user details update
 
 
 ## [1.2.3] - 2023-10-15
@@ -214,7 +223,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 <!-- Links to compare changes from previous version vs new version -->
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.2.2...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/signnow/SignNow.NET/compare/1.2.3...1.3.0
+[1.2.3]: https://github.com/signnow/SignNow.NET/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/signnow/SignNow.NET/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/signnow/SignNow.NET/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/signnow/SignNow.NET/compare/1.1.1...1.2.0

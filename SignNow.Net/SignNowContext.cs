@@ -30,6 +30,9 @@ namespace SignNow.Net
         /// <inheritdoc cref="IEventSubscriptionService"/>
         public IEventSubscriptionService Events { get; protected set; }
 
+        /// <inheritdoc cref="IDocumentGroup"/>
+        public IDocumentGroup DocumentGroup { get; protected set; }
+
         /// <summary>
         /// Create all the services using single instance of <see cref="ISignNowClient"/> and other dependencies.
         /// </summary>
@@ -59,6 +62,7 @@ namespace SignNow.Net
             Documents = new DocumentService(ApiBaseUrl, Token, SignNowClient);
             Folders = new FolderService(ApiBaseUrl, Token, SignNowClient);
             Events = new EventSubscriptionService(ApiBaseUrl, Token, SignNowClient);
+            DocumentGroup = new DocumentGroupService(ApiBaseUrl, Token, SignNowClient);
         }
 
         /// <summary>
@@ -85,6 +89,7 @@ namespace SignNow.Net
             ((DocumentService)Documents).Token = Token;
             ((FolderService)Folders).Token = Token;
             ((EventSubscriptionService)Events).Token = Token;
+            ((DocumentGroupService)DocumentGroup).Token = Token;
         }
     }
 }

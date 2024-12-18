@@ -1,22 +1,30 @@
+using System.IO;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SignNow.Net.Examples.Documents
+namespace SignNow.Net.Examples
 {
-    public static partial class DocumentExamples
+    public partial class DocumentExamples
     {
-        /// <summary>
-        /// Create a one-time use URL for anyone to download the document as a PDF.
-        /// </summary>
-        /// <param name="documentId">Identity of the document</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns><see cref="DownloadLinkResponse"/></returns>
-        public static async Task<DownloadLinkResponse>
-            CreateOneTimeLinkToDownloadTheDocument(string documentId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateOneTimeLinkToDownloadTheDocumentAsync()
         {
-            return await signNowContext.Documents
-                .CreateOneTimeDownloadLinkAsync(documentId)
+            // Upload a document with a signature field
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateOneTimeLinkToDownloadTheDocumentTest.pdf")
                 .ConfigureAwait(false);
+
+            // Create a one-time use URL for anyone to download the document as a PDF
+            var oneTimeLink = await testContext.Documents
+                .CreateOneTimeDownloadLinkAsync(document?.Id)
+                .ConfigureAwait(false);
+
+            // Check if the URL is valid
+            StringAssert.Contains(oneTimeLink.Url.Host, "signnow.com");
+
+            // Clean up
+            DeleteTestDocument(document?.Id);
         }
     }
 }

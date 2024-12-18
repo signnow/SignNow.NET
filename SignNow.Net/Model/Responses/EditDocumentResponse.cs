@@ -1,16 +1,11 @@
-using Newtonsoft.Json;
+using SignNow.Net.Model.Responses.GenericResponses;
 
 namespace SignNow.Net.Model.Responses
 {
     /// <summary>
     /// Represents response for edit document.
     /// </summary>
-    public class EditDocumentResponse
+    public class EditDocumentResponse : IdResponse
     {
-        /// <summary>
-        /// Identity of the document.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
     }
 }

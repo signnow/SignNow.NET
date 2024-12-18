@@ -1,26 +1,35 @@
+using System;
+using System.IO;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SignNow.Net.Examples.Documents
+namespace SignNow.Net.Examples
 {
-    public static partial class DocumentExamples
+    public partial class DocumentExamples
     {
-        /// <summary>
-        /// Create a signing link to the document for signature.
-        /// </summary>
-        /// <param name="documentId">Identity of the document you’d like to have signed</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns>
-        /// Response with:
-        /// <para><see cref="SigningLinkResponse.Url"/> to sign the document via web browser using signNow credentials.</para>
-        /// <para><see cref="SigningLinkResponse.AnonymousUrl"/> to sign the document via web browser without signNow credentials.</para>
-        /// </returns>
-        public static async Task<SigningLinkResponse> CreateSigningLinkToTheDocument(string documentId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateSigningLinkToTheDocumentAsync()
         {
-            // using `documentId` from the Upload document step
-            return await signNowContext.Documents
-                .CreateSigningLinkAsync(documentId)
+            // Upload a document with a signature field
+            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            var document = await testContext.Documents
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateSigningLinkToTheDocument.pdf")
                 .ConfigureAwait(false);
+
+            // Create a signing link to the document for signature
+            var signingLink = await testContext.Documents
+                .CreateSigningLinkAsync(document?.Id)
+                .ConfigureAwait(false);
+
+            // Validate the response
+            Assert.IsNotNull(signingLink.Url);
+            Assert.IsNotNull(signingLink.AnonymousUrl);
+            Assert.IsInstanceOfType(signingLink.Url, typeof(Uri));
+            Assert.AreEqual("https", signingLink.Url.Scheme);
+            Assert.IsFalse(string.IsNullOrEmpty(signingLink.Url.OriginalString));
+
+            // Clean up
+            DeleteTestDocument(document?.Id);
         }
     }
 }

@@ -126,7 +126,7 @@ jobs:
 
       - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           name: ${{ runner.os }}-codecov-${{ matrix.framework }}
           flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}

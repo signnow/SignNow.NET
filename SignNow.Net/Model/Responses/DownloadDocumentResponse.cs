@@ -18,6 +18,11 @@ namespace SignNow.Net.Model
         public long Length { get; set; }
 
         /// <summary>
+        /// Type of content.
+        /// </summary>
+        public string MediaType { get; set; }
+
+        /// <summary>
         /// File contents as Stream.
         /// </summary>
         public Stream Document { get; set; }

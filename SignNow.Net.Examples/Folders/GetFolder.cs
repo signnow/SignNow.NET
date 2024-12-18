@@ -1,23 +1,39 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 
-namespace SignNow.Net.Examples.Folders
+namespace SignNow.Net.Examples
 {
-    public static partial class FolderExamples
+    public partial class FolderExamples
     {
-        /// <summary>
-        /// Get all details of a specific folder including a list of all documents in that folder.
-        /// </summary>
-        /// <param name="folderId">ID of the folder to get details of</param>
-        /// <param name="options">Options like: sort, filter, limit, etc...</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns></returns>
-        public static async Task<SignNowFolders> GetFolder(string folderId, GetFolderOptions options, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task GetFolderAsync()
         {
-            return await signNowContext.Folders
-                .GetFolderAsync(folderId, options)
+            // Get all folders
+            var folders = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+
+            // Get folderId of the "Documents" folder
+            var folderId = folders.Folders.FirstOrDefault(f => f.Name == "Documents")?.Id;
+
+            var filterBySigningStatus = new GetFolderOptions
+            {
+                Filters = new FolderFilters(SigningStatus.Pending)
+            };
+
+            // Get all details of a specific folder including a list of all documents in that folder
+            var folder = await testContext.Folders
+                .GetFolderAsync(folderId, filterBySigningStatus)
                 .ConfigureAwait(false);
+
+            // Check if folder contains only pending documents
+            Assert.IsTrue(folders.Documents.All(d => d.Status == DocumentStatus.Pending));
+            Assert.AreEqual(folders.TotalDocuments, folders.Documents.Count);
+            Assert.IsTrue(folder.SystemFolder);
+            Assert.AreEqual(folderId, folder.Id);
+            Assert.AreEqual(folders.Id, folder.ParentId);
         }
     }
 }

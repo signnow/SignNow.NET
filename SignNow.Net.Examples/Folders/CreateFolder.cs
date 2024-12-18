@@ -1,23 +1,41 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using SignNow.Net.Model;
-using SignNow.Net.Model.Responses;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model.Requests;
 
-namespace SignNow.Net.Examples.Folders
+namespace SignNow.Net.Examples
 {
-    public static partial class FolderExamples
+    public partial class FolderExamples: ExamplesBase
     {
-        /// <summary>
-        /// Creates a folder for the user
-        /// </summary>
-        /// <param name="name">Name of a new folder</param>
-        /// <param name="parentId">Identifier for the parent folder that contains this folder</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns></returns>
-        public static async Task<FolderIdentityResponse> CreateFolder(string name, string parentId, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateFolderAsync()
         {
-            return await signNowContext.Folders
-                .CreateFolderAsync(name, parentId)
+            // Get Root folder and Documents folder
+            var root = await testContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var timestamp = (long)(DateTime.Now - UnixEpoch).TotalSeconds;
+            // Note: You should use different folder name for each example run
+            var myFolderName = $"CreateFolderExample_{timestamp}";
+
+            // Creating new folder
+            var createNewFolder = await testContext.Folders
+                .CreateFolderAsync(myFolderName, documentsFolder?.Id)
                 .ConfigureAwait(false);
+
+            Assert.IsNotNull(createNewFolder.Id);
+
+            // Check if new folder exists
+            var checkNewFolderExists = await testContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, new GetFolderOptions {IncludeDocumentsSubfolder = false})
+                .ConfigureAwait(false);
+
+            var myFolder = checkNewFolderExists.Folders.FirstOrDefault(f => f.Name == myFolderName);
+            Assert.AreEqual(myFolderName, myFolder?.Name);
+
+            // clean up
+            await testContext.Folders.DeleteFolderAsync(myFolder?.Id).ConfigureAwait(false);
         }
     }
 }

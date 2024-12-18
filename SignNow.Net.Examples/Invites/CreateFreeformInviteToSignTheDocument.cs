@@ -1,32 +1,57 @@
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 
-namespace SignNow.Net.Examples.Invites
+namespace SignNow.Net.Examples
 {
-    public static partial class InviteExamples
+    public partial class InviteExamples
     {
-        /// <summary>
-        /// Create a freeform invite to the document for signature.
-        /// </summary>
-        /// <param name="document">signNow document you’d like to have signed</param>
-        /// <param name="email">The email of the invitee.</param>
-        /// <param name="signNowContext">signNow container with services.</param>
-        /// <returns>
-        /// <see cref="InviteResponse"/> which contains an Identity of invite request.
-        /// </returns>
-        public static async Task<InviteResponse> CreateFreeformInviteToSignTheDocument(SignNowDocument document, string email, SignNowContext signNowContext)
+        [TestMethod]
+        public async Task CreateFreeformInviteToSignTheDocumentAsync()
         {
-            // Create freeform invite
-            var invite = new FreeFormSignInvite(email)
+            // Upload the document
+            await using var fileStream = File.OpenRead(PdfWithoutFields);
+            var document = await testContext.Documents
+                .UploadDocumentAsync(fileStream, "CreateFreeformInviteToSignTheDocument.pdf")
+                .ConfigureAwait(false);
+
+            // get the document
+            var signNowDoc = await testContext.Documents.GetDocumentAsync(document.Id).ConfigureAwait(false);
+
+            // Check the document doesn't have any invites
+            Assert.AreEqual(DocumentStatus.NoInvite, signNowDoc.Status);
+
+            // Create an free form invite
+            var emailTo = "noreply@signnow.com";
+            var invite = new FreeFormSignInvite(emailTo)
             {
-                Message = $"{email} invited you to sign the document {document.Name}",
+                Message = $"{emailTo} invited you to sign the document {signNowDoc.Name}",
                 Subject = "The subject of the Email"
             };
-
-            // Creating Invite request
-            return await signNowContext.Invites
-                .CreateInviteAsync(document.Id, invite)
+            var inviteResponse = await testContext.Invites
+                .CreateInviteAsync(signNowDoc.Id, invite)
                 .ConfigureAwait(false);
+
+            // Check the invite was created
+            Assert.IsFalse(string.IsNullOrEmpty(inviteResponse.Id));
+
+            // get document with invite
+            var documentWithInvite = await testContext.Documents.GetDocumentAsync(signNowDoc.Id).ConfigureAwait(false);
+            var createdInvite = documentWithInvite.InvitesStatus.FirstOrDefault();
+
+            // Check the invite was added to the document
+            Assert.AreEqual("noreply@signnow.com", createdInvite?.SignerEmail);
+            Assert.AreEqual(inviteResponse.Id, createdInvite?.Id);
+            Assert.AreEqual(InviteStatus.Pending, createdInvite?.Status);
+            Assert.AreEqual(DocumentStatus.Pending, documentWithInvite.Status);
+
+            // cancel free form invite
+            await testContext.Invites.CancelInviteAsync((FreeformInvite)createdInvite).ConfigureAwait(false);
+
+            // clean up
+            DeleteTestDocument(document.Id);
         }
     }
 }

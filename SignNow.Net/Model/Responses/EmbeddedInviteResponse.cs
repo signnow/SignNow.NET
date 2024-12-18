@@ -1,20 +1,15 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Model.Responses.GenericResponses;
 
 namespace SignNow.Net.Model
 {
     /// <summary>
     /// Represents response from signNow API for create embedded invite request.
     /// </summary>
-    public class EmbeddedInviteData
+    public class EmbeddedInviteData : IdResponse
     {
-        /// <summary>
-        /// Identity of embedded invite request.
-        /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
         /// <summary>
         /// Signer's email address.
         /// </summary>
