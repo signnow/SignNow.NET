@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - '**.md'
       - 'SignNow.Net/SignNow.Net.Examples/**'
+      - '.github/workflows/release.yml'
     tags-ignore:
       - '**'
   pull_request:
