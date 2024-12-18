@@ -78,8 +78,10 @@ namespace UnitTests.Helpers
 
             #if NETCOREAPP3_0 || NETCOREAPP3_1
                 expectedVersion = "3.";
-            #elif NET5_0
-                expectedVersion = "5.";
+            #elif NET7_0
+                expectedVersion = "7.";
+            #elif NET8_0
+                expectedVersion = "8.";
             #endif
 
             StringAssert.StartsWith(SdkRuntime.FrameworkVersion(), expectedVersion);

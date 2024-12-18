@@ -31,13 +31,13 @@ jobs:
       matrix:
         include:
           # Ubuntu
-          - { name: 'Linux .NET 5',         os: ubuntu-22.04,   framework: 'net5' }
+          - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0' }
           # macOs
-          - { name: 'macOS .NET 5',         os: macos-13,       framework: 'net5' }
+          - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
           # Windows
-          - { name: 'Windows .NET Core 3',  os: windows-latest, framework: 'netcoreapp3.1' }
-          - { name: 'Windows .NET 5',       os: windows-latest, framework: 'net5' }
-          - { name: 'Windows .NET 4.5',     os: windows-latest, framework: 'net45' }
+          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0' }
+          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
+          - { name: 'Windows .NET 4.5', os: windows-latest, framework: 'net45' }
 
     env:
       COREHOST_TRACE: false
@@ -60,10 +60,10 @@ jobs:
 
       - name: Setup .NET SDK Version for Target Framework
         run: |
-          If ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
-            Write-Output "DOTNET_SDK_VERSION=3.1.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          } ElseIf ("${{ matrix.framework }}" -eq "net5") {
-            Write-Output "DOTNET_SDK_VERSION=5.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          If ("${{ matrix.framework }}" -eq "net7.0") {
+            Write-Output "DOTNET_SDK_VERSION=7.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } ElseIf ("${{ matrix.framework }}" -eq "net8.0") {
+            Write-Output "DOTNET_SDK_VERSION=8.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           }
 
       - name: Setup .NET SDK
@@ -111,10 +111,10 @@ jobs:
 
       - name: Setup Code Coverage report flags
         run: |
-          If ("${{ matrix.framework }}" -eq "netcoreapp3.1") {
-            Write-Output "TARGET_FRAMEWORK=netstandard12" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          } ElseIf ("${{ matrix.framework }}" -eq "net5") {
+          If ("${{ matrix.framework }}" -eq "net7.0") {
             Write-Output "TARGET_FRAMEWORK=netstandard20" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } ElseIf ("${{ matrix.framework }}" -eq "net8.0") {
+            Write-Output "TARGET_FRAMEWORK=netstandard21" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           } Else {
             Write-Output "TARGET_FRAMEWORK=net45" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           }
