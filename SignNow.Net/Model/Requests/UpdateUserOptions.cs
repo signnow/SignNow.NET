@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Requests
 {
@@ -33,6 +34,7 @@ namespace SignNow.Net.Model.Requests
         /// if "false" - all user tokens except current one are expired
         /// </summary>
         [JsonProperty("logout_all")]
+        [JsonConverter(typeof(BoolToStringJsonConverter))]
         public bool LogOutAll { get; set; } = true;
     }
 }

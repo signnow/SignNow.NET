@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - `DownloadDocumentResponse` model extended with `MediaType` property
 
+### Fixed
+- Fixed force logout after user details update
+
 
 ## [1.2.3] - 2023-10-15
 ### Fixed
