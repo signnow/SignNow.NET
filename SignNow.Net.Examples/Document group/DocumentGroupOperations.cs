@@ -11,7 +11,7 @@ using DownloadType = SignNow.Net.Model.Requests.DocumentGroup.DownloadType;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class DocumentGroupOperations : ExamplesRunner
+    public partial class DocumentGroupOperations : ExamplesBase
     {
         [TestMethod]
         public async Task BasicOperationsWithDocumentGroupAsync()

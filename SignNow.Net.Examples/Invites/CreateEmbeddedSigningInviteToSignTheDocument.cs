@@ -9,7 +9,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class InviteExamples : ExamplesRunner
+    public partial class InviteExamples : ExamplesBase
     {
         [TestMethod]
         public async Task CreateEmbeddedSigningInviteToSignTheDocumentAsync()

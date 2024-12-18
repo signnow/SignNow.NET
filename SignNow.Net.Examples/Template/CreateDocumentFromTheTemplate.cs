@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class TemplateExamples: ExamplesRunner
+    public partial class TemplateExamples: ExamplesBase
     {
         [TestMethod]
         public async Task CreateDocumentFromTemplateAsync()

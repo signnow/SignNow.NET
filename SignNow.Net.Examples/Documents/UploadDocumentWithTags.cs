@@ -6,7 +6,7 @@ using SignNow.Net.Model;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class DocumentExamples : ExamplesRunner
+    public partial class DocumentExamples : ExamplesBase
     {
         [TestMethod]
         public async Task UploadDocumentWithTagsAsync()

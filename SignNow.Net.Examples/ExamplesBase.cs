@@ -8,15 +8,8 @@ using SignNow.Net.Test.Context;
 
 namespace SignNow.Net.Examples
 {
-    /// <summary>
-    /// This Test class contains all tests for Code Samples.
-    ///
-    /// To run single test from console:
-    ///     # For example we want to run only RequestAccessTokenTest
-    ///     dotnet test SignNow.Net.Examples --filter RequestAccessTokenTest
-    /// </summary>
     [TestClass]
-    public abstract class ExamplesRunner
+    public abstract class ExamplesBase
     {
         protected DateTime UnixEpoch => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

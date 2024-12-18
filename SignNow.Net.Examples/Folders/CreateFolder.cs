@@ -6,7 +6,7 @@ using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Examples
 {
-    public partial class FolderExamples: ExamplesRunner
+    public partial class FolderExamples: ExamplesBase
     {
         [TestMethod]
         public async Task CreateFolderAsync()

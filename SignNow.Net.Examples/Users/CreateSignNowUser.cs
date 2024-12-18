@@ -6,7 +6,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class UserExamples : ExamplesRunner
+    public partial class UserExamples : ExamplesBase
     {
         [TestMethod]
         public async Task CreateSignNowUserAsync()

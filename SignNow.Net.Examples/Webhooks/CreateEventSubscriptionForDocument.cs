@@ -9,7 +9,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class CreateEventSubscriptionForDocument : ExamplesRunner
+    public partial class CreateEventSubscriptionForDocument : ExamplesBase
     {
         /// <summary>
         /// Allows to subscribe an external service(callback_url) to a specific event of user or document.

@@ -6,7 +6,7 @@ using SignNow.Net.Service;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class OAuth2Examples : ExamplesRunner
+    public partial class OAuth2Examples : ExamplesBase
     {
         /// <summary>
         /// An example of obtaining an access token via OAuth 2.0 service.
