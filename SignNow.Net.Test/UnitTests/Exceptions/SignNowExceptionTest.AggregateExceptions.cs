@@ -47,7 +47,7 @@ namespace UnitTests.Exceptions
 
             Assert.AreEqual(10, snEx.InnerExceptions.Count);
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK && WINDOWS
             expectedMessage = generalMessage;
 #endif
             Assert.AreEqual(expectedMessage, snEx.Message, "Wrong error Message");
@@ -68,6 +68,8 @@ namespace UnitTests.Exceptions
             var snExceptions = new List<SignNowException>();
             var aggregateMessage = new StringBuilder();
 
+
+
             for (var i = 0; i < 5; i++)
             {
                 snExceptions.Add(
@@ -83,7 +85,7 @@ namespace UnitTests.Exceptions
             catch (AggregateException ex)
             {
                 var expectedMessage = "test-error-message" + aggregateMessage;
-#if NETFRAMEWORK
+#if NETFRAMEWORK && WINDOWS
                 expectedMessage = "test-error-message";
 #endif
                 Assert.AreEqual(expectedMessage, ex.Message);

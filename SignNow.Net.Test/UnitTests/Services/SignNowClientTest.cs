@@ -48,7 +48,7 @@ namespace UnitTests.Services
                             'message': 'context of second errors item'
                         }
                     ]}",
-#if NETFRAMEWORK
+#if NETFRAMEWORK && WINDOWS
                 $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine}"
 #else
                 $"context of first errors item{Environment.NewLine}context of second errors item{Environment.NewLine} (context of first errors item) (context of second errors item)"
@@ -128,7 +128,7 @@ namespace UnitTests.Services
 
             StringAssert.Matches(exception.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
 
-            #if !NET45
+            #if !NET45_OR_GREATER
             StringAssert.Contains(exception.InnerException?.Message, "The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.");
             StringAssert.Contains(exception.InnerException?.InnerException?.Message, "A task was canceled.");
             #else

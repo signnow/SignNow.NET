@@ -50,7 +50,7 @@ namespace UnitTests.Exceptions
             var exception = new SignNowException(TestMessage, innerEx);
             var expectedMessage = TestMessage + $" ({innerExMessage})";
 
-#if NETFRAMEWORK
+#if NETFRAMEWORK && WINDOWS
             expectedMessage = TestMessage;
 #endif
 
