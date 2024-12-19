@@ -79,13 +79,6 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
-      - name: Setup dotnet tools
-        env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ env.DOTNET_SDK_VERSION }}/x64
-        run: |
-          dotnet tool install --global InheritDocTool
-          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
-
       - name: Restore Nuget packages
         run: dotnet restore -v:n
 

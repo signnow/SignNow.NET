@@ -10,7 +10,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-      <NoWarn>1591,1573</NoWarn>
+      <!--
+        1591 - do not warn about missing documentation on build
+        1573 - do not warn about missing parameter documentation on build
+      -->
+      <NoWarn>$(NoWarn);1591;1573</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
@@ -52,8 +56,5 @@
         <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
-
-    <!-- XML documentation generation -->
-    <Import Project="..\InheritDoc.targets" />
 
 </Project>

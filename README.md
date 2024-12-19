@@ -61,12 +61,11 @@ Get your account at <https://www.signnow.com/developers>
         - [Get all document groups the user owns][doc_group_operations example]
     - [Folders](#folders)
         - [Get all folders](#get-all-folders)
-        - [Get folder by Id][get_folder example]
+        - [Get folder by ID][get_folder example]
         - [Create folder][create_folder example]
         - [Rename folder][rename_folder example]
         - [Delete folder][delete_folder example]
 6. [Contribution guidelines](#contribution-guidelines)
-    - [XML doc generation](#xml-doc-generation)
     - [Important notes](#important-notes)
 7. [License](#license)
 
@@ -87,11 +86,11 @@ To start using the API  you will need an API key. You can get one here <https://
 #### Windows
 
 - .Net Framework 4.5 or newer version should be installed in your system, or
-- .Net Core 3.0 and newer
+- .Net 7.0 and newer
 
 #### MacOS and Linux
 
-- .Net Core 3.0 and newer
+- .Net 7.0 and newer
 
 ## Installation
 
@@ -152,7 +151,7 @@ More examples: [Request Access token][request_access_token example], [Verify Acc
 
 ### Creates an account for a user
 
-By default verification email is not sent to newly created User.
+By default, verification email is not sent to newly created User.
 To send it - use `IUserService.SendVerificationEmailAsync(string email)`
 
 ```csharp
@@ -632,16 +631,6 @@ More examples: [Get all folders][get_all_folders example], [Get folder][get_fold
 
 ## Contribution guidelines
 
-### XML doc generation
-
-For XML documentation generation, install InheritDocTool:
-
-```bash
-dotnet tool install -g InheritDocTool
-```
-
-More about the InheritDoc [here](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/examples#document-a-hierarchy-of-classes-and-interfaces)
-
 ### Important notes
 
 Thanks to all contributors who got interested in this project. We're excited to hear from you. Here are some tips to make our collaboration meaningful and bring its best results to life:
@@ -664,7 +653,7 @@ If you have questions about the signNow API, please visit [signNow API Reference
 
 **Sales**: For pricing information, please call (800) 831-2050, email sales@signnow.com or visit <https://www.signnow.com/contact>.
 
-<!-- Aliases for URLs: please place here any long urls to keep clean markdown markup -->
+<!-- Aliases for URLs: please place here any long urls to keep clean Markdown markup -->
 [actions build badge]: https://github.com/signnow/SignNow.NET/workflows/Build%20and%20Test/badge.svg "Build status"
 [actions build link]: https://github.com/signnow/SignNow.NET/actions?query=workflow%3A%22Build+and+Test%22
 [codecov badge]: https://codecov.io/gh/signnow/SignNow.NET/branch/develop/graph/badge.svg "Code coverage report"

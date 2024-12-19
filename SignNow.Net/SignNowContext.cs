@@ -41,17 +41,17 @@ namespace SignNow.Net
         {
         }
 
+        /// <inheritdoc cref="SignNowContext(Token)"/>
         /// <summary>Create all the services with user provided Http Client</summary>
         /// <param name="baseApiUrl">Base signNow api URL</param>
-        /// <inheritdoc cref="SignNowContext(Token)"/>
         /// <param name="client">User provided Http Client</param>
         public SignNowContext(Uri baseApiUrl, Token token, HttpClient client)
             : this(baseApiUrl, token, new SignNowClient(client))
         {
         }
 
-        /// <param name="baseApiUrl">Base signNow api URL</param>
         /// <inheritdoc cref="SignNowContext(Token)"/>
+        /// <param name="baseApiUrl">Base signNow api URL</param>
         /// <param name="signNowClient">signNow HTTP Client</param>
         public SignNowContext(Uri baseApiUrl, Token token, ISignNowClient signNowClient = null)
             : base(baseApiUrl, token, signNowClient)

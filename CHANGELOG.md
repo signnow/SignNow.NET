@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Changed
+- Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
+- Drop support for .NET Core 2.1 and 3.1 (dropper netstandard 1.x)
+- Updated netstandard min version to 2.0
+- Removed InheritDoc tool from the project
+
 
 ## [1.3.0] - 2024-12-18
 ### Added
