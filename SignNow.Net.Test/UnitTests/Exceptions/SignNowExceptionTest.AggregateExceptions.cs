@@ -47,7 +47,7 @@ namespace UnitTests.Exceptions
 
             Assert.AreEqual(10, snEx.InnerExceptions.Count);
 
-#if NET45_OR_GREATER && WINDOWS
+#if NETFRAMEWORK
             expectedMessage = generalMessage;
 #endif
             Assert.AreEqual(expectedMessage, snEx.Message, "Wrong error Message");
@@ -83,7 +83,7 @@ namespace UnitTests.Exceptions
             catch (AggregateException ex)
             {
                 var expectedMessage = "test-error-message" + aggregateMessage;
-#if NET45_OR_GREATER && WINDOWS
+#if NETFRAMEWORK
                 expectedMessage = "test-error-message";
 #endif
                 Assert.AreEqual(expectedMessage, ex.Message);
