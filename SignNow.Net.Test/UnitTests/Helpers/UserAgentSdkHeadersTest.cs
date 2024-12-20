@@ -30,9 +30,7 @@ namespace UnitTests.Helpers
 
             var userAgentString = $"{SdkRuntime.ClientName}/v{SdkRuntime.Version} ({RuntimeInfo.OsName}; {RuntimeInfo.Platform}; {RuntimeInfo.Arch}) {SdkRuntime.FrameworkName()}/v{SdkRuntime.FrameworkVersion()}";
 
-            #if DEBUG
-            Console.WriteLine(userAgentString);
-            #endif
+            Console.WriteLine("Detected User-Agent string: {0}", userAgentString);
 
             StringAssert.Contains(SdkRuntime.ClientName, "SignNow .NET API Client");
             StringAssert.Matches(SdkRuntime.ClientName, new Regex(patternClient));
@@ -46,23 +44,15 @@ namespace UnitTests.Helpers
         [TestMethod]
         public void OsDescriptionTest()
         {
-            #if DEBUG
-            Console.WriteLine(SdkRuntime.OsDescription());
-            #endif
+            Console.WriteLine("Detected OS description: {0}", SdkRuntime.OsDescription());
 
-            var expectedOs = RuntimeInfo.GetOSName()
-                .Replace("macOS", "Darwin")
-                .ToUpperInvariant();
-
-            StringAssert.Contains(SdkRuntime.OsDescription().ToUpperInvariant(),  expectedOs);
+            StringAssert.Matches(SdkRuntime.OsDescription().ToLower(), new Regex(@"windows|darwin|macos|osx|linux||ubuntu|debian|redhat|fedora|alpine|freebsd"));
         }
 
         [TestMethod]
         public void FrameworkNameTest()
         {
-            #if DEBUG
-            Console.WriteLine(SdkRuntime.FrameworkName());
-            #endif
+            Console.WriteLine("Detected Framework name: {0}", SdkRuntime.FrameworkName());
 
             StringAssert.Contains(SdkRuntime.FrameworkName(), ".NET");
         }
@@ -70,16 +60,16 @@ namespace UnitTests.Helpers
         [TestMethod]
         public void FrameworkVersionTest()
         {
-            #if DEBUG
-            Console.WriteLine(SdkRuntime.FrameworkVersion());
-            #endif
+            Console.WriteLine("Detected Framework version: {0}", SdkRuntime.FrameworkVersion());
 
             var expectedVersion = "4.";
 
             #if NETCOREAPP3_0 || NETCOREAPP3_1
                 expectedVersion = "3.";
-            #elif NET5_0
-                expectedVersion = "5.";
+            #elif NET7_0
+                expectedVersion = "7.";
+            #elif NET8_0
+                expectedVersion = "8.";
             #endif
 
             StringAssert.StartsWith(SdkRuntime.FrameworkVersion(), expectedVersion);

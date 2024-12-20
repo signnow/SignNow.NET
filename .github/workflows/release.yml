@@ -15,7 +15,6 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
       DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
       NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
-      DOTNET_SDK_VERSION: 5.0.x
 
     defaults:
       run:
@@ -24,12 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET 5
+      - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            3.1.x
-            5.0.x
+            7.0.x
+            8.0.x
 
       - name: Setup Nuget Cache
         uses: actions/cache@v4
@@ -38,13 +37,6 @@ jobs:
           path: ~/.nuget
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
-
-      - name: Setup dotnet tool
-        env:
-          DOTNET_ROOT: ${{ runner.tool_cache }}/dncs/${{ env.DOTNET_SDK_VERSION }}/x64
-        run: |
-          dotnet tool install --global InheritDocTool --version 2.5.2
-          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore Nuget packages
         run: dotnet restore -v:n

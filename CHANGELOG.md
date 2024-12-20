@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Changed
+- Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
+- Drop support for .NET Core 2.1 and 3.1 (dropper netstandard 1.x)
+- Updated netstandard min version to 2.0
+- Removed InheritDoc tool from the project
+- Upgraded NET Framework min supported version to 4.6.2
+
 
 ## [1.3.0] - 2024-12-18
 ### Added
@@ -94,8 +101,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `IFolderService.GetAllFoldersAsync` that allows you to get all user Folders with documents
 - `IFolderService.GetFolderAsync` that allows you to get all details of a specific folder including all documents in that folder.
 - `IFolderService.CreateFolderAsync` that allows you to create folder for a user.
-- `IFolderService.DeleteFolderAsync` that allows you to deletes a folder.
-- `IFolderService.RenameFolderAsync` that allows you to renames a folder.
+- `IFolderService.DeleteFolderAsync` that allows you to delete a folder.
+- `IFolderService.RenameFolderAsync` that allows you to rename a folder.
 - `IDocumentService.MoveDocumentAsync` that allows you to move the document to a specified folder.
 
 
@@ -123,8 +130,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `Service.DocumentService.CreateOneTimeDownloadLinkAsync` that allows to share document via one-time URL
 - `Service.UserService.CreateUserAsync` that allows to create an account for user
 - `Service.UserService.UpdateUserAsync` that allows to update user information i.e. first name, last name
-- `Service.UserService.SendVerificationEmailAsync` that allows to sends verification email to a user
-- `Service.UserService.SendPasswordResetLinkAsync` that allows to sends password reset link to a user
+- `Service.UserService.SendVerificationEmailAsync` that allows to send verification email to a user
+- `Service.UserService.SendPasswordResetLinkAsync` that allows to send password reset link to a user
 
 ### Changed
 - Increased timeout for Http Client
@@ -218,7 +225,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Implemented document ID parameter value validation in DocumentService.DeleteDocumentAsync method.
 
 
-<!-- Aliases for URLs: please place here any long urls to keep clean markdown markup -->
+<!-- Aliases for URLs: please place here any long urls to keep clean Markdown markup -->
 [create role-based invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-role-based-invite
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 

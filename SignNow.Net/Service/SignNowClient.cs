@@ -13,7 +13,7 @@ using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Model;
 using SignNow.Net.Model;
 
-#if NET45
+#if NET462
 using System.Net;
 #endif
 
@@ -67,7 +67,7 @@ namespace SignNow.Net.Service
         /// </param>
         public SignNowClient(HttpClient httpClient = null)
         {
-#if NET45
+#if NET462
             // With .NET Framework 4.5, it's necessary to manually enable support for TLS 1.2.
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 #endif

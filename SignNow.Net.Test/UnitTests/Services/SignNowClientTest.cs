@@ -128,7 +128,7 @@ namespace UnitTests.Services
 
             StringAssert.Matches(exception.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
 
-            #if NET5_0
+            #if !NET45_OR_GREATER
             StringAssert.Contains(exception.InnerException?.Message, "The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.");
             StringAssert.Contains(exception.InnerException?.InnerException?.Message, "A task was canceled.");
             #else
