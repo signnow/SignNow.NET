@@ -32,8 +32,8 @@ jobs:
         include:
           # Ubuntu
           - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0' }
-          # macOs
-          - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
+          # macOs - disabled due to the same behavior as in Ubuntu
+          # - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
           # Windows
           - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0' }
           - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
