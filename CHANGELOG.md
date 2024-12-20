@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Drop support for .NET Core 2.1 and 3.1 (dropper netstandard 1.x)
 - Updated netstandard min version to 2.0
 - Removed InheritDoc tool from the project
+- Upgraded NET Framework min supported version to 4.6.2
 
 
 ## [1.3.0] - 2024-12-18

@@ -8,7 +8,7 @@
 
 ## About signNow
 
-signNow.Net is the official .NET 4.5+ and .NET Standard class library for the signNow API. signNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
+signNow.Net is the official .NET 4.6.2+ and .NET Standard class library for the signNow API. signNow allows you to embed legally-binding e-signatures into your app, CRM or cloud storage. Send documents for signature directly from your website. Invite multiple signers to finalize contracts. Track status of your requests and download signed copies automatically.
 
 Get your account at <https://www.signnow.com/developers>
 
@@ -85,7 +85,7 @@ To start using the API  you will need an API key. You can get one here <https://
 
 #### Windows
 
-- .Net Framework 4.5 or newer version should be installed in your system, or
+- .Net Framework 4.6.2 or newer version should be installed in your system, or
 - .Net 7.0 and newer
 
 #### MacOS and Linux

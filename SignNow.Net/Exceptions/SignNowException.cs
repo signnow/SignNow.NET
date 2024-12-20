@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 
 namespace SignNow.Net.Exceptions
 {
-#if NET45 || NETSTANDARD2_0
+#if NET462 || NETSTANDARD2_0
     [Serializable]
 #endif
     public class SignNowException : AggregateException
@@ -78,7 +78,7 @@ namespace SignNow.Net.Exceptions
             HttpStatusCode = httpStatusCode;
         }
 
-    #if NET45 || NETSTANDARD2_0
+    #if NET462 || NETSTANDARD2_0
         protected SignNowException(SerializationInfo info, StreamingContext context) : base (info, context) { }
     #endif
     }
