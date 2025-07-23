@@ -1,0 +1,9 @@
+# SignNow.NET gitignore
+#
+# OS and IDE specific ignoring files shold be configured
+# into ~/.global_gitignore
+# @see: https://help.github.com/en/articles/ignoring-files#create-a-global-gitignore
+#
+
+# ignore local files with API credentials
+*.signnow.com.json

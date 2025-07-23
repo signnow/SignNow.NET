@@ -1,0 +1,70 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    env:
+      COREHOST_TRACE: false
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1          # Disable sending usage data to Microsoft
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
+      DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
+      NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            7.0.x
+            8.0.x
+
+      - name: Setup Nuget Cache
+        uses: actions/cache@v4
+        id: nuget-cache
+        with:
+          path: ~/.nuget
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore Nuget packages
+        run: dotnet restore -v:n
+
+      - name: Prepare Release Assets
+        id: get-version
+        shell: bash
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          .github/release-notes.sh CHANGELOG.md > release-notes.txt
+
+      - name: Creates Nuget package
+        run: dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: signNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
+          tag: ${{ steps.get-version.outputs.VERSION }}
+          bodyFile: ${{ github.workspace }}/release-notes.txt
+          allowUpdates: true
+          artifacts: ${{ github.workspace }}/SignNow.Net/bin/Publish/*.nupkg
+          artifactContentType: application/octet-stream
+
+      - name: Publish Nuget Package
+        working-directory: ${{ github.workspace }}/SignNow.Net/bin/Publish
+        run: |
+          dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
+              -k ${{ secrets.NUGET_TOKEN }} \
+              -s https://api.nuget.org/v3/index.json

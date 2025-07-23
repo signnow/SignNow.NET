@@ -1,0 +1,16 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+    <PropertyGroup>
+        <IsTestProject>true</IsTestProject>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!--Enable coverage through coverlet's MSBuild task package or use console param: `/p:CollectCoverage=true`-->
+    <PropertyGroup Condition="'$(CollectCoverage)' == 'true'">
+      <CollectCoverage>true</CollectCoverage>
+      <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
+      <CoverletOutput>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/</CoverletOutput>
+      <MergeWith>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/coverage.$(TargetFramework).json</MergeWith>
+      <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+    </PropertyGroup>
+</Project>

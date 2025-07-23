@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\netfx.props" />
+  <Import Project="..\SignNow.props" />
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1;net462</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <PackageId>SignNow.NET</PackageId>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <!--
+        1591 - do not warn about missing documentation on build
+        1573 - do not warn about missing parameter documentation on build
+      -->
+      <NoWarn>$(NoWarn);1591;1573</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Net.Http.WebRequest" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="_Internal\Model\" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="_Internal\Infrastructure\" />
+      <Folder Include="_Internal\Response" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="SignNowClient.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Exceptions\ExceptionMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ExceptionMessages.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Exceptions\ExceptionMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+</Project>

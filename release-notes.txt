@@ -1,0 +1,1 @@
+Release notes are available at: https://github.com/signnow/SignNow.NET/releases
