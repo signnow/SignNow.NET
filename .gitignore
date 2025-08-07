@@ -7,3 +7,5 @@
 
 # ignore local files with API credentials
 *.signnow.com.json
+*/bin/
+*/obj/

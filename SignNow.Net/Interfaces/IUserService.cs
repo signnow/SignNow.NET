@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
 {
@@ -50,6 +51,23 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns></returns>
         Task SendPasswordResetLinkAsync(string email, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Verifies user's email address using the verification token from the verification email
+        /// </summary>
+        /// <param name="email">User's email address</param>
+        /// <param name="verificationToken">The token included in the verification link sent to the user's email address</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>Response containing the verified email address</returns>
+        Task<VerifyEmailResponse> VerifyEmailAsync(string email, string verificationToken, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates user's initials with the provided image data
+        /// </summary>
+        /// <param name="imageData">Base64 encoded image data for the user's initials</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
+        /// <returns>Response containing the initial image details</returns>
+        Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(string imageData, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns an enumerable of user's documents that have been modified
