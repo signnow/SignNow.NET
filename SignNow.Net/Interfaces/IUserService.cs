@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
@@ -64,10 +65,10 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Updates user's initials with the provided image data
         /// </summary>
-        /// <param name="imageData">Base64 encoded image data for the user's initials</param>
+        /// <param name="imageData">Stream containing binary image data for the user's initials</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled</param>
         /// <returns>Response containing the initial image details</returns>
-        Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(string imageData, CancellationToken cancellationToken = default);
+        Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(Stream imageData, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns an enumerable of user's documents that have been modified

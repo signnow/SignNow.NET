@@ -1,11 +1,12 @@
 using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
-using SignNow.Net.Test.Constants;
 
 namespace UnitTests.Services
 {
@@ -14,24 +15,26 @@ namespace UnitTests.Services
         [TestMethod]
         public void UpdateUserInitialsWithValidImageDataShouldReturnResponse()
         {
+            // Real API response structure based on sn-api-mvp.json specification
             var mockResponse = @"
             {
-                ""id"": ""initial123"",
-                ""width"": ""200"",
-                ""height"": ""100"",
-                ""created"": ""2023-12-01T10:00:00Z""
+                ""id"": ""1234567890abcdef1234567890abcdef12345678"",
+                ""width"": ""80"",
+                ""height"": ""40"",
+                ""created"": ""1701424800""
             }";
 
             var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(mockResponse));
-            var validImageData = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
-
-            var response = userService.UpdateUserInitialsAsync(validImageData).Result;
+            var validImageBytes = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==");
+            
+            using var imageStream = new MemoryStream(validImageBytes);
+            var response = userService.UpdateUserInitialsAsync(imageStream).Result;
 
             Assert.IsNotNull(response);
-            Assert.AreEqual("initial123", response.Id);
-            Assert.AreEqual("200", response.Width);
-            Assert.AreEqual("100", response.Height);
-            Assert.AreEqual("2023-12-01T10:00:00Z", response.Created);
+            Assert.AreEqual("1234567890abcdef1234567890abcdef12345678", response.Id);
+            Assert.AreEqual(80, response.Width);
+            Assert.AreEqual(40, response.Height);
+            Assert.AreEqual(new DateTime(2023, 12, 1, 10, 0, 0, DateTimeKind.Utc), response.Created);
         }
 
         [TestMethod]
@@ -42,79 +45,111 @@ namespace UnitTests.Services
             var exception = Assert.ThrowsException<AggregateException>(
                 () => userService.UpdateUserInitialsAsync(null).Result);
 
-            Assert.IsNotNull(exception.InnerException);
-            StringAssert.Contains(exception.InnerException.Message, "Cannot be null, empty or whitespace");
-            StringAssert.Contains(exception.InnerException.Message, "imageData");
+            Assert.IsInstanceOfType(exception.InnerException, typeof(ArgumentNullException));
+            Assert.AreEqual("imageData", ((ArgumentNullException)exception.InnerException).ParamName);
         }
 
         [TestMethod]
-        public void UpdateUserInitialsShouldThrowExceptionForEmptyImageData()
+        public async Task UpdateUserInitialsShouldThrowExceptionForEmptyImageData()
         {
-            var userService = new UserService(ApiBaseUrl, new Token());
+            // Real API error response for empty data - based on comment in code review
+            var errorResponse = @"
+            {
+                ""errors"": [
+                    {
+                        ""code"": 65536,
+                        ""message"": ""data must not be empty""
+                    }
+                ]
+            }";
 
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => userService.UpdateUserInitialsAsync("").Result);
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(errorResponse, HttpStatusCode.BadRequest));
+            using var emptyStream = new MemoryStream();
+            
+            var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
+                async () => await userService.UpdateUserInitialsAsync(emptyStream));
 
-            Assert.IsNotNull(exception.InnerException);
-            StringAssert.Contains(exception.InnerException.Message, "Cannot be null, empty or whitespace");
-            StringAssert.Contains(exception.InnerException.Message, "imageData");
+            Assert.IsNotNull(exception);
+            Assert.IsTrue(exception.Message.Contains("data must not be empty"), 
+                $"Expected 'data must not be empty' in error message. Actual: {exception.Message}");
         }
 
         [TestMethod]
         public async Task UpdateUserInitialsWithInvalidImageDataShouldThrowSignNowException()
         {
-            var mockErrorResponse = @"
+            // Real API error response for invalid payload based on user.json code 65536
+            var errorResponse = @"
             {
-                ""error"": ""Unable to convert file to png"",
-                ""error_description"": ""Unable to convert file to png""
+                ""errors"": [
+                    {
+                        ""code"": 65536,
+                        ""message"": ""Invalid payload""
+                    }
+                ]
             }";
 
-            var userService = new UserService(ApiBaseUrl, new Token(), 
-                SignNowClientMock(mockErrorResponse, System.Net.HttpStatusCode.BadRequest));
-
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(errorResponse, HttpStatusCode.BadRequest));
+            var invalidImageBytes = System.Text.Encoding.UTF8.GetBytes("invalid image data");
+            
+            using var imageStream = new MemoryStream(invalidImageBytes);
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
-                async () => await userService.UpdateUserInitialsAsync("invalid_image_data"));
+                async () => await userService.UpdateUserInitialsAsync(imageStream));
 
             Assert.IsNotNull(exception);
-            StringAssert.Contains(exception.Message, "Unable to convert file to png");
+            Assert.IsTrue(exception.Message.Contains("Invalid payload") || exception.Message.Contains("invalid"), 
+                $"Expected error message to contain validation error. Actual: {exception.Message}");
         }
 
         [TestMethod]
         public async Task UpdateUserInitialsWithUnsupportedImageTypeShouldThrowSignNowException()
         {
-            var mockErrorResponse = @"
+            // Real API error response for unsupported format
+            var errorResponse = @"
             {
-                ""error"": ""Unsupported Image Type"",
-                ""error_description"": ""Unsupported Image Type""
+                ""errors"": [
+                    {
+                        ""code"": 65536,
+                        ""message"": ""Invalid payload""
+                    }
+                ]
             }";
 
-            var userService = new UserService(ApiBaseUrl, new Token(), 
-                SignNowClientMock(mockErrorResponse, System.Net.HttpStatusCode.BadRequest));
-
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(errorResponse, HttpStatusCode.BadRequest));
+            var unsupportedImageBytes = System.Text.Encoding.UTF8.GetBytes("GIF89a..."); // Unsupported GIF data
+            
+            using var imageStream = new MemoryStream(unsupportedImageBytes);
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
-                async () => await userService.UpdateUserInitialsAsync("unsupported_format_data"));
+                async () => await userService.UpdateUserInitialsAsync(imageStream));
 
             Assert.IsNotNull(exception);
-            StringAssert.Contains(exception.Message, "Unsupported Image Type");
+            Assert.IsTrue(exception.Message.Contains("Invalid payload") || exception.Message.Contains("invalid"), 
+                $"Expected error message to contain validation error. Actual: {exception.Message}");
         }
 
         [TestMethod]
         public async Task UpdateUserInitialsWithImageTooLargeShouldThrowSignNowException()
         {
-            var mockErrorResponse = @"
+            // Real API error response for payload too large
+            var errorResponse = @"
             {
-                ""error"": ""Initial image too large."",
-                ""error_description"": ""Initial image too large.""
+                ""errors"": [
+                    {
+                        ""code"": 65536,
+                        ""message"": ""Invalid payload""
+                    }
+                ]
             }";
 
-            var userService = new UserService(ApiBaseUrl, new Token(), 
-                SignNowClientMock(mockErrorResponse, System.Net.HttpStatusCode.BadRequest));
-
+            var userService = new UserService(ApiBaseUrl, new Token(), SignNowClientMock(errorResponse, HttpStatusCode.BadRequest));
+            var largeImageBytes = new byte[10 * 1024 * 1024]; // 10MB of data
+            
+            using var imageStream = new MemoryStream(largeImageBytes);
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
-                async () => await userService.UpdateUserInitialsAsync("very_large_image_data"));
+                async () => await userService.UpdateUserInitialsAsync(imageStream));
 
             Assert.IsNotNull(exception);
-            StringAssert.Contains(exception.Message, "Initial image too large");
+            Assert.IsTrue(exception.Message.Contains("Invalid payload") || exception.Message.Contains("invalid"), 
+                $"Expected error message to contain validation error. Actual: {exception.Message}");
         }
     }
 }

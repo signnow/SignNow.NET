@@ -1,4 +1,7 @@
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Internal.Requests
@@ -9,9 +12,11 @@ namespace SignNow.Net.Internal.Requests
     internal class UpdateUserInitialsRequest : JsonHttpContent
     {
         /// <summary>
-        /// Base64 encoded image data for the user's initials
+        /// Binary image data for the user's initials.
         /// </summary>
         [JsonProperty("data")]
-        public string Data { get; set; }
+        [JsonConverter(typeof(StringBase64ToByteArrayJsonConverter))]
+        [SuppressMessage("Properties should not return arrays", "CA1819")]
+        public byte[] Data { get; set; }
     }
 }

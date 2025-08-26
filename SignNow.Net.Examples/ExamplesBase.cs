@@ -17,7 +17,7 @@ namespace SignNow.Net.Examples
         /// Base path to the `TestExamples` directory.
         /// Path should use Unix-like directory separator char. It requires for cross-platform path compatibility.
         /// </summary>
-        private static readonly string BaseTestExamplesPath = "../../../TestExamples/"
+        protected static readonly string BaseTestExamplesPath = "../../../TestExamples/"
             .Replace('/', Path.DirectorySeparatorChar);
 
         protected static readonly string PdfWithSignatureField = Path.Combine(BaseTestExamplesPath, "DocumentWithSignatureFieldTag.pdf");

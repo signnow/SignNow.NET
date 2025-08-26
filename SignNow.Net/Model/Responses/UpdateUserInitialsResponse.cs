@@ -1,4 +1,6 @@
+using System;
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Responses
 {
@@ -17,18 +19,21 @@ namespace SignNow.Net.Model.Responses
         /// Width of the initial image in pixels.
         /// </summary>
         [JsonProperty("width")]
-        public string Width { get; set; }
+        [JsonConverter(typeof(StringToIntJsonConverter))]
+        public int Width { get; set; }
 
         /// <summary>
         /// Height of the initial image in pixels.
         /// </summary>
         [JsonProperty("height")]
-        public string Height { get; set; }
+        [JsonConverter(typeof(StringToIntJsonConverter))]
+        public int Height { get; set; }
 
         /// <summary>
         /// Timestamp when the initial was created.
         /// </summary>
         [JsonProperty("created")]
-        public string Created { get; set; }
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
+        public DateTime Created { get; set; }
     }
 }

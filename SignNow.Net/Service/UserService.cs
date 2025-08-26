@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
@@ -131,17 +132,30 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc cref="IUserService.UpdateUserInitialsAsync" />
-        /// <exception cref="ArgumentException"><paramref name="imageData"/> is null or empty</exception>
-        public async Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(string imageData, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"><paramref name="imageData"/> is null</exception>
+        public async Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(Stream imageData, CancellationToken cancellationToken = default)
         {
-            Guard.ArgumentIsNotEmptyString(imageData, nameof(imageData));
+            Guard.ArgumentNotNull(imageData, nameof(imageData));
+
+            Token.TokenType = TokenType.Bearer;
+
+            byte[] imageBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+                await imageData.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+#else
+                await imageData.CopyToAsync(memoryStream).ConfigureAwait(false);
+#endif
+                imageBytes = memoryStream.ToArray();
+            }
 
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/initial"),
                 Content = new UpdateUserInitialsRequest
                 {
-                    Data = imageData
+                    Data = imageBytes
                 },
                 Token = Token
             };

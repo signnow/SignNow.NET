@@ -1,67 +1,68 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Model;
-using SignNow.Net.Service;
-using SignNow.Net.Test.Context;
 
 namespace AcceptanceTests
 {
     public partial class UserServiceTest
     {
-        [TestMethod]
-        public async Task CannotUpdateUserInitialsWithIncorrectImageData()
+        [DataTestMethod]
+        [DynamicData(nameof(GetInvalidImageDataTestCases), DynamicDataSourceType.Method)]
+        public async Task CannotUpdateUserInitialsWithInvalidData(string testName, byte[] imageData, string expectedErrorMessage)
         {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
-
-            // Get Bearer token for user initial operations
-            var oAuthService = new OAuth2Service(ApiBaseUrl, credentials.ClientId, credentials.ClientSecret);
-            var token = await oAuthService.GetTokenAsync(credentials.Login, credentials.Password, SignNow.Net.Model.Scope.All);
-            userService.Token = token;
-
+            using var imageStream = new MemoryStream(imageData);
+            
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
-                async () => await userService.UpdateUserInitialsAsync("invalid_image_data"));
+                async () => await SignNowTestContext.Users.UpdateUserInitialsAsync(imageStream));
 
-            // Should throw exception for incorrect image data as per API specification
-            Assert.IsNotNull(exception);
-        }
-
-        [TestMethod]
-        public async Task CannotUpdateUserInitialsWithEmptyImageData()
-        {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
-
-            // Get Bearer token for user initial operations
-            var oAuthService = new OAuth2Service(ApiBaseUrl, credentials.ClientId, credentials.ClientSecret);
-            var token = await oAuthService.GetTokenAsync(credentials.Login, credentials.Password, SignNow.Net.Model.Scope.All);
-            userService.Token = token;
-
-            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
-                async () => await userService.UpdateUserInitialsAsync(""));
-
-            Assert.IsNotNull(exception);
-            StringAssert.Contains(exception.Message, "imageData");
+            Assert.IsNotNull(exception, "Exception should not be null");
+            
+            // Check for specific API error message
+            Assert.IsTrue(
+                exception.Message.IndexOf(expectedErrorMessage, StringComparison.OrdinalIgnoreCase) >= 0,
+                $"Test case '{testName}': Expected error message to contain '{expectedErrorMessage}'. Actual: {exception.Message}"
+            );
         }
 
         [TestMethod]
         public async Task CannotUpdateUserInitialsWithNullImageData()
         {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
+            var exception = await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+                async () => await SignNowTestContext.Users.UpdateUserInitialsAsync(null));
 
-            // Get Bearer token for user initial operations
-            var oAuthService = new OAuth2Service(ApiBaseUrl, credentials.ClientId, credentials.ClientSecret);
-            var token = await oAuthService.GetTokenAsync(credentials.Login, credentials.Password, SignNow.Net.Model.Scope.All);
-            userService.Token = token;
+            Assert.IsNotNull(exception, "Exception should not be null");
+            Assert.AreEqual("imageData", exception.ParamName, "Parameter name should be 'imageData'");
+        }
 
-            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
-                async () => await userService.UpdateUserInitialsAsync(null));
+        private static IEnumerable<object[]> GetInvalidImageDataTestCases()
+        {
+            // Test case: Empty data should return "data must not be empty" error
+            yield return new object[] 
+            { 
+                "Empty Image Data", 
+                new byte[0], 
+                "data must not be empty" 
+            };
 
-            Assert.IsNotNull(exception);
-            StringAssert.Contains(exception.Message, "imageData");
+            // Test case: Invalid image format - API returns specific error message
+            yield return new object[] 
+            { 
+                "Invalid Image Format", 
+                Encoding.UTF8.GetBytes("invalid image data"), 
+                "Unable to convert file to png" 
+            };
+
+            // Test case: Unsupported image type (e.g., GIF) - API returns specific error message
+            yield return new object[] 
+            { 
+                "Unsupported Image Type", 
+                Encoding.UTF8.GetBytes("GIF89a..."), 
+                "Unable to convert file to png" 
+            };
         }
     }
 }

@@ -1,70 +1,109 @@
 using System;
-using System.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
-using SignNow.Net.Model;
-using SignNow.Net.Service;
-using SignNow.Net.Test.Context;
 
 namespace AcceptanceTests
 {
     public partial class UserServiceTest
     {
-        [TestMethod]
-        public async Task CannotVerifyEmailWithIncorrectToken()
+        [DataTestMethod]
+        [DynamicData(nameof(GetVerifyEmailErrorTestCases), DynamicDataSourceType.Method)]
+        public async Task CannotVerifyEmailWithInvalidData(string testName, string email, string verificationToken, string expectedErrorMessage, int expectedErrorCode)
         {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
-            
-            // Create Basic auth token like in OAuth2Service
-            var plainTextBytes = Encoding.UTF8.GetBytes($"{credentials.ClientId}:{credentials.ClientSecret}");
-            var appToken = Convert.ToBase64String(plainTextBytes);
-            userService.Token = new Token { AppToken = appToken, TokenType = TokenType.Basic };
-            
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
-                async () => await userService.VerifyEmailAsync(
-                    "test@signnow.com", 
-                    "incorrect_verification_token"));
+                async () => await SignNowTestContext.Users.VerifyEmailAsync(email, verificationToken));
 
-            // Should throw exception for incorrect token as per API specification
-            Assert.IsNotNull(exception);
+            Assert.IsNotNull(exception, $"Test case '{testName}': Exception should not be null");
+            
+            // Check for specific API error message and code
+            Assert.IsTrue(
+                exception.Message.IndexOf(expectedErrorMessage, StringComparison.OrdinalIgnoreCase) >= 0,
+                $"Test case '{testName}': Expected error message to contain '{expectedErrorMessage}'. Actual: {exception.Message}"
+            );
         }
 
-        [TestMethod]
-        public void VerifyEmailWithNullTokenShouldThrowArgumentException()
+        [DataTestMethod]
+        [DynamicData(nameof(GetVerifyEmailArgumentTestCases), DynamicDataSourceType.Method)]
+        public async Task VerifyEmailShouldThrowArgumentExceptionForInvalidInput(string testName, string email, string verificationToken, Type expectedExceptionType)
         {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
-            
-            // Create Basic auth token like in OAuth2Service
-            var plainTextBytes = Encoding.UTF8.GetBytes($"{credentials.ClientId}:{credentials.ClientSecret}");
-            var appToken = Convert.ToBase64String(plainTextBytes);
-            userService.Token = new Token { AppToken = appToken, TokenType = TokenType.Basic };
+            Exception exception;
+            try
+            {
+                await SignNowTestContext.Users.VerifyEmailAsync(email, verificationToken);
+                Assert.Fail($"Test case '{testName}': Expected {expectedExceptionType.Name} but no exception was thrown");
+                return;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
 
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => userService.VerifyEmailAsync("test@signnow.com", null).Result);
-
-            Assert.IsNotNull(exception.InnerException);
-            Assert.IsInstanceOfType(exception.InnerException, typeof(ArgumentException));
+            Assert.IsNotNull(exception, $"Test case '{testName}': Exception should not be null");
+            Assert.IsInstanceOfType(exception, expectedExceptionType, $"Test case '{testName}': Exception type should be {expectedExceptionType.Name}");
         }
 
-        [TestMethod]
-        public void VerifyEmailWithInvalidEmailShouldThrowArgumentException()
+        private static IEnumerable<object[]> GetVerifyEmailErrorTestCases()
         {
-            var credentials = new CredentialLoader(ApiBaseUrl).GetCredentials();
-            var userService = new UserService(ApiBaseUrl, null);
-            
-            // Create Basic auth token like in OAuth2Service
-            var plainTextBytes = Encoding.UTF8.GetBytes($"{credentials.ClientId}:{credentials.ClientSecret}");
-            var appToken = Convert.ToBase64String(plainTextBytes);
-            userService.Token = new Token { AppToken = appToken, TokenType = TokenType.Basic };
+            // Test case: Incorrect verification token (API error code 65629)
+            yield return new object[] 
+            { 
+                "Incorrect Verification Token", 
+                "test@signnow.com", 
+                "incorrect_verification_token",
+                "verification token does not match email address passed in or is invalid",
+                65629
+            };
 
-            var exception = Assert.ThrowsException<AggregateException>(
-                () => userService.VerifyEmailAsync("invalid-email", "valid_token").Result);
+            // Test case: Expired verification token (API returns same error as incorrect token)
+            yield return new object[] 
+            { 
+                "Expired Verification Token", 
+                "test@signnow.com", 
+                "expired_verification_token",
+                "verification token does not match email address passed in or is invalid",
+                65629
+            };
+        }
 
-            Assert.IsNotNull(exception.InnerException);
-            Assert.IsInstanceOfType(exception.InnerException, typeof(ArgumentException));
+        private static IEnumerable<object[]> GetVerifyEmailArgumentTestCases()
+        {
+            // Test case: Null verification token
+            yield return new object[] 
+            { 
+                "Null Verification Token", 
+                "test@signnow.com", 
+                null,
+                typeof(ArgumentException)
+            };
+
+            // Test case: Empty verification token
+            yield return new object[] 
+            { 
+                "Empty Verification Token", 
+                "test@signnow.com", 
+                "",
+                typeof(ArgumentException)
+            };
+
+            // Test case: Invalid email format
+            yield return new object[] 
+            { 
+                "Invalid Email Format", 
+                "invalid-email", 
+                "valid_token",
+                typeof(ArgumentException)
+            };
+
+            // Test case: Null email - SDK throws ArgumentNullException for null parameters
+            yield return new object[] 
+            { 
+                "Null Email", 
+                null, 
+                "valid_token",
+                typeof(ArgumentNullException)
+            };
         }
     }
 }
