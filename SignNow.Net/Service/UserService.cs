@@ -139,24 +139,12 @@ namespace SignNow.Net.Service
 
             Token.TokenType = TokenType.Bearer;
 
-            byte[] imageBytes;
-            using (var memoryStream = new MemoryStream())
-            {
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-                await imageData.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
-#else
-                await imageData.CopyToAsync(memoryStream).ConfigureAwait(false);
-#endif
-                imageBytes = memoryStream.ToArray();
-            }
+            var content = await UpdateUserInitialsRequest.CreateAsync(imageData, cancellationToken).ConfigureAwait(false);
 
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/initial"),
-                Content = new UpdateUserInitialsRequest
-                {
-                    Data = imageBytes
-                },
+                Content = content,
                 Token = Token
             };
 
