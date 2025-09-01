@@ -139,12 +139,10 @@ namespace SignNow.Net.Service
 
             Token.TokenType = TokenType.Bearer;
 
-            var content = await UpdateUserInitialsRequest.CreateAsync(imageData, cancellationToken).ConfigureAwait(false);
-
             var requestOptions = new PutHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/user/initial"),
-                Content = content,
+                Content = new UpdateUserInitialsRequest(imageData),
                 Token = Token
             };
 
