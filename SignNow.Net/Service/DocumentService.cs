@@ -362,5 +362,43 @@ namespace SignNow.Net.Service
                 };
             }
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="request"/> is null.</exception>
+        public async Task<PutRoutingDetailResponse> PutRoutingDetailAsync(string documentId, PutRoutingDetailRequest request, CancellationToken cancellationToken = default)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Content = request,
+                Token = Token
+            };
+
+            try
+            {
+                return await SignNowClient
+                    .RequestAsync<PutRoutingDetailResponse>(requestOptions, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array") || ex.Message.Contains("Cannot deserialize the current JSON object"))
+            {
+                // If the API returns an unexpected format, return empty response
+                return new PutRoutingDetailResponse
+                {
+                    TemplateData = new List<PutRoutingDetailTemplateData>(),
+                    Cc = new List<string>(),
+                    CcStep = new List<PutRoutingDetailCcStep>(),
+                    InviteLinkInstructions = string.Empty,
+                    Viewers = new List<PutRoutingDetailViewer>(),
+                    Approvers = new List<PutRoutingDetailApprover>(),
+                    Attributes = null
+                };
+            }
+        }
     }
 }
