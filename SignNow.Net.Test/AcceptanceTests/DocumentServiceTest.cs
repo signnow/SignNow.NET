@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Exceptions;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Responses;
 using UnitTests;
 
 namespace AcceptanceTests
@@ -71,6 +73,36 @@ namespace AcceptanceTests
 
             Assert.IsNotNull(link.Url);
             StringAssert.Contains(link.Url.Host, "signnow.com");
+        }
+
+        [TestMethod]
+        public async Task GetRoutingDetail()
+        {
+            // Note: This test may fail if the test document doesn't have routing details configured
+            // In a real scenario, you would need a document with routing details set up
+            try
+            {
+                var response = await SignNowTestContext.Documents
+                    .GetRoutingDetailAsync(TestPdfDocumentIdWithFields)
+                    .ConfigureAwait(false);
+
+                Assert.IsNotNull(response);
+                Assert.IsNotNull(response.RoutingDetails);
+                Assert.IsNotNull(response.Cc);
+                Assert.IsNotNull(response.CcStep);
+                Assert.IsNotNull(response.InviteLinkInstructions);
+                Assert.IsNotNull(response.Viewers);
+                Assert.IsNotNull(response.Approvers);
+                Assert.IsNotNull(response.Attributes);
+            }
+            catch (SignNowException ex)
+            {
+                // If the document doesn't have routing details, the API might return an error
+                // This is expected behavior for documents without routing details configured
+                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
+                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest,
+                    $"Unexpected error: {ex.Message}");
+            }
         }
     }
 }

@@ -7,7 +7,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
+using SignNow.Net.Test.FakeModels;
 using SignNow.Net.Test.FakeModels.EditFields;
 
 namespace UnitTests.Services
@@ -49,6 +51,43 @@ namespace UnitTests.Services
                 .ConfigureAwait(false);
 
             Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public async Task GetRoutingDetailAsyncTest()
+        {
+            var fakeResponse = new GetRoutingDetailResponseFaker().Generate();
+            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
+
+            var response = await service
+                .GetRoutingDetailAsync(Faker.Random.Hash(40))
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.RoutingDetails);
+            Assert.IsNotNull(response.Cc);
+            Assert.IsNotNull(response.CcStep);
+            Assert.IsNotNull(response.InviteLinkInstructions);
+            Assert.IsNotNull(response.Viewers);
+            Assert.IsNotNull(response.Approvers);
+            Assert.IsNotNull(response.Attributes);
+        }
+
+        [TestMethod]
+        public async Task GetRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
+        {
+            var service = new DocumentService(ApiBaseUrl, new Token());
+
+            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
+                async () => await service
+                    .GetRoutingDetailAsync("invalidId")
+                    .ConfigureAwait(false)
+            ).ConfigureAwait(false);
+
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, ExceptionMessages.InvalidFormatOfId, "invalidId");
+            StringAssert.Contains(exception.Message, errorMessage);
+            Assert.AreEqual("invalidId", exception.ParamName);
         }
 
         [TestMethod]

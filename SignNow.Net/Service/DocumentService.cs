@@ -298,5 +298,38 @@ namespace SignNow.Net.Service
                 .RequestAsync<EditDocumentResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<GetRoutingDetailResponse> GetRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Token = Token
+            };
+
+            try
+            {
+                return await SignNowClient
+                    .RequestAsync<GetRoutingDetailResponse>(requestOptions, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array"))
+            {
+                // If the API returns an empty array instead of an object, return empty response
+                return new GetRoutingDetailResponse
+                {
+                    RoutingDetails = new List<RoutingDetail>(),
+                    Cc = new List<string>(),
+                    CcStep = new List<CcStep>(),
+                    InviteLinkInstructions = string.Empty,
+                    Viewers = new List<Viewer>(),
+                    Approvers = new List<Approver>(),
+                    Attributes = null
+                };
+            }
+        }
     }
 }

@@ -138,5 +138,13 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets routing detail information for a document template.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to get routing detail for.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
+        Task<GetRoutingDetailResponse> GetRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }
