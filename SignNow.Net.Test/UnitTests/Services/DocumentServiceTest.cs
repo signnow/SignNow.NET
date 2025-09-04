@@ -91,6 +91,40 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
+        public async Task PostRoutingDetailAsyncTest()
+        {
+            var fakeResponse = new PostRoutingDetailResponseFaker().Generate();
+            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
+
+            var response = await service
+                .PostRoutingDetailAsync(Faker.Random.Hash(40))
+                .ConfigureAwait(false);
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.RoutingDetails);
+            Assert.IsNotNull(response.Cc);
+            Assert.IsNotNull(response.CcStep);
+            Assert.IsNotNull(response.InviteLinkInstructions);
+        }
+
+        [TestMethod]
+        public async Task PostRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
+        {
+            var service = new DocumentService(ApiBaseUrl, new Token());
+
+            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
+                async () => await service
+                    .PostRoutingDetailAsync("invalidId")
+                    .ConfigureAwait(false)
+            ).ConfigureAwait(false);
+
+            var errorMessage = string.Format(CultureInfo.InvariantCulture, ExceptionMessages.InvalidFormatOfId, "invalidId");
+            StringAssert.Contains(exception.Message, errorMessage);
+            Assert.AreEqual("invalidId", exception.ParamName);
+        }
+
+        [TestMethod]
         public async Task ThrowsExceptionForWrongParams()
         {
             var service = new DocumentService(ApiBaseUrl, new Token());

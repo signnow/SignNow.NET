@@ -331,5 +331,36 @@ namespace SignNow.Net.Service
                 };
             }
         }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<PostRoutingDetailResponse> PostRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Content = new EmptyPayloadRequest(),
+                Token = Token
+            };
+
+            try
+            {
+                return await SignNowClient
+                    .RequestAsync<PostRoutingDetailResponse>(requestOptions, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array") || ex.Message.Contains("Cannot deserialize the current JSON object"))
+            {
+                // If the API returns an unexpected format, return empty response
+                return new PostRoutingDetailResponse
+                {
+                    RoutingDetails = new List<PostRoutingDetail>(),
+                    Cc = new List<string>(),
+                    CcStep = new List<PostCcStep>(),
+                    InviteLinkInstructions = string.Empty
+                };
+            }
+        }
     }
 }

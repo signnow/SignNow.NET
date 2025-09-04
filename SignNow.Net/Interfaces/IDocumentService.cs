@@ -146,5 +146,14 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
         Task<GetRoutingDetailResponse> GetRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets or creates or updates routing detail for a document template.
+        /// If routing detail is not active, updates the data. If routing detail is not found, creates routing detail based on actors data.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to post routing detail for.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
+        Task<PostRoutingDetailResponse> PostRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
     }
 }
