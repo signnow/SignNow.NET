@@ -122,6 +122,31 @@ namespace SignNow.Net.Interfaces
         Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Creates multiple invites to different signers from one template using a CSV file.
+        /// A new document is generated for each signer and stored in the specified folder.
+        /// </summary>
+        /// <param name="templateId">Identity of the template to create bulk invites from.</param>
+        /// <param name="csvFileStream">Stream containing the CSV file with signers' roles, emails, and document names.</param>
+        /// <param name="fileName">Name of the CSV file.</param>
+        /// <param name="folderId">ID of the folder where the documents should be stored.</param>
+        /// <param name="subject">Custom email subject for all signers.</param>
+        /// <param name="emailMessage">Custom email message for all signers.</param>
+        /// <param name="clientTimestamp">The timestamp in UNIX code.</param>
+        /// <param name="signatureType">Type of QES signature requested from signers. Possible values: eideasy, eideasy-pdf, nom151.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Returns status of the bulk invite job.</returns>
+        Task<BulkInviteTemplateResponse> CreateBulkInviteFromTemplateAsync(
+            string templateId,
+            Stream csvFileStream,
+            string fileName,
+            string folderId,
+            string subject = null,
+            string emailMessage = null,
+            int? clientTimestamp = null,
+            string signatureType = null,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Adds values to fields that the Signers can later edit when they receive the document for signature.
         /// Works only with Text field types.
         /// </summary>
@@ -166,5 +191,6 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Updated routing detail information including signers, CC recipients, and instructions.</returns>
         Task<PutRoutingDetailResponse> PutRoutingDetailAsync(string documentId, PutRoutingDetailRequest request, CancellationToken cancellationToken = default);
+
     }
 }

@@ -260,6 +260,44 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> or <paramref name="folderId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <paramref name="csvFileStream"/>, <paramref name="fileName"/>, or <paramref name="folderId"/> is null.</exception>
+        public async Task<BulkInviteTemplateResponse> CreateBulkInviteFromTemplateAsync(
+            string templateId,
+            Stream csvFileStream,
+            string fileName,
+            string folderId,
+            string subject = null,
+            string emailMessage = null,
+            int? clientTimestamp = null,
+            string signatureType = null,
+            CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(csvFileStream, nameof(csvFileStream));
+            Guard.ArgumentNotNull(fileName, nameof(fileName));
+            Guard.ArgumentNotNull(folderId, nameof(folderId));
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/bulkinvite"),
+                Content = new BulkInviteTemplateRequest(
+                    csvFileStream,
+                    fileName,
+                    folderId.ValidateId(),
+                    subject,
+                    emailMessage,
+                    clientTimestamp,
+                    signatureType),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<BulkInviteTemplateResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
         public async Task PrefillTextFieldsAsync(string documentId, IEnumerable<TextField> fields, CancellationToken cancellationToken = default)
