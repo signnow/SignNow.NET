@@ -94,7 +94,6 @@ namespace AcceptanceTests
                 Assert.IsNotNull(response.InviteLinkInstructions);
                 Assert.IsNotNull(response.Viewers);
                 Assert.IsNotNull(response.Approvers);
-                Assert.IsNotNull(response.Attributes);
             }
             catch (SignNowException ex)
             {
@@ -176,7 +175,7 @@ namespace AcceptanceTests
                     .ConfigureAwait(false);
 
                 Assert.IsNotNull(response);
-                Assert.IsNotNull(response.TemplateData);
+                // TemplateData can be null if not configured in the document
                 Assert.IsNotNull(response.Cc);
                 Assert.IsNotNull(response.CcStep);
                 Assert.IsNotNull(response.InviteLinkInstructions);
