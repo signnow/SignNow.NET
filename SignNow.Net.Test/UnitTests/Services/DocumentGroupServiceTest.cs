@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels;
@@ -147,6 +148,38 @@ namespace UnitTests.Services
             Assert.AreEqual("66974a4b421546a69167ba342d1ae94af56ce351", response.Data.Documents[0].Id);
             Assert.AreEqual("ForDocumentGroupFile-1", response.Data.Documents[0].Name);
             Assert.AreEqual("40204b3344984733bb16d61f8550f8b5edfd719a", response.Data.Owner.Id);
+        }
+
+        [TestMethod]
+        public async Task UpdateDocumentGroupTemplateAsyncTest()
+        {
+            var jsonResponse = @"{
+                ""status"": ""success""
+            }";
+            var service = new DocumentGroupService(ApiBaseUrl, new Token(),
+                SignNowClientMock(jsonResponse));
+
+            var updateRequest = new UpdateDocumentGroupTemplateRequestFaker().Generate();
+            var response = await service.UpdateDocumentGroupTemplateAsync("03c74b3083f34ebf8ef40a3039dfb32c85a08437", updateRequest).ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(response, typeof(UpdateDocumentGroupTemplateResponse));
+            Assert.AreEqual("success", response.Status);
+        }
+
+        [TestMethod]
+        public async Task UpdateDocumentGroupTemplateAsyncThrowsExceptionForInvalidIdTest()
+        {
+            var service = new DocumentGroupService(ApiBaseUrl, new Token(), SignNowClientMock("{}"));
+            var updateRequest = new UpdateDocumentGroupTemplateRequestFaker().Generate();
+
+            var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
+                async () => await service
+                    .UpdateDocumentGroupTemplateAsync("invalid-id", updateRequest)
+                    .ConfigureAwait(false)
+            ).ConfigureAwait(false);
+
+            StringAssert.Contains(exception.Message, "Invalid format of ID");
+            Assert.AreEqual("invalid-id", exception.ParamName);
         }
     }
 }

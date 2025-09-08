@@ -78,5 +78,83 @@ namespace SignNow.Net.Examples
                 DeleteTestDocument(document.Id);
             }
         }
+
+        [TestMethod]
+        public async Task UpdateDocumentGroupTemplateAsync()
+        {
+            // Note: This example demonstrates how to update a document group template
+            // In a real scenario, you would first create a document group template
+            // For this example, we'll use a mock template ID
+
+            var documentGroupTemplateId = "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00777";
+
+            // Create update request with template IDs to add and remove
+            var updateRequest = new UpdateDocumentGroupTemplateRequest
+            {
+                TemplateIdsToAdd = new List<string> 
+                { 
+                    "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00789",
+                    "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00790"
+                },
+                TemplateIdsToRemove = new List<string> 
+                { 
+                    "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00791"
+                },
+                RoutingDetails = @"{
+                    ""invite_steps"": [
+                        {
+                            ""order"": 1,
+                            ""invite_emails"": [
+                                {
+                                    ""email"": ""signer@example.com"",
+                                    ""subject"": ""Document Group Template Needs Your Signature"",
+                                    ""message"": ""Please sign the documents in this template group"",
+                                    ""expiration_days"": 30,
+                                    ""reminder"": 0,
+                                    ""hasSignActions"": true,
+                                    ""allow_reassign"": ""0""
+                                }
+                            ],
+                            ""invite_actions"": [
+                                {
+                                    ""email"": ""signer@example.com"",
+                                    ""role_name"": ""Signer"",
+                                    ""action"": ""sign"",
+                                    ""document_id"": ""402ed7dca63eb1c78433827e6d946c3db91b1c15"",
+                                    ""document_name"": ""Contract Document"",
+                                    ""UUID"": ""3a994cdb-039e-4fb0-a350-affd7f3566f1"",
+                                    ""allow_reassign"": ""0"",
+                                    ""decline_by_signature"": ""0""
+                                }
+                            ]
+                        }
+                    ],
+                    ""include_email_attachments"": 0
+                }",
+                TemplateGroupName = "Updated Contract Template Group"
+            };
+
+            try
+            {
+                // Update the document group template
+                var response = await testContext.DocumentGroup
+                    .UpdateDocumentGroupTemplateAsync(documentGroupTemplateId, updateRequest)
+                    .ConfigureAwait(false);
+
+                // Verify the response
+                Assert.IsNotNull(response);
+                Assert.AreEqual("success", response.Status);
+                Console.WriteLine("Document group template updated successfully: {0}", response.Status);
+            }
+            catch (SignNow.Net.Exceptions.SignNowException ex)
+            {
+                // Handle expected errors for mock template ID
+                Console.WriteLine("Expected error for mock template ID: {0} - {1}", ex.HttpStatusCode, ex.Message);
+                
+                // Verify it's the right type of error
+                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
+                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest);
+            }
+        }
     }
 }
