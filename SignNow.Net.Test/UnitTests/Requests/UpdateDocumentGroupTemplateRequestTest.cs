@@ -13,64 +13,55 @@ namespace UnitTests.Requests
         {
             var request = new UpdateDocumentGroupTemplateRequestFaker().Generate();
             
-            Assert.IsNotNull(request.TemplateIdsToAdd);
-            Assert.IsNotNull(request.TemplateIdsToRemove);
-            Assert.IsNotNull(request.RoutingDetails);
+            Assert.IsNotNull(request.Order);
             Assert.IsNotNull(request.TemplateGroupName);
+            Assert.IsNotNull(request.EmailActionOnComplete);
             
             // Verify that the request can be serialized to JSON
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(request);
             Assert.IsFalse(string.IsNullOrEmpty(json));
             
             // Verify JSON contains expected properties
-            Assert.IsTrue(json.Contains("template_ids_to_add"));
-            Assert.IsTrue(json.Contains("template_ids_to_remove"));
-            Assert.IsTrue(json.Contains("routing_details"));
+            Assert.IsTrue(json.Contains("order"));
             Assert.IsTrue(json.Contains("template_group_name"));
+            Assert.IsTrue(json.Contains("email_action_on_complete"));
         }
 
         [TestMethod]
-        public void UpdateDocumentGroupTemplateRequestWithEmptyListsTest()
+        public void UpdateDocumentGroupTemplateRequestWithEmptyOrderTest()
         {
             var request = new UpdateDocumentGroupTemplateRequest
             {
-                TemplateIdsToAdd = new List<string>(),
-                TemplateIdsToRemove = new List<string>(),
-                RoutingDetails = "{}",
-                TemplateGroupName = "Test Template Group"
+                Order = new List<string>(),
+                TemplateGroupName = "Test Template Group",
+                EmailActionOnComplete = "documents_and_attachments"
             };
 
-            Assert.AreEqual(0, request.TemplateIdsToAdd.Count);
-            Assert.AreEqual(0, request.TemplateIdsToRemove.Count);
-            Assert.AreEqual("{}", request.RoutingDetails);
+            Assert.AreEqual(0, request.Order.Count);
             Assert.AreEqual("Test Template Group", request.TemplateGroupName);
+            Assert.AreEqual("documents_and_attachments", request.EmailActionOnComplete);
         }
 
         [TestMethod]
         public void UpdateDocumentGroupTemplateRequestWithDataTest()
         {
-            var templateIdsToAdd = new List<string> { "template1", "template2" };
-            var templateIdsToRemove = new List<string> { "template3" };
-            var routingDetails = "{\"invite_steps\":[]}";
+            var order = new List<string> { "template1", "template2" };
             var templateGroupName = "My Template Group";
+            var emailActionOnComplete = "documents_and_attachments_only_to_recipients";
 
             var request = new UpdateDocumentGroupTemplateRequest
             {
-                TemplateIdsToAdd = templateIdsToAdd,
-                TemplateIdsToRemove = templateIdsToRemove,
-                RoutingDetails = routingDetails,
-                TemplateGroupName = templateGroupName
+                Order = order,
+                TemplateGroupName = templateGroupName,
+                EmailActionOnComplete = emailActionOnComplete
             };
 
-            Assert.AreEqual(2, request.TemplateIdsToAdd.Count);
-            Assert.AreEqual("template1", request.TemplateIdsToAdd[0]);
-            Assert.AreEqual("template2", request.TemplateIdsToAdd[1]);
+            Assert.AreEqual(2, request.Order.Count);
+            Assert.AreEqual("template1", request.Order[0]);
+            Assert.AreEqual("template2", request.Order[1]);
             
-            Assert.AreEqual(1, request.TemplateIdsToRemove.Count);
-            Assert.AreEqual("template3", request.TemplateIdsToRemove[0]);
-            
-            Assert.AreEqual(routingDetails, request.RoutingDetails);
             Assert.AreEqual(templateGroupName, request.TemplateGroupName);
+            Assert.AreEqual(emailActionOnComplete, request.EmailActionOnComplete);
         }
     }
 }
