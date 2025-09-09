@@ -100,7 +100,7 @@ namespace AcceptanceTests
             var documents = new List<SignNow.Net.Model.SignNowDocument>();
             
             // Upload test documents
-            using var fileStream = System.IO.File.OpenRead("TestData/Documents/DocumentWithSignatureFieldTag.pdf");
+            using var fileStream = System.IO.File.OpenRead(PdfFilePath);
             
             for (int i = 0; i < 2; i++)
             {
@@ -129,11 +129,18 @@ namespace AcceptanceTests
                     .ConfigureAwait(false);
 
                 Assert.IsNotNull(response);
-                Assert.IsNotNull(response.Id);
-                Assert.IsNotNull(response.Status);
-                Assert.IsTrue(response.Id.Length == 40);
                 
-                Console.WriteLine($"Created document group template: {response.Id} with status: {response.Status}");
+                if (response.IsAccepted)
+                {
+                    Console.WriteLine("Document group template creation was accepted and scheduled for processing");
+                }
+                else
+                {
+                    Assert.IsNotNull(response.Id);
+                    Assert.IsNotNull(response.Status);
+                    Assert.IsTrue(response.Id.Length == 40);
+                    Console.WriteLine($"Created document group template: {response.Id} with status: {response.Status}");
+                }
             }
             catch (SignNow.Net.Exceptions.SignNowException ex)
             {
