@@ -21,66 +21,53 @@ namespace SignNow.Net.Examples
                 .UploadDocumentWithFieldExtractAsync(fileStream, "PostRoutingDetailTest.pdf")
                 .ConfigureAwait(false);
 
-            try
+            // Create or update routing detail information for the document
+            var routingDetail = await testContext.Documents
+                .PostRoutingDetailAsync(document.Id)
+                .ConfigureAwait(false);
+
+            // Verify response structure first with assertions
+            Assert.IsNotNull(routingDetail);
+            Assert.IsNotNull(routingDetail.RoutingDetails);
+            Assert.IsNotNull(routingDetail.Cc);
+            Assert.IsNotNull(routingDetail.CcStep);
+            Assert.IsNotNull(routingDetail.InviteLinkInstructions);
+
+            // Display routing details information
+            System.Console.WriteLine($"Invite Link Instructions: {routingDetail.InviteLinkInstructions}");
+            
+            // Display routing details (signers)
+            foreach (var detail in routingDetail.RoutingDetails)
             {
-                // Create or update routing detail information for the document
-                var routingDetail = await testContext.Documents
-                    .PostRoutingDetailAsync(document.Id)
-                    .ConfigureAwait(false);
-
-                // Display routing details information
-                System.Console.WriteLine($"Invite Link Instructions: {routingDetail.InviteLinkInstructions}");
-                
-                // Display routing details (signers)
-                foreach (var detail in routingDetail.RoutingDetails)
-                {
-                    System.Console.WriteLine($"Signer: {detail.Name}");
-                    System.Console.WriteLine($"  Email: {detail.DefaultEmail}");
-                    System.Console.WriteLine($"  Role ID: {detail.RoleId}");
-                    System.Console.WriteLine($"  Signer Order: {detail.SignerOrder}");
-                    System.Console.WriteLine($"  Inviter Role: {detail.InviterRole}");
-                }
-
-                // Display CC recipients
-                if (routingDetail.Cc?.Count > 0)
-                {
-                    System.Console.WriteLine("CC Recipients:");
-                    foreach (var ccEmail in routingDetail.Cc)
-                    {
-                        System.Console.WriteLine($"  {ccEmail}");
-                    }
-                }
-
-                // Display CC steps
-                if (routingDetail.CcStep?.Count > 0)
-                {
-                    System.Console.WriteLine("CC Steps:");
-                    foreach (var ccStep in routingDetail.CcStep)
-                    {
-                        System.Console.WriteLine($"  Step {ccStep.Step}: {ccStep.Name} ({ccStep.Email})");
-                    }
-                }
-
-                // Verify the response structure
-                Assert.IsNotNull(routingDetail);
-                Assert.IsNotNull(routingDetail.RoutingDetails);
-                Assert.IsNotNull(routingDetail.Cc);
-                Assert.IsNotNull(routingDetail.CcStep);
-                Assert.IsNotNull(routingDetail.InviteLinkInstructions);
+                System.Console.WriteLine($"Signer: {detail.Name}");
+                System.Console.WriteLine($"  Email: {detail.DefaultEmail}");
+                System.Console.WriteLine($"  Role ID: {detail.RoleId}");
+                System.Console.WriteLine($"  Signer Order: {detail.SignerOrder}");
+                System.Console.WriteLine($"  Inviter Role: {detail.InviterRole}");
             }
-            catch (SignNowException ex)
+
+            // Display CC recipients
+            if (routingDetail.Cc?.Count > 0)
             {
-                // If the document doesn't have actors or routing details can't be created, the API might return an error
-                System.Console.WriteLine($"Could not create routing details: {ex.Message}");
-                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest,
-                    $"Unexpected error: {ex.Message}");
+                System.Console.WriteLine("CC Recipients:");
+                foreach (var ccEmail in routingDetail.Cc)
+                {
+                    System.Console.WriteLine($"  {ccEmail}");
+                }
             }
-            finally
+
+            // Display CC steps
+            if (routingDetail.CcStep?.Count > 0)
             {
-                // Clean up the test document
-                DeleteTestDocument(document?.Id);
+                System.Console.WriteLine("CC Steps:");
+                foreach (var ccStep in routingDetail.CcStep)
+                {
+                    System.Console.WriteLine($"  Step {ccStep.Step}: {ccStep.Name} ({ccStep.Email})");
+                }
             }
+
+            // Clean up the test document
+            DeleteTestDocument(document?.Id);
         }
     }
 }

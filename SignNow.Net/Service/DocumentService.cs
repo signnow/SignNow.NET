@@ -12,6 +12,7 @@ using System.Net.Http;
 using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
+using Newtonsoft.Json;
 
 namespace SignNow.Net.Service
 {
@@ -354,7 +355,7 @@ namespace SignNow.Net.Service
                     .RequestAsync<GetRoutingDetailResponse>(requestOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array"))
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
             {
                 // If the API returns an empty array instead of an object, return empty response
                 return new GetRoutingDetailResponse
@@ -388,9 +389,9 @@ namespace SignNow.Net.Service
                     .RequestAsync<PostRoutingDetailResponse>(requestOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array") || ex.Message.Contains("Cannot deserialize the current JSON object"))
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
             {
-                // If the API returns an unexpected format, return empty response
+                // If the API returns unexpected JSON format, return empty response
                 return new PostRoutingDetailResponse
                 {
                     RoutingDetails = new List<PostRoutingDetail>(),
@@ -406,8 +407,7 @@ namespace SignNow.Net.Service
         /// <exception cref="System.ArgumentNullException">If <see paramref="request"/> is null.</exception>
         public async Task<PutRoutingDetailResponse> PutRoutingDetailAsync(string documentId, PutRoutingDetailRequest request, CancellationToken cancellationToken = default)
         {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
+            Guard.ArgumentNotNull(request, nameof(request));
 
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
@@ -423,9 +423,9 @@ namespace SignNow.Net.Service
                     .RequestAsync<PutRoutingDetailResponse>(requestOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize the current JSON array") || ex.Message.Contains("Cannot deserialize the current JSON object"))
+            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
             {
-                // If the API returns an unexpected format, return empty response
+                // If the API returns unexpected JSON format, return empty response
                 return new PutRoutingDetailResponse
                 {
                     TemplateData = new List<PutRoutingDetailTemplateData>(),

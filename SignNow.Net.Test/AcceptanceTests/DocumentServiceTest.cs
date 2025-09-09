@@ -79,30 +79,21 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task GetRoutingDetail()
         {
-            // Note: This test may fail if the test document doesn't have routing details configured
-            // In a real scenario, you would need a document with routing details set up
-            try
-            {
-                var response = await SignNowTestContext.Documents
-                    .GetRoutingDetailAsync(TestPdfDocumentIdWithFields)
-                    .ConfigureAwait(false);
+            // This test requires a document with routing details configured
+            // If the test fails, it means either the document doesn't have routing details
+            // or there's an actual issue with the API call
+            var response = await SignNowTestContext.Documents
+                .GetRoutingDetailAsync(TestPdfDocumentIdWithFields)
+                .ConfigureAwait(false);
 
-                Assert.IsNotNull(response);
-                Assert.IsNotNull(response.RoutingDetails);
-                Assert.IsNotNull(response.Cc);
-                Assert.IsNotNull(response.CcStep);
-                Assert.IsNotNull(response.InviteLinkInstructions);
-                Assert.IsNotNull(response.Viewers);
-                Assert.IsNotNull(response.Approvers);
-            }
-            catch (SignNowException ex)
-            {
-                // If the document doesn't have routing details, the API might return an error
-                // This is expected behavior for documents without routing details configured
-                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest,
-                    $"Unexpected error: {ex.Message}");
-            }
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.RoutingDetails);
+            Assert.IsNotNull(response.Cc);
+            Assert.IsNotNull(response.CcStep);
+            Assert.IsNotNull(response.InviteLinkInstructions);
+            Assert.IsNotNull(response.Viewers);
+            Assert.IsNotNull(response.Approvers);
+            // Attributes can be null if not configured in the document
         }
 
         [TestMethod]
@@ -134,61 +125,51 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task PutRoutingDetail()
         {
-            // Note: This test updates routing details for a document
-            // The API will update or create routing detail based on the provided data
-            try
+            // This test updates routing details for a document
+            // If the test fails, it means either the document doesn't have the required actors/roles
+            // or there's an actual issue with the API call
+            var request = new PutRoutingDetailRequest
             {
-                // Create a sample request with routing details
-                var request = new PutRoutingDetailRequest
+                Id = "e849617a2f26af2eb3d52e1251031050d933d6a6",
+                DocumentId = TestPdfDocumentIdWithFields,
+                Data = new List<PutRoutingDetailData>
                 {
-                    Id = "e849617a2f26af2eb3d52e1251031050d933d6a6",
-                    DocumentId = TestPdfDocumentIdWithFields,
-                    Data = new List<PutRoutingDetailData>
+                    new PutRoutingDetailData
                     {
-                        new PutRoutingDetailData
-                        {
-                            DefaultEmail = "signer1@example.com",
-                            InviterRole = false,
-                            Name = "Signer 1",
-                            RoleId = "d7fcf72b4bbc47b0cc629ffe8b24421c66fec6a0",
-                            SignerOrder = 1,
-                            DeclineBySignature = false
-                        }
-                    },
-                    Cc = new List<string> { "cc1@example.com" },
-                    CcStep = new List<PutCcStep>
+                        DefaultEmail = "signer1@example.com",
+                        InviterRole = false,
+                        Name = "Signer 1",
+                        RoleId = "d7fcf72b4bbc47b0cc629ffe8b24421c66fec6a0",
+                        SignerOrder = 1,
+                        DeclineBySignature = false
+                    }
+                },
+                Cc = new List<string> { "cc1@example.com" },
+                CcStep = new List<PutCcStep>
+                {
+                    new PutCcStep
                     {
-                        new PutCcStep
-                        {
-                            Email = "cc1@example.com",
-                            Step = 1,
-                            Name = "CC Recipient 1"
-                        }
-                    },
-                    InviteLinkInstructions = "Please review and sign this document",
-                    Viewers = new List<PutViewer>(),
-                    Approvers = new List<PutApprover>()
-                };
+                        Email = "cc1@example.com",
+                        Step = 1,
+                        Name = "CC Recipient 1"
+                    }
+                },
+                InviteLinkInstructions = "Please review and sign this document",
+                Viewers = new List<PutViewer>(),
+                Approvers = new List<PutApprover>()
+            };
 
-                var response = await SignNowTestContext.Documents
-                    .PutRoutingDetailAsync(TestPdfDocumentIdWithFields, request)
-                    .ConfigureAwait(false);
+            var response = await SignNowTestContext.Documents
+                .PutRoutingDetailAsync(TestPdfDocumentIdWithFields, request)
+                .ConfigureAwait(false);
 
-                Assert.IsNotNull(response);
-                // TemplateData can be null if not configured in the document
-                Assert.IsNotNull(response.Cc);
-                Assert.IsNotNull(response.CcStep);
-                Assert.IsNotNull(response.InviteLinkInstructions);
-                Assert.IsNotNull(response.Viewers);
-                Assert.IsNotNull(response.Approvers);
-            }
-            catch (SignNowException ex)
-            {
-                // If the document doesn't have actors or routing details can't be updated, the API might return an error
-                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest,
-                    $"Unexpected error: {ex.Message}");
-            }
+            Assert.IsNotNull(response);
+            // TemplateData can be null if not configured in the document
+            Assert.IsNotNull(response.Cc);
+            Assert.IsNotNull(response.CcStep);
+            Assert.IsNotNull(response.InviteLinkInstructions);
+            Assert.IsNotNull(response.Viewers);
+            Assert.IsNotNull(response.Approvers);
         }
     }
 }
