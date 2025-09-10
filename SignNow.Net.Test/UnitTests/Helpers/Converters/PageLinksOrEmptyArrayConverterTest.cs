@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
+using UnitTests;
 
 namespace UnitTests.Helpers.Converters
 {
@@ -28,7 +29,7 @@ namespace UnitTests.Helpers.Converters
             }";
 
             // Act
-            var pagination = JsonConvert.DeserializeObject<Pagination>(realApiResponse);
+            var pagination = TestUtils.DeserializeFromJson<Pagination>(realApiResponse);
 
             // Assert
             Assert.IsNotNull(pagination.Links);
@@ -50,7 +51,7 @@ namespace UnitTests.Helpers.Converters
             }";
 
             // Act
-            var pagination = JsonConvert.DeserializeObject<Pagination>(realApiResponse);
+            var pagination = TestUtils.DeserializeFromJson<Pagination>(realApiResponse);
 
             // Assert
             Assert.IsNotNull(pagination.Links);
@@ -73,7 +74,7 @@ namespace UnitTests.Helpers.Converters
 
             // Act & Assert
             var exception = Assert.ThrowsException<JsonSerializationException>(
-                () => JsonConvert.DeserializeObject<Pagination>(invalidJson));
+                () => TestUtils.DeserializeFromJson<Pagination>(invalidJson));
 
             Assert.AreEqual("Unexpected token type: String", exception.Message);
         }
@@ -102,7 +103,7 @@ namespace UnitTests.Helpers.Converters
 
             // Act - Serialize to JSON and deserialize back
             var json = JsonConvert.SerializeObject(originalPagination);
-            var deserializedPagination = JsonConvert.DeserializeObject<Pagination>(json);
+            var deserializedPagination = TestUtils.DeserializeFromJson<Pagination>(json);
 
             // Assert - The result should be the same as the original
             Assert.AreEqual(originalPagination.Total, deserializedPagination.Total);
@@ -130,7 +131,7 @@ namespace UnitTests.Helpers.Converters
 
             // Act - Serialize to JSON and deserialize back
             var json = JsonConvert.SerializeObject(originalPagination);
-            var deserializedPagination = JsonConvert.DeserializeObject<Pagination>(json);
+            var deserializedPagination = TestUtils.DeserializeFromJson<Pagination>(json);
 
             // Assert - The result should be the same as the original
             Assert.AreEqual(originalPagination.Total, deserializedPagination.Total);
