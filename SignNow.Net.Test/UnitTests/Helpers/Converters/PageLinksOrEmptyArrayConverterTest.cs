@@ -102,7 +102,7 @@ namespace UnitTests.Helpers.Converters
             };
 
             // Act - Serialize to JSON and deserialize back
-            var json = JsonConvert.SerializeObject(originalPagination);
+            var json = TestUtils.SerializeToJsonFormatted(originalPagination);
             var deserializedPagination = TestUtils.DeserializeFromJson<Pagination>(json);
 
             // Assert - The result should be the same as the original
@@ -130,7 +130,7 @@ namespace UnitTests.Helpers.Converters
             };
 
             // Act - Serialize to JSON and deserialize back
-            var json = JsonConvert.SerializeObject(originalPagination);
+            var json = TestUtils.SerializeToJsonFormatted(originalPagination);
             var deserializedPagination = TestUtils.DeserializeFromJson<Pagination>(json);
 
             // Assert - The result should be the same as the original
