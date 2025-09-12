@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
+using UpdateRoutingDetailCcStepRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep;
+using UpdateRoutingDetailViewerRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailViewer;
+using UpdateRoutingDetailApproverRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailApprover;
 
 namespace SignNow.Net.Examples
 {
@@ -53,15 +56,15 @@ namespace SignNow.Net.Examples
                     "cc1@example.com", 
                     "cc2@example.com" 
                 },
-                CcStep = new List<UpdateRoutingDetailCcStep>
+                CcStep = new List<UpdateRoutingDetailCcStepRequest>
                 {
-                    new UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStepRequest
                     {
                         Email = "cc1@example.com",
                         Step = 1,
                         Name = "CC Recipient 1"
                     },
-                    new UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStepRequest
                     {
                         Email = "cc2@example.com",
                         Step = 2,
@@ -69,9 +72,9 @@ namespace SignNow.Net.Examples
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document. This is a test document for routing details.",
-                Viewers = new List<UpdateRoutingDetailViewer>
+                Viewers = new List<UpdateRoutingDetailViewerRequest>
                 {
-                    new UpdateRoutingDetailViewer
+                    new UpdateRoutingDetailViewerRequest
                     {
                         DefaultEmail = "viewer1@example.com",
                         Name = "UpdateRoutingDetailViewer 1",
@@ -80,9 +83,9 @@ namespace SignNow.Net.Examples
                         ContactId = "38528aa9c323463c9563b3608c18467d9d569e09"
                     }
                 },
-                Approvers = new List<UpdateRoutingDetailApprover>
+                Approvers = new List<UpdateRoutingDetailApproverRequest>
                 {
-                    new UpdateRoutingDetailApprover
+                    new UpdateRoutingDetailApproverRequest
                     {
                         DefaultEmail = "approver1@example.com",
                         Name = "UpdateRoutingDetailApprover 1",

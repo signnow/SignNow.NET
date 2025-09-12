@@ -4,6 +4,9 @@ using System.Linq;
 using Bogus;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
+using UpdateRoutingDetailCcStepRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep;
+using UpdateRoutingDetailViewerRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailViewer;
+using UpdateRoutingDetailApproverRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailApprover;
 
 namespace SignNow.Net.Test.FakeModels
 {
@@ -101,12 +104,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="UpdateRoutingDetailCcStep"/>
+    /// Faker <see cref="UpdateRoutingDetailCcStepRequest"/>
     /// </summary>
-    public class UpdateRoutingDetailCcStepFaker : Faker<UpdateRoutingDetailCcStep>
+    public class UpdateRoutingDetailCcStepFaker : Faker<UpdateRoutingDetailCcStepRequest>
     {
         /// <summary>
-        /// Creates new instance of <see cref="UpdateRoutingDetailCcStep"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailCcStepRequest"/> fake object.
         /// </summary>
         public UpdateRoutingDetailCcStepFaker()
         {
@@ -120,12 +123,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="UpdateRoutingDetailViewer"/>
+    /// Faker <see cref="UpdateRoutingDetailViewerRequest"/>
     /// </summary>
-    public class UpdateRoutingDetailViewerFaker : Faker<UpdateRoutingDetailViewer>
+    public class UpdateRoutingDetailViewerFaker : Faker<UpdateRoutingDetailViewerRequest>
     {
         /// <summary>
-        /// Creates new instance of <see cref="UpdateRoutingDetailViewer"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailViewerRequest"/> fake object.
         /// </summary>
         public UpdateRoutingDetailViewerFaker()
         {
@@ -141,12 +144,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="UpdateRoutingDetailApprover"/>
+    /// Faker <see cref="UpdateRoutingDetailApproverRequest"/>
     /// </summary>
-    public class UpdateRoutingDetailApproverFaker : Faker<UpdateRoutingDetailApprover>
+    public class UpdateRoutingDetailApproverFaker : Faker<UpdateRoutingDetailApproverRequest>
     {
         /// <summary>
-        /// Creates new instance of <see cref="UpdateRoutingDetailApprover"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailApproverRequest"/> fake object.
         /// </summary>
         public UpdateRoutingDetailApproverFaker()
         {

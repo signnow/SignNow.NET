@@ -8,6 +8,9 @@ using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
 using UnitTests;
+using UpdateRoutingDetailCcStepRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep;
+using UpdateRoutingDetailViewerRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailViewer;
+using UpdateRoutingDetailApproverRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailApprover;
 
 namespace AcceptanceTests
 {
@@ -145,9 +148,9 @@ namespace AcceptanceTests
                     }
                 },
                 Cc = new List<string> { "cc1@example.com" },
-                CcStep = new List<UpdateRoutingDetailCcStep>
+                CcStep = new List<UpdateRoutingDetailCcStepRequest>
                 {
-                    new UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStepRequest
                     {
                         Email = "cc1@example.com",
                         Step = 1,
@@ -155,8 +158,8 @@ namespace AcceptanceTests
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document",
-                Viewers = new List<UpdateRoutingDetailViewer>(),
-                Approvers = new List<UpdateRoutingDetailApprover>()
+                Viewers = new List<UpdateRoutingDetailViewerRequest>(),
+                Approvers = new List<UpdateRoutingDetailApproverRequest>()
             };
 
             var response = await SignNowTestContext.Documents
