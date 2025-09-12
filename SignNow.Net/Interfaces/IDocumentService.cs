@@ -135,7 +135,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="signatureType">Type of QES signature requested from signers.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns status of the bulk invite job.</returns>
-        Task<BulkInviteTemplateResponse> CreateBulkInviteFromTemplateAsync(
+        Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
             string templateId,
             Stream csvFileStream,
             string fileName,

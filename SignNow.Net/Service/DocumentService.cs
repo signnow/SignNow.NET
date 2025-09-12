@@ -263,7 +263,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> or <paramref name="folderId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentNullException">If <paramref name="csvFileStream"/>, <paramref name="fileName"/>, or <paramref name="folderId"/> is null.</exception>
-        public async Task<BulkInviteTemplateResponse> CreateBulkInviteFromTemplateAsync(
+        public async Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
             string templateId,
             Stream csvFileStream,
             string fileName,
@@ -294,7 +294,7 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync<BulkInviteTemplateResponse>(requestOptions, cancellationToken)
+                .RequestAsync<SuccessStatusResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 
