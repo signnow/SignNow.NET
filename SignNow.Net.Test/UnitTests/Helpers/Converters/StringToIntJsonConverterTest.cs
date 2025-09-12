@@ -29,7 +29,7 @@ namespace UnitTests.Helpers.Converters
             };
 
             var actual = TestUtils.SerializeToJsonFormatted(obj);
-            var expected = $"\"page_count\":100";
+            var expected = $"\"page_count\": 100";
 
             StringAssert.Contains(actual, expected);
         }

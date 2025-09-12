@@ -36,9 +36,11 @@ namespace UnitTests.Helpers.Converters
             };
 
             var actual = TestUtils.SerializeToJsonFormatted(obj);
-            const string Expected = "\"created\":\"1572968651\",\"updated\":\"1572968651\"";
+            const string ExpectedCreated = "\"created\": \"1572968651\"";
+            const string ExpectedUpdated = "\"updated\": \"1572968651\"";
 
-            StringAssert.Contains(actual, Expected);
+            StringAssert.Contains(actual, ExpectedCreated);
+            StringAssert.Contains(actual, ExpectedUpdated);
         }
 
         [TestMethod]

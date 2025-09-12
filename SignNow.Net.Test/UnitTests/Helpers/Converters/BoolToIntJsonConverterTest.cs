@@ -39,8 +39,8 @@ namespace UnitTests.Helpers.Converters
 
             var actual = TestUtils.SerializeToJsonFormatted(obj);
 
-            StringAssert.Contains(actual, $"\"force_new_signature\":1");
-            StringAssert.Contains(actual, $"\"reassign\":0");
+            StringAssert.Contains(actual, $"\"force_new_signature\": 1");
+            StringAssert.Contains(actual, $"\"reassign\": 0");
         }
 
         [TestMethod]

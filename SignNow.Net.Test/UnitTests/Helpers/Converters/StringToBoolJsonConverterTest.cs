@@ -48,7 +48,7 @@ namespace UnitTests.Helpers.Converters
             };
 
             var actual = TestUtils.SerializeToJsonFormatted(obj);
-            var expected = $"\"active\":{param.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}";
+            var expected = $"\"active\": {param.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}";
 
             StringAssert.Contains(actual, expected);
         }
