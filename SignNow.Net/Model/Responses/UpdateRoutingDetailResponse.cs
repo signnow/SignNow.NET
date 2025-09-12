@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using SignNow.Net.Model;
 using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Responses
@@ -98,25 +99,8 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Put routing detail CC step information
     /// </summary>
-    public class UpdateRoutingDetailCcStep
+    public class UpdateRoutingDetailCcStep : CcStepBase
     {
-        /// <summary>
-        /// Email of cc step
-        /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        /// <summary>
-        /// Step number
-        /// </summary>
-        [JsonProperty("step")]
-        public int Step { get; set; }
-
-        /// <summary>
-        /// Name of cc step
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
     }
 
     /// <summary>
