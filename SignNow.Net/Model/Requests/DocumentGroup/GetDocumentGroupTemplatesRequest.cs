@@ -14,9 +14,9 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         public int Limit { get; set; }
 
         /// <summary>
-        /// The number of templates to skip from the first one (default: 0)
+        /// The number of templates to skip from the first one (optional)
         /// </summary>
-        public int Offset { get; set; } = 0;
+        public int? Offset { get; set; }
 
         /// <summary>
         /// Creates query string parameters for the request
@@ -24,11 +24,22 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         /// <returns>Query string parameters</returns>
         public string ToQueryString()
         {
-            var parameters = new List<string>
+            // Return empty string if limit is not set (0 or negative)
+            if (Limit <= 0)
             {
-                $"limit={Limit}",
-                $"offset={Offset}"
-            };
+                return string.Empty;
+            }
+
+            var parameters = new List<string>();
+
+            // Always include limit since it's required
+            parameters.Add($"limit={Limit}");
+
+            // Only include offset if it's been explicitly set
+            if (Offset != null)
+            {
+                parameters.Add($"offset={Offset}");
+            }
 
             return string.Join("&", parameters);
         }
