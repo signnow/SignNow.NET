@@ -25,7 +25,7 @@ namespace SignNow.Net.Test.TestData.FakeModels
         public DocumentGroupTemplateFaker()
         {
             RuleFor(x => x.FolderId, f => f.Random.Bool() ? f.Random.AlphaNumeric(40) : null);
-            RuleFor(x => x.LastUpdated, f => f.Date.Past().ToString("yyyy-MM-dd HH:mm:ss"));
+            RuleFor(x => x.LastUpdated, f => f.Date.Past());
             RuleFor(x => x.TemplateGroupId, f => f.Random.AlphaNumeric(40));
             RuleFor(x => x.TemplateGroupName, f => f.Commerce.ProductName() + " Template Group");
             RuleFor(x => x.OwnerEmail, f => f.Internet.Email());

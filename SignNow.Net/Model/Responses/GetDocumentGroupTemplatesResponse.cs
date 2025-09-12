@@ -1,5 +1,7 @@
+using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Responses
 {
@@ -36,7 +38,8 @@ namespace SignNow.Net.Model.Responses
         /// Last updated timestamp
         /// </summary>
         [JsonProperty("last_updated")]
-        public string LastUpdated { get; set; }
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
+        public DateTime LastUpdated { get; set; }
 
         /// <summary>
         /// Template group ID
