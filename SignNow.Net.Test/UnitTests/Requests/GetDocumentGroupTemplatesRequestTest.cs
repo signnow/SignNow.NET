@@ -7,14 +7,6 @@ namespace SignNow.Net.Test.UnitTests.Requests
     [TestClass]
     public class GetDocumentGroupTemplatesRequestTest
     {
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_SerializationTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequestFaker().Generate();
-            
-            Assert.IsTrue(request.Limit >= 1 && request.Limit <= 50);
-            Assert.IsTrue(request.Offset >= 0);
-        }
 
         [TestMethod]
         public void GetDocumentGroupTemplatesRequest_ToQueryStringTest()

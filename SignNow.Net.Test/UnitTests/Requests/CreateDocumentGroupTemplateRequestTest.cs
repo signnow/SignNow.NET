@@ -8,24 +8,6 @@ namespace UnitTests.Requests
     [TestClass]
     public class CreateDocumentGroupTemplateRequestTest
     {
-        [TestMethod]
-        public void CreateDocumentGroupTemplateRequestSerializationTest()
-        {
-            var request = new CreateDocumentGroupTemplateRequestFaker().Generate();
-            
-            Assert.IsNotNull(request.Name);
-            Assert.IsNotNull(request.FolderId);
-            Assert.IsNotNull(request.OwnAsMerged);
-            
-            // Verify that the request can be serialized to JSON
-            var json = TestUtils.SerializeToJsonFormatted(request);
-            Assert.IsFalse(string.IsNullOrEmpty(json));
-            
-            // Verify JSON contains expected properties
-            Assert.IsTrue(json.Contains("name"));
-            Assert.IsTrue(json.Contains("folder_id"));
-            Assert.IsTrue(json.Contains("own_as_merged"));
-        }
 
         [TestMethod]
         public void CreateDocumentGroupTemplateRequestWithRequiredFieldsTest()

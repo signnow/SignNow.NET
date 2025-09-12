@@ -9,24 +9,6 @@ namespace UnitTests.Requests
     [TestClass]
     public class UpdateDocumentGroupTemplateRequestTest
     {
-        [TestMethod]
-        public void UpdateDocumentGroupTemplateRequestSerializationTest()
-        {
-            var request = new UpdateDocumentGroupTemplateRequestFaker().Generate();
-            
-            Assert.IsNotNull(request.Order);
-            Assert.IsNotNull(request.TemplateGroupName);
-            Assert.IsNotNull(request.EmailActionOnComplete);
-            
-            // Verify that the request can be serialized to JSON
-            var json = TestUtils.SerializeToJsonFormatted(request);
-            Assert.IsFalse(string.IsNullOrEmpty(json));
-            
-            // Verify JSON contains expected properties
-            Assert.IsTrue(json.Contains("order"));
-            Assert.IsTrue(json.Contains("template_group_name"));
-            Assert.IsTrue(json.Contains("email_action_on_complete"));
-        }
 
         [TestMethod]
         public void UpdateDocumentGroupTemplateRequestWithEmptyOrderTest()

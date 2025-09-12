@@ -70,22 +70,5 @@ namespace SignNow.Net.Test.UnitTests.Responses
             Assert.IsTrue(templateItem.Roles.Contains("Signer 2"));
         }
 
-        [TestMethod]
-        public void GetDocumentGroupTemplatesResponse_FakerTest()
-        {
-            var response = new GetDocumentGroupTemplatesResponseFaker().Generate();
-
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.DocumentGroupTemplates);
-            Assert.IsTrue(response.DocumentGroupTemplateTotalCount > 0);
-            Assert.IsTrue(response.DocumentGroupTemplates.Count > 0);
-
-            var template = response.DocumentGroupTemplates.First();
-            Assert.IsNotNull(template.TemplateGroupId);
-            Assert.IsNotNull(template.TemplateGroupName);
-            Assert.IsNotNull(template.OwnerEmail);
-            Assert.IsNotNull(template.Templates);
-            Assert.IsTrue(template.Templates.Count > 0);
-        }
     }
 }

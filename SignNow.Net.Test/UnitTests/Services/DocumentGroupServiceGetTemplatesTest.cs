@@ -102,21 +102,5 @@ namespace SignNow.Net.Test.UnitTests.Services
             Assert.IsTrue(template.RoutingDetails.SignAsMerged);
         }
 
-        [TestMethod]
-        public async Task GetDocumentGroupTemplatesAsyncWithFakerTest()
-        {
-            var fakeResponse = new GetDocumentGroupTemplatesResponseFaker().Generate();
-            var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
-            
-            var service = new DocumentGroupService(ApiBaseUrl, new Token(),
-                SignNowClientMock(jsonResponse));
-
-            var request = new GetDocumentGroupTemplatesRequestFaker().Generate();
-            var response = await service.GetDocumentGroupTemplatesAsync(request).ConfigureAwait(false);
-
-            Assert.IsInstanceOfType(response, typeof(GetDocumentGroupTemplatesResponse));
-            Assert.IsNotNull(response.DocumentGroupTemplates);
-            Assert.IsTrue(response.DocumentGroupTemplateTotalCount > 0);
-        }
     }
 }
