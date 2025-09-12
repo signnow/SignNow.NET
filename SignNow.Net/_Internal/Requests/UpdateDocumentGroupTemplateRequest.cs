@@ -4,6 +4,7 @@ using Newtonsoft.Json.Converters;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.DocumentGroup;
+using PublicUpdateRequest = SignNow.Net.Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest;
 
 namespace SignNow.Net.Internal.Requests
 {
@@ -35,7 +36,7 @@ namespace SignNow.Net.Internal.Requests
         /// Creates a new instance of UpdateDocumentGroupTemplateRequest from the public request model
         /// </summary>
         /// <param name="request">Public request model</param>
-        public UpdateDocumentGroupTemplateRequest(SignNow.Net.Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest request)
+        public UpdateDocumentGroupTemplateRequest(PublicUpdateRequest request)
         {
             Order = request.Order;
             TemplateGroupName = request.TemplateGroupName;

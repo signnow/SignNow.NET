@@ -53,15 +53,15 @@ namespace SignNow.Net.Examples
                     "cc1@example.com", 
                     "cc2@example.com" 
                 },
-                CcStep = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep>
+                CcStep = new List<UpdateRoutingDetailCcStep>
                 {
-                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStep
                     {
                         Email = "cc1@example.com",
                         Step = 1,
                         Name = "CC Recipient 1"
                     },
-                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStep
                     {
                         Email = "cc2@example.com",
                         Step = 2,
@@ -69,9 +69,9 @@ namespace SignNow.Net.Examples
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document. This is a test document for routing details.",
-                Viewers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailViewer>
+                Viewers = new List<UpdateRoutingDetailViewer>
                 {
-                    new SignNow.Net.Model.Requests.UpdateRoutingDetailViewer
+                    new UpdateRoutingDetailViewer
                     {
                         DefaultEmail = "viewer1@example.com",
                         Name = "UpdateRoutingDetailViewer 1",
@@ -80,9 +80,9 @@ namespace SignNow.Net.Examples
                         ContactId = "38528aa9c323463c9563b3608c18467d9d569e09"
                     }
                 },
-                Approvers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailApprover>
+                Approvers = new List<UpdateRoutingDetailApprover>
                 {
-                    new SignNow.Net.Model.Requests.UpdateRoutingDetailApprover
+                    new UpdateRoutingDetailApprover
                     {
                         DefaultEmail = "approver1@example.com",
                         Name = "UpdateRoutingDetailApprover 1",

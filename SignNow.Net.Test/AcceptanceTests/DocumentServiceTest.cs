@@ -145,9 +145,9 @@ namespace AcceptanceTests
                     }
                 },
                 Cc = new List<string> { "cc1@example.com" },
-                CcStep = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep>
+                CcStep = new List<UpdateRoutingDetailCcStep>
                 {
-                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
+                    new UpdateRoutingDetailCcStep
                     {
                         Email = "cc1@example.com",
                         Step = 1,
@@ -155,8 +155,8 @@ namespace AcceptanceTests
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document",
-                Viewers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailViewer>(),
-                Approvers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailApprover>()
+                Viewers = new List<UpdateRoutingDetailViewer>(),
+                Approvers = new List<UpdateRoutingDetailApprover>()
             };
 
             var response = await SignNowTestContext.Documents

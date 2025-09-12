@@ -101,12 +101,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep"/>
+    /// Faker <see cref="UpdateRoutingDetailCcStep"/>
     /// </summary>
-    public class UpdateRoutingDetailCcStepFaker : Faker<SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep>
+    public class UpdateRoutingDetailCcStepFaker : Faker<UpdateRoutingDetailCcStep>
     {
         /// <summary>
-        /// Creates new instance of <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailCcStep"/> fake object.
         /// </summary>
         public UpdateRoutingDetailCcStepFaker()
         {
@@ -120,12 +120,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailViewer"/>
+    /// Faker <see cref="UpdateRoutingDetailViewer"/>
     /// </summary>
-    public class UpdateRoutingDetailViewerFaker : Faker<SignNow.Net.Model.Requests.UpdateRoutingDetailViewer>
+    public class UpdateRoutingDetailViewerFaker : Faker<UpdateRoutingDetailViewer>
     {
         /// <summary>
-        /// Creates new instance of <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailViewer"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailViewer"/> fake object.
         /// </summary>
         public UpdateRoutingDetailViewerFaker()
         {
@@ -141,12 +141,12 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailApprover"/>
+    /// Faker <see cref="UpdateRoutingDetailApprover"/>
     /// </summary>
-    public class UpdateRoutingDetailApproverFaker : Faker<SignNow.Net.Model.Requests.UpdateRoutingDetailApprover>
+    public class UpdateRoutingDetailApproverFaker : Faker<UpdateRoutingDetailApprover>
     {
         /// <summary>
-        /// Creates new instance of <see cref="SignNow.Net.Model.Requests.UpdateRoutingDetailApprover"/> fake object.
+        /// Creates new instance of <see cref="UpdateRoutingDetailApprover"/> fake object.
         /// </summary>
         public UpdateRoutingDetailApproverFaker()
         {
