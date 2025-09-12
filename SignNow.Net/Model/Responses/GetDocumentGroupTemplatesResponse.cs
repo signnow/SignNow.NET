@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
@@ -293,6 +294,7 @@ namespace SignNow.Net.Model.Responses
         /// Authentication type
         /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AuthenticationInfoType? Type { get; set; }
     }
 }

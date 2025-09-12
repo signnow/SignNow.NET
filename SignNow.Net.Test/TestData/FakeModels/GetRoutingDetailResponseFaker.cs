@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Test.FakeModels
@@ -174,7 +175,14 @@ namespace SignNow.Net.Test.FakeModels
         {
             Rules((f, o) =>
             {
-                o.Type = f.PickRandom("password", "sms", "phone");
+                o.Type = f.PickRandom(AuthenticationInfoType.Password, AuthenticationInfoType.Phone);
+                
+                // If type is Phone, set method and phone
+                if (o.Type == AuthenticationInfoType.Phone)
+                {
+                    o.Method = f.PickRandom(PhoneAuthenticationMethod.PhoneCall, PhoneAuthenticationMethod.Sms);
+                    o.Phone = f.Phone.PhoneNumber();
+                }
             });
         }
     }

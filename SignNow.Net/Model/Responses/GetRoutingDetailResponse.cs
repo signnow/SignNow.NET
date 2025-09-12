@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SignNow.Net.Model;
 
 namespace SignNow.Net.Model.Responses
 {
@@ -198,7 +200,21 @@ namespace SignNow.Net.Model.Responses
         /// Authentication type
         /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AuthenticationInfoType Type { get; set; }
+
+        /// <summary>
+        /// Allowed methods for authentication type phone
+        /// </summary>
+        [JsonProperty("method", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PhoneAuthenticationMethod? Method { get; set; }
+
+        /// <summary>
+        /// Phone number for authentication type phone
+        /// </summary>
+        [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
+        public string Phone { get; set; }
     }
 
     /// <summary>

@@ -133,7 +133,7 @@ namespace SignNow.Net.Test.TestData.FakeModels
     {
         public DocumentGroupTemplateAuthenticationFaker()
         {
-            RuleFor(x => x.Type, f => f.PickRandom("password", "phone", null));
+            RuleFor(x => x.Type, f => f.PickRandom(AuthenticationInfoType.Password, AuthenticationInfoType.Phone, (AuthenticationInfoType?)null));
         }
     }
 }
