@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -12,10 +12,10 @@ namespace UnitTests.Models
         public void ShouldDeserializeFromJson()
         {
             var fakeToken = new TokenFaker().Generate();
-            var fakeJson = JsonConvert.SerializeObject(fakeToken, Formatting.Indented);
+            var fakeJson = TestUtils.SerializeToJsonFormatted(fakeToken);
 
-            var actual = JsonConvert.DeserializeObject<Token>(fakeJson);
-            var actualJson = JsonConvert.SerializeObject(actual, Formatting.Indented);
+            var actual = TestUtils.DeserializeFromJson<Token>(fakeJson);
+            var actualJson = TestUtils.SerializeToJsonFormatted(actual);
 
             Assert.AreEqual(fakeJson, actualJson);
             Assert.AreEqual(fakeToken.AccessToken, actual.AccessToken);

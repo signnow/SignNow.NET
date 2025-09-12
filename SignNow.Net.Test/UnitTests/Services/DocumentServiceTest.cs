@@ -11,6 +11,7 @@ using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels;
 using SignNow.Net.Test.FakeModels.EditFields;
+using UnitTests;
 
 namespace UnitTests.Services
 {
@@ -57,7 +58,7 @@ namespace UnitTests.Services
         public async Task GetRoutingDetailAsyncTest()
         {
             var fakeResponse = new GetRoutingDetailResponseFaker().Generate();
-            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
 
             var response = await service
@@ -94,7 +95,7 @@ namespace UnitTests.Services
         public async Task PostRoutingDetailAsyncTest()
         {
             var fakeResponse = new PostRoutingDetailResponseFaker().Generate();
-            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
 
             var response = await service
@@ -129,7 +130,7 @@ namespace UnitTests.Services
         {
             var fakeRequest = new PutRoutingDetailRequestFaker().Generate();
             var fakeResponse = new PutRoutingDetailResponseFaker().Generate();
-            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
 
             var response = await service

@@ -34,7 +34,7 @@ namespace UnitTests
             var signatureType = "eideasy";
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
-            var mockClient = SignNowClientMock(JsonConvert.SerializeObject(expectedResponse));
+            var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
@@ -66,7 +66,7 @@ namespace UnitTests
             var folderId = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0";
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
-            var mockClient = SignNowClientMock(JsonConvert.SerializeObject(expectedResponse));
+            var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
@@ -96,7 +96,7 @@ namespace UnitTests
             var emailMessage = "Custom message for the signer";
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
-            var mockClient = SignNowClientMock(JsonConvert.SerializeObject(expectedResponse));
+            var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
@@ -127,7 +127,7 @@ namespace UnitTests
             var clientTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
-            var mockClient = SignNowClientMock(JsonConvert.SerializeObject(expectedResponse));
+            var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 

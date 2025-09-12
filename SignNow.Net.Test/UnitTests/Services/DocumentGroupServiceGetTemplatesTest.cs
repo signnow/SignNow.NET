@@ -106,7 +106,7 @@ namespace SignNow.Net.Test.UnitTests.Services
         public async Task GetDocumentGroupTemplatesAsyncWithFakerTest()
         {
             var fakeResponse = new GetDocumentGroupTemplatesResponseFaker().Generate();
-            var jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(fakeResponse);
+            var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             
             var service = new DocumentGroupService(ApiBaseUrl, new Token(),
                 SignNowClientMock(jsonResponse));

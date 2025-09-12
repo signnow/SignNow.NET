@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Responses;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace UnitTests.Responses
 {
@@ -8,59 +9,75 @@ namespace UnitTests.Responses
     public class CreateDocumentGroupTemplateResponseTest
     {
         [TestMethod]
-        public void CreateDocumentGroupTemplateResponseSerializationTest()
+        public void ShouldDeserializeFromJson()
         {
+            // Arrange
             var response = new CreateDocumentGroupTemplateResponseFaker().Generate();
             
-            Assert.IsNotNull(response.Id);
-            Assert.IsNotNull(response.Status);
+            // Act
+            var json = TestUtils.SerializeToJsonFormatted(response);
+            var deserializedResponse = TestUtils.DeserializeFromJson<CreateDocumentGroupTemplateResponse>(json);
             
-            // Verify that the response can be serialized to JSON
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-            Assert.IsFalse(string.IsNullOrEmpty(json));
-            
-            // Verify JSON contains expected properties
-            Assert.IsTrue(json.Contains("id"));
-            Assert.IsTrue(json.Contains("status"));
+            // Assert
+            Assert.IsNotNull(deserializedResponse);
+            Assert.AreEqual(response.Id, deserializedResponse.Id);
+            Assert.AreEqual(response.Status, deserializedResponse.Status);
         }
 
         [TestMethod]
-        public void CreateDocumentGroupTemplateResponseWithDataTest()
+        public void ShouldSerializeDeserializeRoundtrip_ForScheduledStatus()
         {
-            var response = new CreateDocumentGroupTemplateResponse
+            // Arrange
+            var originalResponse = new CreateDocumentGroupTemplateResponse
             {
-                Id = "b12e4a885b513a6d9c4c2e7c2b7fa06a013a7412",
+                Id = "test-template-123",
                 Status = "scheduled"
             };
 
-            Assert.AreEqual("b12e4a885b513a6d9c4c2e7c2b7fa06a013a7412", response.Id);
-            Assert.AreEqual("scheduled", response.Status);
+            // Act
+            var json = TestUtils.SerializeToJsonFormatted(originalResponse);
+            var deserializedResponse = TestUtils.DeserializeFromJson<CreateDocumentGroupTemplateResponse>(json);
+
+            // Assert
+            Assert.AreEqual(originalResponse.Id, deserializedResponse.Id);
+            Assert.AreEqual(originalResponse.Status, deserializedResponse.Status);
+            Assert.That.JsonEqual(TestUtils.SerializeToJsonFormatted(originalResponse), deserializedResponse);
         }
 
         [TestMethod]
-        public void CreateDocumentGroupTemplateResponseWithSuccessStatusTest()
+        public void ShouldSerializeDeserializeRoundtrip_ForSuccessStatus()
         {
-            var response = new CreateDocumentGroupTemplateResponse
+            // Arrange
+            var originalResponse = new CreateDocumentGroupTemplateResponse
             {
-                Id = "template123",
+                Id = "test-template-456",
                 Status = "success"
             };
 
-            Assert.AreEqual("template123", response.Id);
-            Assert.AreEqual("success", response.Status);
+            // Act
+            var json = TestUtils.SerializeToJsonFormatted(originalResponse);
+            var deserializedResponse = TestUtils.DeserializeFromJson<CreateDocumentGroupTemplateResponse>(json);
+
+            // Assert
+            Assert.AreEqual(originalResponse.Id, deserializedResponse.Id);
+            Assert.AreEqual(originalResponse.Status, deserializedResponse.Status);
+            Assert.That.JsonEqual(TestUtils.SerializeToJsonFormatted(originalResponse), deserializedResponse);
         }
 
         [TestMethod]
-        public void CreateDocumentGroupTemplateResponseWithProcessingStatusTest()
+        public void ShouldHandleAcceptedResponse_WithNullIdAndAcceptedStatus()
         {
+            // Arrange
             var response = new CreateDocumentGroupTemplateResponse
             {
-                Id = "template456",
-                Status = "processing"
+                Id = null,
+                Status = "accepted"
             };
 
-            Assert.AreEqual("template456", response.Id);
-            Assert.AreEqual("processing", response.Status);
+            // Act & Assert
+            Assert.IsTrue(response.IsAccepted);
+            Assert.IsNull(response.Id);
+            Assert.AreEqual("accepted", response.Status);
         }
     }
 }

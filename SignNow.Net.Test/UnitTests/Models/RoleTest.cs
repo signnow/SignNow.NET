@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -12,9 +12,9 @@ namespace UnitTests.Models
         public void ShouldDeserializeFromJson()
         {
             var fakeRole = new RoleFaker().Generate();
-            var jsonFake = JsonConvert.SerializeObject(fakeRole, Formatting.Indented);
+            var jsonFake = TestUtils.SerializeToJsonFormatted(fakeRole);
 
-            var role = JsonConvert.DeserializeObject<Role>(jsonFake);
+            var role = TestUtils.DeserializeFromJson<Role>(jsonFake);
 
             Assert.AreEqual(fakeRole.Id, role.Id);
             Assert.AreEqual(fakeRole.SigningOrder, role.SigningOrder);

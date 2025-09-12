@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace UnitTests.Requests
 {
@@ -17,7 +18,7 @@ namespace UnitTests.Requests
             Assert.IsNotNull(request.OwnAsMerged);
             
             // Verify that the request can be serialized to JSON
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(request);
+            var json = TestUtils.SerializeToJsonFormatted(request);
             Assert.IsFalse(string.IsNullOrEmpty(json));
             
             // Verify JSON contains expected properties

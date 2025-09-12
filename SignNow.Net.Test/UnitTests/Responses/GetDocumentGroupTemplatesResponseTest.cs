@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Responses;
 using SignNow.Net.Test.TestData.FakeModels;
 using System.Linq;
+using UnitTests;
 
 namespace SignNow.Net.Test.UnitTests.Responses
 {
@@ -18,7 +19,7 @@ namespace SignNow.Net.Test.UnitTests.Responses
                         ""last_updated"": ""1634828541"",
                         ""template_group_id"": ""31706abc6e50c977af03c1cacd3875a44fb679b9"",
                         ""template_group_name"": ""DGT test"",
-                        ""owner_email"": ""kulygin.denys@pdffiller.team"",
+                        ""owner_email"": ""test.user@example.com"",
                         ""templates"": [
                             {
                                 ""id"": ""a8f84795001f4add81dc8efc45d97fdeed9a00aa"",
@@ -42,7 +43,7 @@ namespace SignNow.Net.Test.UnitTests.Responses
                 ""document_group_template_total_count"": 1
             }";
 
-            var response = Newtonsoft.Json.JsonConvert.DeserializeObject<GetDocumentGroupTemplatesResponse>(jsonResponse);
+            var response = TestUtils.DeserializeFromJson<GetDocumentGroupTemplatesResponse>(jsonResponse);
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.DocumentGroupTemplates);
@@ -52,7 +53,7 @@ namespace SignNow.Net.Test.UnitTests.Responses
             var template = response.DocumentGroupTemplates.First();
             Assert.AreEqual("31706abc6e50c977af03c1cacd3875a44fb679b9", template.TemplateGroupId);
             Assert.AreEqual("DGT test", template.TemplateGroupName);
-            Assert.AreEqual("kulygin.denys@pdffiller.team", template.OwnerEmail);
+            Assert.AreEqual("test.user@example.com", template.OwnerEmail);
             Assert.IsFalse(template.IsPrepared);
             Assert.IsNotNull(template.Templates);
             Assert.AreEqual(1, template.Templates.Count);
