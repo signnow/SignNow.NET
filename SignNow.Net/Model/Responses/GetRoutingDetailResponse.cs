@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model;
 
 namespace SignNow.Net.Model.Responses
@@ -232,7 +234,8 @@ namespace SignNow.Net.Model.Responses
         /// Redirect URI
         /// </summary>
         [JsonProperty("redirect_uri")]
-        public string RedirectUri { get; set; }
+        [JsonConverter(typeof(StringToUriJsonConverter))]
+        public Uri RedirectUri { get; set; }
 
         /// <summary>
         /// On complete action

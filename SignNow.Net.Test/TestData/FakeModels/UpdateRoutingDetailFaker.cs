@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
@@ -280,8 +281,8 @@ namespace SignNow.Net.Test.FakeModels
             Rules((f, o) =>
             {
                 o.BrandId = f.Random.Hash(40); // 40-character ID
-                o.RedirectUri = f.Internet.Url();
-                o.CloseRedirectUri = f.Internet.Url();
+                o.RedirectUri = new Uri(f.Internet.Url());
+                o.CloseRedirectUri = new Uri(f.Internet.Url());
             });
         }
     }
