@@ -9,7 +9,7 @@ namespace SignNow.Net.Examples
     public partial class DocumentExamples
     {
         [TestMethod]
-        public async Task PostRoutingDetailAsync()
+        public async Task CreateRoutingDetailAsync()
         {
             // Note: This example demonstrates how to create or update routing details for a document
             // The API will create routing details based on actors data if they don't exist
@@ -18,12 +18,12 @@ namespace SignNow.Net.Examples
             // First, upload a document to test with
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = await testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "PostRoutingDetailTest.pdf")
+                .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoutingDetailTest.pdf")
                 .ConfigureAwait(false);
 
             // Create or update routing detail information for the document
             var routingDetail = await testContext.Documents
-                .PostRoutingDetailAsync(document.Id)
+                .CreateRoutingDetailAsync(document.Id)
                 .ConfigureAwait(false);
 
             // Verify response structure first with assertions

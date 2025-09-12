@@ -6,12 +6,12 @@ using SignNow.Net.Model.Responses;
 namespace SignNow.Net.Test.FakeModels
 {
     /// <summary>
-    /// Faker <see cref="PostRoutingDetailResponse"/>
+    /// Faker <see cref="CreateRoutingDetailResponse"/>
     /// </summary>
-    public class PostRoutingDetailResponseFaker : Faker<PostRoutingDetailResponse>
+    public class CreateRoutingDetailResponseFaker : Faker<CreateRoutingDetailResponse>
     {
         /// <summary>
-        /// Creates new instance of <see cref="PostRoutingDetailResponse"/> fake object.
+        /// Creates new instance of <see cref="CreateRoutingDetailResponse"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -38,27 +38,27 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public PostRoutingDetailResponseFaker()
+        public CreateRoutingDetailResponseFaker()
         {
             Rules((f, o) =>
             {
-                o.RoutingDetails = new PostRoutingDetailFaker().Generate(f.Random.Int(1, 3));
+                o.RoutingDetails = new CreateRoutingDetailFaker().Generate(f.Random.Int(1, 3));
                 o.Cc = f.Make(f.Random.Int(0, 3), () => f.Internet.Email()).ToList();
-                o.CcStep = new PostCcStepFaker().Generate(f.Random.Int(0, 2));
+                o.CcStep = new CreateRoutingDetailCcStepFaker().Generate(f.Random.Int(0, 2));
                 o.InviteLinkInstructions = f.Lorem.Sentence();
             });
         }
     }
 
     /// <summary>
-    /// Faker <see cref="PostRoutingDetail"/>
+    /// Faker <see cref="CreateRoutingDetail"/>
     /// </summary>
-    public class PostRoutingDetailFaker : Faker<PostRoutingDetail>
+    public class CreateRoutingDetailFaker : Faker<CreateRoutingDetail>
     {
         /// <summary>
-        /// Creates new instance of <see cref="PostRoutingDetail"/> fake object.
+        /// Creates new instance of <see cref="CreateRoutingDetail"/> fake object.
         /// </summary>
-        public PostRoutingDetailFaker()
+        public CreateRoutingDetailFaker()
         {
             Rules((f, o) =>
             {
@@ -72,14 +72,14 @@ namespace SignNow.Net.Test.FakeModels
     }
 
     /// <summary>
-    /// Faker <see cref="PostCcStep"/>
+    /// Faker <see cref="CreateRoutingDetailCcStep"/>
     /// </summary>
-    public class PostCcStepFaker : Faker<PostCcStep>
+    public class CreateRoutingDetailCcStepFaker : Faker<CreateRoutingDetailCcStep>
     {
         /// <summary>
-        /// Creates new instance of <see cref="PostCcStep"/> fake object.
+        /// Creates new instance of <see cref="CreateRoutingDetailCcStep"/> fake object.
         /// </summary>
-        public PostCcStepFaker()
+        public CreateRoutingDetailCcStepFaker()
         {
             Rules((f, o) =>
             {

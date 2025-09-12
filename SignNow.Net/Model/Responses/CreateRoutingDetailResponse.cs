@@ -4,15 +4,15 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Model.Responses
 {
     /// <summary>
-    /// Response model for posting routing detail information
+    /// Response model for creating routing detail information
     /// </summary>
-    public class PostRoutingDetailResponse
+    public class CreateRoutingDetailResponse
     {
         /// <summary>
         /// Array with routing details
         /// </summary>
         [JsonProperty("routing_details")]
-        public IReadOnlyList<PostRoutingDetail> RoutingDetails { get; set; }
+        public IReadOnlyList<CreateRoutingDetail> RoutingDetails { get; set; }
 
         /// <summary>
         /// Array of cc's emails
@@ -24,7 +24,7 @@ namespace SignNow.Net.Model.Responses
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<PostCcStep> CcStep { get; set; }
+        public IReadOnlyList<CreateRoutingDetailCcStep> CcStep { get; set; }
 
         /// <summary>
         /// Invite link instruction
@@ -34,9 +34,9 @@ namespace SignNow.Net.Model.Responses
     }
 
     /// <summary>
-    /// Post routing detail information
+    /// Create routing detail information
     /// </summary>
-    public class PostRoutingDetail
+    public class CreateRoutingDetail
     {
         /// <summary>
         /// Default email for routing detail
@@ -70,9 +70,9 @@ namespace SignNow.Net.Model.Responses
     }
 
     /// <summary>
-    /// Post CC step information
+    /// Create routing detail CC step information
     /// </summary>
-    public class PostCcStep
+    public class CreateRoutingDetailCcStep
     {
         /// <summary>
         /// Email of cc step

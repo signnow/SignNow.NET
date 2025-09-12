@@ -97,14 +97,14 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public async Task PostRoutingDetail()
+        public async Task CreateRoutingDetail()
         {
             // Note: This test creates or updates routing details for a document
             // The API will create routing details based on actors data if they don't exist
             try
             {
                 var response = await SignNowTestContext.Documents
-                    .PostRoutingDetailAsync(TestPdfDocumentIdWithFields)
+                    .CreateRoutingDetailAsync(TestPdfDocumentIdWithFields)
                     .ConfigureAwait(false);
 
                 Assert.IsNotNull(response);
@@ -123,18 +123,18 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public async Task PutRoutingDetail()
+        public async Task UpdateRoutingDetail()
         {
             // This test updates routing details for a document
             // If the test fails, it means either the document doesn't have the required actors/roles
             // or there's an actual issue with the API call
-            var request = new PutRoutingDetailRequest
+            var request = new UpdateRoutingDetailRequest
             {
                 Id = "e849617a2f26af2eb3d52e1251031050d933d6a6",
                 DocumentId = TestPdfDocumentIdWithFields,
-                Data = new List<PutRoutingDetailData>
+                Data = new List<RoutingDetailData>
                 {
-                    new PutRoutingDetailData
+                    new RoutingDetailData
                     {
                         DefaultEmail = "signer1@example.com",
                         InviterRole = false,
@@ -145,9 +145,9 @@ namespace AcceptanceTests
                     }
                 },
                 Cc = new List<string> { "cc1@example.com" },
-                CcStep = new List<PutCcStep>
+                CcStep = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep>
                 {
-                    new PutCcStep
+                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
                     {
                         Email = "cc1@example.com",
                         Step = 1,
@@ -155,12 +155,12 @@ namespace AcceptanceTests
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document",
-                Viewers = new List<PutViewer>(),
-                Approvers = new List<PutApprover>()
+                Viewers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailViewer>(),
+                Approvers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailApprover>()
             };
 
             var response = await SignNowTestContext.Documents
-                .PutRoutingDetailAsync(TestPdfDocumentIdWithFields, request)
+                .UpdateRoutingDetailAsync(TestPdfDocumentIdWithFields, request)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(response);

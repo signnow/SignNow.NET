@@ -180,7 +180,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="documentId">Identity of the document to post routing detail for.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
-        Task<PostRoutingDetailResponse> PostRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
+        Task<CreateRoutingDetailResponse> CreateRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates or creates routing detail for a document template.
@@ -190,7 +190,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="request">Routing detail request containing signers, CC recipients, viewers, and approvers.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Updated routing detail information including signers, CC recipients, and instructions.</returns>
-        Task<PutRoutingDetailResponse> PutRoutingDetailAsync(string documentId, PutRoutingDetailRequest request, CancellationToken cancellationToken = default);
+        Task<UpdateRoutingDetailResponse> UpdateRoutingDetailAsync(string documentId, UpdateRoutingDetailRequest request, CancellationToken cancellationToken = default);
 
     }
 }

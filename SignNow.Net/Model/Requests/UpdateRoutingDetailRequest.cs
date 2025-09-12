@@ -7,7 +7,7 @@ namespace SignNow.Net.Model.Requests
     /// <summary>
     /// Request model for updating routing detail information
     /// </summary>
-    public class PutRoutingDetailRequest : JsonHttpContent
+    public class UpdateRoutingDetailRequest : JsonHttpContent
     {
         /// <summary>
         /// Unique id of template routing detail
@@ -25,7 +25,7 @@ namespace SignNow.Net.Model.Requests
         /// Array with routing details
         /// </summary>
         [JsonProperty("data")]
-        public IReadOnlyList<PutRoutingDetailData> Data { get; set; }
+        public IReadOnlyList<RoutingDetailData> Data { get; set; }
 
         /// <summary>
         /// Array of cc's emails
@@ -37,7 +37,7 @@ namespace SignNow.Net.Model.Requests
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<PutCcStep> CcStep { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailCcStep> CcStep { get; set; }
 
         /// <summary>
         /// Invite link instruction
@@ -49,20 +49,20 @@ namespace SignNow.Net.Model.Requests
         /// Array of viewers
         /// </summary>
         [JsonProperty("viewers")]
-        public IReadOnlyList<PutViewer> Viewers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailViewer> Viewers { get; set; }
 
         /// <summary>
         /// Array of approvers
         /// </summary>
         [JsonProperty("approvers")]
-        public IReadOnlyList<PutApprover> Approvers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailApprover> Approvers { get; set; }
 
     }
 
     /// <summary>
-    /// Put routing detail data information
+    /// Routing detail data information
     /// </summary>
-    public class PutRoutingDetailData
+    public class RoutingDetailData
     {
         /// <summary>
         /// Default email for routing detail
@@ -102,9 +102,9 @@ namespace SignNow.Net.Model.Requests
     }
 
     /// <summary>
-    /// Put CC step information
+    /// CC step information
     /// </summary>
-    public class PutCcStep
+    public class UpdateRoutingDetailCcStep
     {
         /// <summary>
         /// Email of cc step
@@ -126,9 +126,9 @@ namespace SignNow.Net.Model.Requests
     }
 
     /// <summary>
-    /// Put viewer information
+    /// Viewer information
     /// </summary>
-    public class PutViewer
+    public class UpdateRoutingDetailViewer
     {
         /// <summary>
         /// Default email for viewer
@@ -162,9 +162,9 @@ namespace SignNow.Net.Model.Requests
     }
 
     /// <summary>
-    /// Put approver information
+    /// Approver information
     /// </summary>
-    public class PutApprover
+    public class UpdateRoutingDetailApprover
     {
         /// <summary>
         /// Default email for approver

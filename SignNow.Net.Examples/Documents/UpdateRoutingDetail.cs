@@ -11,7 +11,7 @@ namespace SignNow.Net.Examples
     public partial class DocumentExamples
     {
         [TestMethod]
-        public async Task PutRoutingDetailAsync()
+        public async Task UpdateRoutingDetailAsync()
         {
             // Note: This example demonstrates how to update routing details for a document
             // The API will update or create routing detail based on the provided data
@@ -19,17 +19,17 @@ namespace SignNow.Net.Examples
             // First, upload a document to test with
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = await testContext.Documents
-                .UploadDocumentWithFieldExtractAsync(fileStream, "PutRoutingDetailTest.pdf")
+                .UploadDocumentWithFieldExtractAsync(fileStream, "UpdateRoutingDetailTest.pdf")
                 .ConfigureAwait(false);
 
             // Create a sample request with routing details
-            var request = new PutRoutingDetailRequest
+            var request = new UpdateRoutingDetailRequest
             {
                 Id = "e849617a2f26af2eb3d52e1251031050d933d6a6",
                 DocumentId = document.Id,
-                Data = new List<PutRoutingDetailData>
+                Data = new List<RoutingDetailData>
                 {
-                    new PutRoutingDetailData
+                    new RoutingDetailData
                     {
                         DefaultEmail = "signer1@example.com",
                         InviterRole = false,
@@ -38,7 +38,7 @@ namespace SignNow.Net.Examples
                         SignerOrder = 1,
                         DeclineBySignature = false
                     },
-                    new PutRoutingDetailData
+                    new RoutingDetailData
                     {
                         DefaultEmail = "signer2@example.com",
                         InviterRole = false,
@@ -53,15 +53,15 @@ namespace SignNow.Net.Examples
                     "cc1@example.com", 
                     "cc2@example.com" 
                 },
-                CcStep = new List<PutCcStep>
+                CcStep = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep>
                 {
-                    new PutCcStep
+                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
                     {
                         Email = "cc1@example.com",
                         Step = 1,
                         Name = "CC Recipient 1"
                     },
-                    new PutCcStep
+                    new SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep
                     {
                         Email = "cc2@example.com",
                         Step = 2,
@@ -69,23 +69,23 @@ namespace SignNow.Net.Examples
                     }
                 },
                 InviteLinkInstructions = "Please review and sign this document. This is a test document for routing details.",
-                Viewers = new List<PutViewer>
+                Viewers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailViewer>
                 {
-                    new PutViewer
+                    new SignNow.Net.Model.Requests.UpdateRoutingDetailViewer
                     {
                         DefaultEmail = "viewer1@example.com",
-                        Name = "Viewer 1",
+                        Name = "UpdateRoutingDetailViewer 1",
                         SigningOrder = 1,
                         InviterRole = false,
                         ContactId = "38528aa9c323463c9563b3608c18467d9d569e09"
                     }
                 },
-                Approvers = new List<PutApprover>
+                Approvers = new List<SignNow.Net.Model.Requests.UpdateRoutingDetailApprover>
                 {
-                    new PutApprover
+                    new SignNow.Net.Model.Requests.UpdateRoutingDetailApprover
                     {
                         DefaultEmail = "approver1@example.com",
-                        Name = "Approver 1",
+                        Name = "UpdateRoutingDetailApprover 1",
                         SigningOrder = 3,
                         InviterRole = false,
                         ExpirationDays = 15,
@@ -96,7 +96,7 @@ namespace SignNow.Net.Examples
 
             // Update routing detail information for the document
             var response = await testContext.Documents
-                .PutRoutingDetailAsync(document.Id, request)
+                .UpdateRoutingDetailAsync(document.Id, request)
                 .ConfigureAwait(false);
 
             // Verify response structure first with assertions
@@ -145,10 +145,10 @@ namespace SignNow.Net.Examples
             // Display viewers
             if (response.Viewers?.Count > 0)
             {
-                System.Console.WriteLine("Viewers:");
+                System.Console.WriteLine("UpdateRoutingDetailViewers:");
                 foreach (var viewer in response.Viewers)
                 {
-                    System.Console.WriteLine($"  Viewer: {viewer.Name}");
+                    System.Console.WriteLine($"  UpdateRoutingDetailViewer: {viewer.Name}");
                     System.Console.WriteLine($"    Email: {viewer.DefaultEmail}");
                     System.Console.WriteLine($"    Contact ID: {viewer.ContactId}");
                     System.Console.WriteLine($"    Signing Order: {viewer.SigningOrder}");
@@ -158,10 +158,10 @@ namespace SignNow.Net.Examples
             // Display approvers
             if (response.Approvers?.Count > 0)
             {
-                System.Console.WriteLine("Approvers:");
+                System.Console.WriteLine("UpdateRoutingDetailApprovers:");
                 foreach (var approver in response.Approvers)
                 {
-                    System.Console.WriteLine($"  Approver: {approver.Name}");
+                    System.Console.WriteLine($"  UpdateRoutingDetailApprover: {approver.Name}");
                     System.Console.WriteLine($"    Email: {approver.DefaultEmail}");
                     System.Console.WriteLine($"    Signing Order: {approver.SigningOrder}");
                     System.Console.WriteLine($"    Contact ID: {approver.ContactId}");

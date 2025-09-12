@@ -92,14 +92,14 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task PostRoutingDetailAsyncTest()
+        public async Task CreateRoutingDetailAsyncTest()
         {
-            var fakeResponse = new PostRoutingDetailResponseFaker().Generate();
+            var fakeResponse = new CreateRoutingDetailResponseFaker().Generate();
             var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
 
             var response = await service
-                .PostRoutingDetailAsync(Faker.Random.Hash(40))
+                .CreateRoutingDetailAsync(Faker.Random.Hash(40))
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(response);
@@ -110,13 +110,13 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task PostRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
+        public async Task CreateRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
         {
             var service = new DocumentService(ApiBaseUrl, new Token());
 
             var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
                 async () => await service
-                    .PostRoutingDetailAsync("invalidId")
+                    .CreateRoutingDetailAsync("invalidId")
                     .ConfigureAwait(false)
             ).ConfigureAwait(false);
 
@@ -126,15 +126,15 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task PutRoutingDetailAsyncTest()
+        public async Task UpdateRoutingDetailAsyncTest()
         {
-            var fakeRequest = new PutRoutingDetailRequestFaker().Generate();
-            var fakeResponse = new PutRoutingDetailResponseFaker().Generate();
+            var fakeRequest = new UpdateRoutingDetailRequestFaker().Generate();
+            var fakeResponse = new UpdateRoutingDetailResponseFaker().Generate();
             var jsonResponse = TestUtils.SerializeToJsonFormatted(fakeResponse);
             var service = new DocumentService(ApiBaseUrl, new Token(), SignNowClientMock(jsonResponse));
 
             var response = await service
-                .PutRoutingDetailAsync(Faker.Random.Hash(40), fakeRequest)
+                .UpdateRoutingDetailAsync(Faker.Random.Hash(40), fakeRequest)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(response);
@@ -148,14 +148,14 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task PutRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
+        public async Task UpdateRoutingDetailAsyncThrowsExceptionForInvalidDocumentId()
         {
             var service = new DocumentService(ApiBaseUrl, new Token());
-            var request = new PutRoutingDetailRequestFaker().Generate();
+            var request = new UpdateRoutingDetailRequestFaker().Generate();
 
             var exception = await Assert.ThrowsExceptionAsync<ArgumentException>(
                 async () => await service
-                    .PutRoutingDetailAsync("invalidId", request)
+                    .UpdateRoutingDetailAsync("invalidId", request)
                     .ConfigureAwait(false)
             ).ConfigureAwait(false);
 
@@ -165,13 +165,13 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task PutRoutingDetailAsyncThrowsExceptionForNullRequest()
+        public async Task UpdateRoutingDetailAsyncThrowsExceptionForNullRequest()
         {
             var service = new DocumentService(ApiBaseUrl, new Token());
 
             var exception = await Assert.ThrowsExceptionAsync<ArgumentNullException>(
                 async () => await service
-                    .PutRoutingDetailAsync(Faker.Random.Hash(40), null)
+                    .UpdateRoutingDetailAsync(Faker.Random.Hash(40), null)
                     .ConfigureAwait(false)
             ).ConfigureAwait(false);
 

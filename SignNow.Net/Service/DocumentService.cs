@@ -373,7 +373,7 @@ namespace SignNow.Net.Service
 
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
-        public async Task<PostRoutingDetailResponse> PostRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
+        public async Task<CreateRoutingDetailResponse> CreateRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
@@ -386,17 +386,17 @@ namespace SignNow.Net.Service
             try
             {
                 return await SignNowClient
-                    .RequestAsync<PostRoutingDetailResponse>(requestOptions, cancellationToken)
+                    .RequestAsync<CreateRoutingDetailResponse>(requestOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
             {
                 // If the API returns unexpected JSON format, return empty response
-                return new PostRoutingDetailResponse
+                return new CreateRoutingDetailResponse
                 {
-                    RoutingDetails = new List<PostRoutingDetail>(),
+                    RoutingDetails = new List<CreateRoutingDetail>(),
                     Cc = new List<string>(),
-                    CcStep = new List<PostCcStep>(),
+                    CcStep = new List<CreateRoutingDetailCcStep>(),
                     InviteLinkInstructions = string.Empty
                 };
             }
@@ -405,7 +405,7 @@ namespace SignNow.Net.Service
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentNullException">If <see paramref="request"/> is null.</exception>
-        public async Task<PutRoutingDetailResponse> PutRoutingDetailAsync(string documentId, PutRoutingDetailRequest request, CancellationToken cancellationToken = default)
+        public async Task<UpdateRoutingDetailResponse> UpdateRoutingDetailAsync(string documentId, UpdateRoutingDetailRequest request, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(request, nameof(request));
 
@@ -420,20 +420,20 @@ namespace SignNow.Net.Service
             try
             {
                 return await SignNowClient
-                    .RequestAsync<PutRoutingDetailResponse>(requestOptions, cancellationToken)
+                    .RequestAsync<UpdateRoutingDetailResponse>(requestOptions, cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
             {
                 // If the API returns unexpected JSON format, return empty response
-                return new PutRoutingDetailResponse
+                return new UpdateRoutingDetailResponse
                 {
-                    TemplateData = new List<PutRoutingDetailTemplateData>(),
+                    TemplateData = new List<UpdateRoutingDetailTemplateData>(),
                     Cc = new List<string>(),
-                    CcStep = new List<PutRoutingDetailCcStep>(),
+                    CcStep = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailCcStep>(),
                     InviteLinkInstructions = string.Empty,
-                    Viewers = new List<PutRoutingDetailViewer>(),
-                    Approvers = new List<PutRoutingDetailApprover>(),
+                    Viewers = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailViewer>(),
+                    Approvers = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailApprover>(),
                     Attributes = null
                 };
             }

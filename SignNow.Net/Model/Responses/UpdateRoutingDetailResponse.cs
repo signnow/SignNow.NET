@@ -4,15 +4,15 @@ using Newtonsoft.Json;
 namespace SignNow.Net.Model.Responses
 {
     /// <summary>
-    /// Response model for putting routing detail information
+    /// Response model for updating routing detail information
     /// </summary>
-    public class PutRoutingDetailResponse
+    public class UpdateRoutingDetailResponse
     {
         /// <summary>
         /// Array with routing details
         /// </summary>
         [JsonProperty("template_data")]
-        public IReadOnlyList<PutRoutingDetailTemplateData> TemplateData { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailTemplateData> TemplateData { get; set; }
 
         /// <summary>
         /// Array of cc's emails
@@ -24,7 +24,7 @@ namespace SignNow.Net.Model.Responses
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<PutRoutingDetailCcStep> CcStep { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailCcStep> CcStep { get; set; }
 
         /// <summary>
         /// Invite link instruction
@@ -36,25 +36,25 @@ namespace SignNow.Net.Model.Responses
         /// Array of viewers
         /// </summary>
         [JsonProperty("viewers")]
-        public IReadOnlyList<PutRoutingDetailViewer> Viewers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailViewer> Viewers { get; set; }
 
         /// <summary>
         /// Array of approvers
         /// </summary>
         [JsonProperty("approvers")]
-        public IReadOnlyList<PutRoutingDetailApprover> Approvers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailApprover> Approvers { get; set; }
 
         /// <summary>
         /// Routing attributes
         /// </summary>
         [JsonProperty("attributes")]
-        public PutRoutingDetailAttributes Attributes { get; set; }
+        public UpdateRoutingDetailAttributes Attributes { get; set; }
     }
 
     /// <summary>
     /// Put routing detail template data information
     /// </summary>
-    public class PutRoutingDetailTemplateData
+    public class UpdateRoutingDetailTemplateData
     {
         /// <summary>
         /// Default email for routing detail
@@ -96,7 +96,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Put routing detail CC step information
     /// </summary>
-    public class PutRoutingDetailCcStep
+    public class UpdateRoutingDetailCcStep
     {
         /// <summary>
         /// Email of cc step
@@ -120,7 +120,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Put routing detail viewer information
     /// </summary>
-    public class PutRoutingDetailViewer
+    public class UpdateRoutingDetailViewer
     {
         /// <summary>
         /// Default email for viewer
@@ -156,7 +156,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Put routing detail approver information
     /// </summary>
-    public class PutRoutingDetailApprover
+    public class UpdateRoutingDetailApprover
     {
         /// <summary>
         /// Default email for approver
@@ -192,7 +192,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Put routing detail attributes
     /// </summary>
-    public class PutRoutingDetailAttributes
+    public class UpdateRoutingDetailAttributes
     {
         /// <summary>
         /// Brand ID
