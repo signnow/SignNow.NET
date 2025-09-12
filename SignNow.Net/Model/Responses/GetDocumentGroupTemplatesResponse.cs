@@ -14,7 +14,7 @@ namespace SignNow.Net.Model.Responses
         /// List of document group templates
         /// </summary>
         [JsonProperty("document_group_templates")]
-        public List<DocumentGroupTemplate> DocumentGroupTemplates { get; set; }
+        public IReadOnlyList<DocumentGroupTemplate> DocumentGroupTemplates { get; set; }
 
         /// <summary>
         /// Total count of document group templates
@@ -63,7 +63,7 @@ namespace SignNow.Net.Model.Responses
         /// List of templates in this group
         /// </summary>
         [JsonProperty("templates")]
-        public List<DocumentGroupTemplateItem> Templates { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateItem> Templates { get; set; }
 
         /// <summary>
         /// Whether the template is prepared
@@ -105,7 +105,7 @@ namespace SignNow.Net.Model.Responses
         /// List of roles for this template
         /// </summary>
         [JsonProperty("roles")]
-        public List<string> Roles { get; set; }
+        public IReadOnlyList<string> Roles { get; set; }
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ namespace SignNow.Net.Model.Responses
         /// List of invite steps
         /// </summary>
         [JsonProperty("invite_steps")]
-        public List<DocumentGroupTemplateInviteStep> InviteSteps { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteStep> InviteSteps { get; set; }
     }
 
     /// <summary>
@@ -171,13 +171,13 @@ namespace SignNow.Net.Model.Responses
         /// List of invite emails
         /// </summary>
         [JsonProperty("invite_emails")]
-        public List<DocumentGroupTemplateInviteEmail> InviteEmails { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteEmail> InviteEmails { get; set; }
 
         /// <summary>
         /// List of invite actions
         /// </summary>
         [JsonProperty("invite_actions")]
-        public List<DocumentGroupTemplateInviteAction> InviteActions { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteAction> InviteActions { get; set; }
     }
 
     /// <summary>
