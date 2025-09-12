@@ -31,7 +31,7 @@ namespace UnitTests
             var subject = "Please sign this document";
             var emailMessage = "Custom message for the signer";
             var clientTimestamp = 1640995200;
-            var signatureType = "eideasy";
+            var signatureType = SignatureType.Eideasy;
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
             var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));

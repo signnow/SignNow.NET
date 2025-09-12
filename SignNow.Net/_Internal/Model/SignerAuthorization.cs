@@ -1,3 +1,5 @@
+using SignNow.Net.Model;
+
 namespace SignNow.Net.Internal.Model
 {
     /// <summary>
@@ -8,7 +10,7 @@ namespace SignNow.Net.Internal.Model
         /// <summary>
         /// Authentication type for case, when password, phone call or sms code used to open the Document.
         /// </summary>
-        public abstract string AuthenticationType { get; }
+        public abstract AuthenticationType AuthenticationType { get; }
 
         /// <summary>
         /// Password will be required from signers when they open the document.
@@ -29,7 +31,7 @@ namespace SignNow.Net.Internal.Model
     internal sealed class PasswordAuthorization : SignerAuthorization
     {
         /// <inheritdoc cref="SignerAuthorization"/>
-        public override string AuthenticationType => "password";
+        public override AuthenticationType AuthenticationType => AuthenticationType.Password;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PasswordAuthorization"/> class.
@@ -47,7 +49,7 @@ namespace SignNow.Net.Internal.Model
     internal sealed class PhoneCallAuthorization : SignerAuthorization
     {
         /// <inheritdoc cref="SignerAuthorization"/>
-        public override string AuthenticationType => "phone_call";
+        public override AuthenticationType AuthenticationType => AuthenticationType.PhoneCall;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PhoneCallAuthorization"/> class.
@@ -65,7 +67,7 @@ namespace SignNow.Net.Internal.Model
     internal sealed class SmsAuthorization : SignerAuthorization
     {
         /// <inheritdoc cref="SignerAuthorization"/>
-        public override string AuthenticationType => "sms";
+        public override AuthenticationType AuthenticationType => AuthenticationType.Sms;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmsAuthorization"/> class.

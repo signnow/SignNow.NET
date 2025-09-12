@@ -132,7 +132,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="subject">Custom email subject for all signers.</param>
         /// <param name="emailMessage">Custom email message for all signers.</param>
         /// <param name="clientTimestamp">The timestamp in UNIX code.</param>
-        /// <param name="signatureType">Type of QES signature requested from signers. Possible values: eideasy, eideasy-pdf, nom151.</param>
+        /// <param name="signatureType">Type of QES signature requested from signers.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns status of the bulk invite job.</returns>
         Task<BulkInviteTemplateResponse> CreateBulkInviteFromTemplateAsync(
@@ -143,7 +143,7 @@ namespace SignNow.Net.Interfaces
             string subject = null,
             string emailMessage = null,
             int? clientTimestamp = null,
-            string signatureType = null,
+            SignatureType? signatureType = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>

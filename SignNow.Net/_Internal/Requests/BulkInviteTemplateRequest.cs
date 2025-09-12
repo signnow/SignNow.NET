@@ -1,7 +1,9 @@
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using SignNow.Net.Interfaces;
+using SignNow.Net.Model;
 
 namespace SignNow.Net.Internal.Requests
 {
@@ -16,7 +18,7 @@ namespace SignNow.Net.Internal.Requests
         private readonly string _subject;
         private readonly string _emailMessage;
         private readonly int? _clientTimestamp;
-        private readonly string _signatureType;
+        private readonly SignatureType? _signatureType;
 
         public BulkInviteTemplateRequest(
             Stream csvFileStream, 
@@ -25,7 +27,7 @@ namespace SignNow.Net.Internal.Requests
             string subject = null,
             string emailMessage = null,
             int? clientTimestamp = null,
-            string signatureType = null)
+            SignatureType? signatureType = null)
         {
             _csvFileStream = csvFileStream;
             _fileName = fileName;
@@ -64,9 +66,16 @@ namespace SignNow.Net.Internal.Requests
                 content.Add(new StringContent(_clientTimestamp.Value.ToString(), Encoding.UTF8), "client_timestamp");
             }
             
-            if (!string.IsNullOrEmpty(_signatureType))
+            if (_signatureType.HasValue)
             {
-                content.Add(new StringContent(_signatureType, Encoding.UTF8), "signature_type");
+                var signatureTypeValue = _signatureType.Value switch
+                {
+                    SignatureType.Eideasy => "eideasy",
+                    SignatureType.EideasyPdf => "eideasy-pdf",
+                    SignatureType.Nom151 => "nom151",
+                    _ => throw new ArgumentException($"Unknown signature type: {_signatureType.Value}")
+                };
+                content.Add(new StringContent(signatureTypeValue, Encoding.UTF8), "signature_type");
             }
 
             return content;

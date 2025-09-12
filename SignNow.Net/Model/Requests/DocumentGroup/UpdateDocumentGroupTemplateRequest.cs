@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Model.Requests.DocumentGroup
@@ -22,10 +24,10 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         public string TemplateGroupName { get; set; }
 
         /// <summary>
-        /// Specifies the action to be taken upon invite completion. 
-        /// Allowed values: documents_and_attachments, documents_and_attachments_only_to_recipients, without_documents_and_attachments
+        /// Specifies the action to be taken upon invite completion.
         /// </summary>
         [JsonProperty("email_action_on_complete")]
-        public string EmailActionOnComplete { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EmailActionsType EmailActionOnComplete { get; set; }
     }
 }

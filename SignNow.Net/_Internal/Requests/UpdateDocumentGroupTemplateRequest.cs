@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.DocumentGroup;
 
@@ -26,7 +28,8 @@ namespace SignNow.Net.Internal.Requests
         /// Specifies the action to be taken upon invite completion
         /// </summary>
         [JsonProperty("email_action_on_complete")]
-        public string EmailActionOnComplete { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EmailActionsType EmailActionOnComplete { get; set; }
 
         /// <summary>
         /// Creates a new instance of UpdateDocumentGroupTemplateRequest from the public request model

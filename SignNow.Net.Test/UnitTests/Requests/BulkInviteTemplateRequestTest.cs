@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Requests;
+using SignNow.Net.Model;
 
 namespace UnitTests
 {
@@ -52,7 +53,7 @@ namespace UnitTests
             var subject = "Please sign this document";
             var emailMessage = "Custom message for the signer";
             var clientTimestamp = 1640995200;
-            var signatureType = "eideasy";
+            var signatureType = SignatureType.Eideasy;
 
             var request = new BulkInviteTemplateRequest(
                 csvStream, 
@@ -92,7 +93,7 @@ namespace UnitTests
             StringAssert.Contains(
                 requestContent,
                 "Content-Disposition: form-data; name=signature_type");
-            StringAssert.Contains(requestContent, signatureType);
+            StringAssert.Contains(requestContent, "eideasy");
         }
     }
 }

@@ -161,7 +161,7 @@ namespace SignNow.Net.Examples
                        {
                            Order = documentIds,
                            TemplateGroupName = "Updated Contract Template Group",
-                           EmailActionOnComplete = "documents_and_attachments"
+                           EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
                        };
 
                     // Update the document group template using the existing template ID
@@ -200,7 +200,7 @@ namespace SignNow.Net.Examples
                         template2.Id
                     },
                     TemplateGroupName = "Updated Contract Template Group",
-                    EmailActionOnComplete = "documents_and_attachments"
+                    EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
                 };
 
                 // Update the document group template using the real template ID

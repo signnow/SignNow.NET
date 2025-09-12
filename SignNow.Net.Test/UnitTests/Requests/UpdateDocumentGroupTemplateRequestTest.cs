@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Test.FakeModels;
 using UnitTests;
@@ -17,12 +18,12 @@ namespace UnitTests.Requests
             {
                 Order = new List<string>(),
                 TemplateGroupName = "Test Template Group",
-                EmailActionOnComplete = "documents_and_attachments"
+                EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
             };
 
             Assert.AreEqual(0, request.Order.Count);
             Assert.AreEqual("Test Template Group", request.TemplateGroupName);
-            Assert.AreEqual("documents_and_attachments", request.EmailActionOnComplete);
+            Assert.AreEqual(EmailActionsType.DocumentsAndAttachments, request.EmailActionOnComplete);
         }
 
         [TestMethod]
@@ -30,7 +31,7 @@ namespace UnitTests.Requests
         {
             var order = new List<string> { "template1", "template2" };
             var templateGroupName = "My Template Group";
-            var emailActionOnComplete = "documents_and_attachments_only_to_recipients";
+            var emailActionOnComplete = EmailActionsType.DocumentsAndAttachmentsOnlyToRecipients;
 
             var request = new UpdateDocumentGroupTemplateRequest
             {

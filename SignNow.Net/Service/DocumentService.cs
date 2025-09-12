@@ -271,7 +271,7 @@ namespace SignNow.Net.Service
             string subject = null,
             string emailMessage = null,
             int? clientTimestamp = null,
-            string signatureType = null,
+            SignatureType? signatureType = null,
             CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(csvFileStream, nameof(csvFileStream));

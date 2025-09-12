@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Bogus;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Requests.DocumentGroup;
 
 namespace SignNow.Net.Test.FakeModels
@@ -28,7 +29,7 @@ namespace SignNow.Net.Test.FakeModels
             {
                 o.Order = f.Make(f.Random.Int(1, 3), () => f.Random.Hash(40));
                 o.TemplateGroupName = f.Commerce.ProductName() + " Template Group";
-                o.EmailActionOnComplete = f.PickRandom("documents_and_attachments", "documents_and_attachments_only_to_recipients", "without_documents_and_attachments");
+                o.EmailActionOnComplete = f.PickRandom(EmailActionsType.DocumentsAndAttachments, EmailActionsType.DocumentsAndAttachmentsOnlyToRecipients, EmailActionsType.WithoutDocumentsAndAttachments);
             });
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SignNow.Net.Model;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using UnitTests;
 
@@ -22,7 +23,7 @@ namespace AcceptanceTests
             {
                 Order = new List<string> { "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00789" },
                 TemplateGroupName = "Updated Template Group",
-                EmailActionOnComplete = "documents_and_attachments"
+                EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
             };
 
             // Use a mock template ID for testing
@@ -51,7 +52,7 @@ namespace AcceptanceTests
             var updateRequest = new UpdateDocumentGroupTemplateRequest
             {
                 Order = new List<string>(),
-                EmailActionOnComplete = "documents_and_attachments",
+                EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments,
                 TemplateGroupName = "Test Template Group"
             };
 
@@ -70,7 +71,7 @@ namespace AcceptanceTests
             var updateRequest = new UpdateDocumentGroupTemplateRequest
             {
                 Order = new List<string>(),
-                EmailActionOnComplete = "documents_and_attachments",
+                EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments,
                 TemplateGroupName = "Test Template Group"
             };
 
