@@ -1,5 +1,7 @@
 using Bogus;
 using SignNow.Net.Model.Responses;
+using SignNow.Net.Model;
+using SignNow.Net.Test.FakeModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,25 +46,11 @@ namespace SignNow.Net.Test.TestData.FakeModels
         {
             RuleFor(x => x.Id, f => f.Random.AlphaNumeric(40));
             RuleFor(x => x.Name, f => f.Commerce.ProductName() + " Template");
-            RuleFor(x => x.Thumbnail, f => new DocumentGroupTemplateThumbnailFaker().Generate());
+            RuleFor(x => x.Thumbnail, f => new ThumbnailFaker().Generate());
             RuleFor(x => x.Roles, f => f.PickRandom(new[] { "Signer", "Approver", "Viewer" }, f.Random.Int(1, 2)).ToList());
         }
     }
 
-    /// <summary>
-    /// Faker for generating fake DocumentGroupTemplateThumbnail data
-    /// </summary>
-    public class DocumentGroupTemplateThumbnailFaker : Faker<DocumentGroupTemplateThumbnail>
-    {
-        public DocumentGroupTemplateThumbnailFaker()
-        {
-            var baseUrl = "https://api.signnow.com/document/{0}/thumbnail?size={1}";
-            
-            RuleFor(x => x.Small, f => string.Format(baseUrl, f.Random.AlphaNumeric(40), "small"));
-            RuleFor(x => x.Medium, f => string.Format(baseUrl, f.Random.AlphaNumeric(40), "medium"));
-            RuleFor(x => x.Large, f => string.Format(baseUrl, f.Random.AlphaNumeric(40), "large"));
-        }
-    }
 
     /// <summary>
     /// Faker for generating fake DocumentGroupTemplateRoutingDetails data

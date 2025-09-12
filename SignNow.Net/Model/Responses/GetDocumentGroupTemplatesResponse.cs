@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using SignNow.Net.Internal.Helpers.Converters;
+using SignNow.Net.Model;
 
 namespace SignNow.Net.Model.Responses
 {
@@ -99,7 +100,7 @@ namespace SignNow.Net.Model.Responses
         /// Template thumbnail URLs
         /// </summary>
         [JsonProperty("thumbnail")]
-        public DocumentGroupTemplateThumbnail Thumbnail { get; set; }
+        public Thumbnail Thumbnail { get; set; }
 
         /// <summary>
         /// List of roles for this template
@@ -108,29 +109,6 @@ namespace SignNow.Net.Model.Responses
         public IReadOnlyList<string> Roles { get; set; }
     }
 
-    /// <summary>
-    /// Document group template thumbnail model
-    /// </summary>
-    public class DocumentGroupTemplateThumbnail
-    {
-        /// <summary>
-        /// Small thumbnail URL
-        /// </summary>
-        [JsonProperty("small")]
-        public string Small { get; set; }
-
-        /// <summary>
-        /// Medium thumbnail URL
-        /// </summary>
-        [JsonProperty("medium")]
-        public string Medium { get; set; }
-
-        /// <summary>
-        /// Large thumbnail URL
-        /// </summary>
-        [JsonProperty("large")]
-        public string Large { get; set; }
-    }
 
     /// <summary>
     /// Document group template routing details model
