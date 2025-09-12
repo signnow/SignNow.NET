@@ -235,9 +235,14 @@ namespace SignNow.Net.Service
         {
             Token.TokenType = TokenType.Bearer;
 
+            var query = request?.ToQueryString();
+            var queryString = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
             var requestOptions = new GetHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentgroup/templates?{request.ToQueryString()}"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentgroup/templates{queryString}"),
                 Token = Token
             };
 
