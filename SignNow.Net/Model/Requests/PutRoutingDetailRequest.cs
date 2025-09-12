@@ -7,7 +7,7 @@ namespace SignNow.Net.Model.Requests
     /// <summary>
     /// Request model for updating routing detail information
     /// </summary>
-    public class PutRoutingDetailRequest : IContent
+    public class PutRoutingDetailRequest : JsonHttpContent
     {
         /// <summary>
         /// Unique id of template routing detail
@@ -57,15 +57,6 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("approvers")]
         public IReadOnlyList<PutApprover> Approvers { get; set; }
 
-        /// <summary>
-        /// Gets the HTTP content for the PUT routing detail request
-        /// </summary>
-        /// <returns>HTTP content representing the request</returns>
-        public System.Net.Http.HttpContent GetHttpContent()
-        {
-            var json = JsonConvert.SerializeObject(this);
-            return new System.Net.Http.StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        }
     }
 
     /// <summary>
