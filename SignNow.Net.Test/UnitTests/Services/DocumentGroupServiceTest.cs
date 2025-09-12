@@ -162,7 +162,7 @@ namespace UnitTests.Services
             var updateRequest = new UpdateDocumentGroupTemplateRequestFaker().Generate();
             var response = await service.UpdateDocumentGroupTemplateAsync("03c74b3083f34ebf8ef40a3039dfb32c85a08437", updateRequest).ConfigureAwait(false);
 
-            Assert.IsInstanceOfType(response, typeof(UpdateDocumentGroupTemplateResponse));
+            Assert.IsInstanceOfType(response, typeof(SuccessStatusResponse));
             Assert.AreEqual("success", response.Status);
         }
 

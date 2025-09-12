@@ -93,7 +93,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="updateRequest">Request containing template IDs to add/remove and routing details.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task<UpdateDocumentGroupTemplateResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, UpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default);
+        Task<SuccessStatusResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, UpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a document group template from an existing document group.

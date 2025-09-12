@@ -4,12 +4,12 @@ using SignNow.Net.Model.Responses;
 namespace SignNow.Net.Test.FakeModels
 {
     /// <summary>
-    /// Faker <see cref="UpdateDocumentGroupTemplateResponse"/>
+    /// Faker <see cref="SuccessStatusResponse"/>
     /// </summary>
-    public class UpdateDocumentGroupTemplateResponseFaker : Faker<UpdateDocumentGroupTemplateResponse>
+    public class SuccessStatusResponseFaker : Faker<SuccessStatusResponse>
     {
         /// <summary>
-        /// Creates new instance of <see cref="UpdateDocumentGroupTemplateResponse"/> fake object.
+        /// Creates new instance of <see cref="SuccessStatusResponse"/> fake object.
         /// </summary>
         /// <example>
         /// This example shows Json representation.
@@ -19,7 +19,7 @@ namespace SignNow.Net.Test.FakeModels
         /// }
         /// </code>
         /// </example>
-        public UpdateDocumentGroupTemplateResponseFaker()
+        public SuccessStatusResponseFaker()
         {
             Rules((f, o) =>
             {

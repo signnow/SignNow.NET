@@ -187,7 +187,7 @@ namespace SignNow.Net.Service
 
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If document group template identity is not valid.</exception>
-        public async Task<UpdateDocumentGroupTemplateResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default)
+        public async Task<SuccessStatusResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
 
@@ -199,7 +199,7 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync<UpdateDocumentGroupTemplateResponse>(requestOptions, cancellationToken)
+                .RequestAsync<SuccessStatusResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 
