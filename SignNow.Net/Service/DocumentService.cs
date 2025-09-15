@@ -335,7 +335,7 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync<GetRoutingDetailResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, new HttpContentToRoutingDetailResponseAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -352,7 +352,7 @@ namespace SignNow.Net.Service
             };
 
             return await SignNowClient
-                .RequestAsync<CreateRoutingDetailResponse>(requestOptions, cancellationToken)
+                .RequestAsync(requestOptions, new HttpContentToCreateRoutingDetailResponseAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken)
                 .ConfigureAwait(false);
         }
 

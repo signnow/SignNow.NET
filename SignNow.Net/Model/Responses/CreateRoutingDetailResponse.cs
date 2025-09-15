@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using SignNow.Net.Model;
 
@@ -7,6 +9,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Response model for creating routing detail information
     /// </summary>
+    [JsonObject]
     public class CreateRoutingDetailResponse
     {
         /// <summary>
@@ -14,6 +17,12 @@ namespace SignNow.Net.Model.Responses
         /// </summary>
         [JsonProperty("routing_details")]
         public IReadOnlyList<CreateRoutingDetail> RoutingDetails { get; set; }
+
+        /// <summary>
+        /// Array with created routing details (alternative property name from API)
+        /// </summary>
+        [JsonProperty("routing_details.created")]
+        public IReadOnlyList<CreateRoutingDetail> RoutingDetailsCreated { get; set; }
 
         /// <summary>
         /// Array of cc's emails
@@ -76,4 +85,5 @@ namespace SignNow.Net.Model.Responses
     public class CreateRoutingDetailCcStep : CcStepBase
     {
     }
+
 }

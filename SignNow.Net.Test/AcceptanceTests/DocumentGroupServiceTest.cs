@@ -125,23 +125,12 @@ namespace AcceptanceTests
                     OwnAsMerged = true
                 };
 
-                var response = await SignNowTestContext.DocumentGroup
+                await SignNowTestContext.DocumentGroup
                     .CreateDocumentGroupTemplateAsync(documentGroup.Id, createRequest)
                     .ConfigureAwait(false);
 
-                Assert.IsNotNull(response);
-                
-                if (response.IsAccepted)
-                {
-                    Console.WriteLine("Document group template creation was accepted and scheduled for processing");
-                }
-                else
-                {
-                    Assert.IsNotNull(response.Id);
-                    Assert.IsNotNull(response.Status);
-                    Assert.IsTrue(response.Id.Length == 40);
-                    Console.WriteLine($"Created document group template: {response.Id} with status: {response.Status}");
-                }
+                // The method returns Task (void) for 202 Accepted responses, so we just verify it completes without exception
+                Console.WriteLine("Document group template creation was accepted and scheduled for processing");
             }
             catch (SignNow.Net.Exceptions.SignNowException ex)
             {

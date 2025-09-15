@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
@@ -10,6 +11,7 @@ namespace SignNow.Net.Model.Responses
     /// <summary>
     /// Response model for getting routing detail information
     /// </summary>
+    [JsonObject]
     public class GetRoutingDetailResponse
     {
         /// <summary>
@@ -226,4 +228,5 @@ namespace SignNow.Net.Model.Responses
         [JsonProperty("on_complete")]
         public string OnComplete { get; set; }
     }
+
 }

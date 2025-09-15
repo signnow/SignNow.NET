@@ -190,12 +190,9 @@ namespace UnitTests.Services
                 SignNowClientMock(""));
 
             var createRequest = new CreateDocumentGroupTemplateRequestFaker().Generate();
-            var response = await service.CreateDocumentGroupTemplateAsync("03c74b3083f34ebf8ef40a3039dfb32c85a08437", createRequest).ConfigureAwait(false);
+            await service.CreateDocumentGroupTemplateAsync("03c74b3083f34ebf8ef40a3039dfb32c85a08437", createRequest).ConfigureAwait(false);
 
-            Assert.IsInstanceOfType(response, typeof(CreateDocumentGroupTemplateResponse));
-            Assert.IsNull(response.Id); // ID is null for 202 Accepted responses
-            Assert.AreEqual("accepted", response.Status);
-            Assert.IsTrue(response.IsAccepted);
+            // The method returns Task (void) for 202 Accepted responses, so we just verify it completes without exception
         }
 
         [TestMethod]
