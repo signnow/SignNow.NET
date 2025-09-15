@@ -261,35 +261,20 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> or <paramref name="folderId"/> is not valid.</exception>
-        /// <exception cref="System.ArgumentNullException">If <paramref name="csvFileStream"/>, <paramref name="fileName"/>, or <paramref name="folderId"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <paramref name="request"/> is null.</exception>
         public async Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
             string templateId,
-            Stream csvFileStream,
-            string fileName,
-            string folderId,
-            string subject = null,
-            string emailMessage = null,
-            int? clientTimestamp = null,
-            SignatureType? signatureType = null,
+            CreateBulkInviteRequest request,
             CancellationToken cancellationToken = default)
         {
-            Guard.ArgumentNotNull(csvFileStream, nameof(csvFileStream));
-            Guard.ArgumentNotNull(fileName, nameof(fileName));
-            Guard.ArgumentNotNull(folderId, nameof(folderId));
+            Guard.ArgumentNotNull(request, nameof(request));
 
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/bulkinvite"),
-                Content = new BulkInviteTemplateRequest(
-                    csvFileStream,
-                    fileName,
-                    folderId.ValidateId(),
-                    subject,
-                    emailMessage,
-                    clientTimestamp,
-                    signatureType),
+                Content = new BulkInviteTemplateRequest(request),
                 Token = Token
             };
 

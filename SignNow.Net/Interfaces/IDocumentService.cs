@@ -126,24 +126,12 @@ namespace SignNow.Net.Interfaces
         /// A new document is generated for each signer and stored in the specified folder.
         /// </summary>
         /// <param name="templateId">Identity of the template to create bulk invites from.</param>
-        /// <param name="csvFileStream">Stream containing the CSV file with signers' roles, emails, and document names.</param>
-        /// <param name="fileName">Name of the CSV file.</param>
-        /// <param name="folderId">ID of the folder where the documents should be stored.</param>
-        /// <param name="subject">Custom email subject for all signers.</param>
-        /// <param name="emailMessage">Custom email message for all signers.</param>
-        /// <param name="clientTimestamp">The timestamp in UNIX code.</param>
-        /// <param name="signatureType">Type of QES signature requested from signers.</param>
+        /// <param name="request">Bulk invite request containing CSV file, folder, and optional parameters.</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Returns status of the bulk invite job.</returns>
         Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
             string templateId,
-            Stream csvFileStream,
-            string fileName,
-            string folderId,
-            string subject = null,
-            string emailMessage = null,
-            int? clientTimestamp = null,
-            SignatureType? signatureType = null,
+            CreateBulkInviteRequest request,
             CancellationToken cancellationToken = default);
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UnitTests;
+using SignNow.Net.Model.Requests;
 
 namespace AcceptanceTests
 {
@@ -29,15 +30,16 @@ namespace AcceptanceTests
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite_test.csv";
 
+            // Create bulk invite request
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, documentsFolder)
+            {
+                Subject = "Please sign this document",
+                EmailMessage = "Custom message for the signer"
+            };
+
             // Create bulk invite
             var result = await SignNowTestContext.Documents
-                .CreateBulkInviteFromTemplateAsync(
-                    createTemplateResult.Id,
-                    csvStream,
-                    fileName,
-                    documentsFolder.Id,
-                    "Please sign this document",
-                    "Custom message for the signer")
+                .CreateBulkInviteFromTemplateAsync(createTemplateResult.Id, bulkInviteRequest)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(result);
@@ -64,13 +66,12 @@ namespace AcceptanceTests
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite_minimal.csv";
 
+            // Create bulk invite request with minimal parameters
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, documentsFolder);
+
             // Create bulk invite with minimal parameters
             var result = await SignNowTestContext.Documents
-                .CreateBulkInviteFromTemplateAsync(
-                    createTemplateResult.Id,
-                    csvStream,
-                    fileName,
-                    documentsFolder.Id)
+                .CreateBulkInviteFromTemplateAsync(createTemplateResult.Id, bulkInviteRequest)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(result);
@@ -96,18 +97,17 @@ namespace AcceptanceTests
             var csvContent = "Signer 1|signer@example.com,QES Document";
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite_qes.csv";
-            var clientTimestamp = (int)(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-            // Create bulk invite with custom subject and message (without QES since test org doesn't support it)
+            // Create bulk invite request with custom subject and message (without QES since test org doesn't support it)
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, documentsFolder)
+            {
+                Subject = "Please sign this document",
+                EmailMessage = "Custom message for the signer"
+            };
+
+            // Create bulk invite with custom subject and message
             var result = await SignNowTestContext.Documents
-                .CreateBulkInviteFromTemplateAsync(
-                    createTemplateResult.Id,
-                    csvStream,
-                    fileName,
-                    documentsFolder.Id,
-                    "Please sign this document",
-                    "Custom message for the signer",
-                    clientTimestamp)
+                .CreateBulkInviteFromTemplateAsync(createTemplateResult.Id, bulkInviteRequest)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(result);

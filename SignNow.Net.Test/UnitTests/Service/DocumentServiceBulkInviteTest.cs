@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Responses;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels;
 using UnitTests;
@@ -27,10 +28,9 @@ namespace UnitTests
             var csvContent = "Signer 1|signer1@email.com,document_name\nSigner 1|signer2@email.com,document_name";
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite.csv";
-            var folderId = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0";
+            var folder = new Folder { Id = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0" };
             var subject = "Please sign this document";
             var emailMessage = "Custom message for the signer";
-            var clientTimestamp = 1640995200;
             var signatureType = SignatureType.Eideasy;
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
@@ -38,16 +38,17 @@ namespace UnitTests
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, folder)
+            {
+                Subject = subject,
+                EmailMessage = emailMessage,
+                SignatureType = signatureType
+            };
+
             // Act
             var result = await documentService.CreateBulkInviteFromTemplateAsync(
                 templateId,
-                csvStream,
-                fileName,
-                folderId,
-                subject,
-                emailMessage,
-                clientTimestamp,
-                signatureType,
+                bulkInviteRequest,
                 CancellationToken.None);
 
             // Assert
@@ -63,20 +64,20 @@ namespace UnitTests
             var csvContent = "Signer 1|signer1@email.com,document_name";
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite.csv";
-            var folderId = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0";
+            var folder = new Folder { Id = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0" };
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
             var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, folder);
+
             // Act
             var result = await documentService.CreateBulkInviteFromTemplateAsync(
                 templateId,
-                csvStream,
-                fileName,
-                folderId,
-                cancellationToken: CancellationToken.None);
+                bulkInviteRequest,
+                CancellationToken.None);
 
             // Assert
             Assert.IsNotNull(result);
@@ -91,7 +92,7 @@ namespace UnitTests
             var csvContent = "Signer 1|signer1@email.com,document_name";
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite.csv";
-            var folderId = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0";
+            var folder = new Folder { Id = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0" };
             var subject = "Please sign this document";
             var emailMessage = "Custom message for the signer";
 
@@ -100,15 +101,17 @@ namespace UnitTests
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, folder)
+            {
+                Subject = subject,
+                EmailMessage = emailMessage
+            };
+
             // Act
             var result = await documentService.CreateBulkInviteFromTemplateAsync(
                 templateId,
-                csvStream,
-                fileName,
-                folderId,
-                subject,
-                emailMessage,
-                cancellationToken: CancellationToken.None);
+                bulkInviteRequest,
+                CancellationToken.None);
 
             // Assert
             Assert.IsNotNull(result);
@@ -123,22 +126,20 @@ namespace UnitTests
             var csvContent = "Signer 1|signer1@email.com,document_name";
             var csvStream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             var fileName = "bulk_invite.csv";
-            var folderId = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0";
-            var clientTimestamp = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var folder = new Folder { Id = "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0" };
 
             var expectedResponse = new BulkInviteTemplateResponseFaker().Generate();
             var mockClient = SignNowClientMock(TestUtils.SerializeToJsonFormatted(expectedResponse));
 
             var documentService = new DocumentService(ApiBaseUrl, new Token(), mockClient);
 
+            var bulkInviteRequest = new CreateBulkInviteRequest(csvStream, fileName, folder);
+
             // Act
             var result = await documentService.CreateBulkInviteFromTemplateAsync(
                 templateId,
-                csvStream,
-                fileName,
-                folderId,
-                clientTimestamp: clientTimestamp,
-                cancellationToken: CancellationToken.None);
+                bulkInviteRequest,
+                CancellationToken.None);
 
             // Assert
             Assert.IsNotNull(result);
