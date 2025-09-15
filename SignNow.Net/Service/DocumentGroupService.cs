@@ -206,7 +206,7 @@ namespace SignNow.Net.Service
 
         /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
-        public async Task<CreateDocumentGroupTemplateResponse> CreateDocumentGroupTemplateAsync(string documentGroupId, CreateDocumentGroupTemplateRequest createRequest, CancellationToken cancellationToken = default)
+        public async Task CreateDocumentGroupTemplateAsync(string documentGroupId, CreateDocumentGroupTemplateRequest createRequest, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
 
@@ -221,13 +221,6 @@ namespace SignNow.Net.Service
             await SignNowClient
                 .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
-
-            // Return a response indicating the operation was accepted
-            return new CreateDocumentGroupTemplateResponse
-            {
-                Id = null,
-                Status = "accepted"
-            };
         }
 
         /// <inheritdoc />
