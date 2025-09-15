@@ -334,26 +334,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            try
-            {
-                return await SignNowClient
-                    .RequestAsync<GetRoutingDetailResponse>(requestOptions, cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
-            {
-                // If the API returns an empty array instead of an object, return empty response
-                return new GetRoutingDetailResponse
-                {
-                    RoutingDetails = new List<RoutingDetail>(),
-                    Cc = new List<string>(),
-                    CcStep = new List<CcStep>(),
-                    InviteLinkInstructions = string.Empty,
-                    Viewers = new List<Viewer>(),
-                    Approvers = new List<Approver>(),
-                    Attributes = null
-                };
-            }
+            return await SignNowClient
+                .RequestAsync<GetRoutingDetailResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -368,23 +351,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            try
-            {
-                return await SignNowClient
-                    .RequestAsync<CreateRoutingDetailResponse>(requestOptions, cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
-            {
-                // If the API returns unexpected JSON format, return empty response
-                return new CreateRoutingDetailResponse
-                {
-                    RoutingDetails = new List<CreateRoutingDetail>(),
-                    Cc = new List<string>(),
-                    CcStep = new List<CreateRoutingDetailCcStep>(),
-                    InviteLinkInstructions = string.Empty
-                };
-            }
+            return await SignNowClient
+                .RequestAsync<CreateRoutingDetailResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -402,26 +371,9 @@ namespace SignNow.Net.Service
                 Token = Token
             };
 
-            try
-            {
-                return await SignNowClient
-                    .RequestAsync<UpdateRoutingDetailResponse>(requestOptions, cancellationToken)
-                    .ConfigureAwait(false);
-            }
-            catch (Newtonsoft.Json.JsonSerializationException ex) when (ex.Message.Contains("Cannot deserialize"))
-            {
-                // If the API returns unexpected JSON format, return empty response
-                return new UpdateRoutingDetailResponse
-                {
-                    TemplateData = new List<UpdateRoutingDetailTemplateData>(),
-                    Cc = new List<string>(),
-                    CcStep = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailCcStep>(),
-                    InviteLinkInstructions = string.Empty,
-                    Viewers = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailViewer>(),
-                    Approvers = new List<SignNow.Net.Model.Responses.UpdateRoutingDetailApprover>(),
-                    Attributes = null
-                };
-            }
+            return await SignNowClient
+                .RequestAsync<UpdateRoutingDetailResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }
