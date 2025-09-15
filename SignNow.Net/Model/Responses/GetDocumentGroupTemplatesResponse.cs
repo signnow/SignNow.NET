@@ -126,7 +126,7 @@ namespace SignNow.Net.Model.Responses
         /// Include email attachments
         /// </summary>
         [JsonProperty("include_email_attachments")]
-        public object IncludeEmailAttachments { get; set; }
+        public string IncludeEmailAttachments { get; set; }
 
         /// <summary>
         /// List of invite steps
