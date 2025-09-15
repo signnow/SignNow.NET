@@ -29,21 +29,24 @@ namespace AcceptanceTests
             // Use a mock template ID for testing
             var mockTemplateId = "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00777";
 
+            SignNow.Net.Model.Responses.SuccessStatusResponse response;
             try
             {
-                var response = await SignNowTestContext.DocumentGroup
+                response = await SignNowTestContext.DocumentGroup
                     .UpdateDocumentGroupTemplateAsync(mockTemplateId, updateRequest)
                     .ConfigureAwait(false);
-
-                Assert.IsNotNull(response);
-                Assert.AreEqual("success", response.Status);
             }
             catch (SignNow.Net.Exceptions.SignNowException ex)
             {
                 // Expected for mock template ID - verify it's the right type of error
                 Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
                              ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest);
+                return; // Exit early since we got the expected exception
             }
+
+            // Only execute assertions if we got a successful response
+            Assert.IsNotNull(response);
+            Assert.AreEqual("success", response.Status);
         }
 
         [TestMethod]
@@ -77,21 +80,24 @@ namespace AcceptanceTests
 
             var mockTemplateId = "ddc7ce43dfc5ad3b2f0fdb1db36889ce53f00777";
 
+            SignNow.Net.Model.Responses.SuccessStatusResponse response;
             try
             {
-                var response = await SignNowTestContext.DocumentGroup
+                response = await SignNowTestContext.DocumentGroup
                     .UpdateDocumentGroupTemplateAsync(mockTemplateId, updateRequest)
                     .ConfigureAwait(false);
-
-                Assert.IsNotNull(response);
-                Assert.AreEqual("success", response.Status);
             }
             catch (SignNow.Net.Exceptions.SignNowException ex)
             {
                 // Expected for mock template ID - verify it's the right type of error
                 Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
                              ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest);
+                return; // Exit early since we got the expected exception
             }
+
+            // Only execute assertions if we got a successful response
+            Assert.IsNotNull(response);
+            Assert.AreEqual("success", response.Status);
         }
 
         [TestMethod]
@@ -116,15 +122,15 @@ namespace AcceptanceTests
                 .CreateDocumentGroupAsync("CreateDocumentGroupTemplateTest", documents)
                 .ConfigureAwait(false);
 
+            // Create document group template from the document group
+            var createRequest = new CreateDocumentGroupTemplateRequest
+            {
+                Name = "Test Document Group Template",
+                OwnAsMerged = true
+            };
+
             try
             {
-                // Create document group template from the document group
-                var createRequest = new CreateDocumentGroupTemplateRequest
-                {
-                    Name = "Test Document Group Template",
-                    OwnAsMerged = true
-                };
-
                 await SignNowTestContext.DocumentGroup
                     .CreateDocumentGroupTemplateAsync(documentGroup.Id, createRequest)
                     .ConfigureAwait(false);
