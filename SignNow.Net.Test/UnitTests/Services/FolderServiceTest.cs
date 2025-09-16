@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 using SignNow.Net.Model.Responses;
 using SignNow.Net.Service;
 using SignNow.Net.Test.FakeModels;
@@ -52,6 +54,86 @@ namespace UnitTests.Services
             var task = service.DeleteFolderAsync(FolderId);
 
             Assert.IsFalse(task.IsFaulted);
+        }
+
+        [TestMethod]
+        public async Task GetFolderAsync()
+        {
+            var fakeFolders = new SignNowFoldersFaker().Generate();
+            var foldersJson = TestUtils.SerializeToJsonFormatted(fakeFolders);
+
+            var service = new FolderService(ApiBaseUrl, new Token(), SignNowClientMock(foldersJson));
+
+            var foldersResponse = await service
+                .GetFolderAsync(FolderId, null)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(fakeFolders.Id, foldersResponse.Id);
+            Assert.AreEqual(fakeFolders.UserId, foldersResponse.UserId);
+            Assert.AreEqual(fakeFolders.Documents.Count, foldersResponse.Documents.Count);
+        }
+
+        [TestMethod]
+        public async Task GetFolderAsync_WithOptions()
+        {
+            var fakeFolders = new SignNowFoldersFaker().Generate();
+            var foldersJson = TestUtils.SerializeToJsonFormatted(fakeFolders);
+
+            var service = new FolderService(ApiBaseUrl, new Token(), SignNowClientMock(foldersJson));
+            var options = new GetFolderOptions
+            {
+                Limit = 10,
+                Offset = 0,
+                EntityTypes = EntityType.All
+            };
+
+            var foldersResponse = await service
+                .GetFolderAsync(FolderId, options)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(fakeFolders.Id, foldersResponse.Id);
+            Assert.AreEqual(fakeFolders.UserId, foldersResponse.UserId);
+            Assert.AreEqual(fakeFolders.Documents.Count, foldersResponse.Documents.Count);
+        }
+
+        [TestMethod]
+        public async Task GetFolderByIdAsync()
+        {
+            var fakeFolders = new SignNowFoldersFaker().Generate();
+            var foldersJson = TestUtils.SerializeToJsonFormatted(fakeFolders);
+
+            var service = new FolderService(ApiBaseUrl, new Token(), SignNowClientMock(foldersJson));
+
+            var foldersResponse = await service
+                .GetFolderByIdAsync(FolderId, null)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(fakeFolders.Id, foldersResponse.Id);
+            Assert.AreEqual(fakeFolders.UserId, foldersResponse.UserId);
+            Assert.AreEqual(fakeFolders.Documents.Count, foldersResponse.Documents.Count);
+        }
+
+        [TestMethod]
+        public async Task GetFolderByIdAsync_WithOptions()
+        {
+            var fakeFolders = new SignNowFoldersFaker().Generate();
+            var foldersJson = TestUtils.SerializeToJsonFormatted(fakeFolders);
+
+            var service = new FolderService(ApiBaseUrl, new Token(), SignNowClientMock(foldersJson));
+            var options = new GetFolderOptions
+            {
+                Limit = 10,
+                Offset = 0,
+                EntityTypes = EntityType.All
+            };
+
+            var foldersResponse = await service
+                .GetFolderByIdAsync(FolderId, options)
+                .ConfigureAwait(false);
+
+            Assert.AreEqual(fakeFolders.Id, foldersResponse.Id);
+            Assert.AreEqual(fakeFolders.UserId, foldersResponse.UserId);
+            Assert.AreEqual(fakeFolders.Documents.Count, foldersResponse.Documents.Count);
         }
 
         [TestMethod]

@@ -97,6 +97,27 @@ namespace SignNow.Net.Service
                 .ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="IFolderService.GetFolderByIdAsync"/>
+        /// <exception cref="System.ArgumentException">If folder identity is not valid.</exception>
+        public async Task<SignNowFolders> GetFolderByIdAsync(string folderId, GetFolderOptions options, CancellationToken cancellation = default)
+        {
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/folder/{folderId.ValidateId()}{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<SignNowFolders>(requestOptions, cancellation)
+                .ConfigureAwait(false);
+        }
+
         /// <inheritdoc cref="IFolderService.RenameFolderAsync"/>
         /// <exception cref="System.ArgumentException">If <paramref name="name"/> is empty.</exception>
         /// <exception cref="System.ArgumentException">If <paramref name="folderId"/> is not valid.</exception>

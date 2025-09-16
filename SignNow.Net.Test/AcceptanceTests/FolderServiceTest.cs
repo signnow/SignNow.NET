@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Internal.Extensions;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 using UnitTests;
 
 namespace AcceptanceTests
@@ -23,6 +24,88 @@ namespace AcceptanceTests
             Assert.IsTrue(folders.Folders.Any(f => f.Name == "Documents"));
             Assert.IsTrue(folders.Folders.Any(f => f.Name == "Archive"));
             Assert.IsTrue(folders.Folders.Any(f => f.Name == "Templates"));
+        }
+
+        [TestMethod]
+        public async Task GetFolderAsync_OriginalEndpoint()
+        {
+            var root = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            // Test the original endpoint
+            var folder = await SignNowTestContext.Folders
+                .GetFolderAsync(documentsFolder?.Id)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folder, typeof(SignNowFolders));
+            Assert.AreEqual(documentsFolder?.Id, folder.Id);
+            Assert.AreEqual("Documents", folder.Name);
+            Assert.IsTrue(folder.SystemFolder);
+        }
+
+        [TestMethod]
+        public async Task GetFolderAsync_WithOptions()
+        {
+            var root = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var options = new GetFolderOptions
+            {
+                Limit = 5,
+                Offset = 0,
+                EntityTypes = EntityType.All,
+                IncludeDocumentsSubfolder = false
+            };
+
+            // Test the original endpoint with options
+            var folder = await SignNowTestContext.Folders
+                .GetFolderAsync(documentsFolder?.Id, options)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folder, typeof(SignNowFolders));
+            Assert.AreEqual(documentsFolder?.Id, folder.Id);
+            Assert.AreEqual("Documents", folder.Name);
+            Assert.IsTrue(folder.SystemFolder);
+        }
+
+        [TestMethod]
+        public async Task GetFolderByIdAsync_NewEndpoint()
+        {
+            var root = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var folderById = await SignNowTestContext.Folders
+                .GetFolderByIdAsync(documentsFolder?.Id)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folderById, typeof(SignNowFolders));
+            Assert.AreEqual(documentsFolder?.Id, folderById.Id);
+            Assert.AreEqual("Documents", folderById.Name);
+            Assert.IsTrue(folderById.SystemFolder);
+        }
+
+        [TestMethod]
+        public async Task GetFolderByIdAsync_WithOptions()
+        {
+            var root = await SignNowTestContext.Folders.GetAllFoldersAsync().ConfigureAwait(false);
+            var documentsFolder = root.Folders.FirstOrDefault(f => f.Name == "Documents");
+
+            var options = new GetFolderOptions
+            {
+                Limit = 5,
+                Offset = 0,
+                EntityTypes = EntityType.All,
+                IncludeDocumentsSubfolder = false
+            };
+
+            var folderById = await SignNowTestContext.Folders
+                .GetFolderByIdAsync(documentsFolder?.Id, options)
+                .ConfigureAwait(false);
+
+            Assert.IsInstanceOfType(folderById, typeof(SignNowFolders));
+            Assert.AreEqual(documentsFolder?.Id, folderById.Id);
+            Assert.AreEqual("Documents", folderById.Name);
+            Assert.IsTrue(folderById.SystemFolder);
         }
 
         [TestMethod]
