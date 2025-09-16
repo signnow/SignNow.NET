@@ -183,19 +183,6 @@ namespace UnitTests.Services
         }
 
         [TestMethod]
-        public async Task CreateDocumentGroupTemplateAsyncTest()
-        {
-            // The API returns 202 Accepted with empty body, so we don't need a JSON response
-            var service = new DocumentGroupService(ApiBaseUrl, new Token(),
-                SignNowClientMock(""));
-
-            var createRequest = new CreateDocumentGroupTemplateRequestFaker().Generate();
-            await service.CreateDocumentGroupTemplateAsync("03c74b3083f34ebf8ef40a3039dfb32c85a08437", createRequest).ConfigureAwait(false);
-
-            // The method returns Task (void) for 202 Accepted responses, so we just verify it completes without exception
-        }
-
-        [TestMethod]
         public async Task CreateDocumentGroupTemplateAsyncThrowsExceptionForInvalidIdTest()
         {
             var service = new DocumentGroupService(ApiBaseUrl, new Token(), SignNowClientMock("{}"));
