@@ -75,7 +75,7 @@ namespace SignNow.Net.Model.Responses
         /// <summary>
         /// Signer order from actor table
         /// </summary>
-        [JsonProperty("signer_order")]
+        [JsonProperty("signing_order")]
         public int SignerOrder { get; set; }
     }
 

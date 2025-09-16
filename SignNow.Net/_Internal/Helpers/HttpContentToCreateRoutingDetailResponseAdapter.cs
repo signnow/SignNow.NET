@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -34,13 +35,22 @@ namespace SignNow.Net.Internal.Helpers
                         var routingDetailsToken = jsonObject["routing_details"];
                         if (routingDetailsToken.Type == JTokenType.Array)
                         {
-                            response.RoutingDetails = routingDetailsToken.ToObject<System.Collections.Generic.IReadOnlyList<CreateRoutingDetail>>();
+                            response.RoutingDetails = routingDetailsToken.ToObject<IReadOnlyList<CreateRoutingDetail>>();
                         }
                         else if (routingDetailsToken.Type == JTokenType.Object)
                         {
-                            // If it's a single object, wrap it in a list
-                            var singleItem = routingDetailsToken.ToObject<CreateRoutingDetail>();
-                            response.RoutingDetails = new System.Collections.Generic.List<CreateRoutingDetail> { singleItem };
+                            // Check if the object has a "data" property containing the array
+                            var dataToken = routingDetailsToken["data"];
+                            if (dataToken != null && dataToken.Type == JTokenType.Array)
+                            {
+                                response.RoutingDetails = dataToken.ToObject<IReadOnlyList<CreateRoutingDetail>>();
+                            }
+                            else
+                            {
+                                // If it's a single object, wrap it in a list
+                                var singleItem = routingDetailsToken.ToObject<CreateRoutingDetail>();
+                                response.RoutingDetails = new List<CreateRoutingDetail> { singleItem };
+                            }
                         }
                     }
                     
@@ -50,13 +60,13 @@ namespace SignNow.Net.Internal.Helpers
                         var createdToken = jsonObject["routing_details.created"];
                         if (createdToken.Type == JTokenType.Array)
                         {
-                            response.RoutingDetailsCreated = createdToken.ToObject<System.Collections.Generic.IReadOnlyList<CreateRoutingDetail>>();
+                            response.RoutingDetailsCreated = createdToken.ToObject<IReadOnlyList<CreateRoutingDetail>>();
                         }
                         else if (createdToken.Type == JTokenType.Object)
                         {
                             // If it's a single object, wrap it in a list
                             var singleItem = createdToken.ToObject<CreateRoutingDetail>();
-                            response.RoutingDetailsCreated = new System.Collections.Generic.List<CreateRoutingDetail> { singleItem };
+                            response.RoutingDetailsCreated = new List<CreateRoutingDetail> { singleItem };
                         }
                         
                         // If we have created details but no regular routing details, use the created ones
@@ -69,12 +79,12 @@ namespace SignNow.Net.Internal.Helpers
                     // Handle other properties
                     if (jsonObject["cc"] != null)
                     {
-                        response.Cc = jsonObject["cc"].ToObject<System.Collections.Generic.IReadOnlyList<string>>();
+                        response.Cc = jsonObject["cc"].ToObject<IReadOnlyList<string>>();
                     }
                     
                     if (jsonObject["cc_step"] != null)
                     {
-                        response.CcStep = jsonObject["cc_step"].ToObject<System.Collections.Generic.IReadOnlyList<CreateRoutingDetailCcStep>>();
+                        response.CcStep = jsonObject["cc_step"].ToObject<IReadOnlyList<CreateRoutingDetailCcStep>>();
                     }
                     
                     if (jsonObject["invite_link_instructions"] != null)

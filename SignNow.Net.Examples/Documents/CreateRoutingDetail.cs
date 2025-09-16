@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Exceptions;
+using SignNow.Net.Interfaces;
+using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Examples
@@ -19,6 +22,29 @@ namespace SignNow.Net.Examples
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
             var document = await testContext.Documents
                 .UploadDocumentWithFieldExtractAsync(fileStream, "CreateRoutingDetailTest.pdf")
+                .ConfigureAwait(false);
+
+            // Add fields with roles to the document
+            var fields = new List<IFieldEditable>
+            {
+                new TextField
+                {
+                    PageNumber = 0,
+                    Name = "TextName",
+                    Role = "Signer 1",
+                    Height = 100,
+                    Width = 200,
+                    Label = "LabelName",
+                    PrefilledText = "prefilled-text-example",
+                    Required = true,
+                    X = 10,
+                    Y = 20
+                },
+            };
+
+            // Edit the document to add fields
+            var editResponse = await testContext.Documents
+                .EditDocumentAsync(document.Id, fields)
                 .ConfigureAwait(false);
 
             // Create or update routing detail information for the document
