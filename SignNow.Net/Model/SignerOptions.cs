@@ -1,6 +1,6 @@
 using System;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Internal.Model;

@@ -1,4 +1,4 @@
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;

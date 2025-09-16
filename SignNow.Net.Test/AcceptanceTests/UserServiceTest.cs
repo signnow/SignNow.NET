@@ -9,7 +9,7 @@ using UnitTests;
 namespace AcceptanceTests
 {
     [TestClass]
-    public class UserServiceTest : AuthorizedApiTestBase
+    public partial class UserServiceTest : AuthorizedApiTestBase
     {
         private readonly string emailPattern = @"(?<userid>\S+)@(?<domain>\w+.\w+)";
         private readonly string inviteIdPattern = @"^[a-zA-Z0-9_]{40,40}$";
