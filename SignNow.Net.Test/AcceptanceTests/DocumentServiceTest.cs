@@ -11,6 +11,7 @@ using UnitTests;
 using UpdateRoutingDetailCcStepRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailCcStep;
 using UpdateRoutingDetailViewerRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailViewer;
 using UpdateRoutingDetailApproverRequest = SignNow.Net.Model.Requests.UpdateRoutingDetailApprover;
+using Bogus;
 
 namespace AcceptanceTests
 {
@@ -140,10 +141,11 @@ namespace AcceptanceTests
                 }
             }
 
-            // If we still don't have a role ID, use a mock value for testing error handling
+            // If we still don't have a role ID, use a faker-generated mock value for testing error handling
             if (string.IsNullOrEmpty(roleId))
             {
-                roleId = "mockroleidfortesting123456789012345";
+                var faker = new Faker();
+                roleId = faker.Random.Hash(40);
             }
 
             var request = new UpdateRoutingDetailRequest

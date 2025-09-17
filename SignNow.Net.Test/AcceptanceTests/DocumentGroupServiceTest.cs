@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using UnitTests;
+using Bogus;
 
 namespace AcceptanceTests
 {
@@ -85,10 +86,11 @@ namespace AcceptanceTests
                 return;
             }
 
-            // If we couldn't create a template, use a mock ID for testing error handling
+            // If we couldn't create a template, use a faker-generated mock ID for testing error handling
             if (string.IsNullOrEmpty(templateId))
             {
-                templateId = "mocktemplateidfortesting1234567890";
+                var faker = new Faker();
+                templateId = faker.Random.Hash(40);
             }
 
             var updateRequest = new UpdateDocumentGroupTemplateRequest
@@ -151,8 +153,9 @@ namespace AcceptanceTests
                 TemplateGroupName = "Test Template Group"
             };
 
-            // Use a mock template ID for testing error handling
-            var templateId = "mocktemplateidfortesting1234567890";
+            // Use a faker-generated mock template ID for testing error handling
+            var faker = new Faker();
+            var templateId = faker.Random.Hash(40);
 
             SignNow.Net.Model.Responses.SuccessStatusResponse response;
             try
