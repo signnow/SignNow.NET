@@ -24,16 +24,13 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         /// <returns>Query string parameters</returns>
         public string ToQueryString()
         {
-            // Return empty string if limit is not set (0 or negative)
-            if (Limit <= 0)
-            {
-                return string.Empty;
-            }
-
             var parameters = new List<string>();
 
-            // Always include limit since it's required
-            parameters.Add($"limit={Limit}");
+            // Only include limit if it's been explicitly set (greater than 0)
+            if (Limit > 0)
+            {
+                parameters.Add($"limit={Limit}");
+            }
 
             // Only include offset if it's been explicitly set
             if (Offset != null)
