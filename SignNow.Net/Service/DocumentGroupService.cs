@@ -12,6 +12,7 @@ using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
 using PublicUpdateDocumentGroupTemplateRequest = SignNow.Net.Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest;
+using InternalUpdateDocumentGroupTemplateRequest = SignNow.Net.Internal.Requests.UpdateDocumentGroupTemplateRequest;
 
 namespace SignNow.Net.Service
 {
@@ -195,7 +196,7 @@ namespace SignNow.Net.Service
             var requestOptions = new PatchHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{documentGroupTemplateId.ValidateId()}"),
-                Content = new Internal.Requests.UpdateDocumentGroupTemplateRequest(updateRequest),
+                Content = new InternalUpdateDocumentGroupTemplateRequest(updateRequest),
                 Token = Token
             };
 
