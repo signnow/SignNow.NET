@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using SignNow.Net.Model;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Requests
 {
@@ -42,7 +44,9 @@ namespace SignNow.Net.Model.Requests
         /// <summary>
         /// Client timestamp for the request (automatically generated).
         /// </summary>
-        public int ClientTimestamp { get; }
+        [JsonProperty("client_timestamp")]
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
+        public DateTime ClientTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Initializes a new instance of the CreateBulkInviteRequest class.
@@ -56,9 +60,6 @@ namespace SignNow.Net.Model.Requests
             CsvFileStream = csvFileStream ?? throw new ArgumentNullException(nameof(csvFileStream));
             FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
             Folder = folder ?? throw new ArgumentNullException(nameof(folder));
-            
-            // Automatically generate client timestamp
-            ClientTimestamp = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         }
     }
 }

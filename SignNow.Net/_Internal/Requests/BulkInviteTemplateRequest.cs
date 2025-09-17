@@ -44,7 +44,8 @@ namespace SignNow.Net.Internal.Requests
             }
             
             // Always add client_timestamp as it's automatically generated
-            content.Add(new StringContent(_request.ClientTimestamp.ToString(), Encoding.UTF8), "client_timestamp");
+            var unixTimestamp = ((DateTimeOffset)_request.ClientTime).ToUnixTimeSeconds();
+            content.Add(new StringContent(unixTimestamp.ToString(), Encoding.UTF8), "client_timestamp");
             
             if (_request.SignatureType.HasValue)
             {
