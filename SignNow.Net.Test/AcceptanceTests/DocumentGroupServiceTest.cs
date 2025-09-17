@@ -114,7 +114,7 @@ namespace AcceptanceTests
                 Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
                              ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest ||
                              ex.HttpStatusCode == System.Net.HttpStatusCode.Forbidden ||
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.UnprocessableEntity,
+                             (int)ex.HttpStatusCode == 422, // UnprocessableEntity (not available in .NET Framework)
                              $"Unexpected HTTP status code: {ex.HttpStatusCode}");
                 return; // Exit early since we got the expected exception
             }
@@ -171,7 +171,7 @@ namespace AcceptanceTests
                 Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
                              ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest ||
                              ex.HttpStatusCode == System.Net.HttpStatusCode.Forbidden ||
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.UnprocessableEntity,
+                             (int)ex.HttpStatusCode == 422, // UnprocessableEntity (not available in .NET Framework)
                              $"Unexpected HTTP status code: {ex.HttpStatusCode}");
                 return; // Exit early since we got the expected exception
             }
