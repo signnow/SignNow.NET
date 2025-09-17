@@ -172,9 +172,7 @@ namespace AcceptanceTests
                         Name = "CC Recipient 1"
                     }
                 },
-                InviteLinkInstructions = "Please review and sign this document",
-                Viewers = new List<UpdateRoutingDetailViewerRequest>(),
-                Approvers = new List<UpdateRoutingDetailApproverRequest>()
+                InviteLinkInstructions = "Please review and sign this document"
             };
 
             var response = await SignNowTestContext.Documents

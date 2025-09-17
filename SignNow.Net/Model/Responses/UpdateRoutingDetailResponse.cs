@@ -15,19 +15,19 @@ namespace SignNow.Net.Model.Responses
         /// Array with routing details
         /// </summary>
         [JsonProperty("template_data")]
-        public IReadOnlyList<UpdateRoutingDetailTemplateData> TemplateData { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailTemplateData> TemplateData { get; set; } = new List<UpdateRoutingDetailTemplateData>();
 
         /// <summary>
         /// Array of cc's emails
         /// </summary>
         [JsonProperty("cc")]
-        public IReadOnlyList<string> Cc { get; set; }
+        public IReadOnlyList<string> Cc { get; set; } = new List<string>();
 
         /// <summary>
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<UpdateRoutingDetailCcStep> CcStep { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailCcStep> CcStep { get; set; } = new List<UpdateRoutingDetailCcStep>();
 
         /// <summary>
         /// Invite link instruction
@@ -39,13 +39,13 @@ namespace SignNow.Net.Model.Responses
         /// Array of viewers
         /// </summary>
         [JsonProperty("viewers")]
-        public IReadOnlyList<UpdateRoutingDetailViewer> Viewers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailViewer> Viewers { get; set; } = new List<UpdateRoutingDetailViewer>();
 
         /// <summary>
         /// Array of approvers
         /// </summary>
         [JsonProperty("approvers")]
-        public IReadOnlyList<UpdateRoutingDetailApprover> Approvers { get; set; }
+        public IReadOnlyList<UpdateRoutingDetailApprover> Approvers { get; set; } = new List<UpdateRoutingDetailApprover>();
 
         /// <summary>
         /// Routing attributes

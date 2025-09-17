@@ -18,19 +18,19 @@ namespace SignNow.Net.Model.Responses
         /// Array with routing details
         /// </summary>
         [JsonProperty("routing_details")]
-        public IReadOnlyList<RoutingDetail> RoutingDetails { get; set; }
+        public IReadOnlyList<RoutingDetail> RoutingDetails { get; set; } = new List<RoutingDetail>();
 
         /// <summary>
         /// Array of cc's emails
         /// </summary>
         [JsonProperty("cc")]
-        public IReadOnlyList<string> Cc { get; set; }
+        public IReadOnlyList<string> Cc { get; set; } = new List<string>();
 
         /// <summary>
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<CcStep> CcStep { get; set; }
+        public IReadOnlyList<CcStep> CcStep { get; set; } = new List<CcStep>();
 
         /// <summary>
         /// Invite link instruction
@@ -42,13 +42,13 @@ namespace SignNow.Net.Model.Responses
         /// Array of viewers
         /// </summary>
         [JsonProperty("viewers")]
-        public IReadOnlyList<Viewer> Viewers { get; set; }
+        public IReadOnlyList<Viewer> Viewers { get; set; } = new List<Viewer>();
 
         /// <summary>
         /// Array of approvers
         /// </summary>
         [JsonProperty("approvers")]
-        public IReadOnlyList<Approver> Approvers { get; set; }
+        public IReadOnlyList<Approver> Approvers { get; set; } = new List<Approver>();
 
         /// <summary>
         /// Routing attributes

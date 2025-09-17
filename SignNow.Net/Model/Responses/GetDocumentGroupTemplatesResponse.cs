@@ -16,7 +16,7 @@ namespace SignNow.Net.Model.Responses
         /// List of document group templates
         /// </summary>
         [JsonProperty("document_group_templates")]
-        public IReadOnlyList<DocumentGroupTemplate> DocumentGroupTemplates { get; set; }
+        public IReadOnlyList<DocumentGroupTemplate> DocumentGroupTemplates { get; set; } = new List<DocumentGroupTemplate>();
 
         /// <summary>
         /// Total count of document group templates
@@ -65,7 +65,7 @@ namespace SignNow.Net.Model.Responses
         /// List of templates in this group
         /// </summary>
         [JsonProperty("templates")]
-        public IReadOnlyList<DocumentGroupTemplateItem> Templates { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateItem> Templates { get; set; } = new List<DocumentGroupTemplateItem>();
 
         /// <summary>
         /// Whether the template is prepared
@@ -107,7 +107,7 @@ namespace SignNow.Net.Model.Responses
         /// List of roles for this template
         /// </summary>
         [JsonProperty("roles")]
-        public IReadOnlyList<string> Roles { get; set; }
+        public IReadOnlyList<string> Roles { get; set; } = new List<string>();
     }
 
 
@@ -132,7 +132,7 @@ namespace SignNow.Net.Model.Responses
         /// List of invite steps
         /// </summary>
         [JsonProperty("invite_steps")]
-        public IReadOnlyList<DocumentGroupTemplateInviteStep> InviteSteps { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteStep> InviteSteps { get; set; } = new List<DocumentGroupTemplateInviteStep>();
     }
 
     /// <summary>
@@ -150,13 +150,13 @@ namespace SignNow.Net.Model.Responses
         /// List of invite emails
         /// </summary>
         [JsonProperty("invite_emails")]
-        public IReadOnlyList<DocumentGroupTemplateInviteEmail> InviteEmails { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteEmail> InviteEmails { get; set; } = new List<DocumentGroupTemplateInviteEmail>();
 
         /// <summary>
         /// List of invite actions
         /// </summary>
         [JsonProperty("invite_actions")]
-        public IReadOnlyList<DocumentGroupTemplateInviteAction> InviteActions { get; set; }
+        public IReadOnlyList<DocumentGroupTemplateInviteAction> InviteActions { get; set; } = new List<DocumentGroupTemplateInviteAction>();
     }
 
     /// <summary>

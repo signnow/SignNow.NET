@@ -16,25 +16,25 @@ namespace SignNow.Net.Model.Responses
         /// Array with routing details
         /// </summary>
         [JsonProperty("routing_details")]
-        public IReadOnlyList<CreateRoutingDetail> RoutingDetails { get; set; }
+        public IReadOnlyList<CreateRoutingDetail> RoutingDetails { get; set; } = new List<CreateRoutingDetail>();
 
         /// <summary>
         /// Array with created routing details (alternative property name from API)
         /// </summary>
         [JsonProperty("routing_details.created")]
-        public IReadOnlyList<CreateRoutingDetail> RoutingDetailsCreated { get; set; }
+        public IReadOnlyList<CreateRoutingDetail> RoutingDetailsCreated { get; set; } = new List<CreateRoutingDetail>();
 
         /// <summary>
         /// Array of cc's emails
         /// </summary>
         [JsonProperty("cc")]
-        public IReadOnlyList<string> Cc { get; set; }
+        public IReadOnlyList<string> Cc { get; set; } = new List<string>();
 
         /// <summary>
         /// Array of cc's steps
         /// </summary>
         [JsonProperty("cc_step")]
-        public IReadOnlyList<CreateRoutingDetailCcStep> CcStep { get; set; }
+        public IReadOnlyList<CreateRoutingDetailCcStep> CcStep { get; set; } = new List<CreateRoutingDetailCcStep>();
 
         /// <summary>
         /// Invite link instruction
