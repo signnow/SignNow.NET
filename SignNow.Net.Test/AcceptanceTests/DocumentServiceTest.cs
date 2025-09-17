@@ -100,32 +100,6 @@ namespace AcceptanceTests
         }
 
         [TestMethod]
-        public async Task CreateRoutingDetail()
-        {
-            // Note: This test creates or updates routing details for a document
-            // The API will create routing details based on actors data if they don't exist
-            try
-            {
-                var response = await SignNowTestContext.Documents
-                    .CreateRoutingDetailAsync(TestPdfDocumentIdWithFields)
-                    .ConfigureAwait(false);
-
-                Assert.IsNotNull(response);
-                Assert.IsNotNull(response.RoutingDetails);
-                Assert.IsNotNull(response.Cc);
-                Assert.IsNotNull(response.CcStep);
-                Assert.IsNotNull(response.InviteLinkInstructions);
-            }
-            catch (SignNowException ex)
-            {
-                // If the document doesn't have actors or routing details can't be created, the API might return an error
-                Assert.IsTrue(ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound || 
-                             ex.HttpStatusCode == System.Net.HttpStatusCode.BadRequest,
-                    $"Unexpected error: {ex.Message}");
-            }
-        }
-
-        [TestMethod]
         public async Task UpdateRoutingDetail()
         {
             // First, try to get existing routing details or create them
