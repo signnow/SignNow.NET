@@ -12,7 +12,6 @@ using System.Net.Http;
 using SignNow.Net.Model.EditFields;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
-using Newtonsoft.Json;
 
 namespace SignNow.Net.Service
 {
