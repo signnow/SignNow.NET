@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Test.TestData.FakeModels;
+using System.Collections.Generic;
 
 namespace SignNow.Net.Test.UnitTests.Requests
 {
@@ -8,19 +9,21 @@ namespace SignNow.Net.Test.UnitTests.Requests
     public class GetDocumentGroupTemplatesRequestTest
     {
 
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_ToQueryStringTest()
+        [DataTestMethod]
+        [DataRow(10, 5, "limit=10&offset=5", DisplayName = "Both limit and offset")]
+        [DataRow(25, 0, "limit=25&offset=0", DisplayName = "Limit with zero offset")]
+        [DataRow(5, 10, "limit=5&offset=10", DisplayName = "Small limit with offset")]
+        public void GetDocumentGroupTemplatesRequest_LimitAndOffsetTest(int limit, int offset, string expectedQueryString)
         {
             var request = new GetDocumentGroupTemplatesRequest
             {
-                Limit = 10,
-                Offset = 5
+                Limit = limit,
+                Offset = offset
             };
 
             var queryString = request.ToQueryString();
             
-            Assert.IsTrue(queryString.Contains("limit=10"));
-            Assert.IsTrue(queryString.Contains("offset=5"));
+            Assert.AreEqual(expectedQueryString, queryString);
         }
 
         [TestMethod]
@@ -37,20 +40,6 @@ namespace SignNow.Net.Test.UnitTests.Requests
             Assert.IsFalse(queryString.Contains("offset"));
         }
 
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_OnlyOffsetTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequest
-            {
-                Limit = 5,
-                Offset = 10
-            };
-
-            var queryString = request.ToQueryString();
-            
-            Assert.IsTrue(queryString.Contains("limit=5"));
-            Assert.IsTrue(queryString.Contains("offset=10"));
-        }
 
         [TestMethod]
         public void GetDocumentGroupTemplatesRequest_EmptyTest()
@@ -75,73 +64,24 @@ namespace SignNow.Net.Test.UnitTests.Requests
             Assert.AreEqual(string.Empty, queryString);
         }
 
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_LargeLimitTest()
+
+
+        [DataTestMethod]
+        [DataRow(1, "limit=1", DisplayName = "Minimum limit")]
+        [DataRow(50, "limit=50", DisplayName = "Maximum limit")]
+        [DataRow(25, "limit=25", DisplayName = "Valid range limit")]
+        [DataRow(100, "limit=100", DisplayName = "Large limit")]
+        public void GetDocumentGroupTemplatesRequest_LimitTest(int limit, string expectedQueryString)
         {
             var request = new GetDocumentGroupTemplatesRequest
             {
-                Limit = 100  // Large value - ToQueryString should still include it
+                Limit = limit
             };
 
             var queryString = request.ToQueryString();
             
-            Assert.AreEqual("limit=100", queryString);
+            Assert.AreEqual(expectedQueryString, queryString);
         }
 
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_ValidRangeTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequest
-            {
-                Limit = 25,
-                Offset = 5
-            };
-
-            var queryString = request.ToQueryString();
-            
-            Assert.IsTrue(queryString.Contains("limit=25"));
-            Assert.IsTrue(queryString.Contains("offset=5"));
-        }
-
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_MinimumLimitTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequest
-            {
-                Limit = 1
-            };
-
-            var queryString = request.ToQueryString();
-            
-            Assert.AreEqual("limit=1", queryString);
-        }
-
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_MaximumLimitTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequest
-            {
-                Limit = 50
-            };
-
-            var queryString = request.ToQueryString();
-            
-            Assert.AreEqual("limit=50", queryString);
-        }
-
-        [TestMethod]
-        public void GetDocumentGroupTemplatesRequest_ZeroOffsetTest()
-        {
-            var request = new GetDocumentGroupTemplatesRequest
-            {
-                Limit = 10,
-                Offset = 0
-            };
-
-            var queryString = request.ToQueryString();
-            
-            Assert.IsTrue(queryString.Contains("limit=10"));
-            Assert.IsTrue(queryString.Contains("offset=0"));
-        }
     }
 }
