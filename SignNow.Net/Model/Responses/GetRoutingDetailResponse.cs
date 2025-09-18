@@ -168,7 +168,7 @@ namespace SignNow.Net.Model.Responses
         /// <summary>
         /// Expiration days
         /// </summary>
-        [JsonProperty("expiration_days")]
+        [JsonProperty("expiration_days", NullValueHandling = NullValueHandling.Ignore)]
         public int? ExpirationDays { get; set; }
 
         /// <summary>

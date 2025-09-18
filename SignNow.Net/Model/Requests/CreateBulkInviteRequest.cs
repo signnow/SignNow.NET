@@ -39,6 +39,7 @@ namespace SignNow.Net.Model.Requests
         /// <summary>
         /// Type of signature to be used for the documents.
         /// </summary>
+        [JsonProperty("signature_type", NullValueHandling = NullValueHandling.Ignore)]
         public SignatureType? SignatureType { get; set; }
 
         /// <summary>

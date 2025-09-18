@@ -98,7 +98,7 @@ namespace SignNow.Net.Model.Requests
         /// <summary>
         /// Decline by signature flag
         /// </summary>
-        [JsonProperty("decline_by_signature")]
+        [JsonProperty("decline_by_signature", NullValueHandling = NullValueHandling.Ignore)]
         public bool? DeclineBySignature { get; set; }
     }
 
@@ -177,7 +177,7 @@ namespace SignNow.Net.Model.Requests
         /// <summary>
         /// Expiration days
         /// </summary>
-        [JsonProperty("expiration_days")]
+        [JsonProperty("expiration_days", NullValueHandling = NullValueHandling.Ignore)]
         public int? ExpirationDays { get; set; }
 
         /// <summary>

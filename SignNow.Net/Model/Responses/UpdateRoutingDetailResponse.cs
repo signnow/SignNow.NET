@@ -92,7 +92,7 @@ namespace SignNow.Net.Model.Responses
         /// <summary>
         /// Decline by signature flag
         /// </summary>
-        [JsonProperty("decline_by_signature")]
+        [JsonProperty("decline_by_signature", NullValueHandling = NullValueHandling.Ignore)]
         public bool? DeclineBySignature { get; set; }
     }
 
