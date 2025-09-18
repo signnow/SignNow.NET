@@ -25,16 +25,10 @@ namespace SignNow.Net.Internal.Helpers
                 
                 if (token.Type == JTokenType.Array)
                 {
-                    // If the response is an array, create a response with empty arrays for other properties
+                    // If the response is an array, create a response with default values
                     return new GetRoutingDetailResponse
                     {
-                        RoutingDetails = new System.Collections.Generic.List<RoutingDetail>(),
-                        Cc = new System.Collections.Generic.List<string>(),
-                        CcStep = new System.Collections.Generic.List<CcStep>(),
-                        InviteLinkInstructions = string.Empty,
-                        Viewers = new System.Collections.Generic.List<Viewer>(),
-                        Approvers = new System.Collections.Generic.List<Approver>(),
-                        Attributes = null
+                        InviteLinkInstructions = string.Empty
                     };
                 }
                 else if (token.Type == JTokenType.Object)
