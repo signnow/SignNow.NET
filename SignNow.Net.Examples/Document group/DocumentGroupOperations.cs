@@ -117,7 +117,7 @@ namespace SignNow.Net.Examples
             };
 
             // Note: This endpoint returns 202 Accepted with empty body for asynchronous processing
-            var documentGroupTemplate = await testContext.DocumentGroup
+            await testContext.DocumentGroup
                 .CreateDocumentGroupTemplateAsync(documentGroup.Id, createTemplateRequest)
                 .ConfigureAwait(false);
 
@@ -129,91 +129,56 @@ namespace SignNow.Net.Examples
                 .CreateTemplateFromDocumentAsync(documents[1].Id, "Additional Template 2")
                 .ConfigureAwait(false);
 
-            // Verify the document group template response
-            Assert.IsNotNull(documentGroupTemplate);
+            // The method returns 202 Accepted with empty body - operation was scheduled
+            Console.WriteLine("Document group template creation was accepted and scheduled for processing");
             
-            if (documentGroupTemplate.IsAccepted)
+            // Since the template creation is asynchronous, we'll demonstrate the update functionality
+            // by using an existing template if available
+            // Try to get an existing document group template to use for the update example
+            var getTemplatesRequest = new GetDocumentGroupTemplatesRequest
             {
-                // 202 Accepted response with empty body - operation was scheduled
-                Console.WriteLine("Document group template creation was accepted and scheduled for processing");
-                
-                // Try to get an existing document group template to use for the update example
-                var getTemplatesRequest = new GetDocumentGroupTemplatesRequest
-                {
-                    Limit = 10,
-                    Offset = 0
-                };
-                
-                var existingTemplates = await testContext.DocumentGroup
-                    .GetDocumentGroupTemplatesAsync(getTemplatesRequest)
+                Limit = 10,
+                Offset = 0
+            };
+            
+            var existingTemplates = await testContext.DocumentGroup
+                .GetDocumentGroupTemplatesAsync(getTemplatesRequest)
+                .ConfigureAwait(false);
+            
+            if (existingTemplates.DocumentGroupTemplates.Count > 0)
+            {
+                var existingTemplate = existingTemplates.DocumentGroupTemplates.First();
+                Console.WriteLine("Using existing template ID for demonstration: {0}", existingTemplate.TemplateGroupId);
+            
+                   // Update the document group template using the existing template ID
+                   // Use the actual document IDs from the existing template
+                   var documentIds = existingTemplate.Templates?.Select(t => t.Id).ToList() ?? new List<string>();
+                   
+                   var updateRequest = new UpdateDocumentGroupTemplateRequest
+                   {
+                       Order = documentIds,
+                       TemplateGroupName = "Updated Contract Template Group",
+                       EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
+                   };
+
+                // Update the document group template using the existing template ID
+                var response = await testContext.DocumentGroup
+                    .UpdateDocumentGroupTemplateAsync(existingTemplate.TemplateGroupId, updateRequest)
                     .ConfigureAwait(false);
-                
-                if (existingTemplates.DocumentGroupTemplates.Count > 0)
+
+                // Verify the response structure (PATCH returns 204 No Content, so response might be null)
+                if (response != null)
                 {
-                    var existingTemplate = existingTemplates.DocumentGroupTemplates.First();
-                    Console.WriteLine("Using existing template ID for demonstration: {0}", existingTemplate.TemplateGroupId);
-                
-                       // Update the document group template using the existing template ID
-                       // Use the actual document IDs from the existing template
-                       var documentIds = existingTemplate.Templates?.Select(t => t.Id).ToList() ?? new List<string>();
-                       
-                       var updateRequest = new UpdateDocumentGroupTemplateRequest
-                       {
-                           Order = documentIds,
-                           TemplateGroupName = "Updated Contract Template Group",
-                           EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
-                       };
-
-                    // Update the document group template using the existing template ID
-                    var response = await testContext.DocumentGroup
-                        .UpdateDocumentGroupTemplateAsync(existingTemplate.TemplateGroupId, updateRequest)
-                        .ConfigureAwait(false);
-
-                    // Verify the response structure (PATCH returns 204 No Content, so response might be null)
-                    if (response != null)
-                    {
-                        Console.WriteLine("Document group template updated successfully: {0}", response.Status ?? "No Content");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Document group template updated successfully (204 No Content)");
-                    }
+                    Console.WriteLine("Document group template updated successfully: {0}", response.Status ?? "No Content");
                 }
                 else
                 {
-                    Console.WriteLine("No existing document group templates found. Skipping update example.");
+                    Console.WriteLine("Document group template updated successfully (204 No Content)");
                 }
             }
             else
             {
-                // Response contains data - verify the structure
-                Assert.IsNotNull(documentGroupTemplate.Id);
-                Assert.IsTrue(documentGroupTemplate.Id.Length == 40);
-                Console.WriteLine("Created document group template: {0} with status: {1}", documentGroupTemplate.Id, documentGroupTemplate.Status);
-
-                // Create update request with template order
-                var updateRequest = new UpdateDocumentGroupTemplateRequest
-                {
-                    Order = new List<string> 
-                    { 
-                        template1.Id,
-                        template2.Id
-                    },
-                    TemplateGroupName = "Updated Contract Template Group",
-                    EmailActionOnComplete = EmailActionsType.DocumentsAndAttachments
-                };
-
-                // Update the document group template using the real template ID
-                var response = await testContext.DocumentGroup
-                    .UpdateDocumentGroupTemplateAsync(documentGroupTemplate.Id, updateRequest)
-                    .ConfigureAwait(false);
-
-                // Verify the response structure before accessing properties
-                Assert.IsNotNull(response);
-                Assert.IsNotNull(response.Status);
-                Assert.AreEqual("success", response.Status);
-                
-                Console.WriteLine("Document group template updated successfully: {0}", response.Status);
+                Console.WriteLine("No existing document group templates found. Skipping update example.");
             }
 
             // Clean up resources
@@ -262,26 +227,12 @@ namespace SignNow.Net.Examples
 
             // Create the document group template
             // Note: This endpoint returns 202 Accepted with empty body for asynchronous processing
-            var response = await testContext.DocumentGroup
+            await testContext.DocumentGroup
                 .CreateDocumentGroupTemplateAsync(documentGroup.Id, createRequest)
                 .ConfigureAwait(false);
 
-            // Verify the response structure before accessing properties
-            Assert.IsNotNull(response);
-            
-            if (response.IsAccepted)
-            {
-                // 202 Accepted response with empty body - operation was scheduled
-                Console.WriteLine("Document group template creation was accepted and scheduled for processing");
-            }
-            else
-            {
-                // Response contains data - verify the structure
-                Assert.IsNotNull(response.Id);
-                Assert.IsNotNull(response.Status);
-                Assert.IsTrue(response.Id.Length == 40);
-                Console.WriteLine("Document group template created successfully: {0} with status: {1}", response.Id, response.Status);
-            }
+            // The method returns 202 Accepted with empty body - operation was scheduled
+            Console.WriteLine("Document group template creation was accepted and scheduled for processing");
 
             // Clean up resources
             await testContext.DocumentGroup.DeleteDocumentGroupAsync(documentGroup.Id).ConfigureAwait(false);
