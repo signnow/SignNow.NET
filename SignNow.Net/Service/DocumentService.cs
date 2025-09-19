@@ -1,4 +1,4 @@
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
@@ -319,6 +319,22 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<EditDocumentResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<DocumentFieldsResponse> GetDocumentFieldsAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/fields"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentFieldsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 

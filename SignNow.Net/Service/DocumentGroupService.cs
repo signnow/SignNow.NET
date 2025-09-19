@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;

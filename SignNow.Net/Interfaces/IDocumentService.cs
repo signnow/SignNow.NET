@@ -154,6 +154,14 @@ namespace SignNow.Net.Interfaces
         Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Retrieves contents from the fields completed by the signer.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to retrieve field data from.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Document fields data with pagination information.</returns>
+        Task<DocumentFieldsResponse> GetDocumentFieldsAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets routing detail information for a document template.
         /// </summary>
         /// <param name="documentId">Identity of the document to get routing detail for.</param>

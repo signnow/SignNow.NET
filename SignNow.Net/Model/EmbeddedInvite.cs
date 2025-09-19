@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers.Converters;
 using SignNow.Net.Model.Requests;
 

@@ -1,6 +1,6 @@
 using System;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Model.Requests.EventSubscriptionBase;
 
 namespace SignNow.Net.Model.Requests

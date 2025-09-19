@@ -38,6 +38,16 @@ namespace SignNow.Net.Interfaces
         Task<SignNowFolders> GetFolderAsync(string folderId, GetFolderOptions options = default, CancellationToken cancellation = default);
 
         /// <summary>
+        /// Returns all details of a specific folder including all documents in that folder using the newer API endpoint (/folder/{folder_id}).
+        /// Both endpoints provide the same functionality but use different API paths.
+        /// </summary>
+        /// <param name="folderId">ID of the folder to get details of</param>
+        /// <param name="options">Folder filter and sort options</param>
+        /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<SignNowFolders> GetFolderByIdAsync(string folderId, GetFolderOptions options = default, CancellationToken cancellation = default);
+
+        /// <summary>
         /// Creates a folder for the user.
         /// </summary>
         /// <param name="name">Name of a new folder</param>
