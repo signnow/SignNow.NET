@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Helpers.Converters;
@@ -88,7 +89,8 @@ namespace SignNow.Net.Model
         /// Authentication type for case, when password used to open the Document.
         /// </summary>
         [JsonProperty("authentication_type", NullValueHandling = NullValueHandling.Ignore)]
-        private string AuthenticationType => SignerAuth?.AuthenticationType;
+        [JsonConverter(typeof(StringEnumConverter))]
+        private AuthenticationType? AuthenticationType => SignerAuth?.AuthenticationType;
 
         /// <summary>
         /// Password will be required from signers when they open the document.

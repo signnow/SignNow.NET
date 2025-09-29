@@ -56,7 +56,7 @@ namespace UnitTests.Helpers.Converters
         {
             var json = $"{{'data': '{location}'}}";
 
-            var actual = JsonConvert.DeserializeObject<HyperlinkContent>(json);
+            var actual = TestUtils.DeserializeFromJson<HyperlinkContent>(json);
             Assert.AreEqual(location?.Replace(@"\/", "/"), actual.Data?.OriginalString);
         }
 
@@ -80,7 +80,7 @@ namespace UnitTests.Helpers.Converters
         public void ShouldThrowExceptionForBrokenUrl()
         {
             var exception = Assert.ThrowsException<JsonSerializationException>(
-                () => JsonConvert.DeserializeObject<HyperlinkContent>(@"{""data"": ""42""}"));
+                () => TestUtils.DeserializeFromJson<HyperlinkContent>(@"{""data"": ""42""}"));
 
             var expectedMessage = string.Format(CultureInfo.CurrentCulture,
                 ExceptionMessages.UnexpectedValueWhenConverting,

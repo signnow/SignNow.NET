@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model.Requests.DocumentGroup;
+using UnitTests;
 
 namespace UnitTests.Requests
 {
@@ -52,7 +52,7 @@ namespace UnitTests.Requests
         public void Deserialize_ShouldSetAllPropertiesTest()
         {
             var json = "{\"type\":\"merged\",\"with_history\":\"no\",\"document_order\":[\"03c74b3083f34ebf8ef40a3039dfb32c85a08437\",\"03c74b3083f34ebf8ef40a3039dfb32c85a08438\"]}";
-            var options = JsonConvert.DeserializeObject<DownloadOptions>(json);
+            var options = TestUtils.DeserializeFromJson<DownloadOptions>(json);
 
             Assert.AreEqual(DownloadType.MergedPdf, options.DownloadType);
             Assert.AreEqual(DocumentHistoryType.NoHistory, options.WithHistory);

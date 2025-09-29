@@ -18,7 +18,7 @@ namespace UnitTests.Helpers.Converters
         [DataRow(@"{'created': 1572968651 }", DisplayName = "with timestamp as integer")]
         public void ShouldDeserializeAsDateTime(string input)
         {
-            var objUtc = JsonConvert.DeserializeObject<SignNowDocument>(input);
+            var objUtc = TestUtils.DeserializeFromJson<SignNowDocument>(input);
             var expectedUtc = DateTime.ParseExact("05/11/2019 15:44:11", _dtFormat, null);
 
             Assert.AreEqual(expectedUtc, objUtc.Created);
@@ -35,10 +35,12 @@ namespace UnitTests.Helpers.Converters
                 Updated = testDate
             };
 
-            var actual = JsonConvert.SerializeObject(obj);
-            const string Expected = "\"created\":\"1572968651\",\"updated\":\"1572968651\"";
+            var actual = TestUtils.SerializeToJsonFormatted(obj);
+            const string ExpectedCreated = "\"created\": \"1572968651\"";
+            const string ExpectedUpdated = "\"updated\": \"1572968651\"";
 
-            StringAssert.Contains(actual, Expected);
+            StringAssert.Contains(actual, ExpectedCreated);
+            StringAssert.Contains(actual, ExpectedUpdated);
         }
 
         [TestMethod]
@@ -54,7 +56,7 @@ namespace UnitTests.Helpers.Converters
         public void ThrowExceptionForNotSupportedTypes()
         {
             var exception = Assert.ThrowsException<JsonSerializationException>(
-                () => JsonConvert.DeserializeObject<SignNowDocument>("{'created':1.2}"));
+                () => TestUtils.DeserializeFromJson<SignNowDocument>("{'created':1.2}"));
 
             var expectedMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
                 "DateTime", "`String`, `Integer`", "Double");

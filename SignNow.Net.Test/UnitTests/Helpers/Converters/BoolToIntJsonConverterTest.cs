@@ -23,7 +23,7 @@ namespace UnitTests.Helpers.Converters
                     ""name"": ""unit-test""
                 }}
             }}";
-            var obj = JsonConvert.DeserializeObject<SignerOptions>(json);
+            var obj = TestUtils.DeserializeFromJson<SignerOptions>(json);
 
             Assert.AreEqual(expected, obj.ForceNewSignature);
         }
@@ -37,10 +37,10 @@ namespace UnitTests.Helpers.Converters
                 AllowToReassign = false
             };
 
-            var actual = JsonConvert.SerializeObject(obj);
+            var actual = TestUtils.SerializeToJsonFormatted(obj);
 
-            StringAssert.Contains(actual, $"\"force_new_signature\":1");
-            StringAssert.Contains(actual, $"\"reassign\":0");
+            StringAssert.Contains(actual, $"\"force_new_signature\": 1");
+            StringAssert.Contains(actual, $"\"reassign\": 0");
         }
 
         [TestMethod]

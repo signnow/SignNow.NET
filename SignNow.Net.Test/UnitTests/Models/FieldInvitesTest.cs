@@ -20,9 +20,9 @@ namespace UnitTests.Models
                 .RuleFor(o => o.Status, testStatus)
                 .Generate();
 
-            var expected = JsonConvert.SerializeObject(fieldInviteFake, Formatting.Indented);
+            var expected = TestUtils.SerializeToJsonFormatted(fieldInviteFake);
 
-            var fieldInvite = JsonConvert.DeserializeObject<FieldInvite>(expected);
+            var fieldInvite = TestUtils.DeserializeFromJson<FieldInvite>(expected);
 
             Assert.That.JsonEqual(expected, fieldInvite);
         }

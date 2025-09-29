@@ -13,9 +13,9 @@ namespace UnitTests.Models
         public void ShouldDeserializeFromJson()
         {
             var signatureFake = new SignatureContentFaker().Generate();
-            var signatureFakeJson = JsonConvert.SerializeObject(signatureFake, Formatting.Indented);
+            var signatureFakeJson = TestUtils.SerializeToJsonFormatted(signatureFake);
 
-            var signature = JsonConvert.DeserializeObject<SignatureContent>(signatureFakeJson);
+            var signature = TestUtils.DeserializeFromJson<SignatureContent>(signatureFakeJson);
 
             Assert.That.JsonEqual(signatureFakeJson, signature);
         }

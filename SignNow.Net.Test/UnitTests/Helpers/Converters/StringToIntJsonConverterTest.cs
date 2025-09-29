@@ -13,7 +13,7 @@ namespace UnitTests.Helpers.Converters
         public void ShouldDeserializeAsInt()
         {
             var json = $"{{\"page_count\": \"100\"}}";
-            var obj = JsonConvert.DeserializeObject<SignNowDocument>(json);
+            var obj = TestUtils.DeserializeFromJson<SignNowDocument>(json);
 
             Assert.AreEqual(100, obj.PageCount);
         }
@@ -28,8 +28,8 @@ namespace UnitTests.Helpers.Converters
                 Updated = DateTime.Now
             };
 
-            var actual = JsonConvert.SerializeObject(obj);
-            var expected = $"\"page_count\":100";
+            var actual = TestUtils.SerializeToJsonFormatted(obj);
+            var expected = $"\"page_count\": 100";
 
             StringAssert.Contains(actual, expected);
         }

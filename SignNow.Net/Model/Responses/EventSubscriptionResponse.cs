@@ -6,7 +6,7 @@ namespace SignNow.Net.Model.Responses
     public class EventSubscriptionResponse
     {
         [JsonProperty("data")]
-        public List<EventSubscription> Data { get; internal set; }
+        public IReadOnlyList<EventSubscription> Data { get; internal set; }
 
         [JsonProperty("meta")]
         public MetaInfo Meta { get; internal set; }

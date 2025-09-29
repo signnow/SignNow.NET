@@ -11,6 +11,8 @@ using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
+using PublicUpdateDocumentGroupTemplateRequest = SignNow.Net.Model.Requests.DocumentGroup.UpdateDocumentGroupTemplateRequest;
+using InternalUpdateDocumentGroupTemplateRequest = SignNow.Net.Internal.Requests.UpdateDocumentGroupTemplateRequest;
 
 namespace SignNow.Net.Service
 {
@@ -182,6 +184,65 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync(requestOptions, new HttpContentToDownloadDocumentResponseAdapter(), HttpCompletionOption.ResponseHeadersRead, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group template identity is not valid.</exception>
+        public async Task<SuccessStatusResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, PublicUpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PatchHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{documentGroupTemplateId.ValidateId()}"),
+                Content = new InternalUpdateDocumentGroupTemplateRequest(updateRequest),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<SuccessStatusResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
+        public async Task CreateDocumentGroupTemplateAsync(string documentGroupId, CreateDocumentGroupTemplateRequest createRequest, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/document-group-template"),
+                Content = createRequest,
+                Token = Token
+            };
+
+            // The API returns 202 Accepted with empty body, so we don't expect a response
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If request parameters are not valid.</exception>
+        public async Task<GetDocumentGroupTemplatesResponse> GetDocumentGroupTemplatesAsync(GetDocumentGroupTemplatesRequest request, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var query = request?.ToQueryString();
+            var queryString = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/user/documentgroup/templates{queryString}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<GetDocumentGroupTemplatesResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

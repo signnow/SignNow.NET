@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
 using SignNow.Net.Test.FakeModels;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -17,7 +17,7 @@ namespace UnitTests.Models
                 ""large"": ""https://api.signnow.com/document/a09b26feeba7ce70228afe6290f4445700b6f349/thumbnail?size=large""
             }";
 
-            var actual = JsonConvert.DeserializeObject<Thumbnail>(Json);
+            var actual = TestUtils.DeserializeFromJson<Thumbnail>(Json);
 
             Assert.AreEqual(
                 "https://api.signnow.com/document/a09b26feeba7ce70228afe6290f4445700b6f349/thumbnail?size=small",
@@ -32,7 +32,7 @@ namespace UnitTests.Models
         {
             var model = new ThumbnailFaker().Generate();
 
-            var actual = JsonConvert.SerializeObject(model);
+            var actual = TestUtils.SerializeToJsonFormatted(model);
 
             StringAssert.Contains(actual, "small");
             StringAssert.Contains(actual, "medium");
