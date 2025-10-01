@@ -1,0 +1,123 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - '**.md'
+      - 'SignNow.Net/SignNow.Net.Examples/**'
+      - '.github/workflows/release.yml'
+    tags-ignore:
+      - '**'
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
+    paths-ignore:
+      - '**.md'
+    tags-ignore:
+      - '**'
+
+# Workflow
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          # Ubuntu
+          - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0' }
+          # macOs - disabled due to the same behavior as in Ubuntu
+          # - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
+          # Windows
+          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0' }
+          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
+          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462' }
+
+    env:
+      COREHOST_TRACE: false
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1          # Disable sending usage data to Microsoft
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
+      DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
+      NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
+      COVERAGE_PATH: SignNow.Net.Test/bin/Debug
+      # Do not generate summary otherwise it leads to duplicate errors in build log
+      DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup .NET SDK Version for Target Framework
+        run: |
+          If ("${{ matrix.framework }}" -eq "net7.0") {
+            Write-Output "DOTNET_SDK_VERSION=7.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            Write-Output "TARGET_FRAMEWORK=netstandard20" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } ElseIf ("${{ matrix.framework }}" -eq "net8.0") {
+            Write-Output "DOTNET_SDK_VERSION=8.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            Write-Output "TARGET_FRAMEWORK=netstandard21" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } Else {
+            Write-Output "TARGET_FRAMEWORK=462" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          }
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Setup Nuget Cache
+        uses: actions/cache@v4
+        id: nuget-cache
+        with:
+          path: ~/.nuget
+          key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Restore Nuget packages
+        run: dotnet restore -v:n
+
+      - name: Configure signNow API
+        run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
+
+      - name: Build and Pack Solution
+        run: |
+          dotnet build SignNow.Net --configuration Debug ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+
+      - name: Run Tests on ${{ matrix.framework }} with Coverage
+        run: |
+          dotnet test SignNow.Net.Test `
+            --configuration Debug --framework ${{ matrix.framework }} `
+            /p:CollectCoverage=true
+
+      - name: Save Code Coverage Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
+          path: SignNow.Net.Test/bin/Debug/**/coverage*
+
+      - name: Test Release Notes parser
+        if: (runner.os == 'macOS' || runner.os == 'Linux')
+        shell: bash
+        run: |
+          .github/release-notes.sh CHANGELOG.md
+
+      - name: Upload Code Coverage Report (Codecov.io)
+        continue-on-error: true
+        uses: codecov/codecov-action@v5
+        with:
+          name: ${{ runner.os }}-codecov-${{ matrix.framework }}
+          flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
+          fail_ci_if_error: false
