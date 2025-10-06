@@ -1,0 +1,25 @@
+<SonarQubeAnalysisProperties xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+    <!-- Generic  -->
+    <Property Name="sonar.projectKey">SignNowInc_csharp-sdk</Property>
+    <Property Name="sonar.projectName">SignNow.NET SDK</Property>
+    <Property Name="sonar.projectDescription">signNow.Net is a .NET 4.6.2+ and .NET standard class library for the signNow API.</Property>
+    <Property Name="sonar.sourceEncoding">UTF-8</Property>
+    <Property Name="sonar.links.ci">https://github.com/SignNowInc/csharp-sdk/actions</Property>
+    <Property Name="sonar.links.scm">https://github.com/SignNowInc/csharp-sdk</Property>
+    <Property Name="sonar.scm.url">scm:git:https://github.com/SignNowInc/csharp-sdk</Property>
+
+    <!-- Sources: Path is relative to the sonar project properties file. -->
+    <Property Name="sonar.sources">SignNow.Net/**</Property>
+    <!-- <Property Name="sonar.inclusions"></Property>-->
+    <Property Name="sonar.exclusions">**/obj/**</Property>
+    
+    <!-- Tests -->
+    <Property Name="sonar.tests">SignNow.Net.Test/**</Property>
+    <!-- <Property Name="sonar.tests.inclusions">**/tests/**</Property>-->
+    <Property Name="sonar.tests.exclusions">**/TestData/Documents/**,**/obj/**</Property>
+
+    <!-- Coverage -->
+    <!-- <Property Name="sonar.cs.vscoveragexml.reportsPaths">coverage.xml</Property> -->
+    <Property Name="sonar.cs.opencover.reportsPaths">**/bin/Debug/**/coverage.*.xml</Property>
+    <Property Name="sonar.cs.vstest.reportsPaths">**/TestResults/*.trx</Property>
+</SonarQubeAnalysisProperties>
