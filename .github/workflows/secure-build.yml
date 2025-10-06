@@ -7,9 +7,126 @@ on:
   pull_request:
     types: [ opened, synchronize, reopened ]
 
+env:
+  SONAR_DOTNET_ENABLE_CONCURRENT_EXECUTION: true
+  COREHOST_TRACE: false
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1       # Disable sending usage data to Microsoft
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1 # Prevent the caching of the packages on the build machine
+  NUGET_XMLDOC_MODE: skip              # Prevent the download of the XML documentation for the packages
+  DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
+
+defaults:
+  run:
+    shell: pwsh
+
 jobs:
   secure-build:
     # The stable version specified here is intentional.
     # Please consult with the Security team before making any changes.
-    uses: pdffiller/security_checks/.github/workflows/secure-build.yml@stable
-    secrets: inherit
+    # uses: pdffiller/security_checks/.github/workflows/secure-build.yml@stable
+    # secrets: inherit
+
+    # Please - do not use the secure-build action from above.
+    # For dotnet projects, this action is completeley useless and not works.
+    # For proper SonarQube analysis - use the sonarqube console toool
+    # with proper configuration for dotnet projects!
+    # For more details - ask the devops team or dotnet developers.
+
+    name: Sonar Scanner
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          # Ubuntu
+          - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0' }
+          # Windows
+          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0' }
+          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
+          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462' }
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup .NET SDK Version for Target Framework
+        run: |
+          If ("${{ matrix.framework }}" -eq "net7.0") {
+            Write-Output "DOTNET_SDK_VERSION=7.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            Write-Output "TARGET_FRAMEWORK=netstandard20" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } ElseIf ("${{ matrix.framework }}" -eq "net8.0") {
+            Write-Output "DOTNET_SDK_VERSION=8.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+            Write-Output "TARGET_FRAMEWORK=netstandard21" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          } Else {
+            Write-Output "TARGET_FRAMEWORK=462" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          }
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Setup Nuget Cache
+        uses: actions/cache@v4
+        id: nuget-cache
+        with:
+          path: ~/.nuget
+          key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
+      - name: Install SonarQube scanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Restore Nuget packages
+        run: dotnet restore -v:n
+
+      - name: Get SDK Version
+        id: props
+        run: |
+          $Props = [xml](Get-Content ./SignNow.props)
+          $Version = $Props.Project.PropertyGroup.Version
+          Write-Output "version=${Version}" >> $Env:GITHUB_OUTPUT
+
+      - name: Configure signNow API
+        run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
+
+      - name: SonarQube begin
+        run: |
+          dotnet-sonarscanner begin `
+            /key:SignNowInc_csharp-sdk `
+            /s:${{ github.workspace }}/SonarQube.Analysis.xml `
+            /v:"${{ steps.props.outputs.version }}" `
+            /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+
+      - name: Build and Pack Solution
+        run: |
+          dotnet build SignNow.Net --configuration Debug ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+
+      - name: Run Tests on ${{ matrix.framework }} with Coverage
+        run: |
+          dotnet test SignNow.Net.Test `
+            --configuration Debug --framework ${{ matrix.framework }} `
+            --logger:trx `
+            /p:CoverletOutputFormat=opencover `
+            /p:CollectCoverage=true
+
+      - name: Save Code Coverage Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
+          path: SignNow.Net.Test/bin/Debug/**/coverage*
+      
+      - name: SonarQube end
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
+
