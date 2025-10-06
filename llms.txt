@@ -1,0 +1,37 @@
+# SignNow .NET SDK
+
+> Official .NET SDK for SignNow's electronic signature API, targeting .NET Framework 4.6.2+, .NET Standard 2.0/2.1, and modern .NET versions. Provides a service-oriented architecture for integrating legally-binding e-signatures into applications, CRMs, and cloud storage solutions.
+
+This SDK enables developers to embed SignNow's electronic signature functionality directly into their .NET applications. It supports document upload, signing workflows, user management, template creation, and comprehensive API interactions through strongly-typed models and async programming patterns.
+
+## Documentation
+
+- [README](README.md): Primary project documentation, installation guide, and comprehensive feature overview with code examples
+- [Changelog](CHANGELOG.md): Release notes and version history with breaking changes and new features
+- [Copilot Instructions](.github/instructions-instructions.md): Complete development guide covering architecture, coding standards, and implementation patterns
+
+## Development Guidelines
+
+- [SignNow Specific Guidelines](.github/instructions/signnow.instructions.md): SDK-specific coding patterns, JSON serialization rules, and service implementation standards
+- [C# Guidelines](.github/instructions/csharp.instructions.md): General C# coding standards, testing practices, and performance optimization guidelines
+- [.NET Framework Guidelines](.github/instructions/net-core-fw.instructions.md): Multi-targeting configuration and cross-platform compatibility guidelines
+
+## Examples
+
+- [OAuth2 Examples](SignNow.Net.Examples/OAuth2/GenerateAccessToken.cs): Authentication, token generation, and refresh token workflows
+- [Document Examples](SignNow.Net.Examples/Documents/UploadDocument.cs): Document upload, download, merge, and management operations
+- [User Examples](SignNow.Net.Examples/Users/): User account creation, management, and profile operations
+- [Folder Examples](SignNow.Net.Examples/Folders/): Folder organization and document categorization
+- [Webhook Examples](SignNow.Net.Examples/Webhooks/): Event subscription and callback handling
+
+## Configuration
+
+- [Project Configuration](SignNow.props): NuGet packaging, versioning, and build configuration
+- [Build Properties](Directory.Build.props): Shared MSBuild properties and dependency management
+- [Multi-targeting Configuration](netfx.props): .NET Framework specific build properties for cross-platform support
+
+## Optional
+
+- [Pull Request Template](.github/pull_request_template.md): Contribution guidelines and checklist for code submissions
+- [Feature Generation Prompts](.github/prompts/generate-feature.prompt.md): Instructions for generating new SDK features and endpoints
+- [Rule Improvement Prompts](.github/prompts/improve-rules.prompt.md): Guidelines for analyzing and improving development rules
