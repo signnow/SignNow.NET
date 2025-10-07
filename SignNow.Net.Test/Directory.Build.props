@@ -12,5 +12,6 @@
       <CoverletOutput>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/</CoverletOutput>
       <MergeWith>$(MSBuildProjectDirectory)/bin/$(Configuration)/$(TargetFramework)/coverage.$(TargetFramework).json</MergeWith>
       <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+      <ExcludeByFile>**/obj/**,**/bin/**,**/FakeModels/**</ExcludeByFile>
     </PropertyGroup>
 </Project>

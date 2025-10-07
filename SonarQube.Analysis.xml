@@ -7,19 +7,27 @@
     <Property Name="sonar.links.ci">https://github.com/SignNowInc/csharp-sdk/actions</Property>
     <Property Name="sonar.links.scm">https://github.com/SignNowInc/csharp-sdk</Property>
     <Property Name="sonar.scm.url">scm:git:https://github.com/SignNowInc/csharp-sdk</Property>
+    <Property Name="sonar.scm.provider">git</Property>
+
+    <Property Name="sonar.log.level">INFO</Property>
 
     <!-- Sources: Path is relative to the sonar project properties file. -->
-    <Property Name="sonar.sources">SignNow.Net/**</Property>
+    <Property Name="sonar.sources">SignNow.Net</Property>
     <!-- <Property Name="sonar.inclusions"></Property>-->
-    <Property Name="sonar.exclusions">**/obj/**</Property>
+    <Property Name="sonar.exclusions">**/obj/**,**/bin/**,**/AssemblyInfo.cs</Property>
     
     <!-- Tests -->
-    <Property Name="sonar.tests">SignNow.Net.Test/**</Property>
-    <!-- <Property Name="sonar.tests.inclusions">**/tests/**</Property>-->
-    <Property Name="sonar.tests.exclusions">**/TestData/Documents/**,**/obj/**</Property>
+    <Property Name="sonar.tests">SignNow.Net.Test</Property>
+    <!-- <Property Name="sonar.test.inclusions">**/tests/**</Property>-->
+    <Property Name="sonar.test.exclusions">**/TestData/Documents/**,**/obj/**,**/bin/**,**/FakeModels/**</Property>
 
     <!-- Coverage -->
     <!-- <Property Name="sonar.cs.vscoveragexml.reportsPaths">coverage.xml</Property> -->
-    <Property Name="sonar.cs.opencover.reportsPaths">**/bin/Debug/**/coverage.*.xml</Property>
-    <Property Name="sonar.cs.vstest.reportsPaths">**/TestResults/*.trx</Property>
+    <Property Name="sonar.cs.opencover.reportsPaths">SignNow.Net.Test/bin/Debug/**/coverage.*.opencover.xml</Property>
+    <Property Name="sonar.cs.vstest.reportsPaths">SignNow.Net.Test/TestResults/*.trx</Property>
+
+    <!-- Language and Framework specific settings -->
+    <Property Name="sonar.dotnet.excludeTestProjects">true</Property>
+    <Property Name="sonar.coverage.exclusions">**/obj/**,**/bin/**,**/*Test*/**,**/TestData/**,**/*.Designer.cs</Property>
+
 </SonarQubeAnalysisProperties>
