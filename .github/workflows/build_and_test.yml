@@ -28,7 +28,6 @@ env:
   COVERAGE_PATH: SignNow.Net.Test/bin/Debug
   # Do not generate summary otherwise it leads to duplicate errors in build log
   DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
-  SONAR_DOTNET_ENABLE_CONCURRENT_EXECUTION: true
 
 defaults:
   run:
