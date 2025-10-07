@@ -64,6 +64,7 @@ jobs:
           $Props = [xml](Get-Content ./SignNow.props)
           $Version = $Props.Project.PropertyGroup.Version
           Write-Output "version=${Version}" >> $Env:GITHUB_OUTPUT
+          Write-Host "✓ Found SignNow.NET SDK project version: $Version"
 
       - name: Setup JDK 17 (SonarQube requirement)
         uses: actions/setup-java@v4
@@ -120,11 +121,17 @@ jobs:
             /v:"${{ steps.props.outputs.version }}" `
             /d:sonar.projectBaseDir="${{ github.workspace }}" `
             /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
-            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
+            /d:sonar.scanner.skipJreProvisioning=true
 
       - name: Build and Pack Solution
         run: |
-          dotnet build SignNow.Net --configuration Debug ${{ env.DOTNET_BUILD_ARGS }}
+          # Force single target framework for SonarQube analysis to prevent duplicate indexing
+          dotnet build SignNow.Net --configuration Debug `
+            --framework ${{ matrix.framework }} `
+            /p:TargetFramework=${{ matrix.framework }} `
+            /p:TargetFrameworks="" `
+            ${{ env.DOTNET_BUILD_ARGS }}
           dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
