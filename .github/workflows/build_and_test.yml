@@ -143,8 +143,7 @@ jobs:
         run: |
           # Build the main library with framework targeting for SonarQube
           dotnet build SignNow.Net --configuration Debug --no-restore `
-            --framework ${{ matrix.framework }} `
-            /p:TargetFramework=${{ matrix.framework }} `
+            /p:TargetFramework=${{ matrix.target }} `
             ${{ env.DOTNET_BUILD_ARGS }}
 
           # Build the test project for the specific framework
