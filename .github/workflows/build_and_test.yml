@@ -142,13 +142,14 @@ jobs:
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |
           # Build the main library with framework targeting for SonarQube
-          dotnet build SignNow.Net --configuration Debug --no-restore `
+          dotnet build SignNow.Net --configuration Debug --no-incremental `
             /p:TargetFramework=${{ matrix.target }} `
             ${{ env.DOTNET_BUILD_ARGS }}
 
           # Build the test project for the specific framework
-          dotnet build SignNow.Net.Test --configuration Debug --no-restore `
+          dotnet build SignNow.Net.Test --configuration Debug --no-incremental `
             --framework ${{ matrix.framework }} `
+            -p:SonarQubeTargetsImported=true `
             ${{ env.DOTNET_BUILD_ARGS }}
           
           dotnet test SignNow.Net.Test --configuration Debug --no-build `
