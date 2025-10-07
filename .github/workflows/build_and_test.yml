@@ -128,9 +128,8 @@ jobs:
         run: |
           # Force single target framework for SonarQube analysis to prevent duplicate indexing
           dotnet build SignNow.Net --configuration Debug `
-            --framework ${{ matrix.framework }} `
             /p:TargetFramework=${{ matrix.framework }} `
-            /p:TargetFrameworks="" `
+            /p:TargetFrameworks=${{ matrix.framework }} `
             ${{ env.DOTNET_BUILD_ARGS }}
           dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
