@@ -101,7 +101,13 @@ jobs:
           if (Test-Path $SonarConfigPath) {
             [xml]$SonarConfig = Get-Content $SonarConfigPath
             $ProjectKey = $SonarConfig.SonarQubeAnalysisProperties.Property | Where-Object { $_.Name -eq "sonar.projectKey" } | Select-Object -ExpandProperty '#text'
-            Write-Output "project-key=${ProjectKey}" >> $Env:GITHUB_OUTPUT
+            if (-not [string]::IsNullOrWhiteSpace($ProjectKey)) {
+              Write-Host "✓ Found SonarQube project key: $ProjectKey"
+              Write-Output "project-key=${ProjectKey}" >> $Env:GITHUB_OUTPUT
+              Write-Output "has-project-key=true" >> $Env:GITHUB_OUTPUT
+            } else {
+              Write-Warning "SonarQube project key is empty in configuration file"
+            }
           } else {
             Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
           }
