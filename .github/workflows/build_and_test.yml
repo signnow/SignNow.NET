@@ -111,6 +111,12 @@ jobs:
           } else {
             Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
           }
+      
+      - name: Compile Solution
+        run: |
+          # Build entire solution normally to ensure all projects are compiled
+          dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: SonarQube begin
         if: steps.sonar.outputs.has-project-key == 'true'
@@ -124,21 +130,24 @@ jobs:
             /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
             /d:sonar.scanner.skipJreProvisioning=true
 
-      - name: Build and Pack Solution
-        run: |
-          # Force single target framework for SonarQube analysis to prevent duplicate indexing
-          dotnet build SignNow.Net.sln --configuration Debug --no-restore`
-            --framework ${{ matrix.framework }} `
-            /p:TargetFramework=${{ matrix.framework }} `
-            ${{ env.DOTNET_BUILD_ARGS }}
-          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+      # - name: Build and Pack Solution
+      #   run: |
+      #     # Force single target framework for SonarQube analysis to prevent duplicate indexing
+      #     dotnet build SignNow.Net.sln --configuration Debug --no-restore`
+      #       --framework ${{ matrix.framework }} `
+      #       /p:TargetFramework=${{ matrix.framework }} `
+      #       ${{ env.DOTNET_BUILD_ARGS }}
+      #     dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |
           dotnet test SignNow.Net.Test `
-            --configuration Debug --no-build --framework ${{ matrix.framework }} `
-            --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
-            /p:CollectCoverage=true
+            --configuration Debug `
+            --framework ${{ matrix.framework }} `
+            --logger:trx `
+            --results-directory ./SignNow.Net.Test/TestResults `
+            /p:CollectCoverage=true `
+            --no-build
 
       - name: Save Code Coverage Results
         uses: actions/upload-artifact@v4
