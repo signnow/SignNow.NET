@@ -19,6 +19,21 @@ on:
     tags-ignore:
       - '**'
 
+env:
+  COREHOST_TRACE: false
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1          # Disable sending usage data to Microsoft
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
+  DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
+  NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
+  COVERAGE_PATH: SignNow.Net.Test/bin/Debug
+  # Do not generate summary otherwise it leads to duplicate errors in build log
+  DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
+  SONAR_DOTNET_ENABLE_CONCURRENT_EXECUTION: true
+
+defaults:
+  run:
+    shell: pwsh
+
 # Workflow
 jobs:
   build:
@@ -39,20 +54,6 @@ jobs:
           - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
           - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462' }
 
-    env:
-      COREHOST_TRACE: false
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1          # Disable sending usage data to Microsoft
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1    # prevent the caching of the packages on the build machine
-      DOTNET_NOLOGO: true                     # removes logo and telemetry message from first run of dotnet cli
-      NUGET_XMLDOC_MODE: skip                 # prevent the download of the XML documentation for the packages
-      COVERAGE_PATH: SignNow.Net.Test/bin/Debug
-      # Do not generate summary otherwise it leads to duplicate errors in build log
-      DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
-
-    defaults:
-      run:
-        shell: pwsh
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,6 +71,19 @@ jobs:
             Write-Output "TARGET_FRAMEWORK=462" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           }
 
+      - name: Get SDK Version
+        id: props
+        run: |
+          $Props = [xml](Get-Content ./SignNow.props)
+          $Version = $Props.Project.PropertyGroup.Version
+          Write-Output "version=${Version}" >> $Env:GITHUB_OUTPUT
+
+      - name: Setup JDK 17 (SonarQube requirement)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -83,11 +97,23 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ matrix.framework }}-${{ hashFiles('**/*.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
 
+      - name: Install SonarQube Scanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
       - name: Restore Nuget packages
         run: dotnet restore -v:n
 
       - name: Configure signNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
+
+      - name: SonarQube begin
+        run: |
+          dotnet-sonarscanner begin `
+            /key:SignNowInc_csharp-sdk `
+            /s:${{ github.workspace }}/SonarQube.Analysis.xml `
+            /v:"${{ steps.props.outputs.version }}" `
+            /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
+            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
 
       - name: Build and Pack Solution
         run: |
@@ -98,6 +124,8 @@ jobs:
         run: |
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
+            --logger:trx `
+            /p:CoverletOutputFormat=opencover `
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
@@ -111,6 +139,9 @@ jobs:
         shell: bash
         run: |
           .github/release-notes.sh CHANGELOG.md
+      
+      - name: SonarQube end
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
 
       - name: Upload Code Coverage Report (Codecov.io)
         continue-on-error: true
