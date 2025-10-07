@@ -141,13 +141,21 @@ jobs:
 
       - name: Run Tests on ${{ matrix.framework }} with Coverage
         run: |
-          dotnet test SignNow.Net.Test `
-            --configuration Debug `
+          # Build the main library with framework targeting for SonarQube
+          dotnet build SignNow.Net --configuration Debug --no-restore`
             --framework ${{ matrix.framework }} `
-            --logger:trx `
-            --results-directory ./SignNow.Net.Test/TestResults `
-            /p:CollectCoverage=true `
-            --no-build
+            /p:TargetFramework=${{ matrix.framework }} `
+            ${{ env.DOTNET_BUILD_ARGS }}
+
+          # Build the test project for the specific framework
+          dotnet build SignNow.Net.Test --configuration Debug --no-restore `
+            --framework ${{ matrix.framework }} `
+            ${{ env.DOTNET_BUILD_ARGS }}
+          
+          dotnet test SignNow.Net.Test --configuration Debug --no-build`
+            --framework ${{ matrix.framework }} `
+            --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
+            /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
         uses: actions/upload-artifact@v4
