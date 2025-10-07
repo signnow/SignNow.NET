@@ -46,30 +46,18 @@ jobs:
       matrix:
         include:
           # Ubuntu
-          - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0' }
+          - { name: 'Linux .NET 8',     os: ubuntu-22.04,   framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard21' }
           # macOs - disabled due to the same behavior as in Ubuntu
           # - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
           # Windows
-          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0' }
-          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0' }
-          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462' }
+          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0', net-sdk: '7.0.x', target: 'netstandard20' }
+          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard21' }
+          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: '462' }
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
-      - name: Setup .NET SDK Version for Target Framework
-        run: |
-          If ("${{ matrix.framework }}" -eq "net7.0") {
-            Write-Output "DOTNET_SDK_VERSION=7.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            Write-Output "TARGET_FRAMEWORK=netstandard20" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          } ElseIf ("${{ matrix.framework }}" -eq "net8.0") {
-            Write-Output "DOTNET_SDK_VERSION=8.0.x" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-            Write-Output "TARGET_FRAMEWORK=netstandard21" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          } Else {
-            Write-Output "TARGET_FRAMEWORK=462" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          }
 
       - name: Get SDK Version
         id: props
@@ -87,7 +75,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+          dotnet-version: ${{ matrix.net-sdk }}
 
       - name: Setup Nuget Cache
         uses: actions/cache@v4
@@ -106,10 +94,23 @@ jobs:
       - name: Configure signNow API
         run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
 
+      - name: Get SonarQube Project Key
+        id: sonar
+        run: |
+          $SonarConfigPath = "${{ github.workspace }}/SonarQube.Analysis.xml"
+          if (Test-Path $SonarConfigPath) {
+            [xml]$SonarConfig = Get-Content $SonarConfigPath
+            $ProjectKey = $SonarConfig.SonarQubeAnalysisProperties.Property | Where-Object { $_.Name -eq "sonar.projectKey" } | Select-Object -ExpandProperty '#text'
+            Write-Output "project-key=${ProjectKey}" >> $Env:GITHUB_OUTPUT
+          } else {
+            Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
+          }
+
       - name: SonarQube begin
+        if: steps.sonar.outputs.has-project-key == 'true'
         run: |
           dotnet-sonarscanner begin `
-            /key:SignNowInc_csharp-sdk `
+            /key:${{ steps.sonar.outputs.project-key }} `
             /s:${{ github.workspace }}/SonarQube.Analysis.xml `
             /v:"${{ steps.props.outputs.version }}" `
             /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
@@ -132,7 +133,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
-          path: SignNow.Net.Test/bin/Debug/**/coverage*
+          path: ${{ env.COVERAGE_PATH }}/**/coverage*
 
       - name: Test Release Notes parser
         if: (runner.os == 'macOS' || runner.os == 'Linux')
@@ -141,14 +142,18 @@ jobs:
           .github/release-notes.sh CHANGELOG.md
       
       - name: SonarQube end
+        if: steps.sonar.outputs.has-project-key == 'true'
         run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
 
       - name: Upload Code Coverage Report (Codecov.io)
+        if: env.CODECOV_TOKEN != ''
         continue-on-error: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v5
         with:
           name: ${{ runner.os }}-codecov-${{ matrix.framework }}
-          flags: ${{ runner.os }},${{ env.TARGET_FRAMEWORK }}
+          flags: ${{ runner.os }},${{ matrix.target }}
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
           fail_ci_if_error: false
