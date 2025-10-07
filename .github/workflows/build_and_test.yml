@@ -119,6 +119,7 @@ jobs:
             /key:${{ steps.sonar.outputs.project-key }} `
             /s:${{ github.workspace }}/SonarQube.Analysis.xml `
             /v:"${{ steps.props.outputs.version }}" `
+            /d:sonar.projectBaseDir="${{ github.workspace }}" `
             /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
             /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
 
@@ -132,7 +133,6 @@ jobs:
           dotnet test SignNow.Net.Test `
             --configuration Debug --framework ${{ matrix.framework }} `
             --logger:trx `
-            /p:CoverletOutputFormat=opencover `
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results

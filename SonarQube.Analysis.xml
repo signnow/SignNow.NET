@@ -10,7 +10,6 @@
 
     <!-- Sources: Path is relative to the sonar project properties file. -->
     <Property Name="sonar.sources">SignNow.Net/**</Property>
-    <Property Name="sonar.projectBaseDir">./</Property>
     <!-- <Property Name="sonar.inclusions"></Property>-->
     <Property Name="sonar.exclusions">**/obj/**</Property>
     
