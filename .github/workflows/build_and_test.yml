@@ -111,25 +111,25 @@ jobs:
           } else {
             Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
           }
-      
-      - name: Compile Solution
-        run: |
-          # Build entire solution normally to ensure all projects are compiled
-          dotnet build SignNow.Net --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
-          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
-
+          
       - name: SonarQube begin
         if: steps.sonar.outputs.has-project-key == 'true'
         run: |
           dotnet-sonarscanner begin `
-            /key:${{ steps.sonar.outputs.project-key }} `
-            /s:${{ github.workspace }}/SonarQube.Analysis.xml `
-            /v:"${{ steps.props.outputs.version }}" `
-            /d:sonar.projectBaseDir="${{ github.workspace }}" `
-            /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
-            /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
-            /d:sonar.scanner.skipJreProvisioning=true
-
+          /key:${{ steps.sonar.outputs.project-key }} `
+          /s:${{ github.workspace }}/SonarQube.Analysis.xml `
+          /v:"${{ steps.props.outputs.version }}" `
+          /d:sonar.projectBaseDir="${{ github.workspace }}" `
+          /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
+          /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
+          /d:sonar.scanner.skipJreProvisioning=true
+            
+      - name: Compile Solution
+        run: |
+          # Build entire solution normally to ensure all projects are compiled
+          dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+        
       # - name: Build and Pack Solution
       #   run: |
       #     # Force single target framework for SonarQube analysis to prevent duplicate indexing
@@ -144,19 +144,16 @@ jobs:
           # Build the main library with framework targeting for SonarQube
           dotnet build SignNow.Net --configuration Debug --no-incremental `
             /p:TargetFramework=${{ matrix.target }} `
-            /p:SonarQubeTargetsImported=true `
             ${{ env.DOTNET_BUILD_ARGS }}
 
           # Build the test project for the specific framework
           dotnet build SignNow.Net.Test --configuration Debug --no-incremental `
             --framework ${{ matrix.framework }} `
-            /p:SonarQubeTargetsImported=true `
             ${{ env.DOTNET_BUILD_ARGS }}
           
           dotnet test SignNow.Net.Test --configuration Debug --no-build `
             --framework ${{ matrix.framework }} `
             --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
-            /p:SonarQubeTargetsImported=true `
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
