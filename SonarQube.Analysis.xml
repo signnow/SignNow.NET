@@ -1,0 +1,34 @@
+<SonarQubeAnalysisProperties xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+    <!-- Generic  -->
+    <Property Name="sonar.projectKey">SignNowInc_csharp-sdk</Property>
+    <Property Name="sonar.projectName">SignNow.NET SDK</Property>
+    <Property Name="sonar.projectDescription">signNow.Net is a .NET 4.6.2+ and .NET standard class library for the signNow API.</Property>
+    <Property Name="sonar.sourceEncoding">UTF-8</Property>
+    <Property Name="sonar.links.ci">https://github.com/SignNowInc/csharp-sdk/actions</Property>
+    <Property Name="sonar.links.scm">https://github.com/SignNowInc/csharp-sdk</Property>
+    <Property Name="sonar.scm.url">scm:git:https://github.com/SignNowInc/csharp-sdk</Property>
+    <Property Name="sonar.scm.provider">git</Property>
+
+    <Property Name="sonar.log.level">INFO</Property>
+
+    <!-- All Path is relative to the sonar project properties file. -->
+    
+    <!-- Sources: Only include C# source files -->
+    <!-- <Property Name="sonar.sources">SignNow.Net</Property> -->
+    <Property Name="sonar.inclusions">SignNow.Net/**/*.cs</Property>
+    <Property Name="sonar.exclusions">**/obj/**,**/bin/**,**/AssemblyInfo.cs,**/*.png,**/*.pdf</Property>
+    
+    <!-- Tests: Only include C# test files -->
+    <!-- <Property Name="sonar.tests">SignNow.Net.Test</Property> -->
+    <Property Name="sonar.test.inclusions">SignNow.Net.Test/**/*.cs</Property>
+    <Property Name="sonar.test.exclusions">**/TestData/Documents/**,**/obj/**,**/bin/**,**/FakeModels/**</Property>
+
+    <!-- Coverage -->
+    <Property Name="sonar.cs.opencover.reportsPaths">SignNow.Net.Test/bin/Debug/**/coverage.*.opencover.xml</Property>
+    <Property Name="sonar.cs.vstest.reportsPaths">SignNow.Net.Test/TestResults/*.trx</Property>
+
+    <!-- Language and Framework specific settings -->
+    <Property Name="sonar.dotnet.excludeTestProjects">true</Property>
+    <Property Name="sonar.coverage.exclusions">**/obj/**,**/bin/**,**/*Test*/**,**/TestData/**,**/*.Designer.cs</Property>
+
+</SonarQubeAnalysisProperties>
