@@ -49,9 +49,9 @@ jobs:
           # macOs - disabled due to the same behavior as in Ubuntu
           # - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
           # Windows
-          # - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0', net-sdk: '7.0.x', target: 'netstandard2.0' }
-          # - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard2.1' }
-          # - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: 'net462' }
+          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0', net-sdk: '7.0.x', target: 'netstandard2.0' }
+          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard2.1' }
+          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: 'net462' }
 
     steps:
       - uses: actions/checkout@v4
@@ -123,23 +123,8 @@ jobs:
           /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
           /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
           /d:sonar.scanner.skipJreProvisioning=true
-            
-      # - name: Compile Solution
-      #   run: |
-      #     # Build entire solution normally to ensure all projects are compiled
-      #     dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
-      #     dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
-        
-      # - name: Build and Pack Solution
-      #   run: |
-      #     # Force single target framework for SonarQube analysis to prevent duplicate indexing
-      #     dotnet build SignNow.Net.sln --configuration Debug --no-restore`
-      #       --framework ${{ matrix.framework }} `
-      #       /p:TargetFramework=${{ matrix.framework }} `
-      #       ${{ env.DOTNET_BUILD_ARGS }}
-      #     dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
-      - name: Run Tests on ${{ matrix.framework }} with Coverage
+      - name: Run Tests on ${{ matrix.framework }} for TargetFramework ${{ matrix.target }} with Coverage
         run: |
           # Build the main library with framework targeting for SonarQube
           dotnet build SignNow.Net --configuration Debug --no-incremental `
@@ -161,16 +146,23 @@ jobs:
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: ${{ env.COVERAGE_PATH }}/**/coverage*
+      
+      - name: SonarQube end
+        if: steps.sonar.outputs.has-project-key == 'true'
+        continue-on-error: true
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
 
       - name: Test Release Notes parser
         if: (runner.os == 'macOS' || runner.os == 'Linux')
         shell: bash
         run: |
           .github/release-notes.sh CHANGELOG.md
-      
-      - name: SonarQube end
-        if: steps.sonar.outputs.has-project-key == 'true'
-        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
+
+      - name: Check entire Solution Compilation and Packaging
+        run: |
+          # Build entire solution normally to ensure all projects are compiled
+          dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: Upload Code Coverage Report (Codecov.io)
         if: env.CODECOV_TOKEN != ''
