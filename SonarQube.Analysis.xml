@@ -14,12 +14,12 @@
     <!-- All Path is relative to the sonar project properties file. -->
     
     <!-- Sources: Only include C# source files -->
-    <Property Name="sonar.sources">SignNow.Net</Property>
+    <!-- <Property Name="sonar.sources">SignNow.Net</Property> -->
     <Property Name="sonar.inclusions">SignNow.Net/**/*.cs</Property>
     <Property Name="sonar.exclusions">**/obj/**,**/bin/**,**/AssemblyInfo.cs,**/*.png,**/*.pdf</Property>
     
     <!-- Tests: Only include C# test files -->
-    <Property Name="sonar.tests">SignNow.Net.Test</Property>
+    <!-- <Property Name="sonar.tests">SignNow.Net.Test</Property> -->
     <Property Name="sonar.test.inclusions">SignNow.Net.Test/**/*.cs</Property>
     <Property Name="sonar.test.exclusions">**/TestData/Documents/**,**/obj/**,**/bin/**,**/FakeModels/**</Property>
 

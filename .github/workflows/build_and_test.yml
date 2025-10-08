@@ -124,11 +124,11 @@ jobs:
           /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
           /d:sonar.scanner.skipJreProvisioning=true
             
-      - name: Compile Solution
-        run: |
-          # Build entire solution normally to ensure all projects are compiled
-          dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
-          dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
+      # - name: Compile Solution
+      #   run: |
+      #     # Build entire solution normally to ensure all projects are compiled
+      #     dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
+      #     dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
         
       # - name: Build and Pack Solution
       #   run: |
