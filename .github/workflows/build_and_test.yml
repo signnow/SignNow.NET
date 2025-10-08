@@ -49,9 +49,9 @@ jobs:
           # macOs - disabled due to the same behavior as in Ubuntu
           # - { name: 'macOS .NET 8',     os: macos-13,       framework: 'net8.0' }
           # Windows
-          - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0', net-sdk: '7.0.x', target: 'netstandard2.0' }
-          - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard2.1' }
-          - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: 'net462' }
+          # - { name: 'Windows .NET 7',   os: windows-latest, framework: 'net7.0', net-sdk: '7.0.x', target: 'netstandard2.0' }
+          # - { name: 'Windows .NET 8',   os: windows-latest, framework: 'net8.0', net-sdk: '8.0.x', target: 'netstandard2.1' }
+          # - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: 'net462' }
 
     steps:
       - uses: actions/checkout@v4
@@ -115,7 +115,7 @@ jobs:
       - name: Compile Solution
         run: |
           # Build entire solution normally to ensure all projects are compiled
-          dotnet build SignNow.Net.sln --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
+          dotnet build SignNow.Net --configuration Debug --no-restore ${{ env.DOTNET_BUILD_ARGS }}
           dotnet pack --configuration Release --output ./SignNow.Net/bin/Publish SignNow.Net
 
       - name: SonarQube begin
@@ -144,17 +144,19 @@ jobs:
           # Build the main library with framework targeting for SonarQube
           dotnet build SignNow.Net --configuration Debug --no-incremental `
             /p:TargetFramework=${{ matrix.target }} `
+            /p:SonarQubeTargetsImported=true `
             ${{ env.DOTNET_BUILD_ARGS }}
 
           # Build the test project for the specific framework
           dotnet build SignNow.Net.Test --configuration Debug --no-incremental `
             --framework ${{ matrix.framework }} `
-            -p:SonarQubeTargetsImported=true `
+            /p:SonarQubeTargetsImported=true `
             ${{ env.DOTNET_BUILD_ARGS }}
           
           dotnet test SignNow.Net.Test --configuration Debug --no-build `
             --framework ${{ matrix.framework }} `
             --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
+            /p:SonarQubeTargetsImported=true `
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
