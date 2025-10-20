@@ -83,7 +83,7 @@ public class YourService : WebClientBase, IYourService
 - **NEVER** call validation methods on separate lines before usage
 - Extension method validation should be fluent and integrated into the natural flow of code
 - The `ValidateId()` and `ValidateEmail()` extension methods returns the validated value, allowing inline usage
-- **Proper Guard Usage**: Use `Guard` class funcionality instead of manual null checking. Extend `Guard` class in `SignNow.Net/_Internal/Helpers/Guard.cs` for custom validations as needed
+- **Proper Guard Usage**: Use `Guard` class functionality instead of manual null checking. Extend `Guard` class in `SignNow.Net/_Internal/Helpers/Guard.cs` for custom validations as needed
 
 ### Model Property Validation Rules
 - **ADD** validation in property setters when API has specific value constraints
@@ -103,7 +103,7 @@ public async Task YourActionAsync(string id, CancellationToken cancellationToken
 ```
 
 ### SignNow Response Formats
-All SignNow API Responses use JSON as the content type. The API has two versions: v1 and v2.
+The most SignNow API Responses use JSON as the content type. The API has two versions: v1 and v2.
 If an endpoint URL starts with v2, it belongs to version 2; otherwise, it is version 1.
 
 Version 2 endpoints follow a strict response structure:
@@ -117,7 +117,8 @@ Version 2 endpoints follow a strict response structure:
 
 - The data field is required.
 - If the response returns a single entity, `data` is an object and the `meta` field is omitted.
-- If the response returns a collection of entities, `data` is an array and the `meta` field contains pagination details
+- If the response returns a collection of entities, `data` is an array and the `meta` field contains pagination details.
+- Use the generic `SignNow.Net.Model.Responses.GenericResponses.DataResponse<T>` class for v2 responses to encapsulate the `data` field.
 
 
 ### Method parameters & Request/Response Classes
@@ -126,6 +127,11 @@ Version 2 endpoints follow a strict response structure:
 - **Request class naming**: do not use HTTP method names (e.g., `Get`, `Post`) in class names; use business operation names instead (e.g., `CreateDocumentRequest`)
 - **Response class naming**: use business operation names (e.g., `DocumentResponse`, `UserResponse`); avoid generic names like `ApiResponse`
 - **ALWAYS** use `= default` for optional reference type parameters instead of `= null`. This provides type-safe defaults and clearer intent.
+- **Types inside new Model Classes**:
+ - Use domain types over primitives
+ - Always reuse existing object types such as `Uri`, `DateTimeOffset`, etc.
+ - Prefer enums/unions for finite sets
+ - Use generics to avoid duplication if applicable
 
 ### Property Assignment Rules
 - **ALWAYS** set all required properties BEFORE using objects in complex operations
@@ -147,7 +153,7 @@ Version 2 endpoints follow a strict response structure:
 - **NEVER** use `[DataContract]` or `[DataMember]` attributes - these are for WCF/XML serialization
 - All model classes should use `[JsonProperty(PropertyName = "api_field_name")]` for API field mapping
 - **Enum Properties**: 
-  - **USE** `StringEnumConverter` from Newtonsoft.Json: `[JsonConverter(typeof(StringEnumConverter))]`
+  - **USE** `StringEnumConverter` from `Newtonsoft.Json`: `[JsonConverter(typeof(StringEnumConverter))]`
   - Use `[EnumMember(Value = "api_value")]` on enum members for custom API string values
   - **NEVER** rely on default enum serialization (numeric or name-based)
 - **URI Properties**: 
@@ -164,19 +170,25 @@ Version 2 endpoints follow a strict response structure:
 
 ## Testing Guidelines
 - **Faker pattern**: Every model needs a corresponding `ModelNameFaker : Faker<ModelName>` class
-- **No trivial tests**: Don't test basic getters/setters or Faker functionality
+- **No trivial tests**: Don't test basic getters/setters or Faker functionality or trivial things
 - **Use TestUtils**: `TestUtils.DeserializeFromJson<T>()` and `TestUtils.SerializeToJsonFormatted()` for JSON deserialization/serialization purposes
 - **Unit tests**: Use Mocked `ISignNowClient` from `SignNowTestBase.SignNowClientMock()`, verify correct endpoint calls
 - Use meaningful test scenarios that validate actual SDK behavior
 - **Tests Inheritance**: Use `SignNowTestBase` (for unit tests) or `AuthorizedApiTestBase` (for acceptance or feature tests)
 
+
 ### Unit Test Rules
+- MSTest framework
+- Base test class: `SignNowTestBase` for common setup and utilities
+- Folder-based organization: organize by functionality areas (Services, Models, Helpers, etc.)
+- Keep existing structure, descriptive naming conventions and defined logical patterns
+- Focus on testing successful execution path and proper business logic
 - **ONE** test per feature - test only the service method behavior, not infrastructure
 - **NO** tests for argument validation - these are covered by validator tests
 - **NO** tests for null/empty parameters - validation is handled by extension methods
 - **NO** tests for API error scenarios - this is SignNowClient's responsibility
 - **NO** "Arrange/Act/Assert" comments in test code - the code structure should be self-evident
-- Focus on testing successful execution path and proper method invocation only
+
 
 ### Acceptance Test Rules
 - **FULL END-TO-END** scenarios only - create prerequisites, execute feature, verify results
@@ -184,6 +196,11 @@ Version 2 endpoints follow a strict response structure:
 - **NO** exception handling in acceptance tests - let tests fail fast on errors
 - Test **ONE main feature** per test method
 - Use real API calls, not mocks
+- Test actual API functionality to ensure it works as expected and responds correctly
+- Real-World Scenarios: Simulate real user scenarios to validate end-to-end workflows
+- Do not cover all possible edge cases - focus on main success paths
+- Follow the AAA pattern (Arrange, Act, Assert) in test methods for clarity
+- Follow existing acceptance test patterns in the project
 
 
 ## Examples Usage Rules
@@ -191,13 +208,13 @@ Version 2 endpoints follow a strict response structure:
 - **NO** comprehensive try/catch blocks - examples should show happy path
 - **INCLUDE** all prerequisites explicitly in the example (document creation, etc.)
 - Each example must be completely self-contained and runnable
-- Avoid overengineering - customers need simple, clear examples
+- Avoid over-engineering - customers need simple, clear examples
 
 
 ## Refactoring
 - Refactor only when necessary to improve code quality or add features.
 - Refactor class names to reflect business logic.
-- Aviod code duplication by leveraging base classes and shared utilities.
+- Avoid code duplication by leveraging base classes and shared utilities.
 - Detect and refactor Model classes that uses the same properties into a common base class.
 
 

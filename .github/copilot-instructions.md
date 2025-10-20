@@ -99,8 +99,8 @@ This SDK is designed as cross-platform library with service-oriented architectur
 - Consumers of the SDK should only need to depend on these interfaces and the models they expose.
 - All implementation classes with complex request transformations should be marked as `internal` and placed into `SignNow.Net/_Internal` folder.
 - All the public responses and request models are located in the `SignNow.Net/Model` folder.
-- All the entities of the SignNow API should be represented by strongly typed models. Models should be groupped by feature areas (e.g., `Document`, `User`, `Folder`, etc.) and further subdivided into `Requests` and `Responses` folders.
-- SignNow API entities could be groupped for re-usage purposes (e.g., `ComplexTags`, `EditFields`, `FieldContents`). The groups should be placed into separate folders under `Model` folder and represent single SignNow API entity.
+- All the entities of the SignNow API should be represented by strongly typed models. Models should be grouped by feature areas (e.g., `Document`, `User`, `Folder`, etc.) and further subdivided into `Requests` and `Responses` folders.
+- SignNow API entities could be grouped for re-usage purposes (e.g., `ComplexTags`, `EditFields`, `FieldContents`). The groups should be placed into separate folders under `Model` folder and represent single SignNow API entity.
 - Avoid exposing implementation details, such as HTTP client classes or internal helpers, in the public API.
 - For dynamic API responses, use internal Json converters to handle deserialization without exposing complexity to consumers.
 
@@ -109,7 +109,7 @@ This SDK is designed as cross-platform library with service-oriented architectur
 - The SDK provides a single entry point - `SignNowContext` with minimalistic parameters for configuration, like API base URL, Token (if any exists) and HTTP client.
 - This `SignNowContext` class registers all necessary services with a single context.
 - For User Authentication - use `SignNowContext.SetAppCredentials()` and `SignNowContext.GetAccessToken()` methods to configure application and user credentials respectively.
-- For advanced scenarious or re-usage of existing HTTP clients, the SDK provides an ability to set custom `ISignNowClient` implementation via `SignNowContext` constructor.
+- For advanced scenarios or re-usage of existing HTTP clients, the SDK provides an ability to set custom `ISignNowClient` implementation via `SignNowContext` constructor.
 - Application secrets and user credentials are not stored in the SDK, and should be managed by the consumer application.
 
 ### Platform-Specific Code
