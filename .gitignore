@@ -7,5 +7,9 @@
 
 # ignore local files with API credentials
 *.signnow.com.json
+
+# source for API code generation
+endpoint.json
+
 */bin/
 */obj/

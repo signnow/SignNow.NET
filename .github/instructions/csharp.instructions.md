@@ -38,7 +38,7 @@ description: Guidelines for building C# applications
 
 - Always include test cases for critical paths of the application.
 - Guide users through creating unit tests.
-- Ommit "Act", "Arrange" or "Assert" comments.
+- Omit "Act", "Arrange" or "Assert" comments.
 
 ## Performance Optimization
 
