@@ -101,7 +101,7 @@ jobs:
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: SignNow.Net.Test/bin/Debug/**/coverage*
