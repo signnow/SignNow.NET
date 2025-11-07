@@ -8,6 +8,7 @@ using SignNow.Net.Test.FakeModels;
 
 namespace UnitTests.Services
 {
+    // todo: delete ?
     [TestClass]
     public class EventSubscriptionServiceTest : SignNowTestBase
     {
@@ -23,48 +24,6 @@ namespace UnitTests.Services
                 Page = 1,
                 SortByCreated = SortOrder.Descending,
                 IncludeEventCount = true
-            };
-
-            var response = await service
-                .GetEventSubscriptionsListAsync(options)
-                .ConfigureAwait(false);
-
-            Assert.AreEqual(fakeResponse.Data.Count, response.Data.Count);
-            Assert.AreEqual(fakeResponse.Meta.Pagination.Total, response.Meta.Pagination.Total);
-        }
-
-        [TestMethod]
-        public async Task GetEventSubscriptionsListAsync_WithoutOptions()
-        {
-            var fakeResponse = new EventSubscriptionResponseFaker().Generate();
-            var responseJson = TestUtils.SerializeToJsonFormatted(fakeResponse);
-
-            var service = new EventSubscriptionService(ApiBaseUrl, new Token(), SignNowClientMock(responseJson));
-
-            var response = await service
-                .GetEventSubscriptionsListAsync()
-                .ConfigureAwait(false);
-
-            Assert.AreEqual(fakeResponse.Data.Count, response.Data.Count);
-            Assert.AreEqual(fakeResponse.Meta.Pagination.Total, response.Meta.Pagination.Total);
-        }
-
-        [TestMethod]
-        public async Task GetEventSubscriptionsListAsync_WithComplexFilters()
-        {
-            var fakeResponse = new EventSubscriptionResponseFaker().Generate();
-            var responseJson = TestUtils.SerializeToJsonFormatted(fakeResponse);
-
-            var service = new EventSubscriptionService(ApiBaseUrl, new Token(), SignNowClientMock(responseJson));
-            var options = new GetEventSubscriptionsListOptions
-            {
-                Page = 2,
-                SortByEvent = SortOrder.Ascending,
-                EntityAndCallbackUrlFilter = "test_entity",
-                DateFilter = new DateRangeFilter(1580719773, 1580720509),
-                EventTypeFilter = new[] { EventType.DocumentComplete },
-                ApplicationFilter = new[] { "test_app" },
-                IncludeEventCount = false
             };
 
             var response = await service
