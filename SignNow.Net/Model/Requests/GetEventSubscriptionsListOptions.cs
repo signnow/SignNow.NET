@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model.Requests.GetFolderQuery;
 
@@ -16,9 +14,51 @@ namespace SignNow.Net.Model.Requests
     public class GetEventSubscriptionsListOptions : IQueryToString
     {
         /// <summary>
+        /// Filter results by specific applications.
+        /// Use ApplicationFilter.In() to filter by multiple applications
+        /// or ApplicationFilter.Equals() to filter by a single application.
+        /// </summary>
+        public ApplicationFilter ApplicationFilter { get; set; }
+
+        /// <summary>
+        /// Filter results by date range (start and end timestamps).
+        /// </summary>
+        public DateRangeFilter DateFilter { get; set; }
+
+        /// <summary>
+        /// Filter of like type for entity IDs.
+        /// </summary>
+        public EntityIdFilter EntityIdFilter { get; set; }
+
+        /// <summary>
+        /// Filter of like type for callback URLs.
+        /// </summary>
+        public CallbackUrlFilter CallbackUrlFilter { get; set; }
+
+        /// <summary>
+        /// Filter results by specific event types.
+        /// </summary>
+        public EventTypeFilter EventTypeFilter { get; set; }
+
+        /// <summary>
+        /// Include the number of events that triggered the webhook in the response.
+        /// </summary>
+        public bool? IncludeEventCount { get; set; }
+
+        /// <summary>
         /// Page number for pagination. Default is 1.
         /// </summary>
         public int? Page { get; set; }
+
+        /// <summary>
+        /// Qty of intems returned per page.
+        /// </summary>
+        public int? PerPage { get; set; }
+
+        /// <summary>
+        /// Sort results by application name (alphabetically).
+        /// </summary>
+        public SortOrder? SortByApplication { get; set; }
 
         /// <summary>
         /// Sort results by creation date.
@@ -31,36 +71,6 @@ namespace SignNow.Net.Model.Requests
         public SortOrder? SortByEvent { get; set; }
 
         /// <summary>
-        /// Sort results by application name (alphabetically).
-        /// </summary>
-        public SortOrder? SortByApplication { get; set; }
-
-        /// <summary>
-        /// Search string for entity IDs and callback URLs.
-        /// </summary>
-        public string EntityAndCallbackUrlFilter { get; set; }
-
-        /// <summary>
-        /// Filter results by date range (start and end timestamps).
-        /// </summary>
-        public DateRangeFilter DateFilter { get; set; }
-
-        /// <summary>
-        /// Filter results by specific event types.
-        /// </summary>
-        public IReadOnlyList<EventType> EventTypeFilter { get; set; }
-
-        /// <summary>
-        /// Filter results by specific applications.
-        /// </summary>
-        public IReadOnlyList<string> ApplicationFilter { get; set; }
-
-        /// <summary>
-        /// Include the number of events that triggered the webhook in the response.
-        /// </summary>
-        public bool? IncludeEventCount { get; set; }
-
-        /// <summary>
         /// Converts the options to a query string.
         /// </summary>
         /// <returns>Query string representation</returns>
@@ -68,160 +78,235 @@ namespace SignNow.Net.Model.Requests
         {
             var parameters = new List<string>();
 
-            // Add page parameter
+            var filters = new List<EventSubscriptionFilter> { ApplicationFilter, DateFilter, EntityIdFilter, CallbackUrlFilter, EventTypeFilter };
+            parameters.AddRange(filters.Select(f => f?.FilterExpression));
+
+            parameters.Add(Sort("application", SortByApplication));
+
+            parameters.Add(Sort("created", SortByCreated));
+
+            parameters.Add(Sort("event", SortByEvent));
+
             if (Page.HasValue)
             {
                 parameters.Add($"page={Page.Value}");
             }
 
-            // Add sort parameters
-            if (SortByCreated.HasValue)
+            if (PerPage.HasValue)
             {
-                var sortValue = SortByCreated.Value == SortOrder.Ascending ? "asc" : "desc";
-                parameters.Add($"sort[created]={sortValue}");
+                parameters.Add($"per_page={PerPage.Value}");
             }
 
-            if (SortByEvent.HasValue)
-            {
-                var sortValue = SortByEvent.Value == SortOrder.Ascending ? "asc" : "desc";
-                parameters.Add($"sort[event]={sortValue}");
-            }
-
-            if (SortByApplication.HasValue)
-            {
-                var sortValue = SortByApplication.Value == SortOrder.Ascending ? "asc" : "desc";
-                parameters.Add($"sort[application]={sortValue}");
-            }
-
-            // Add include_event_count parameter
             if (IncludeEventCount.HasValue)
             {
-                parameters.Add($"include_event_count={IncludeEventCount.Value.ToString().ToLowerInvariant()}");
+                parameters.Add($"include_event_count={IncludeEventCount.Value.ToString().ToLower()}");
             }
 
-            // Add filters (these require URL encoding and complex JSON structure)
-            var filters = BuildFilters();
-            if (!string.IsNullOrEmpty(filters))
-            {
-                parameters.Add($"filters={Uri.EscapeDataString(filters)}");
-            }
-
-            return string.Join("&", parameters);
+            return string.Join("&", parameters.Where(p => p != null));
         }
 
-        private string BuildFilters()
+        private string Sort(string propertyName, SortOrder? sortOrder)
         {
-            var filterConditions = new List<object>();
-
-            // Entity ID and Callback URL filter using OR condition
-            if (!string.IsNullOrEmpty(EntityAndCallbackUrlFilter))
+            if (sortOrder.HasValue)
             {
-                filterConditions.Add(new
-                {
-                    _OR = new object[]
-                    {
-                        new { entity_id = new { type = "like", value = EntityAndCallbackUrlFilter } },
-                        new { callback_url = new { type = "like", value = EntityAndCallbackUrlFilter } }
-                    }
-                });
+                var sortOrderStr = sortOrder.Value == SortOrder.Ascending ? "asc" : "desc";
+                return $"sort[{propertyName}]={sortOrderStr}";
             }
-
-            // Date filter
-            if (DateFilter != null)
-            {
-                filterConditions.Add(new
-                {
-                    date = new
-                    {
-                        type = "between",
-                        value = new[] { DateFilter.StartTimestamp, DateFilter.EndTimestamp }
-                    }
-                });
-            }
-
-            // Event type filter
-            if (EventTypeFilter != null && EventTypeFilter.Count > 0)
-            {
-                var eventTypeValues = EventTypeFilter.Select(eventType => 
-                    GetEventTypeApiValue(eventType)).ToArray();
-
-                filterConditions.Add(new
-                {
-                    @event = new
-                    {
-                        type = "in",
-                        value = eventTypeValues
-                    }
-                });
-            }
-
-            // Application filter
-            if (ApplicationFilter != null && ApplicationFilter.Count > 0)
-            {
-                filterConditions.Add(new
-                {
-                    application = new
-                    {
-                        type = "in",
-                        value = ApplicationFilter.ToArray()
-                    }
-                });
-            }
-
-            if (filterConditions.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            return JsonConvert.SerializeObject(filterConditions);
-        }
-
-        private static string GetEventTypeApiValue(EventType eventType)
-        {
-            var field = eventType.GetType().GetField(eventType.ToString());
-            var attribute = field?.GetCustomAttributes(typeof(EnumMemberAttribute), false)
-                .Cast<EnumMemberAttribute>()
-                .FirstOrDefault();
-            
-            return attribute?.Value ?? eventType.ToString().ToLowerInvariant();
+            return null;
         }
     }
 
     /// <summary>
-    /// Date range filter for event subscriptions.
+    /// Base class for event subscription filters.
+    /// Provides common functionality for creating query filter strings.
     /// </summary>
-    public class DateRangeFilter
+    public class EventSubscriptionFilter
     {
         /// <summary>
-        /// Start timestamp (Unix timestamp).
+        /// Returns the string representation of the filter for use in query parameters.
         /// </summary>
-        public long StartTimestamp { get; set; }
+        public string FilterExpression { get; private set; }
 
         /// <summary>
-        /// End timestamp (Unix timestamp).
+        /// Initializes a new instance of the <see cref="EventSubscriptionFilter"/> class.
+        /// This class helps create filters in format Filter.In("a", "b"), Filter.Equal("a") etc.
         /// </summary>
-        public long EndTimestamp { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of DateRangeFilter with DateTime values.
-        /// </summary>
-        /// <param name="startDate">Start date</param>
-        /// <param name="endDate">End date</param>
-        public DateRangeFilter(DateTime startDate, DateTime endDate)
+        /// <param name="filterExpression">The filter expression string. Builded with help of CreateSingleValueFilter, CreateArrayValueFilter.</param>
+        protected EventSubscriptionFilter(string filterExpression)
         {
-            StartTimestamp = ((DateTimeOffset)startDate).ToUnixTimeSeconds();
-            EndTimestamp = ((DateTimeOffset)endDate).ToUnixTimeSeconds();
+            FilterExpression = filterExpression;
         }
 
         /// <summary>
-        /// Initializes a new instance of DateRangeFilter with Unix timestamps.
+        /// Creates a filter expression for a single value operation.
         /// </summary>
-        /// <param name="startTimestamp">Start timestamp</param>
-        /// <param name="endTimestamp">End timestamp</param>
-        public DateRangeFilter(long startTimestamp, long endTimestamp)
+        /// <param name="propertyName">The property name to filter on.</param>
+        /// <param name="operation">The filter operation (e.g., "=", "like").</param>
+        /// <param name="value">The filter value.</param>
+        /// <returns>A formatted filter expression string.</returns>
+        protected static string CreateSingleValueFilter(string propertyName, string operation, string value)
+            => $"filters=[{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":\"{value}\"}}}}]";
+
+        /// <summary>
+        /// Creates a filter expression for an array value operation.
+        /// </summary>
+        /// <param name="propertyName">The property name to filter on.</param>
+        /// <param name="operation">The filter operation (e.g., "in", "between").</param>
+        /// <param name="values">The array of filter values.</param>
+        /// <returns>A formatted filter expression string.</returns>
+        protected static string CreateArrayValueFilter(string propertyName, string operation, string[] values, bool addQuotes = true)
         {
-            StartTimestamp = startTimestamp;
-            EndTimestamp = endTimestamp;
+            var quotedValues = addQuotes ? values.Select(v => $"\"{v}\"") : values;
+            return $"filters=[{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":[{string.Join(", ", quotedValues)}]}}}}]";
         }
     }
+
+    /// <summary>
+    /// Provides filtering capabilities for event subscriptions by application name.
+    /// </summary>
+    public sealed class ApplicationFilter : EventSubscriptionFilter
+    {
+        private ApplicationFilter(string filterExpression) : base(filterExpression) { }
+
+        /// <summary>
+        /// Creates a filter that matches event subscriptions from any of the specified applications.
+        /// </summary>
+        /// <param name="applicationNames">The application names to filter by.</param>
+        /// <returns>An application filter for the specified names.</returns>
+        /// <exception cref="ArgumentException">Thrown when applicationNames is empty or contains null/empty values.</exception>
+        public static ApplicationFilter In(params string[] applicationNames)
+        {
+            if (applicationNames == null || applicationNames?.Length == 0)
+                throw new ArgumentException("At least one application name must be provided.", nameof(applicationNames));
+
+            if (applicationNames.Any(string.IsNullOrEmpty))
+                throw new ArgumentException("Application name cannot be null or empty.", nameof(applicationNames));
+
+            return new ApplicationFilter(CreateArrayValueFilter("application", "in", applicationNames));
+        }
+
+        /// <summary>
+        /// Creates a filter that matches event subscriptions from a specific application.
+        /// </summary>
+        /// <param name="applicationName">The application name to filter by.</param>
+        /// <returns>An application filter for the specified name.</returns>
+        /// <exception cref="ArgumentException">Thrown when applicationName is null or empty.</exception>
+        public static ApplicationFilter Equal(string applicationName)
+        {
+            if (string.IsNullOrWhiteSpace(applicationName))
+                throw new ArgumentException("Application name cannot be null or empty.", nameof(applicationName));
+
+            return new ApplicationFilter(CreateSingleValueFilter("application", "=", applicationName));
+        }
+    }
+
+    /// <summary>
+    /// Provides filtering capabilities for event subscriptions by creation date range.
+    /// </summary>
+    public sealed class DateRangeFilter : EventSubscriptionFilter
+    {
+        private DateRangeFilter(string filterExpression) : base(filterExpression) { }
+
+        /// <summary>
+        /// Creates a filter for event subscriptions created between the specified timestamp range.
+        /// </summary>
+        /// <param name="fromTimestamp">The start timestamp (Unix seconds, inclusive).</param>
+        /// <param name="toTimestamp">The end timestamp (Unix seconds, inclusive).</param>
+        /// <returns>A date range filter for the specified period.</returns>
+        /// <exception cref="ArgumentException">Thrown when fromTimestamp is greater than toTimestamp.</exception>
+        public static DateRangeFilter Between(long fromTimestamp, long toTimestamp)
+        {
+            if (fromTimestamp > toTimestamp)
+                throw new ArgumentException("From timestamp cannot be greater than to timestamp.", nameof(fromTimestamp));
+
+            return new DateRangeFilter(CreateArrayValueFilter("date", "between", new[] { fromTimestamp.ToString(), toTimestamp.ToString() }, addQuotes: false));
+        }
+
+        /// <summary>
+        /// Creates a filter for event subscriptions created between the specified date range.
+        /// </summary>
+        /// <param name="from">The start date of the range (inclusive).</param>
+        /// <param name="to">The end date of the range (inclusive).</param>
+        /// <returns>A date range filter for the specified period.</returns>
+        /// <exception cref="ArgumentException">Thrown when fromDate is greater than toDate.</exception>
+        public static DateRangeFilter Between(DateTime from, DateTime to)
+        {
+            var fromTimestamp = ((DateTimeOffset)from).ToUnixTimeSeconds();
+            var toTimestamp = ((DateTimeOffset)to).ToUnixTimeSeconds();
+            return Between(fromTimestamp, toTimestamp);
+        }
+    }
+
+    /// <summary>
+    /// Provides filtering capabilities for event subscriptions by entity ID pattern matching.
+    /// </summary>
+    public sealed class EntityIdFilter : EventSubscriptionFilter
+    {
+        private EntityIdFilter(string filterExpression) : base(filterExpression) { }
+
+        /// <summary>
+        /// Creates a filter that matches entity IDs containing the specified pattern.
+        /// </summary>
+        /// <param name="pattern">The pattern to search for in entity IDs.</param>
+        /// <returns>An entity ID filter for the specified pattern.</returns>
+        /// <exception cref="ArgumentException">Thrown when pattern is null or empty.</exception>
+        public static EntityIdFilter Like(string pattern)
+        {
+            if (string.IsNullOrEmpty(pattern))
+                throw new ArgumentException("Pattern cannot be null or empty.", nameof(pattern));
+
+            return new EntityIdFilter(CreateSingleValueFilter("entity_id", "like", pattern));
+        }
+    }
+
+    /// <summary>
+    /// Provides filtering capabilities for event subscriptions by callback URL pattern matching.
+    /// </summary>
+    public sealed class CallbackUrlFilter : EventSubscriptionFilter
+    {
+        private CallbackUrlFilter(string filterExpression) : base(filterExpression) { }
+
+        /// <summary>
+        /// Creates a filter that matches callback URLs containing the specified pattern.
+        /// </summary>
+        /// <param name="urlPattern">The URL pattern to search for in callback URLs.</param>
+        /// <returns>A callback URL filter for the specified pattern.</returns>
+        /// <exception cref="ArgumentException">Thrown when urlPattern is null or empty.</exception>
+        public static CallbackUrlFilter Like(string urlPattern)
+        {
+            if (string.IsNullOrEmpty(urlPattern))
+                throw new ArgumentException("URL pattern cannot be null or empty.", nameof(urlPattern));
+
+            return new CallbackUrlFilter(CreateSingleValueFilter("callback_url", "like", urlPattern));
+        }
+    }
+
+    /// <summary>
+    /// Provides filtering capabilities for event subscriptions by event type.
+    /// </summary>
+    public sealed class EventTypeFilter : EventSubscriptionFilter
+    {
+        private EventTypeFilter(string filterExpression) : base(filterExpression) { }
+
+        /// <summary>
+        /// Creates a filter that matches any of the specified event types.
+        /// </summary>
+        /// <param name="eventTypes">The event types to filter by.</param>
+        /// <returns>An event type filter for the specified types.</returns>
+        /// <exception cref="ArgumentException">Thrown when eventTypes is null or empty.</exception>
+        public static EventTypeFilter In(params EventType[] eventTypes)
+        {
+            if (eventTypes == null || eventTypes?.Length == 0)
+                throw new ArgumentException("At least one event type must be provided.", nameof(eventTypes));
+
+            var enumValues = eventTypes.Select(eventType =>
+            {
+                var enumValueInfo = eventType.GetType().GetMember(eventType.ToString()).First();
+                return enumValueInfo.GetCustomAttribute<EnumMemberAttribute>().Value;
+            });
+
+            return new EventTypeFilter(CreateArrayValueFilter("event", "in", enumValues.ToArray()));
+        }
+    }
+
 }

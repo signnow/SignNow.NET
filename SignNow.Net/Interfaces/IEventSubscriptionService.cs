@@ -31,7 +31,7 @@ namespace SignNow.Net.Interfaces
 
         /// <summary>
         /// Gets a filtered and sorted list of event subscriptions with enhanced query options.
-        /// Supports filtering by entity ID, callback URL, date range, event types, and applications,
+        /// Supports filtering by entity ID, callback URL, date, event types, and applications,
         /// as well as sorting by creation date, event type, or application name.
         /// </summary>
         /// <param name="options">Enhanced query options for filtering and sorting</param>
