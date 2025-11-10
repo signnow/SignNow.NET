@@ -175,7 +175,7 @@ namespace UnitTests.Requests
             };
 
             Assert.AreEqual(
-                "filters=[{\"application\":{\"type\": \"in\", \"value\":[\"App1\", \"App2\"]}}]&filters=[{\"event\":{\"type\": \"in\", \"value\":[\"document.complete\"]}}]&sort[created]=desc&page=1",
+                "filters=[{\"application\":{\"type\": \"in\", \"value\":[\"App1\", \"App2\"]}}, {\"event\":{\"type\": \"in\", \"value\":[\"document.complete\"]}}]&sort[created]=desc&page=1",
                 options.ToQueryString()
             );
         }

@@ -78,14 +78,28 @@ namespace SignNow.Net.Model.Requests
         {
             var parameters = new List<string>();
 
-            var filters = new List<EventSubscriptionFilter> { ApplicationFilter, DateFilter, EntityIdFilter, CallbackUrlFilter, EventTypeFilter };
-            parameters.AddRange(filters.Select(f => f?.FilterExpression));
+            var filters = new List<EventSubscriptionFilter> { ApplicationFilter, DateFilter, EntityIdFilter, CallbackUrlFilter, EventTypeFilter }
+                .Where(f => f != null)
+                .Select(f => f?.FilterExpression);
+            if(filters.Count() > 0)
+            {
+                parameters.Add($"filters=[{string.Join(", ", filters)}]");
+            }
 
-            parameters.Add(Sort("application", SortByApplication));
+            if (SortByApplication.HasValue)
+            {
+                parameters.Add(Sort("application", SortByApplication.Value));
+            }
 
-            parameters.Add(Sort("created", SortByCreated));
+            if (SortByCreated.HasValue)
+            {
+                parameters.Add(Sort("created", SortByCreated.Value));
+            }
 
-            parameters.Add(Sort("event", SortByEvent));
+            if (SortByEvent.HasValue)
+            {
+                parameters.Add(Sort("event", SortByEvent.Value));
+            }
 
             if (Page.HasValue)
             {
@@ -102,17 +116,13 @@ namespace SignNow.Net.Model.Requests
                 parameters.Add($"include_event_count={IncludeEventCount.Value.ToString().ToLower()}");
             }
 
-            return string.Join("&", parameters.Where(p => p != null));
+            return string.Join("&", parameters);
         }
 
-        private string Sort(string propertyName, SortOrder? sortOrder)
+        private string Sort(string propertyName, SortOrder sortOrder)
         {
-            if (sortOrder.HasValue)
-            {
-                var sortOrderStr = sortOrder.Value == SortOrder.Ascending ? "asc" : "desc";
-                return $"sort[{propertyName}]={sortOrderStr}";
-            }
-            return null;
+            var sortOrderStr = sortOrder == SortOrder.Ascending ? "asc" : "desc";
+            return $"sort[{propertyName}]={sortOrderStr}";
         }
     }
 
@@ -145,7 +155,7 @@ namespace SignNow.Net.Model.Requests
         /// <param name="value">The filter value.</param>
         /// <returns>A formatted filter expression string.</returns>
         protected static string CreateSingleValueFilter(string propertyName, string operation, string value)
-            => $"filters=[{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":\"{value}\"}}}}]";
+            => $"{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":\"{value}\"}}}}";
 
         /// <summary>
         /// Creates a filter expression for an array value operation.
@@ -157,7 +167,7 @@ namespace SignNow.Net.Model.Requests
         protected static string CreateArrayValueFilter(string propertyName, string operation, string[] values, bool addQuotes = true)
         {
             var quotedValues = addQuotes ? values.Select(v => $"\"{v}\"") : values;
-            return $"filters=[{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":[{string.Join(", ", quotedValues)}]}}}}]";
+            return $"{{\"{propertyName}\":{{\"type\": \"{operation}\", \"value\":[{string.Join(", ", quotedValues)}]}}}}";
         }
     }
 

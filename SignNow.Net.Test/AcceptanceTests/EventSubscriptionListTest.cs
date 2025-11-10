@@ -31,6 +31,13 @@ namespace AcceptanceTests
             var response = await SignNowTestContext.Events
                 .GetEventSubscriptionsListAsync(options);
 
+            Assert.AreEqual(
+                $"filters=[{{\"entity_id\":{{\"type\": \"like\", \"value\":\"{TestPdfDocumentId}\"}}}}, " +
+                $"{{\"callback_url\":{{\"type\": \"like\", \"value\":\"docs.signnow\"}}}}, " +
+                $"{{\"event\":{{\"type\": \"in\", \"value\":[\"document.freeform.signed\"]}}}}]" +
+                $"&sort[created]=desc&page=1&per_page=5",
+                options.ToQueryString()
+            );
             Assert.AreEqual(5, response.Meta.Pagination.PerPage);
             Assert.IsTrue(response.Data.Count > 0);
             var subscription = response.Data.First();
