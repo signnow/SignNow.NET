@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
 ### Added
-- `IEventSubscriptionService.GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions with pagination, date range filtering, event type filtering, application filtering, entity filtering, and callback URL filtering
+- `GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions
 
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
