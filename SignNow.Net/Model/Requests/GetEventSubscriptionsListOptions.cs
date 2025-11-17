@@ -203,12 +203,8 @@ namespace SignNow.Net.Model.Requests
         /// <param name="fromTimestamp">The start timestamp (Unix seconds, inclusive).</param>
         /// <param name="toTimestamp">The end timestamp (Unix seconds, inclusive).</param>
         /// <returns>A date range filter for the specified period.</returns>
-        /// <exception cref="ArgumentException">Thrown when fromTimestamp is greater than toTimestamp.</exception>
         public static DateRangeFilter Between(long fromTimestamp, long toTimestamp)
         {
-            if (fromTimestamp > toTimestamp)
-                throw new ArgumentException("From timestamp cannot be greater than to timestamp.", nameof(fromTimestamp));
-
             return new DateRangeFilter(CreateArrayValueFilter("date", "between", new[] { fromTimestamp.ToString(), toTimestamp.ToString() }, addQuotes: false));
         }
 
@@ -218,7 +214,6 @@ namespace SignNow.Net.Model.Requests
         /// <param name="from">The start date of the range (inclusive).</param>
         /// <param name="to">The end date of the range (inclusive).</param>
         /// <returns>A date range filter for the specified period.</returns>
-        /// <exception cref="ArgumentException">Thrown when fromDate is greater than toDate.</exception>
         public static DateRangeFilter Between(DateTime from, DateTime to)
         {
             var fromTimestamp = ((DateTimeOffset)from).ToUnixTimeSeconds();
@@ -239,11 +234,11 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         /// <param name="pattern">The pattern to search for in entity IDs.</param>
         /// <returns>An entity ID filter for the specified pattern.</returns>
-        /// <exception cref="ArgumentException">Thrown when pattern is null or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown when pattern is null.</exception>
         public static EntityIdFilter Like(string pattern)
         {
-            if (string.IsNullOrEmpty(pattern))
-                throw new ArgumentException("Pattern cannot be null or empty.", nameof(pattern));
+            if (pattern == null)
+                throw new ArgumentException("Pattern cannot be null.", nameof(pattern));
 
             return new EntityIdFilter(CreateSingleValueFilter("entity_id", "like", pattern));
         }
@@ -261,11 +256,11 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         /// <param name="urlPattern">The URL pattern to search for in callback URLs.</param>
         /// <returns>A callback URL filter for the specified pattern.</returns>
-        /// <exception cref="ArgumentException">Thrown when urlPattern is null or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown when urlPattern is null.</exception>
         public static CallbackUrlFilter Like(string urlPattern)
         {
-            if (string.IsNullOrEmpty(urlPattern))
-                throw new ArgumentException("URL pattern cannot be null or empty.", nameof(urlPattern));
+            if (urlPattern == null)
+                throw new ArgumentException("URL pattern cannot be null.", nameof(urlPattern));
 
             return new CallbackUrlFilter(CreateSingleValueFilter("callback_url", "like", urlPattern));
         }
@@ -283,11 +278,11 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         /// <param name="eventTypes">The event types to filter by.</param>
         /// <returns>An event type filter for the specified types.</returns>
-        /// <exception cref="ArgumentException">Thrown when eventTypes is null or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown when eventTypes is null.</exception>
         public static EventTypeFilter In(params EventType[] eventTypes)
         {
-            if (eventTypes == null || eventTypes?.Length == 0)
-                throw new ArgumentException("At least one event type must be provided.", nameof(eventTypes));
+            if (eventTypes == null)
+                throw new ArgumentException("EventTypes could not be null.", nameof(eventTypes));
 
             var enumValues = eventTypes.Select(eventType =>
             {

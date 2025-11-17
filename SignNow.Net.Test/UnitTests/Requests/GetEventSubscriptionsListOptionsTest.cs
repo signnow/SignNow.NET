@@ -85,52 +85,63 @@ namespace UnitTests.Requests
         }
 
         [TestMethod]
-        public void Between_WithFromDateGreaterThanToDate_ThrowsArgumentException()
+        public void Between_WithFromDateGreaterThanToDate_NoException() // current SignNow API behaviour
         {
             var fromDate = new DateTime(2023, 12, 31, 23, 59, 59, DateTimeKind.Utc);
             var toDate = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var options = new GetEventSubscriptionsListOptions
+            {
+                DateFilter = DateRangeFilter.Between(fromDate, toDate)
+            };
 
-            Assert.ThrowsException<ArgumentException>(() => DateRangeFilter.Between(fromDate, toDate));
+            var fromTimestamp = new DateTimeOffset(fromDate).ToUnixTimeSeconds();
+            var toTimestamp = new DateTimeOffset(toDate).ToUnixTimeSeconds();
+            Assert.AreEqual(
+                $"filters=[{{\"date\":{{\"type\": \"between\", \"value\":[{fromTimestamp}, {toTimestamp}]}}}}]",
+                options.ToQueryString()
+            );
         }
         #endregion
 
         #region EntityIdFilter Tests
         [TestMethod]
-        public void ToQueryString_EntitytIdFilterDataProviderFilters_ReturnsCorrectFormat()
+        [DataRow("")]
+        [DataRow("abcd")]
+        public void ToQueryString_EntitytIdFilterDataProviderFilters_ReturnsCorrectFormat(string likeExpression)
         {
             var options = new GetEventSubscriptionsListOptions
             {
-                EntityIdFilter = EntityIdFilter.Like("abcd")
+                EntityIdFilter = EntityIdFilter.Like(likeExpression)
             };
 
-            Assert.AreEqual("filters=[{\"entity_id\":{\"type\": \"like\", \"value\":\"abcd\"}}]", options.ToQueryString());
+            Assert.AreEqual($"filters=[{{\"entity_id\":{{\"type\": \"like\", \"value\":\"{likeExpression}\"}}}}]", options.ToQueryString());
         }
 
         [TestMethod]
         public void EntityIdFilter_WithNullOrEmpty_ThrowsArgumentException()
         {
             Assert.ThrowsException<ArgumentException>(() => EntityIdFilter.Like(null));
-            Assert.ThrowsException<ArgumentException>(() => EntityIdFilter.Like(""));
         }
         #endregion
 
         #region CallbackUrlFilter Tests
         [TestMethod]
-        public void CallbackUrlFilter_EntitytIdFilterDataProviderFilters_ReturnsCorrectFormat()
+        [DataRow("")]
+        [DataRow("example.com/webhook")]
+        public void CallbackUrlFilter_EntitytIdFilterDataProviderFilters_ReturnsCorrectFormat(string urlExpression)
         {
             var options = new GetEventSubscriptionsListOptions
             {
-                CallbackUrlFilter = CallbackUrlFilter.Like("example.com/webhook")
+                CallbackUrlFilter = CallbackUrlFilter.Like(urlExpression)
             };
 
-            Assert.AreEqual("filters=[{\"callback_url\":{\"type\": \"like\", \"value\":\"example.com/webhook\"}}]", options.ToQueryString());
+            Assert.AreEqual($"filters=[{{\"callback_url\":{{\"type\": \"like\", \"value\":\"{urlExpression}\"}}}}]", options.ToQueryString());
         }
 
         [TestMethod]
         public void CallbackUrlFilter_WithNullOrEmpty_ThrowsArgumentException()
         {
             Assert.ThrowsException<ArgumentException>(() => CallbackUrlFilter.Like(null));
-            Assert.ThrowsException<ArgumentException>(() => CallbackUrlFilter.Like(""));
         }
         #endregion
 
@@ -147,9 +158,19 @@ namespace UnitTests.Requests
         }
 
         [TestMethod]
+        public void EventTypeFilter_WithEmptyArrayOfEventTypes_ReturnsCorrectFilter()
+        {
+            var options = new GetEventSubscriptionsListOptions
+            {
+                EventTypeFilter = EventTypeFilter.In()
+            };
+
+            Assert.AreEqual("filters=[{\"event\":{\"type\": \"in\", \"value\":[]}}]", options.ToQueryString());
+        }
+
+        [TestMethod]
         public void EventTypeFilter_IsNull_ThrowsArgumentException()
         {
-            Assert.ThrowsException<ArgumentException>(() => EventTypeFilter.In());
             Assert.ThrowsException<ArgumentException>(() => EventTypeFilter.In(null));
         }
         #endregion
