@@ -17,7 +17,7 @@ namespace AcceptanceTests
         {
             await SignNowTestContext.Events.CreateEventSubscriptionAsync(
                 new CreateEventSubscription(EventType.DocumentFreeformSigned, TestPdfDocumentId, new Uri("https://docs.signnow.com"))
-            );
+            ).ConfigureAwait(false);
 
             var options = new GetEventSubscriptionsListOptions
             {
@@ -29,7 +29,8 @@ namespace AcceptanceTests
                 SortByCreated = SortOrder.Descending
             };
             var response = await SignNowTestContext.Events
-                .GetEventSubscriptionsListAsync(options);
+                .GetEventSubscriptionsListAsync(options)
+                .ConfigureAwait(false);
 
             Assert.AreEqual(
                 $"filters=[{{\"entity_id\":{{\"type\": \"like\", \"value\":\"{TestPdfDocumentId}\"}}}}, " +
@@ -47,7 +48,9 @@ namespace AcceptanceTests
             Assert.AreEqual(true, subscription.Active);
 
             // todo: update to v2 DeleteEventSubscription
-            await SignNowTestContext.Events.DeleteEventSubscriptionAsync(response.Data.First().Id);
+            await SignNowTestContext.Events
+                .DeleteEventSubscriptionAsync(response.Data.First().Id)
+                .ConfigureAwait(false);
         }
     }
 }

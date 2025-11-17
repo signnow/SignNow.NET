@@ -19,13 +19,14 @@ namespace SignNow.Net.Examples
         public async Task Initialize()
         {
             var uploadResponse = await testContext.Documents
-                .UploadDocumentAsync(File.OpenRead(PdfWithoutFields), "Test.Pdf");
+                .UploadDocumentAsync(File.OpenRead(PdfWithoutFields), "Test.Pdf")
+                .ConfigureAwait(false);
 
             testDocumentId = uploadResponse.Id;
 
             await testContext.Events.CreateEventSubscriptionAsync(
                 new CreateEventSubscription(EventType.DocumentFreeformSigned, testDocumentId, new Uri("https://example.com"))
-            );
+            ).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -46,7 +47,8 @@ namespace SignNow.Net.Examples
             };
 
             var basicResponse = await testContext.Events
-                .GetEventSubscriptionsListAsync(options);
+                .GetEventSubscriptionsListAsync(options)
+                .ConfigureAwait(false);
 
             Console.WriteLine($"Total event subscriptions: {basicResponse.Meta.Pagination.Total}");
             Console.WriteLine($"Showing page {basicResponse.Meta.Pagination.CurrentPage} of {basicResponse.Meta.Pagination.TotalPages}");
@@ -66,7 +68,8 @@ namespace SignNow.Net.Examples
             };
 
             var eventTypeResponse = await testContext.Events
-                .GetEventSubscriptionsListAsync(eventTypeOptions);
+                .GetEventSubscriptionsListAsync(eventTypeOptions)
+                .ConfigureAwait(false);
 
             Console.WriteLine($"Found {eventTypeResponse.Data.Count} subscriptions for document events");
             foreach (var subscription in eventTypeResponse.Data.Take(3))
@@ -85,7 +88,8 @@ namespace SignNow.Net.Examples
             };
 
             var searchResponse = await testContext.Events
-                .GetEventSubscriptionsListAsync(searchOptions);
+                .GetEventSubscriptionsListAsync(searchOptions)
+                .ConfigureAwait(false);
 
             Console.WriteLine($"Found {searchResponse.Data.Count} subscriptions matching 'signnow'");
             foreach (var subscription in searchResponse.Data.Take(3))
@@ -106,7 +110,8 @@ namespace SignNow.Net.Examples
             };
 
             var dateResponse = await testContext.Events
-                .GetEventSubscriptionsListAsync(dateOptions);
+                .GetEventSubscriptionsListAsync(dateOptions)
+                .ConfigureAwait(false);
 
             Console.WriteLine($"Found {dateResponse.Data.Count} subscriptions created in the last 30 days");
             foreach (var subscription in dateResponse.Data.Take(3))
@@ -125,7 +130,8 @@ namespace SignNow.Net.Examples
         public async Task Cleanup()
         {
             await testContext.Events
-                .DeleteEventSubscriptionAsync(eventId);
+                .DeleteEventSubscriptionAsync(eventId)
+                .ConfigureAwait(false);
 
             DeleteTestDocument(testDocumentId);
         }
