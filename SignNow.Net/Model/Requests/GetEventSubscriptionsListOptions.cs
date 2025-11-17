@@ -183,9 +183,12 @@ namespace SignNow.Net.Model.Requests
         /// </summary>
         /// <param name="applicationNames">The application names to filter by.</param>
         /// <returns>An application filter for the specified names.</returns>
-        /// <exception cref="ArgumentException">Thrown when applicationNames is empty or contains null/empty values.</exception>
+        /// <exception cref="ArgumentException">Thrown when applicationNames is null.</exception>
         public static ApplicationFilter In(params string[] applicationNames)
         {
+            if (applicationNames == null)
+                throw new ArgumentException("Application names cannot be null.", nameof(applicationNames));
+
             return new ApplicationFilter(CreateArrayValueFilter("application", "in", applicationNames));
         }
     }

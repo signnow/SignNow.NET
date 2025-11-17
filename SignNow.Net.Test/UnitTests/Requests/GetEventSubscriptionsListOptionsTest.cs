@@ -64,6 +64,12 @@ namespace UnitTests.Requests
 
             Assert.AreEqual(expectedQuery, options.ToQueryString());
         }
+
+        [TestMethod]
+        public void ApplicationFilters_IsNull_ThrowsArgumentException()
+        {
+            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.In(null));
+        }
         #endregion
 
         #region DateFilter Tests
@@ -118,7 +124,7 @@ namespace UnitTests.Requests
         }
 
         [TestMethod]
-        public void EntityIdFilter_WithNullOrEmpty_ThrowsArgumentException()
+        public void EntityIdFilter_IsNull_ThrowsArgumentException()
         {
             Assert.ThrowsException<ArgumentException>(() => EntityIdFilter.Like(null));
         }
@@ -139,7 +145,7 @@ namespace UnitTests.Requests
         }
 
         [TestMethod]
-        public void CallbackUrlFilter_WithNullOrEmpty_ThrowsArgumentException()
+        public void CallbackUrlFilter_IsNull_ThrowsArgumentException()
         {
             Assert.ThrowsException<ArgumentException>(() => CallbackUrlFilter.Like(null));
         }
