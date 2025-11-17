@@ -77,7 +77,7 @@ namespace SignNow.Net.Model.Requests
         public string ToQueryString()
         {
             var parameters = new List<string>();
-
+            
             var filters = new List<EventSubscriptionFilter> { ApplicationFilter, DateFilter, EntityIdFilter, CallbackUrlFilter, EventTypeFilter }
                 .Where(f => f != null)
                 .Select(f => f?.FilterExpression);
@@ -186,27 +186,7 @@ namespace SignNow.Net.Model.Requests
         /// <exception cref="ArgumentException">Thrown when applicationNames is empty or contains null/empty values.</exception>
         public static ApplicationFilter In(params string[] applicationNames)
         {
-            if (applicationNames == null || applicationNames?.Length == 0)
-                throw new ArgumentException("At least one application name must be provided.", nameof(applicationNames));
-
-            if (applicationNames.Any(string.IsNullOrEmpty))
-                throw new ArgumentException("Application name cannot be null or empty.", nameof(applicationNames));
-
             return new ApplicationFilter(CreateArrayValueFilter("application", "in", applicationNames));
-        }
-
-        /// <summary>
-        /// Creates a filter that matches event subscriptions from a specific application.
-        /// </summary>
-        /// <param name="applicationName">The application name to filter by.</param>
-        /// <returns>An application filter for the specified name.</returns>
-        /// <exception cref="ArgumentException">Thrown when applicationName is null or empty.</exception>
-        public static ApplicationFilter Equal(string applicationName)
-        {
-            if (string.IsNullOrWhiteSpace(applicationName))
-                throw new ArgumentException("Application name cannot be null or empty.", nameof(applicationName));
-
-            return new ApplicationFilter(CreateSingleValueFilter("application", "=", applicationName));
         }
     }
 

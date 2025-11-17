@@ -48,7 +48,9 @@ namespace UnitTests.Requests
         #region ApplicationFilter Tests
         static IEnumerable<object[]> FilterDataProvider()
         {
-            yield return new object[] { ApplicationFilter.Equal("app"), "filters=[{\"application\":{\"type\": \"=\", \"value\":\"app\"}}]" };
+            yield return new object[] { ApplicationFilter.In(), "filters=[{\"application\":{\"type\": \"in\", \"value\":[]}}]" };
+            yield return new object[] { ApplicationFilter.In(""), "filters=[{\"application\":{\"type\": \"in\", \"value\":[\"\"]}}]" };
+            yield return new object[] { ApplicationFilter.In(null, "app2"), "filters=[{\"application\":{\"type\": \"in\", \"value\":[\"\", \"app2\"]}}]" };
             yield return new object[] { ApplicationFilter.In("app1", "app2"), "filters=[{\"application\":{\"type\": \"in\", \"value\":[\"app1\", \"app2\"]}}]" };
         }
         [DataTestMethod]
@@ -61,17 +63,6 @@ namespace UnitTests.Requests
             };
 
             Assert.AreEqual(expectedQuery, options.ToQueryString());
-        }
-
-        [TestMethod]
-        public void ApplicationFilters_WithNullOrEmptyValues_ThrowsArgumentException()
-        {
-            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.In());
-            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.In("app", ""));
-            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.In("app", null));
-
-            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.Equal(null));
-            Assert.ThrowsException<ArgumentException>(() => ApplicationFilter.Equal(""));
         }
         #endregion
 
