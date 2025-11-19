@@ -12,7 +12,15 @@ on:
       - '**'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
+      - 'develop'
+    paths-ignore:
+      - '**.md'
+    tags-ignore:
+      - '**'
+  pull_request_target:
+    branches:
+      - 'main'
       - 'develop'
     paths-ignore:
       - '**.md'
@@ -57,6 +65,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          # For pull_request_target (dependabot), checkout the PR head SHA
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.ref }}
 
       - name: Get SDK Version
         id: props
