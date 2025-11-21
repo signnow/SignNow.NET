@@ -30,6 +30,16 @@ namespace SignNow.Net.Interfaces
         Task<EventSubscriptionResponse> GetEventSubscriptionsAsync(IQueryToString options = default, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets a filtered and sorted list of event subscriptions with enhanced query options.
+        /// Supports filtering by entity ID, callback URL, date, event types, and applications,
+        /// as well as sorting by creation date, event type, or application name.
+        /// </summary>
+        /// <param name="options">Enhanced query options for filtering and sorting</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Filtered and sorted list of event subscriptions</returns>
+        Task<EventSubscriptionResponse> GetEventSubscriptionsListAsync(GetEventSubscriptionsListOptions options = default, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Allows users to get detailed info about one event subscription by its ID.
         /// </summary>
         /// <param name="eventId">Identity of event</param>

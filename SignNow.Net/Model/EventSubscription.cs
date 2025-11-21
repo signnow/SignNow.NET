@@ -26,8 +26,17 @@ namespace SignNow.Net.Model
         [JsonProperty("entity_id")]
         public int EntityId { get; set; }
 
+        /// <summary>
+        /// The unique ID of the event entity: "document_id", "user_id", "document_group_id", "template_id"
+        /// </summary>
         [JsonProperty("entity_unique_id", NullValueHandling = NullValueHandling.Ignore)]
         public string EntityUid { get; internal set; }
+
+        /// <summary>
+        /// HTTP request method used for the event subscription callback.
+        /// </summary>
+        [JsonProperty("request_method")]
+        public string RequestMethod { get; set; }
 
         /// <summary>
         /// Always only "callback"
@@ -35,11 +44,29 @@ namespace SignNow.Net.Model
         [JsonProperty("action")]
         public string Action { get; set; } = "callback";
 
+        /// <summary>
+        /// Indicates whether the event subscription is currently active.
+        /// </summary>
+        [JsonProperty("active")]
+        public bool? Active { get; set; }
+
+        /// <summary>
+        /// Additional attributes and configuration for the event subscription callback.
+        /// </summary>
         [JsonProperty("json_attributes")]
         public EventAttributes JsonAttributes { get; set; }
 
+        /// <summary>
+        /// Name of the application that created the event subscription.
+        /// </summary>
         [JsonProperty("application_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ApplicationName { get; set; }
+
+        /// <summary>
+        /// Version of the event subscription schema or API.
+        /// </summary>
+        [JsonProperty("version")]
+        public int? Version { get; set; }
 
         /// <summary>
         /// Timestamp document was created.
@@ -47,6 +74,18 @@ namespace SignNow.Net.Model
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Number of events that have triggered this subscription (if included in response).
+        /// </summary>
+        [JsonProperty("event_count")]
+        public int? EventCount { get; set; }
+
+        /// <summary>
+        /// Email address of the owner of the event subscription.
+        /// </summary>
+        [JsonProperty("event_subscription_owner_email")]
+        public string EventSubscriptionOwnerEmail { get; set; }
     }
 
     public class EventAttributes
