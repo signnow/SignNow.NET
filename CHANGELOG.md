@@ -8,8 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Added
 - `GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions
 - `GetEventSubscriptionByIdAsync` method for retrieving event subscription details by ID using the v2 event-subscriptions endpoint
-- `EntityType` property to `EventSubscription` model for better API response support
-- `DeleteAccessToken` property restored in `EventAttributes` model
 
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
