@@ -72,6 +72,15 @@ namespace SignNow.Net.Interfaces
         Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Deletes an event subscription using the v2 API endpoint.
+        /// This method uses Bearer token authentication and the new v2 endpoint structure.
+        /// </summary>
+        /// <param name="subscriptionId">The unique identifier of the event subscription to delete.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>A task representing the asynchronous delete operation.</returns>
+        Task DeleteEventSubscriptionV2Async(string subscriptionId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Allows users to get the list of webhook events (events history) by the event subscription ID.
         /// </summary>
         /// <param name="eventId">Specific event identity</param>
