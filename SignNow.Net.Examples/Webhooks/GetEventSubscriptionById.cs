@@ -9,24 +9,24 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class GetEventSubscriptionById : ExamplesBase
+    public class GetEventSubscriptionById : ExamplesBase
     {
         /// <summary>
         /// Gets subscription info by subscription ID using the v2 event-subscriptions endpoint.
         /// This example demonstrates how to create an event subscription and then retrieve its details using the subscription ID.
         /// </summary>
-        /// <see cref="https://docs.signnow.com/docs/signnow/branches/v1.2/reference/operations/get-v2-event-subscriptions-subscription_id"/>
+        /// <see cref="https://docs.signnow.com/docs/signnow/manage-event-subscriptions/operations/get-a-v-2-event-subscription"/>
         [TestMethod]
         public async Task GetEventSubscriptionByIdAsync()
         {
             // Upload document with fields
-            await using var fileStream = File.OpenRead(PdfWithSignatureField);
+            await using var fileStream = File.OpenRead(PdfWithoutFields);
             var document = await testContext.Documents
                 .UploadDocumentWithFieldExtractAsync(fileStream, "DocumentForEventSubscriptionById.pdf")
                 .ConfigureAwait(false);
 
             // Create event subscription for document update event
-            var callbackUrl = new Uri("https://example.com/webhook/handler");
+            var callbackUrl = new Uri($"https://example.com/{Guid.NewGuid()}"); // generate uniquie id which we will use to find the event subscription
             await testContext.Events
                 .CreateEventSubscriptionAsync(new CreateEventSubscription(EventType.DocumentUpdate, document.Id, callbackUrl))
                 .ConfigureAwait(false);
@@ -34,16 +34,14 @@ namespace SignNow.Net.Examples
             // Get the list of event subscriptions to find our created subscription
             var eventSubscriptions = await testContext.Events
                 .GetEventSubscriptionsListAsync(new GetEventSubscriptionsListOptions 
-                { 
-                    EntityIdFilter = EntityIdFilter.Like(document.Id),
-                    EventTypeFilter = EventTypeFilter.In(EventType.DocumentUpdate),
-                    PerPage = 1 
+                {
+                    CallbackUrlFilter = CallbackUrlFilter.Like(callbackUrl.ToString())
                 })
                 .ConfigureAwait(false);
 
-            Assert.IsTrue(eventSubscriptions.Data.Count > 0, "Should have at least one event subscription");
+            var createdSubscription = eventSubscriptions.Data.FirstOrDefault();
+            Assert.IsNotNull(createdSubscription, "Should have at least one event subscription");
 
-            var createdSubscription = eventSubscriptions.Data.First();
             var subscriptionId = createdSubscription.Id;
 
             // Use GetEventSubscriptionByIdAsync to get subscription details
@@ -58,19 +56,18 @@ namespace SignNow.Net.Examples
             Assert.AreEqual(document.Id, retrievedSubscription.EntityUid);
             Assert.AreEqual("post", retrievedSubscription.RequestMethod);
             Assert.AreEqual("callback", retrievedSubscription.Action);
+            Assert.AreEqual(EventSubscriptionEntityType.Document, retrievedSubscription.EntityType);
             Assert.IsNotNull(retrievedSubscription.JsonAttributes);
             Assert.AreEqual(callbackUrl, retrievedSubscription.JsonAttributes.CallbackUrl);
-            Assert.IsTrue(retrievedSubscription.Created > DateTime.MinValue);
 
-            // The retrieved subscription should have additional properties from the v2 API response
-            // such as entity_type that may not be available in other endpoints
             Console.WriteLine($"Subscription ID: {retrievedSubscription.Id}");
             Console.WriteLine($"Entity Type: {retrievedSubscription.EntityType}");
             Console.WriteLine($"Event Type: {retrievedSubscription.Event}");
             Console.WriteLine($"Callback URL: {retrievedSubscription.JsonAttributes.CallbackUrl}");
             Console.WriteLine($"Created: {retrievedSubscription.Created}");
 
-            // Clean up: Delete the event subscription and document
+            // todo: update to v2 DeleteEventSubscription
+            // Clean up
             await testContext.Events
                 .DeleteEventSubscriptionAsync(subscriptionId)
                 .ConfigureAwait(false);
