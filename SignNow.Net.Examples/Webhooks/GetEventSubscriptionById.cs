@@ -8,8 +8,7 @@ using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Examples
 {
-    [TestClass]
-    public class GetEventSubscriptionById : ExamplesBase
+    public partial class EventSubscriptionExamples : ExamplesBase
     {
         /// <summary>
         /// Gets subscription info by subscription ID using the v2 event-subscriptions endpoint.

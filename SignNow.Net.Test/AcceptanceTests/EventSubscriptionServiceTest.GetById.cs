@@ -9,8 +9,7 @@ using UnitTests;
 
 namespace AcceptanceTests
 {
-    [TestClass]
-    public class EventSubscriptionGetByIdTest : AuthorizedApiTestBase
+    public partial class EventSubscriptionServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
         public async Task GetEventSubscriptionByIdAsync_ReturnsSubscriptionDetails()

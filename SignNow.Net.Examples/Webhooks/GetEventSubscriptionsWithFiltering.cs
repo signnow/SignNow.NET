@@ -9,8 +9,7 @@ using SignNow.Net.Model.Requests.GetFolderQuery;
 
 namespace SignNow.Net.Examples
 {
-    [TestClass]
-    public partial class GetEventSubscriptionsWithFiltering : ExamplesBase
+    public partial class EventSubscriptionExamples : ExamplesBase
     {
         private string testDocumentId;
         private string eventId;
