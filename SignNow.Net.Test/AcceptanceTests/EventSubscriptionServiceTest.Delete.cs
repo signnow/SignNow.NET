@@ -10,8 +10,7 @@ using UnitTests;
 
 namespace AcceptanceTests
 {
-    [TestClass]
-    public class EventSubscriptionDeleteTest : AuthorizedApiTestBase
+    public partial class EventSubscriptionServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
         public async Task DeleteEventSubscriptionAsync_WithValidId_DeletesSuccessfully()

@@ -8,8 +8,7 @@ using SignNow.Net.Model.Requests;
 
 namespace SignNow.Net.Examples
 {
-    [TestClass]
-    public partial class DeleteEventSubscriptionExample : ExamplesBase
+    public partial class EventSubscriptionExamples : ExamplesBase
     {
         /// <summary>
         /// Demonstrates how to delete an event subscription using the SignNow .NET SDK.
