@@ -21,6 +21,12 @@ namespace SignNow.Net.Model
         public EventType Event { get; set; }
 
         /// <summary>
+        /// Entity type of the event subscription (e.g., "document", "user", "document_group", "template")
+        /// </summary>
+        [JsonProperty("entity_type")]
+        public string EntityType { get; set; }
+
+        /// <summary>
         /// The unique ID of the event: "document_id", "user_id", "document_group_id", "template_id"
         /// </summary>
         [JsonProperty("entity_id")]
@@ -90,13 +96,13 @@ namespace SignNow.Net.Model
 
     public class EventAttributes
     {
-        // /// <summary>
-        // /// Determines whether to keep access_token in the payload.
-        // /// If true, then we should delete access_token key from payload.
-        // /// If false, keep the access_token in payload attributes
-        // /// </summary>
-        // [JsonProperty("delete_access_token")]
-        // public bool DeleteAccessToken { get; set; } = true;
+        /// <summary>
+        /// Determines whether to keep access_token in the payload.
+        /// If true, then we should delete access_token key from payload.
+        /// If false, keep the access_token in payload attributes
+        /// </summary>
+        [JsonProperty("delete_access_token")]
+        public bool DeleteAccessToken { get; set; } = true;
 
         /// <summary>
         /// If true, 1.2 tls version will be used. If false, default tls version will be used.
