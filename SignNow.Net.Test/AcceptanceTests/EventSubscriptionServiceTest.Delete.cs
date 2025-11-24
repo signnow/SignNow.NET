@@ -15,13 +15,14 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task DeleteEventSubscriptionAsync_WithValidId_DeletesSuccessfully()
         {
+            var callbackUrl = new Uri($"https://example.com/delete-test{Faker.Random.Guid()}");
             await SignNowTestContext.Events.CreateEventSubscriptionAsync(
-                new CreateEventSubscription(EventType.DocumentComplete, TestPdfDocumentId, new Uri("https://example.com/delete-test"))
+                new CreateEventSubscription(EventType.DocumentComplete, TestPdfDocumentId, callbackUrl)
             ).ConfigureAwait(false);
 
             var options = new GetEventSubscriptionsListOptions
             {
-                EntityIdFilter = EntityIdFilter.Like(TestPdfDocumentId)
+                CallbackUrlFilter = CallbackUrlFilter.Like(callbackUrl.ToString())
             };
 
             var eventSubscriptions = await SignNowTestContext.Events
