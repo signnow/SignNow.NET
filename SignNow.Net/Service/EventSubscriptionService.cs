@@ -98,7 +98,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task<EventSubscription> GetEventSubscriptionByIdAsync(string subscriptionId, CancellationToken cancellationToken = default)
+        public async Task<EventSubscription> GetEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new GetHttpRequestOptions

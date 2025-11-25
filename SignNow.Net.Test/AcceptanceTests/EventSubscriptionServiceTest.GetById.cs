@@ -30,7 +30,7 @@ namespace AcceptanceTests
             Assert.IsNotNull(createdSubscription, "Should have at least one subscription");
 
             var retrievedSubscription = await SignNowTestContext.Events
-                .GetEventSubscriptionByIdAsync(createdSubscription.Id)
+                .GetEventSubscriptionAsync(createdSubscription.Id)
                 .ConfigureAwait(false);
 
             Assert.IsNotNull(retrievedSubscription);

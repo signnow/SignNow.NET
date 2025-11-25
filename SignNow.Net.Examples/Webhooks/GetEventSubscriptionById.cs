@@ -16,7 +16,7 @@ namespace SignNow.Net.Examples
         /// </summary>
         /// <see cref="https://docs.signnow.com/docs/signnow/manage-event-subscriptions/operations/get-a-v-2-event-subscription"/>
         [TestMethod]
-        public async Task GetEventSubscriptionByIdAsync()
+        public async Task GetEventSubscriptionAsync()
         {
             // Upload document with fields
             await using var fileStream = File.OpenRead(PdfWithoutFields);
@@ -45,7 +45,7 @@ namespace SignNow.Net.Examples
 
             // Use GetEventSubscriptionByIdAsync to get subscription details
             var retrievedSubscription = await testContext.Events
-                .GetEventSubscriptionByIdAsync(subscriptionId)
+                .GetEventSubscriptionAsync(subscriptionId)
                 .ConfigureAwait(false);
 
             // Verify the subscription details
