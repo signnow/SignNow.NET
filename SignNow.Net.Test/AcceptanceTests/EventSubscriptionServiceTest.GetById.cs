@@ -46,7 +46,7 @@ namespace AcceptanceTests
 
             // todo: update to v2 DeleteEventSubscription
             await SignNowTestContext.Events
-                .DeleteEventSubscriptionAsync(createdSubscription.Id)
+                .UnsubscribeEventSubscriptionAsync(createdSubscription.Id)
                 .ConfigureAwait(false);
         }
     }

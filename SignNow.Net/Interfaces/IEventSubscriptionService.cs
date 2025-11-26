@@ -69,7 +69,7 @@ namespace SignNow.Net.Interfaces
         /// <param name="eventId">Specific event identity</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
+        Task UnsubscribeEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an event subscription using the v2 API endpoint.

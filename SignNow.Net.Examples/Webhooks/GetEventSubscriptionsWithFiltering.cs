@@ -129,7 +129,7 @@ namespace SignNow.Net.Examples
         public async Task Cleanup()
         {
             await testContext.Events
-                .DeleteEventSubscriptionAsync(eventId)
+                .UnsubscribeEventSubscriptionAsync(eventId)
                 .ConfigureAwait(false);
 
             DeleteTestDocument(testDocumentId);
