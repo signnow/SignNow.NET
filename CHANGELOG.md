@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Added
 - `GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions
 - `GetEventSubscriptionAsync` method for retrieving event subscription details by ID using the v2 event-subscriptions endpoint
-- `DeleteEventSubscriptionV2Async` method for deleting event subscription
+- `DeleteEventSubscriptionAsync` method for deleting event subscription
 
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects

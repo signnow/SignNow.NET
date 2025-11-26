@@ -56,7 +56,7 @@ namespace SignNow.Net.Examples
             try
             {
                 await testContext.Events
-                    .DeleteEventSubscriptionV2Async(subscriptionToDelete.Id)
+                    .DeleteEventSubscriptionAsync(subscriptionToDelete.Id)
                     .ConfigureAwait(false);
 
                 Console.WriteLine($"✓ Successfully deleted event subscription: {subscriptionToDelete.Id}");
@@ -102,7 +102,7 @@ namespace SignNow.Net.Examples
             try
             {
                 await testContext.Events
-                    .DeleteEventSubscriptionV2Async(nonExistentId)
+                    .DeleteEventSubscriptionAsync(nonExistentId)
                     .ConfigureAwait(false);
 
                 Console.WriteLine("❌ Unexpected: Delete operation succeeded for non-existent ID");

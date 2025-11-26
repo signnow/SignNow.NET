@@ -33,7 +33,7 @@ namespace AcceptanceTests
             Assert.IsNotNull(subscriptionToDelete, "Test subscription event not found");
 
             await SignNowTestContext.Events
-                .DeleteEventSubscriptionV2Async(subscriptionToDelete.Id)
+                .DeleteEventSubscriptionAsync(subscriptionToDelete.Id)
                 .ConfigureAwait(false);
 
             var eventSubscriptionsAfterDelete = await SignNowTestContext.Events
@@ -50,7 +50,7 @@ namespace AcceptanceTests
 
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
                 async () => await SignNowTestContext.Events
-                    .DeleteEventSubscriptionV2Async(nonExistentId)
+                    .DeleteEventSubscriptionAsync(nonExistentId)
                     .ConfigureAwait(false)
             );
 

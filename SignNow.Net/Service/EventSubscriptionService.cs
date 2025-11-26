@@ -146,7 +146,7 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task DeleteEventSubscriptionV2Async(string subscriptionId, CancellationToken cancellationToken = default)
+        public async Task DeleteEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new DeleteHttpRequestOptions
