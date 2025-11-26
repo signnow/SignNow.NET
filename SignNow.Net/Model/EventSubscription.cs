@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
@@ -19,6 +20,13 @@ namespace SignNow.Net.Model
         [JsonProperty("event")]
         [JsonConverter(typeof(StringEnumConverter))]
         public EventType Event { get; set; }
+
+        /// <summary>
+        /// Entity type of the event subscription (e.g., "document", "user", "document_group", "template")
+        /// </summary>
+        [JsonProperty("entity_type")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EventSubscriptionEntityType EntityType { get; set; }
 
         /// <summary>
         /// The unique ID of the event: "document_id", "user_id", "document_group_id", "template_id"
@@ -150,5 +158,35 @@ namespace SignNow.Net.Model
 
         [JsonProperty("float_head")]
         public float FloatHead { get; set; }
+    }
+
+    /// <summary>
+    /// Represents the type of entity that an event subscription is associated with.
+    /// </summary>
+    public enum EventSubscriptionEntityType
+    {
+        /// <summary>
+        /// Event subscription is associated with a document entity.
+        /// </summary>
+        [EnumMember(Value = "document")]
+        Document,
+
+        /// <summary>
+        /// Event subscription is associated with a template entity.
+        /// </summary>
+        [EnumMember(Value = "template")]
+        Template,
+
+        /// <summary>
+        /// Event subscription is associated with a document group entity.
+        /// </summary>
+        [EnumMember(Value = "document_group")]
+        DocumentGroup,
+
+        /// <summary>
+        /// Event subscription is associated with a user entity.
+        /// </summary>
+        [EnumMember(Value = "user")]
+        User
     }
 }

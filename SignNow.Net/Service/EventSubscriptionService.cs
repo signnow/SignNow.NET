@@ -98,6 +98,23 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        public async Task<EventSubscription> GetEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{subscriptionId.ValidateId()}"),
+                Token = Token
+            };
+
+            var responseData = await SignNowClient
+                .RequestAsync<EventSubscriptionInfoResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+
+            return responseData.ResponseData;
+        }
+
+        /// <inheritdoc />
         public async Task<EventUpdateResponse> UpdateEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
