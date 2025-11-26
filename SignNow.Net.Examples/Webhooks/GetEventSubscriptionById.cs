@@ -68,7 +68,7 @@ namespace SignNow.Net.Examples
             // todo: update to v2 DeleteEventSubscription
             // Clean up
             await testContext.Events
-                .DeleteEventSubscriptionAsync(subscriptionId)
+                .UnsubscribeEventSubscriptionAsync(subscriptionId)
                 .ConfigureAwait(false);
 
             DeleteTestDocument(document.Id);
