@@ -47,6 +47,13 @@ namespace SignNow.Net.Model.Requests.EventSubscriptionBase
         [JsonProperty("headers", NullValueHandling = NullValueHandling.Ignore)]
         public EventAttributeHeaders Headers { get; set; }
 
+        // todo: check if used in basic event update
+        /// <summary>
+        /// Whether the payload of the webhook should include metadata.
+        /// </summary>
+        [JsonProperty("include_metadata")]
+        public bool IncludeMetadata { get; set; }
+
         /// <summary>
         /// Enables the HMAC security logic
         /// </summary>

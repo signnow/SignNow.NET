@@ -174,5 +174,22 @@ namespace SignNow.Net.Service
                 .RequestAsync<EventHistoryListResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task EditEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{updateEvent.Id.ValidateId()}"),
+                Content = updateEvent,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
