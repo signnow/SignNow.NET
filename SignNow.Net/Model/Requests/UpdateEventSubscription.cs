@@ -13,7 +13,6 @@ namespace SignNow.Net.Model.Requests
         [JsonIgnore]
         public string Id { get; private set; }
 
-        // todo: documentation
         public UpdateEventSubscription(EventType eventType, string entityId, string eventId, Uri callbackUrl)
         {
             Id = eventId.ValidateId();
