@@ -91,8 +91,8 @@ namespace SignNow.Net.Interfaces
         /// <summary>
         /// Allows to update an existing event subscription.
         /// </summary>
-        /// <param name="updateEvent">Event details for update</param>
+        /// <param name="editEvent">Event details for update</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        Task EditEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default);
+        Task EditEventSubscriptionAsync(EditEventSubscription editEvent, CancellationToken cancellationToken = default);
     }
 }

@@ -176,14 +176,14 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
-        public async Task EditEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default)
+        public async Task EditEventSubscriptionAsync(EditEventSubscription editEvent, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
 
             var requestOptions = new PutHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{updateEvent.Id.ValidateId()}"),
-                Content = updateEvent,
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{editEvent.Id.ValidateId()}"),
+                Content = editEvent,
                 Token = Token
             };
 

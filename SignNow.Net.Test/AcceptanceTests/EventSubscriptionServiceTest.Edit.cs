@@ -15,35 +15,26 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task EditEventSubscriptionAsync_WithValidOptions_EditsSuccessfully()
         {
-            var originalCallbackUrl = new Uri($"https://example.com/edit-test-original{Faker.Random.Guid()}");
-            var updatedCallbackUrl = new Uri($"https://example.com/edit-test-updated{Faker.Random.Guid()}");
+            var originalCallbackUrl = new Uri($"https://example.com/original-url/{Faker.Random.Guid()}"); // Guid is added, so we will be able to find only this event using CallbackUrlFilter
+            var updatedCallbackUrl = new Uri("https://example.com/updated-url");
 
-            // Create initial event subscription
             await SignNowTestContext.Events.CreateEventSubscriptionAsync(
                 new CreateEventSubscription(EventType.DocumentComplete, TestPdfDocumentId, originalCallbackUrl)
             ).ConfigureAwait(false);
 
-            // Find the created subscription
-            var options = new GetEventSubscriptionsListOptions
-            {
-                CallbackUrlFilter = CallbackUrlFilter.Like(originalCallbackUrl.ToString())
-            };
-
             var eventSubscriptions = await SignNowTestContext.Events
-                .GetEventSubscriptionsListAsync(options)
+                .GetEventSubscriptionsListAsync(new GetEventSubscriptionsListOptions {
+                    CallbackUrlFilter = CallbackUrlFilter.Like(originalCallbackUrl.ToString())
+                })
                 .ConfigureAwait(false);
 
             var subscriptionToEdit = eventSubscriptions.Data.FirstOrDefault();
+
             Assert.IsNotNull(subscriptionToEdit, "Test subscription event not found");
 
-            // Edit the event subscription
-            var updateRequest = new UpdateEventSubscription(
-                EventType.DocumentUpdate, 
-                TestPdfDocumentId,
-                subscriptionToEdit.Id,
-                updatedCallbackUrl)
+            var updateRequest = new EditEventSubscription(EventType.DocumentUpdate, TestPdfDocumentId, subscriptionToEdit.Id, updatedCallbackUrl)
             {
-                Attributes = new SignNow.Net.Model.Requests.EventSubscriptionBase.EventCreateAttributes
+                Attributes =
                 {
                     UseTls12 = true,
                     IncludeMetadata = true,
@@ -55,17 +46,16 @@ namespace AcceptanceTests
                 .EditEventSubscriptionAsync(updateRequest)
                 .ConfigureAwait(false);
 
-            // Verify the changes
             var updatedSubscription = await SignNowTestContext.Events
                 .GetEventSubscriptionAsync(subscriptionToEdit.Id)
                 .ConfigureAwait(false);
 
             Assert.AreEqual(EventType.DocumentUpdate, updatedSubscription.Event, "Event type should be updated");
             Assert.AreEqual(updatedCallbackUrl, updatedSubscription.JsonAttributes.CallbackUrl, "Callback URL should be updated");
-            Assert.AreEqual(true, updatedSubscription.JsonAttributes.UseTls12, "UseTls12 should be updated");
-            Assert.AreEqual(true, updatedSubscription.JsonAttributes.DocIdQueryParam, "DocIdQueryParam should be updated");
+            Assert.IsTrue(updatedSubscription.JsonAttributes.UseTls12, "UseTls12 should be updated to true");
+            Assert.IsTrue(updatedSubscription.JsonAttributes.IncludeMetadata, "UseTls12 should be updated to true");
+            Assert.IsTrue(updatedSubscription.JsonAttributes.DocIdQueryParam, "DocIdQueryParam should be updated to true");
 
-            // Cleanup
             await SignNowTestContext.Events
                 .DeleteEventSubscriptionAsync(subscriptionToEdit.Id)
                 .ConfigureAwait(false);
@@ -75,7 +65,7 @@ namespace AcceptanceTests
         public async Task EditEventSubscriptionAsync_WithNonExistentId_ThrowsSignNowException()
         {
             var nonExistentId = "1234567890abcdef1234567890abcdef12345678";
-            var updateRequest = new UpdateEventSubscription(
+            var updateRequest = new EditEventSubscription(
                 EventType.DocumentComplete, 
                 TestPdfDocumentId,
                 nonExistentId,

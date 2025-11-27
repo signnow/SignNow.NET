@@ -139,6 +139,12 @@ namespace SignNow.Net.Model
         public EventAttributeHeaders Headers { get; set; }
 
         /// <summary>
+        /// Whether the payload of the webhook should include metadata.
+        /// </summary>
+        [JsonProperty("include_metadata", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? IncludeMetadata { get; set; }
+
+        /// <summary>
         /// Enables the HMAC security logic
         /// </summary>
         [JsonProperty("secret_key", NullValueHandling = NullValueHandling.Ignore)]
