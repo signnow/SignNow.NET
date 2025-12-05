@@ -87,12 +87,5 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Events History page</returns>
         Task<EventHistoryListResponse> GetEventHistoryAsync(string eventId, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Allows to update an existing event subscription.
-        /// </summary>
-        /// <param name="editEvent">Event details for update</param>
-        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
-        Task EditEventSubscriptionAsync(EditEventSubscription editEvent, CancellationToken cancellationToken = default);
     }
 }
