@@ -9,7 +9,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public class EditEventSubscriptionExample : ExamplesBase
+    public class UpdateEventSubscriptionExample : ExamplesBase
     {
         /// <summary>
         /// Edit an existing event subscription.
@@ -18,7 +18,7 @@ namespace SignNow.Net.Examples
         /// </summary>
         /// <see cref="https://docs.signnow.com/docs/signnow/manage-event-subscriptions/operations/update-a-v-2-event-subscription"/>
         [TestMethod]
-        public async Task EditEventSubscriptionAsync()
+        public async Task UpdateEventSubscriptionAsync()
         {
             // Upload document with fields
             await using var fileStream = File.OpenRead(PdfWithSignatureField);
@@ -45,7 +45,7 @@ namespace SignNow.Net.Examples
 
             // Edit the event subscription with new configuration
             var updatedCallbackUrl = new Uri("https://example.com/updated-webhook");
-            var editRequest = new EditEventSubscription(EventType.DocumentUpdate, document.Id, subscriptionToEdit.Id, updatedCallbackUrl)
+            var updateRequest = new UpdateEventSubscription(EventType.DocumentUpdate, document.Id, subscriptionToEdit.Id, updatedCallbackUrl)
             {
                 Attributes =
                 {
@@ -54,13 +54,13 @@ namespace SignNow.Net.Examples
                 }
             };
 
-            await testContext.Events
-                .EditEventSubscriptionAsync(editRequest)
+            var updateResponse = await testContext.Events
+                .UpdateEventSubscriptionAsync(updateRequest)
                 .ConfigureAwait(false);
 
             // Verify the changes
             var updatedSubscription = await testContext.Events
-                .GetEventSubscriptionAsync(subscriptionToEdit.Id)
+                .GetEventSubscriptionAsync(updateResponse.Id)
                 .ConfigureAwait(false);
 
             Assert.AreEqual(EventType.DocumentUpdate, updatedSubscription.Event);

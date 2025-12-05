@@ -13,7 +13,7 @@ namespace AcceptanceTests
     public partial class EventSubscriptionServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
-        public async Task EditEventSubscriptionAsync_WithValidOptions_EditsSuccessfully()
+        public async Task UpdateEventSubscriptionAsync_WithValidOptions_EditsSuccessfully()
         {
             var originalCallbackUrl = new Uri($"https://example.com/original-url/{Faker.Random.Guid()}"); // Guid is added, so we will be able to find only this event using CallbackUrlFilter
             var updatedCallbackUrl = new Uri("https://example.com/updated-url");
@@ -28,11 +28,11 @@ namespace AcceptanceTests
                 })
                 .ConfigureAwait(false);
 
-            var subscriptionToEdit = eventSubscriptions.Data.FirstOrDefault();
+            var subscriptionToUpdate = eventSubscriptions.Data.FirstOrDefault();
 
-            Assert.IsNotNull(subscriptionToEdit, "Test subscription event not found");
+            Assert.IsNotNull(subscriptionToUpdate, "Test subscription event not found");
 
-            var updateRequest = new EditEventSubscription(EventType.DocumentUpdate, TestPdfDocumentId, subscriptionToEdit.Id, updatedCallbackUrl)
+            var updateRequest = new UpdateEventSubscription(EventType.DocumentUpdate, TestPdfDocumentId, subscriptionToUpdate.Id, updatedCallbackUrl)
             {
                 Attributes =
                 {
@@ -42,12 +42,12 @@ namespace AcceptanceTests
                 }
             };
 
-            await SignNowTestContext.Events
-                .EditEventSubscriptionAsync(updateRequest)
+            var updateResponse = await SignNowTestContext.Events
+                .UpdateEventSubscriptionAsync(updateRequest)
                 .ConfigureAwait(false);
 
             var updatedSubscription = await SignNowTestContext.Events
-                .GetEventSubscriptionAsync(subscriptionToEdit.Id)
+                .GetEventSubscriptionAsync(updateResponse.Id)
                 .ConfigureAwait(false);
 
             Assert.AreEqual(EventType.DocumentUpdate, updatedSubscription.Event, "Event type should be updated");
@@ -57,15 +57,15 @@ namespace AcceptanceTests
             Assert.IsTrue(updatedSubscription.JsonAttributes.DocIdQueryParam, "DocIdQueryParam should be updated to true");
 
             await SignNowTestContext.Events
-                .DeleteEventSubscriptionAsync(subscriptionToEdit.Id)
+                .DeleteEventSubscriptionAsync(subscriptionToUpdate.Id)
                 .ConfigureAwait(false);
         }
 
         [TestMethod]
-        public async Task EditEventSubscriptionAsync_WithNonExistentId_ThrowsSignNowException()
+        public async Task UpdateEventSubscriptionAsync_WithNonExistentId_ThrowsSignNowException()
         {
             var nonExistentId = "1234567890abcdef1234567890abcdef12345678";
-            var updateRequest = new EditEventSubscription(
+            var updateRequest = new UpdateEventSubscription(
                 EventType.DocumentComplete, 
                 TestPdfDocumentId,
                 nonExistentId,
@@ -73,7 +73,7 @@ namespace AcceptanceTests
 
             var exception = await Assert.ThrowsExceptionAsync<SignNowException>(
                 async () => await SignNowTestContext.Events
-                    .EditEventSubscriptionAsync(updateRequest)
+                    .UpdateEventSubscriptionAsync(updateRequest)
                     .ConfigureAwait(false)
             );
 
