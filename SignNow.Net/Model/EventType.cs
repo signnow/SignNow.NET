@@ -66,6 +66,12 @@ namespace SignNow.Net.Model
         [EnumMember(Value = "user.document.update")]
         UserDocumentUpdate,
 
+        // todo:
+        [EnumMember(Value = "user.invite.expired")]
+        UserInviteExpired,
+
+        [EnumMember(Value = "invite.expired")]
+        InviteExpired,
 
         // Template events
 

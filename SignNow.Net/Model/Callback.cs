@@ -152,7 +152,8 @@ namespace SignNow.Net.Model
         /// The event name.
         /// </summary>
         [JsonProperty("event")]
-        public string Event { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EventType Event { get; set; }
 
         /// <summary>
         /// The environment URL.
@@ -160,6 +161,12 @@ namespace SignNow.Net.Model
         [JsonProperty("environment")]
         [JsonConverter(typeof(StringToUriJsonConverter))]
         public Uri Environment { get; set; }
+
+        /// <summary>
+        /// The ID of the user who initiated the action.
+        /// </summary>
+        [JsonProperty("initiator_id")]
+        public string InitiatorId { get; set; }
 
         /// <summary>
         /// The callback URL.
@@ -173,12 +180,6 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }
-
-        /// <summary>
-        /// The ID of the user who initiated the action.
-        /// </summary>
-        [JsonProperty("initiator_id")]
-        public string InitiatorId { get; set; }
     }
 
     /// <summary>
@@ -193,6 +194,60 @@ namespace SignNow.Net.Model
         public string DocumentId { get; set; }
 
         /// <summary>
+        /// The template ID.
+        /// </summary>
+        [JsonProperty("template_id")]
+        public string TemplateId { get; set; }
+
+        /// <summary>
+        /// The invite ID.
+        /// </summary>
+        [JsonProperty("invite_id")]
+        public string InviteId { get; set; }
+
+        /// <summary>
+        /// The signer information.
+        /// </summary>
+        [JsonProperty("signer")]
+        public string Signer { get; set; }
+
+        /// <summary>
+        /// The status.
+        /// </summary>
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        /// <summary>
+        /// The old invite unique ID.
+        /// </summary>
+        [JsonProperty("old_invite_unique_id")]
+        public string OldInviteUniqueId { get; set; }
+
+        /// <summary>
+        /// The group ID.
+        /// </summary>
+        [JsonProperty("group_id")]
+        public string GroupId { get; set; }
+
+        /// <summary>
+        /// The group name.
+        /// </summary>
+        [JsonProperty("group_name")]
+        public string GroupName { get; set; }
+
+        /// <summary>
+        /// The group invite information.
+        /// </summary>
+        [JsonProperty("group_invite")]
+        public string GroupInvite { get; set; }
+
+        /// <summary>
+        /// The group invite ID.
+        /// </summary>
+        [JsonProperty("group_invite_id")]
+        public string GroupInviteId { get; set; }
+
+        /// <summary>
         /// The document name.
         /// </summary>
         [JsonProperty("document_name")]
@@ -203,5 +258,23 @@ namespace SignNow.Net.Model
         /// </summary>
         [JsonProperty("user_id")]
         public string UserId { get; set; }
+
+        /// <summary>
+        /// The initiator ID.
+        /// </summary>
+        [JsonProperty("initiator_id")]
+        public string InitiatorId { get; set; }
+
+        /// <summary>
+        /// The initiator email.
+        /// </summary>
+        [JsonProperty("initiator_email")]
+        public string InitiatorEmail { get; set; }
+
+        /// <summary>
+        /// The viewer user unique ID.
+        /// </summary>
+        [JsonProperty("viewer_user_unique_id")]
+        public string ViewerUserUniqueId { get; set; }
     }
 }
