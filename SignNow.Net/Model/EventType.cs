@@ -218,11 +218,36 @@ namespace SignNow.Net.Model
         [EnumMember(Value = "user.document_group.create")]
         UserDocumentGroupCreate,
 
+        [EnumMember(Value = "user.document_group.update")]
+        UserDocumentGroupUpdate,
+
+        [EnumMember(Value = "user.document_group.complete")]
+        UserDocumentGroupComplete,
+
+        [EnumMember(Value = "user.document_group.delete")]
+        UserDocumentGroupDelete,
+
+
+        [EnumMember(Value = "user.document_group.invite.create")]
+        UserDocumentGroupInviteCreate,
+
+        [EnumMember(Value = "user.document_group.invite.resend")]
+        UserDocumentGroupInviteResend,
+
+        [EnumMember(Value = "user.document_group.invite.update")]
+        UserDocumentGroupInviteUpdate,
+
+        [EnumMember(Value = "user.document_group.invite.cancel")]
+        UserDocumentGroupInviteCancel,
+
         /// <summary>
         /// The document group has been deleted
         /// </summary>
         [EnumMember(Value = "document_group.delete")]
         DocumentGroupDelete,
+
+        [EnumMember(Value = "document_group.update")]
+        DocumentGroupUpdate,
 
         /// <summary>
         /// The document group has been completed

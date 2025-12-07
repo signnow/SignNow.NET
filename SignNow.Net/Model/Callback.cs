@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SignNow.Net._Internal.Helpers.Converters;
@@ -10,7 +11,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents a webhook callback event in the SignNow system.
     /// </summary>
-    public class Callback
+    public class CallbackBase
     {
         /// <summary>
         /// Unique identifier of the callback.
@@ -95,12 +96,6 @@ namespace SignNow.Net.Model
         public EventAttributeHeaders RequestHeaders { get; set; }
 
         /// <summary>
-        /// The content sent in the callback request.
-        /// </summary>
-        [JsonProperty("request_content")]
-        public CallbackRequestContent RequestContent { get; set; }
-
-        /// <summary>
         /// The response content received from the callback URL.
         /// </summary>
         [JsonProperty("response_content")]
@@ -119,10 +114,16 @@ namespace SignNow.Net.Model
         public string EventSubscriptionOwnerEmail { get; set; }
     }
 
+    public class Callback<T> : CallbackBase
+    {
+        [JsonProperty("request_content")]
+        public CallbackRequestContent<T> RequestContent { get; set; }
+    }
+
     /// <summary>
     /// Represents the content sent in a callback request.
     /// </summary>
-    public class CallbackRequestContent
+    public class CallbackRequestContent<T>
     {
         /// <summary>
         /// Metadata about the callback request.
@@ -134,7 +135,7 @@ namespace SignNow.Net.Model
         /// The actual content/payload of the callback.
         /// </summary>
         [JsonProperty("content")]
-        public CallbackContentData Content { get; set; }
+        public T Content { get; set; }
     }
 
     /// <summary>
@@ -185,7 +186,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents the content data in a callback.
     /// </summary>
-    public class CallbackContentData
+    public class CallbackContentAllFields
     {
         /// <summary>
         /// The document ID.
