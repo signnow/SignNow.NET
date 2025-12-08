@@ -25,6 +25,14 @@ namespace AcceptanceTests
                 f => f.Event.In(EventType.DocumentComplete, EventType.DocumentFieldInviteReplace),
                 f => f.EventType.In(EventSubscriptionEntityType.Document, EventSubscriptionEntityType.Template)
             );
+
+            var sorts = new CallbackSortOptionsBuilder();
+            // last definition win
+            var sres = sorts.Application()
+                .Application(CallbackSortOptionsBuilder.Sorting.Desc)
+                .StartTime(CallbackSortOptionsBuilder.Sorting.Desc)
+                .StartTime(CallbackSortOptionsBuilder.Sorting.Asc)
+                .Code(CallbackSortOptionsBuilder.Sorting.Asc);
         }
 
         [TestMethod]
@@ -39,10 +47,12 @@ namespace AcceptanceTests
                 //.GetCallbacksAsync(new GetCallbacksOptions())
                 .GetCallbacksAsync(new GetCallbacksOptions()
                 {
-                    Filters = f => f.And(
-                        f => f.Code.Between(200, 200),
-                        f => f.Application.In("1")
-                    )
+                    Filters = f => f.Or(
+                        f => f.Code.Between(1, 500),
+                        f => f.CallbackUrl.Like("example.com")
+                    ),
+                    Sortings = s => s.StartTime(),
+                    PerPage = 50
                 })
                 .ConfigureAwait(false);
 

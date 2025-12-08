@@ -16,7 +16,7 @@ namespace SignNow.Net.Model.Requests
     {
         public Func<CallbackFilterBuilder, string> Filters { get; set; }
 
-        public Func<CallbackSortOptionsBuilder, string> Sortings { get; set; }
+        public Func<CallbackSortOptionsBuilder, CallbackSortOptionsBuilder> Sortings { get; set; }
 
         // todo: check Page & PerPage
         /// <summary>
@@ -42,7 +42,10 @@ namespace SignNow.Net.Model.Requests
                 parameters.Add($"filters=[{Filters.Invoke(new CallbackFilterBuilder())}]");
             }
 
-            // sorts
+            if(Sortings != null)
+            {
+                parameters.Add(Sortings.Invoke(new CallbackSortOptionsBuilder()).ToString());
+            }
 
             if (Page.HasValue)
             {
@@ -61,14 +64,16 @@ namespace SignNow.Net.Model.Requests
 
     public class FilterBuilderBase
     {
-        protected string And<T>(params Func<T, string>[] filterBuilder) where T : new()
+        protected string And<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
         {
+            // todo: check if more than 1 parameter, otherwise just filter itself; blank input ?
             var res = filterBuilder.Select(b => b.Invoke(new T()));
             return $"{{\"_AND\": [{string.Join(",", res)}]}}";
         }
 
-        public string Or<T>(params Func<T, string>[] filterBuilder) where T : new()
+        public string Or<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
         {
+            // todo: check if more than 1 parameter, otherwise just filter itself
             var res = filterBuilder.Select(b => b.Invoke(new T()));
             return $"{{\"_OR\": [{string.Join(",", res)}]}}";
         }
@@ -157,7 +162,7 @@ namespace SignNow.Net.Model.Requests
 
     public class CallbackSortOptionsBuilder
     {
-        // set of filters, so last one won
+        private Dictionary<string, string> sorts = new Dictionary<string, string>();
 
         public enum Sorting
         {
@@ -166,31 +171,41 @@ namespace SignNow.Net.Model.Requests
 
         public CallbackSortOptionsBuilder Application(Sorting sort = Sorting.Asc)
         {
+            sorts["application"] = Sort("application", sort);
             return this;
         }
 
         public CallbackSortOptionsBuilder Code(Sorting sort = Sorting.Asc)
         {
+            sorts["code"] = Sort("code", sort);
             return this;
         }
 
         public CallbackSortOptionsBuilder EndTime(Sorting sort = Sorting.Asc)
         {
+            sorts["end_time"] = Sort("end_time", sort);
             return this;
         }
 
         public CallbackSortOptionsBuilder StartTime(Sorting sort = Sorting.Asc)
         {
+            sorts["start_time"] = Sort("start_time", sort);
             return this;
         }
 
         public CallbackSortOptionsBuilder Event(Sorting sort = Sorting.Asc)
         {
+            sorts["event"] = Sort("event", sort);
             return this;
         }
 
-        // materialize query
-        public override string ToString() => "";
+        public override string ToString() => string.Join("&", sorts.Values);
+
+        private string Sort(string propertyName, Sorting sortOrder)
+        {
+            var sortOrderStr = sortOrder == Sorting.Asc ? "asc" : "desc";
+            return $"sort[{propertyName}]={sortOrderStr}";
+        }
     }
 
 }
