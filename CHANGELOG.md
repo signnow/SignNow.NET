@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions
 - `GetEventSubscriptionAsync` method for retrieving event subscription details by ID using the v2 event-subscriptions endpoint
 - `DeleteEventSubscriptionAsync` method for deleting event subscription
-- `EditEventSubscriptionAsync` method for updating existing event subscriptions using the v2 event-subscriptions endpoint
 
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
@@ -17,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Updated netstandard min version to 2.0
 - Removed InheritDoc tool from the project
 - Upgraded NET Framework min supported version to 4.6.2
+- Update the 'UpdateEventSubscriptionAsync' method to use the latest implementation of SignNow API event-subscriptions endpoint
 
 
 ## [1.3.0] - 2024-12-18
