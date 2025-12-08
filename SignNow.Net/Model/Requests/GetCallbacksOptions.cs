@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using SignNow.Net.Interfaces;
 
@@ -34,50 +35,124 @@ namespace SignNow.Net.Model.Requests
         /// <returns>Query string representation</returns>
         public string ToQueryString()
         {
-            return "";
+            var parameters = new List<string>();
+
+            if (Filters != null)
+            {
+                parameters.Add($"filters=[{Filters.Invoke(new CallbackFilterBuilder())}]");
+            }
+
+            // sorts
+
+            if (Page.HasValue)
+            {
+                parameters.Add($"page={Page.Value}");
+            }
+
+            if (PerPage.HasValue)
+            {
+                parameters.Add($"per_page={PerPage.Value}");
+            }
+
+            return string.Join("&", parameters);
         }
 
     }
 
-    public class CallbackFilterBuilder
+    public class FilterBuilderBase
+    {
+        protected string And<T>(params Func<T, string>[] filterBuilder) where T : new()
+        {
+            var res = filterBuilder.Select(b => b.Invoke(new T()));
+            return $"{{\"_AND\": [{string.Join(",", res)}]}}";
+        }
+
+        public string Or<T>(params Func<T, string>[] filterBuilder) where T : new()
+        {
+            var res = filterBuilder.Select(b => b.Invoke(new T()));
+            return $"{{\"_OR\": [{string.Join(",", res)}]}}";
+        }
+
+        protected static string Filter(string param, string operation, string value)
+            => $"{{\"{param}\":{{\"type\": \"{operation}\", \"value\": \"{value}\"}}}}";
+
+        protected static string Filter(string param, string operation, string[] value)
+            => $"{{\"{param}\":{{\"type\": \"{operation}\", \"value\": [{string.Join(",", value.Select(v => $"\"{v}\""))}]}}}}";
+
+        protected static string FilterNoQuotes(string param, string operation, string[] value)
+            => $"{{\"{param}\":{{\"type\": \"{operation}\", \"value\": [{string.Join(", ", value)}]}}}}";
+
+        protected static string[] EnumToStringValues<T>(T[] enums) where T : Enum
+        {
+            var enumValues = enums.Select(eventType =>
+            {
+                var enumValueInfo = eventType.GetType().GetMember(eventType.ToString()).First();
+                return enumValueInfo.GetCustomAttribute<EnumMemberAttribute>().Value;
+            });
+            return enumValues.ToArray();
+        }
+    }
+
+    public class CallbackFilterBuilder : FilterBuilderBase
     {
         public ApplicationImplementation Application { get; set; } = new ApplicationImplementation();
         public CodeImplementation Code { get; set; } = new CodeImplementation();
-        //public int Date { get; set; }
-        //public int EntityId { get; set; }
-        //public int CallbackUrl { get; set; }
-        //public int InitiatorId { get; set; }
-        //public int Event { get; set; }
-        //public int EventType { get; set; }
+        public DateImplementation Date { get; set; } = new DateImplementation();
+        public EntityIdImplementation EntityId { get; set; } = new EntityIdImplementation();
+        public CallbackUrlImplementation CallbackUrl { get; set; } = new CallbackUrlImplementation();
+        public InitiatorIdImplementation InitiatorId { get; set; } = new InitiatorIdImplementation();
+        public EventImplementation Event { get; set; } = new EventImplementation();
+        public EventTypeImplementation EventType { get; set; } = new EventTypeImplementation();
 
         public string And(params Func<CallbackFilterBuilder, string>[] filterBuilder)
-        {
-            return "";
-        }
+            => base.And<CallbackFilterBuilder>(filterBuilder);
 
         public string Or(params Func<CallbackFilterBuilder, string>[] filterBuilder)
-        {
-            return "";
-        }
+            => base.Or<CallbackFilterBuilder>(filterBuilder);
 
         public class ApplicationImplementation
         {
-            public string In()
-            {
-                return "";
-            }
+            public string In(params string[] ids) => Filter("application", "in", ids);
         }
 
         public class CodeImplementation
         {
-            public string Equal()
-            {
-                return "";
-            }
+            public string Between(int from, int to) => FilterNoQuotes("code", "between", new[] { from.ToString(), to.ToString()});
         }
 
-        // materialize query
-        public override string ToString() => "";
+        public class DateImplementation
+        {
+            public string Between(long from, long to) => FilterNoQuotes("date", "between", new[] { from.ToString(), to.ToString()});
+
+            public string Between(DateTime from, DateTime to) => FilterNoQuotes("date", "between", new[] {
+                ((DateTimeOffset)from).ToUnixTimeSeconds().ToString(), ((DateTimeOffset)to).ToUnixTimeSeconds().ToString()
+            });
+        }
+
+        public class EntityIdImplementation
+        {
+            public string Like(string value) => Filter("entity_id", "like", value);
+        }
+
+        public class CallbackUrlImplementation
+        {
+            public string Like(string value) => Filter("callback_url", "like", value);
+        }
+
+        public class InitiatorIdImplementation
+        {
+            public string Like(string value) => Filter("initiator_id", "like", value);
+        }
+
+        public class EventImplementation
+        {
+            public string In(params EventType[] events) => Filter("event", "in", EnumToStringValues(events));
+        }
+
+        public class EventTypeImplementation
+        {
+            public string In(params EventSubscriptionEntityType[] events) => Filter("event_type", "in", EnumToStringValues(events));
+        }
     }
 
     public class CallbackSortOptionsBuilder

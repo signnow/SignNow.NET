@@ -4,7 +4,7 @@ using SignNow.Net.Model;
 
 namespace SignNow.Net.Test.FakeModels
 {
-    public class CallbackFaker : Faker<Callback>
+    public class CallbackFaker : Faker<Callback<CallbackContentAllFields>>
     {
         /// <summary>
         /// Faker for <see cref="Callback"/>

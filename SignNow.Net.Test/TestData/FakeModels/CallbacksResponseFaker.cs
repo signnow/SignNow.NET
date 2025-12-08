@@ -46,7 +46,7 @@ namespace SignNow.Net.Test.FakeModels
         {
             StrictMode(true);
             
-            RuleFor(o => o.Data, f => new CallbackFaker().Generate(f.Random.Int(1, 10)) as IReadOnlyList<Callback>);
+            RuleFor(o => o.Data, f => new CallbackFaker().Generate(f.Random.Int(1, 10)) as IReadOnlyList<Callback<CallbackContentAllFields>>);
             RuleFor(o => o.Meta, f => new MetaInfoFaker().Generate());
         }
 
@@ -57,7 +57,7 @@ namespace SignNow.Net.Test.FakeModels
         public static CallbacksResponseFaker Empty()
         {
             var faker = new CallbacksResponseFaker();
-            faker.RuleFor(o => o.Data, f => new List<Callback>() as IReadOnlyList<Callback>);
+            faker.RuleFor(o => o.Data, f => new List<Callback<CallbackContentAllFields>>() as IReadOnlyList<Callback<CallbackContentAllFields>>);
             return faker;
         }
 
@@ -69,7 +69,7 @@ namespace SignNow.Net.Test.FakeModels
         public static CallbacksResponseFaker WithSuccessfulCallbacks(int count)
         {
             var faker = new CallbacksResponseFaker();
-            faker.RuleFor(o => o.Data, f => CallbackFaker.Successful().Generate(count) as IReadOnlyList<Callback>);
+            faker.RuleFor(o => o.Data, f => CallbackFaker.Successful().Generate(count) as IReadOnlyList<Callback<CallbackContentAllFields>>);
             return faker;
         }
 
@@ -81,7 +81,7 @@ namespace SignNow.Net.Test.FakeModels
         public static CallbacksResponseFaker WithFailedCallbacks(int count)
         {
             var faker = new CallbacksResponseFaker();
-            faker.RuleFor(o => o.Data, f => CallbackFaker.Failed().Generate(count) as IReadOnlyList<Callback>);
+            faker.RuleFor(o => o.Data, f => CallbackFaker.Failed().Generate(count) as IReadOnlyList<Callback<CallbackContentAllFields>>);
             return faker;
         }
     }
