@@ -9,7 +9,7 @@ using UnitTests;
 
 namespace AcceptanceTests
 {
-    //[TestClass]
+    [TestClass]
     public partial class EventSubscriptionServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]

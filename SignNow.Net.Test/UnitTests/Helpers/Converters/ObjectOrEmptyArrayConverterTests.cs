@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using SignNow.Net._Internal.Helpers.Converters;
@@ -12,42 +7,55 @@ namespace SignNow.Net.Test.UnitTests.Helpers.Converters
     [TestClass]
     public class ObjectOrEmptyArrayConverterTests
     {
-        // better split to 2 test classes
-        [TestMethod]
-        [DataRow("{'pr_1': 'propvalue1', 'pr_2': 'propvalue2'}", typeof(ModelA.ModelB))]
-        [DataRow("{}", typeof(ModelA.ModelB))]
-        [DataRow("[]", null)]
-        [DataRow("null", null)]
-        public void MyTestMethod(string modelB, Type expected)
+        public class TestContainer
         {
-            var json = $@"
-            {{
-                'version': 2,
-                'model_b': {modelB}
-            }}";
+            [JsonProperty("version")]
+            public int Version { get; set; }
 
-            var obj = JsonConvert.DeserializeObject<ModelA>(json);
+            [JsonProperty("test_property")]
+            [JsonConverter(typeof(ObjectOrEmptyArrayConverter))]
+            public TestModel TestProperty { get; set; }
 
-            Assert.AreEqual(expected, obj.Mb?.GetType());
+            public class TestModel
+            {
+                [JsonProperty("property1")]
+                public string Property1 { get; set; }
+
+                [JsonProperty("property2")]
+                public string Property2 { get; set; }
+            }
         }
-    }
 
-    public class ModelA
-    {
-        [JsonProperty("version")]
-        public int Version { get; set; }
-
-        [JsonProperty("model_b")]
-        [JsonConverter(typeof(ObjectOrEmptyArrayConverter))]
-        public ModelB Mb { get; set; }
-
-        public class ModelB
+        [TestMethod]
+        [DataRow("{'version': 1, 'test_property': {} }")]
+        [DataRow("{'version': 1, 'test_property': {'property1': 'a'} }")]
+        [DataRow("{'version': 1, 'test_property': {'property1': 'a', 'property2': 'b'} }")]
+        public void ReadJson_ShouldDeserializeToTargetType(string json)
         {
-            [JsonProperty("pr_1")]
-            public string Prop1 { get; set; }
+            var result = JsonConvert.DeserializeObject<TestContainer>(json);
 
-            [JsonProperty("pr_2")]
-            public string Prop2 { get; set; }
+            Assert.IsInstanceOfType(result.TestProperty, typeof(TestContainer.TestModel));
+        }
+
+        [TestMethod]
+        [DataRow("{'version': 1, 'test_property': [] }")]
+        [DataRow("{'version': 1, 'test_property': null }")]
+        public void ReadJson_ShouldDeserializeToNull(string json)
+        {
+            var result = JsonConvert.DeserializeObject<TestContainer>(json);
+
+            Assert.IsNull(result.TestProperty);
+        }
+
+        [TestMethod]
+        [DataRow("{'version': 1, 'test_property': 1 }")]
+        [DataRow("{'version': 1, 'test_property': true }")]
+        [DataRow("{'version': 1, 'test_property': ['a', 'b'] }")]
+        public void ReadJson_ShouldThrowJsonDeserilizationException(string json)
+        {
+            Assert.ThrowsException<JsonSerializationException>(
+                () => JsonConvert.DeserializeObject<TestContainer>(json)
+            );
         }
     }
 }

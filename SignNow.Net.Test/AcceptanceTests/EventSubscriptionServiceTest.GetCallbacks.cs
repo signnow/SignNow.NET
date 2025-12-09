@@ -10,7 +10,6 @@ using UnitTests;
 
 namespace AcceptanceTests
 {
-    [TestClass]
     public partial class EventSubscriptionServiceTest : AuthorizedApiTestBase
     {
         [TestMethod]
