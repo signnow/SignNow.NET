@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
+using SignNow.Net.Model.Requests.QueryBuilders;
 using UnitTests;
 
 namespace AcceptanceTests
@@ -29,10 +31,10 @@ namespace AcceptanceTests
             var sorts = new CallbackSortOptionsBuilder();
             // last definition win
             var sres = sorts.Application()
-                .Application(CallbackSortOptionsBuilder.Sorting.Desc)
-                .StartTime(CallbackSortOptionsBuilder.Sorting.Desc)
-                .StartTime(CallbackSortOptionsBuilder.Sorting.Asc)
-                .Code(CallbackSortOptionsBuilder.Sorting.Asc);
+                .Application(SortOrder.Descending)
+                .StartTime(SortOrder.Descending)
+                .StartTime(SortOrder.Ascending)
+                .Code(SortOrder.Ascending);
         }
 
         [TestMethod]
