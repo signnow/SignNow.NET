@@ -10,45 +10,6 @@ namespace SignNow.Net.Model.Responses
     /// </summary>
     public class CallbacksResponse
     {
-        private readonly static EventType[] documentDeleteTypes = new[] {
-            EventType.DocumentDelete, EventType.UserDocumentDelete
-        };
-        private readonly static EventType[] documentUpdateTypes = new[] {
-            EventType.DocumentUpdate, EventType.UserDocumentUpdate,
-            EventType.UserDocumentCreate, EventType.UserDocumentComplete, EventType.DocumentComplete
-        };
-        private readonly static EventType[] documentOpenTypes = new[] {
-            EventType.DocumentOpen, EventType.UserDocumentOpen
-        };
-        private readonly static EventType[] templateCopyTypes = new[] {
-            EventType.TemplateCopy, EventType.UserTemplateCopy
-        };
-        private readonly static EventType[] documentInviteTypes = new[] {
-            EventType.UserDocumentFieldInviteCreate,
-            EventType.UserDocumentFieldInviteDecline, EventType.UserDocumentFieldInviteDelete, EventType.UserDocumentFieldInviteSigned,
-            EventType.UserDocumentFieldInviteSent, EventType.UserDocumentFreeformCreate, EventType.UserDocumentFreeformSigned,
-            EventType.DocumentFieldInviteCreate, EventType.DocumentFieldInviteDecline, EventType.DocumentFieldInviteDelete,
-            EventType.DocumentFieldInviteSigned, EventType.DocumentFieldInviteSent, EventType.DocumentFreeformCreate, EventType.DocumentFreeformSigned
-        };
-        private readonly static EventType[] documentInviteReassignTypes = new[] {
-            EventType.UserDocumentFieldInviteReassign, EventType.DocumentFieldInviteReassign
-        };
-        private readonly static EventType[] documentInviteReplaceTypes = new[] {
-            EventType.UserDocumentFieldInviteReplace, EventType.DocumentFieldInviteReplace
-        };
-        private readonly static EventType[] documentGroupTypes = new[] { 
-            EventType.UserDocumentGroupCreate, EventType.UserDocumentGroupUpdate, EventType.UserDocumentGroupComplete, 
-            EventType.DocumentGroupUpdate, EventType.DocumentGroupComplete
-        };
-        private readonly static EventType[] documentGroupDeleteTypes = new[] {
-            EventType.DocumentGroupDelete, EventType.UserDocumentGroupDelete
-        };
-        private readonly static EventType[] documentGroupInviteTypes = new[] { 
-            EventType.UserDocumentGroupInviteCreate, EventType.UserDocumentGroupInviteResend, EventType.UserDocumentGroupInviteUpdate, 
-            EventType.UserDocumentGroupInviteCancel, EventType.DocumentGroupInviteCreate, EventType.DocumentGroupInviteResend, 
-            EventType.DocumentGroupInviteUpdate, EventType.DocumentGroupInviteCancel
-        };
-
         /// <summary>
         /// The list of callback events.
         /// </summary>
@@ -61,21 +22,50 @@ namespace SignNow.Net.Model.Responses
         [JsonProperty("meta")]
         public MetaInfo Meta { get; set; }
 
-        // Allow to filter & get only Callback<ConcreetModel> 
-        public IEnumerable<Callback<T>> Get<T>() where T : EventContentCallbackBase
+        /// <summary>
+        /// Allows to get only callbacks of type Callback&lt;T&gt; where T class inherited from EventContentCallbackBase
+        /// </summary>
+        public IEnumerable<Callback<T>> GetCallbacksWith<T>() where T : EventContentCallbackBase
         {
             var eventTypes = typeof(T).Name switch
             {
-                nameof(DocumentDeleteEventContent) => documentDeleteTypes,
-                nameof(DocumentUpdateEventContent) => documentUpdateTypes,
-                nameof(DocumentOpenEventContent) => documentOpenTypes,
-                nameof(TemplateCopyEventContent) => templateCopyTypes,
-                nameof(DocumentInviteEventContent) => documentInviteTypes,
-                nameof(DocumentInviteReassignEventContent) => documentInviteReassignTypes,
-                nameof(DocumentInviteReplaceEventContent) => documentInviteReplaceTypes,
-                nameof(DocumentGroupEventContent) => documentGroupTypes,
-                nameof(DocumentGroupDeleteEventContent) => documentGroupDeleteTypes,
-                nameof(DocumentGroupInviteEventContent) => documentGroupInviteTypes,
+                nameof(DocumentDeleteEventContent) => new[] {
+                    EventType.DocumentDelete, EventType.UserDocumentDelete
+                },
+                nameof(DocumentUpdateEventContent) => new[] {
+                    EventType.DocumentUpdate, EventType.UserDocumentUpdate, EventType.UserDocumentCreate, EventType.UserDocumentComplete, EventType.DocumentComplete
+                },
+                nameof(DocumentOpenEventContent) => new[] {
+                    EventType.DocumentOpen, EventType.UserDocumentOpen
+                },
+                nameof(TemplateCopyEventContent) => new[] {
+                    EventType.TemplateCopy, EventType.UserTemplateCopy
+                },
+                nameof(DocumentInviteEventContent) => new[] {
+                    EventType.UserDocumentFieldInviteCreate, EventType.UserDocumentFieldInviteDecline, EventType.UserDocumentFieldInviteDelete,
+                    EventType.UserDocumentFieldInviteSigned, EventType.UserDocumentFieldInviteSent, EventType.UserDocumentFreeformCreate,
+                    EventType.UserDocumentFreeformSigned, EventType.DocumentFieldInviteCreate, EventType.DocumentFieldInviteDecline,
+                    EventType.DocumentFieldInviteDelete, EventType.DocumentFieldInviteSigned, EventType.DocumentFieldInviteSent,
+                    EventType.DocumentFreeformCreate, EventType.DocumentFreeformSigned
+                },
+                nameof(DocumentInviteReassignEventContent) => new[] {
+                    EventType.UserDocumentFieldInviteReassign, EventType.DocumentFieldInviteReassign
+                },
+                nameof(DocumentInviteReplaceEventContent) => new[] {
+                    EventType.UserDocumentFieldInviteReplace, EventType.DocumentFieldInviteReplace
+                },
+                nameof(DocumentGroupEventContent) => new[] {
+                    EventType.UserDocumentGroupCreate, EventType.UserDocumentGroupUpdate, EventType.UserDocumentGroupComplete,
+                    EventType.DocumentGroupUpdate, EventType.DocumentGroupComplete
+                },
+                nameof(DocumentGroupDeleteEventContent) => new[] {
+                    EventType.DocumentGroupDelete, EventType.UserDocumentGroupDelete
+                },
+                nameof(DocumentGroupInviteEventContent) => new[] {
+                    EventType.UserDocumentGroupInviteCreate, EventType.UserDocumentGroupInviteResend, EventType.UserDocumentGroupInviteUpdate,
+                    EventType.UserDocumentGroupInviteCancel, EventType.DocumentGroupInviteCreate, EventType.DocumentGroupInviteResend,
+                    EventType.DocumentGroupInviteUpdate, EventType.DocumentGroupInviteCancel
+                },
                 _ => null
             };
             return Data

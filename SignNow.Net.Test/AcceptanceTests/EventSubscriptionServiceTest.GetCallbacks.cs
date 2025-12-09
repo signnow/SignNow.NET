@@ -57,7 +57,7 @@ namespace AcceptanceTests
                 })
                 .ConfigureAwait(false);
 
-            var res = response.Get<DocumentUpdateEventContent>().ToArray();
+            var res = response.GetCallbacksWith<DocumentUpdateEventContent>().ToArray();
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Data);
