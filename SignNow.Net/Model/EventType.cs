@@ -66,10 +66,15 @@ namespace SignNow.Net.Model
         [EnumMember(Value = "user.document.update")]
         UserDocumentUpdate,
 
-        // todo:
+        /// <summary>
+        /// Invite expiration event
+        /// </summary>
         [EnumMember(Value = "user.invite.expired")]
         UserInviteExpired,
 
+        /// <summary>
+        /// Invite expiration event
+        /// </summary>
         [EnumMember(Value = "invite.expired")]
         InviteExpired,
 
@@ -218,25 +223,46 @@ namespace SignNow.Net.Model
         [EnumMember(Value = "user.document_group.create")]
         UserDocumentGroupCreate,
 
+        /// <summary>
+        /// The document group has been updated by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.update")]
         UserDocumentGroupUpdate,
 
+        /// <summary>
+        /// The document group has been completed by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.complete")]
         UserDocumentGroupComplete,
 
+        /// <summary>
+        /// The document group has been deleted by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.delete")]
         UserDocumentGroupDelete,
 
 
+        /// <summary>
+        /// An invite to sign the document group has been created by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.invite.create")]
         UserDocumentGroupInviteCreate,
 
+        /// <summary>
+        /// An invite to sign the document group has been resent by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.invite.resend")]
         UserDocumentGroupInviteResend,
 
+        /// <summary>
+        /// An invite to sign the document group has been updated by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.invite.update")]
         UserDocumentGroupInviteUpdate,
 
+        /// <summary>
+        /// An invite to sign the document group has been canceled by a specific user
+        /// </summary>
         [EnumMember(Value = "user.document_group.invite.cancel")]
         UserDocumentGroupInviteCancel,
 
@@ -246,6 +272,9 @@ namespace SignNow.Net.Model
         [EnumMember(Value = "document_group.delete")]
         DocumentGroupDelete,
 
+        /// <summary>
+        /// The document group has been updated
+        /// </summary>
         [EnumMember(Value = "document_group.update")]
         DocumentGroupUpdate,
 

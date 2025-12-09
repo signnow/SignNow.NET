@@ -16,9 +16,8 @@ namespace SignNow.Net.Model.Requests
 
         public Func<CallbackSortOptionsBuilder, CallbackSortOptionsBuilder> Sortings { get; set; }
 
-        // todo: check Page & PerPage
         /// <summary>
-        /// Page number for pagination. Default is 1.
+        /// Page number for pagination.
         /// </summary>
         public int? Page { get; set; }
 
