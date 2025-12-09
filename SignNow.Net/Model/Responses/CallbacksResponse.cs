@@ -62,7 +62,7 @@ namespace SignNow.Net.Model.Responses
         public MetaInfo Meta { get; set; }
 
         // Allow to filter & get only Callback<ConcreetModel> 
-        public IEnumerable<Callback<T>> Get<T>()
+        public IEnumerable<Callback<T>> Get<T>() where T : EventContentCallbackBase
         {
             var eventTypes = typeof(T).Name switch
             {
