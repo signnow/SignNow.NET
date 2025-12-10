@@ -5,7 +5,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Required only to limit possible models in CallbacksResponse
     /// </summary>
-    public abstract class EventContentCallbackBase
+    public interface IEventContentCallback
     {
     }
 
@@ -13,7 +13,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document deletion events.
     /// Used for: document.delete, user.document.delete
     /// </summary>
-    public class DocumentDeleteEventContent : EventContentCallbackBase
+    public class DocumentDeleteEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -51,7 +51,7 @@ namespace SignNow.Net.Model
     /// Used for: document.update, user.document.update, user.document.create, user.document.complete, document.complete
     /// </summary>
 
-    public class DocumentUpdateEventContent : EventContentCallbackBase
+    public class DocumentUpdateEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -76,7 +76,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document open events.
     /// Used for: document.open, user.document.open
     /// </summary>
-    public class DocumentOpenEventContent : EventContentCallbackBase
+    public class DocumentOpenEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -107,7 +107,7 @@ namespace SignNow.Net.Model
     /// Represents content data for template copy events.
     /// Used for: template.copy, user.template.copy
     /// </summary>
-    public class TemplateCopyEventContent : EventContentCallbackBase
+    public class TemplateCopyEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -138,7 +138,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document invite and form events.
     /// Used for: user.document.fieldinvite.*, document.fieldinvite.*, user.document.freeform.*, document.freeform.*
     /// </summary>
-    public class DocumentInviteEventContent : EventContentCallbackBase
+    public class DocumentInviteEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -169,7 +169,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document field invite reassign events.
     /// Used for: user.document.fieldinvite.reassign, document.fieldinvite.reassign
     /// </summary>
-    public class DocumentInviteReassignEventContent : EventContentCallbackBase
+    public class DocumentInviteReassignEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -200,7 +200,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document field invite replace events.
     /// Used for: user.document.fieldinvite.replace, document.fieldinvite.replace
     /// </summary>
-    public class DocumentInviteReplaceEventContent : EventContentCallbackBase
+    public class DocumentInviteReplaceEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document ID.
@@ -237,7 +237,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document group create/update/complete events.
     /// Used for: user.document_group.create, user.document_group.update, user.document_group.complete, document_group.update, document_group.complete
     /// </summary>
-    public class DocumentGroupEventContent : EventContentCallbackBase
+    public class DocumentGroupEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document group ID.
@@ -262,7 +262,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document group delete events.
     /// Used for: document_group.delete, user.document_group.delete
     /// </summary>
-    public class DocumentGroupDeleteEventContent : EventContentCallbackBase
+    public class DocumentGroupDeleteEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document group ID.
@@ -299,7 +299,7 @@ namespace SignNow.Net.Model
     /// Represents content data for document group invite events.
     /// Used for: user.document_group.invite.*, document_group.invite.*
     /// </summary>
-    public class DocumentGroupInviteEventContent : EventContentCallbackBase
+    public class DocumentGroupInviteEventContent : IEventContentCallback
     {
         /// <summary>
         /// The document group ID.
@@ -323,7 +323,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents the content data in a callback.
     /// </summary>
-    public class CallbackContentAllFields : EventContentCallbackBase
+    public class CallbackContentAllFields : IEventContentCallback
     {
         /// <summary>
         /// The document ID.

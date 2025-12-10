@@ -11,7 +11,7 @@ namespace SignNow.Net.Model
     /// This model could represent any request content (CallbackContentAllFields) or specific one - any other type inherited from EventContentCallbackBase
     /// </summary>
     /// <typeparam name="T">Model from EventContentCallbackModels</typeparam>
-    public class Callback<T> : CallbackBase where T : EventContentCallbackBase
+    public class Callback<T> : CallbackBase where T : IEventContentCallback
     {
         [JsonProperty("request_content")]
         public CallbackRequestContent<T> RequestContent { get; set; }

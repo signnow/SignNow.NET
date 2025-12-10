@@ -8,7 +8,7 @@ namespace SignNow.Net.Model
     /// <summary>
     /// Represents the content sent in a callback request.
     /// </summary>
-    public class CallbackRequestContent<T> where T : EventContentCallbackBase
+    public class CallbackRequestContent<T> where T : IEventContentCallback
     {
         /// <summary>
         /// Metadata about the callback request.

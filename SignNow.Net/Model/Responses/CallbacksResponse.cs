@@ -25,7 +25,7 @@ namespace SignNow.Net.Model.Responses
         /// <summary>
         /// Allows to get only callbacks of type Callback&lt;T&gt; where T class inherited from EventContentCallbackBase
         /// </summary>
-        public IEnumerable<Callback<T>> GetCallbacksWith<T>() where T : EventContentCallbackBase
+        public IEnumerable<Callback<T>> GetCallbacksWith<T>() where T : IEventContentCallback
         {
             var eventTypes = typeof(T).Name switch
             {
