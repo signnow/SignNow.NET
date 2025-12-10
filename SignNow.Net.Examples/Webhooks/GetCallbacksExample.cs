@@ -1,154 +1,86 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Requests.GetFolderQuery;
 
 namespace SignNow.Net.Examples
 {
-    public partial class EventSubscriptionExamples : ExamplesBase
+    [TestClass]
+    public class GetCallbacksExample : ExamplesBase
     {
         /// <summary>
         /// Demonstrates how to get a list of webhook callback events with various filtering and sorting options.
-        /// This example shows how to retrieve callback history and analyze webhook delivery results.
+        /// This example shows how to retrieve callback history and analyze webhook delivery results using the current SDK API.
         /// </summary>
         /// <see cref="https://docs.signnow.com/docs/signnow/reference/operations/get-v2-event-subscriptions-callbacks"/>
         [TestMethod]
         public async Task GetCallbacksAsync()
         {
-            // First, ensure we have a document and event subscription for demonstration
-            var uploadResponse = await testContext.Documents
-                .UploadDocumentAsync(File.OpenRead(PdfWithoutFields), "CallbackExample.pdf")
-                .ConfigureAwait(false);
-
-            var documentId = uploadResponse.Id;
-
-            // Create an event subscription to potentially generate callbacks
-            await testContext.Events.CreateEventSubscriptionAsync(
-                new CreateEventSubscription(EventType.DocumentFreeformSigned, documentId, new Uri("https://example.com/webhook"))
-            ).ConfigureAwait(false);
-
-            // Example 1: Get all callbacks with default sorting (by start_time desc)
-            Console.WriteLine("=== Example 1: Get all callbacks ===");
+            // Example 1: Get all callbacks with default options
+            Console.WriteLine("=== Example 1: Get all callbacks with default pagination ===");
             var allCallbacks = await testContext.Events
                 .GetCallbacksAsync()
                 .ConfigureAwait(false);
 
             Console.WriteLine($"Total callbacks found: {allCallbacks.Data.Count}");
-            Console.WriteLine($"Current page: {allCallbacks.Meta?.Pagination?.CurrentPage}");
-            Console.WriteLine($"Total pages: {allCallbacks.Meta?.Pagination?.TotalPages}");
+            Console.WriteLine($"Current page: {allCallbacks.Meta.Pagination.CurrentPage}");
+            Console.WriteLine($"Per page: {allCallbacks.Meta.Pagination.PerPage}");
+            Console.WriteLine($"Total pages: {allCallbacks.Meta.Pagination.TotalPages}");
+            Console.WriteLine($"Total items: {allCallbacks.Meta.Pagination.Total}");
 
-            // Example 2: Filter by successful callbacks only
-            Console.WriteLine("\n=== Example 2: Filter successful callbacks (HTTP 2xx) ===");
+            // Example 2: Filter by successful callbacks using fluent filter builder
+            Console.WriteLine("\n=== Example 2: Filter successful callbacks (HTTP 2xx status codes) ===");
             var successfulCallbacks = await testContext.Events
                 .GetCallbacksAsync(new GetCallbacksOptions
                 {
-                    //CodeFilter = CodeRangeFilter.Success(),
-                    //SortByStartTime = SortOrder.Descending
+                    Filters = f => f.Code.Between(200, 299),
+                    Sortings = s => s.StartTime(SortOrder.Descending),
+                    PerPage = 10
                 })
                 .ConfigureAwait(false);
 
             Console.WriteLine($"Successful callbacks: {successfulCallbacks.Data.Count}");
             foreach (var callback in successfulCallbacks.Data.Take(3))
             {
-                //Console.WriteLine($"  ID: {callback.Id}, Code: {callback.Code}, Event: {callback.Event}");
-                //Console.WriteLine($"  Start Time: {callback.StartTimeOffset:yyyy-MM-dd HH:mm:ss} UTC");
-                //Console.WriteLine($"  Duration: {callback.Duration?.TotalMilliseconds ?? 0}ms");
-                //Console.WriteLine($"  Success: {callback.IsSuccessful}");
+                Console.WriteLine($"  ID: {callback.Id}");
+                Console.WriteLine($"  Status Code: {callback.ResponseStatusCode}");
+                Console.WriteLine($"  Event: {callback.EventName}");
+                Console.WriteLine($"  Entity ID: {callback.EntityId}");
+                Console.WriteLine();
             }
 
-            // Example 3: Filter by error responses
-            Console.WriteLine("\n=== Example 3: Filter error callbacks (HTTP 4xx and 5xx) ===");
+            // Example 3: Filter by error responses and callback url using complex filters, sorting by start time and code
+            Console.WriteLine("=== Example 3: Filter error callbacks (HTTP 4xx and 5xx) ===");
             var errorCallbacks = await testContext.Events
                 .GetCallbacksAsync(new GetCallbacksOptions
                 {
-                    //CodeFilter = new CodeRangeFilter(400, 599), // Client and server errors
-                    //SortByCode = SortOrder.Ascending
+                    Filters = f => f.And(
+                        f => f.Date.Between(DateTime.UtcNow.AddDays(-30), DateTime.UtcNow),
+                        f => f.Or(
+                            fb => fb.Code.Between(400, 499),
+                            fb => fb.Code.Between(500, 599)
+                        ),
+                        f => f.CallbackUrl.Like("example.com")
+                    ),
+                    Sortings = s => s
+                        .Code(SortOrder.Ascending)
+                        .StartTime(SortOrder.Descending),
+                    PerPage = 15
                 })
                 .ConfigureAwait(false);
 
             Console.WriteLine($"Error callbacks: {errorCallbacks.Data.Count}");
             foreach (var callback in errorCallbacks.Data.Take(3))
             {
-                //Console.WriteLine($"  ID: {callback.Id}, Code: {callback.Code}");
-                //Console.WriteLine($"  Error Message: {callback.ErrorMessage ?? "N/A"}");
-                //Console.WriteLine($"  Client Error: {callback.IsClientError}, Server Error: {callback.IsServerError}");
+                Console.WriteLine($"  ID: {callback.Id}");
+                Console.WriteLine($"  Callback Url: {callback.CallbackUrl}");
+                Console.WriteLine($"  Status Code: {callback.ResponseStatusCode}");
+                Console.WriteLine($"  Response Content: {callback.ResponseContent ?? "N/A"}");
+                Console.WriteLine($"  Application: {callback.ApplicationName}");
+                Console.WriteLine();
             }
-
-            // Example 4: Search for specific entity or URL
-            Console.WriteLine("\n=== Example 4: Search in entity IDs, callback URLs, and initiator IDs ===");
-            var searchResults = await testContext.Events
-                .GetCallbacksAsync(new GetCallbacksOptions
-                {
-                    //SearchFilter = documentId.Substring(0, 8), // Search for part of document ID
-                    //SortByEvent = SortOrder.Ascending
-                })
-                .ConfigureAwait(false);
-
-            Console.WriteLine($"Search results: {searchResults.Data.Count}");
-            foreach (var callback in searchResults.Data.Take(3))
-            {
-                Console.WriteLine($"  Entity ID: {callback.EntityId}");
-                Console.WriteLine($"  Callback URL: {callback.CallbackUrl}");
-                //Console.WriteLine($"  Event Type: {callback.EventType}");
-            }
-
-            // Example 5: Filter by specific event types
-            Console.WriteLine("\n=== Example 5: Filter by document events ===");
-            var documentEvents = await testContext.Events
-                .GetCallbacksAsync(new GetCallbacksOptions
-                {
-                    //EventFilter = EventFilter.Document(),
-                    //EventTypeFilter = EventTypeFilter.In(EventType.DocumentFreeformSigned),
-                    //SortByApplication = SortOrder.Ascending
-                })
-                .ConfigureAwait(false);
-
-            Console.WriteLine($"Document event callbacks: {documentEvents.Data.Count}");
-            foreach (var callback in documentEvents.Data.Take(3))
-            {
-                //Console.WriteLine($"  Event: {callback.Event}");
-                //Console.WriteLine($"  Event Type: {callback.EventType}");
-                //Console.WriteLine($"  Application: {callback.Application}");
-            }
-
-            // Example 6: Multiple sorting options
-            Console.WriteLine("\n=== Example 6: Sort by multiple criteria ===");
-            var sortedCallbacks = await testContext.Events
-                .GetCallbacksAsync(new GetCallbacksOptions
-                {
-                    //SortByEndTime = SortOrder.Descending,
-                    //SortByCode = SortOrder.Ascending
-                })
-                .ConfigureAwait(false);
-
-            Console.WriteLine($"Multi-sorted callbacks: {sortedCallbacks.Data.Count}");
-
-            // Example 7: Analyze callback performance
-            Console.WriteLine("\n=== Example 7: Performance Analysis ===");
-            if (allCallbacks.Data.Any())
-            {
-                ////var completedCallbacks = allCallbacks.Data.Where(c => c.Duration.HasValue).ToList();
-                //if (completedCallbacks.Any())
-                //{
-                //    var avgDuration = completedCallbacks.Average(c => c.Duration.Value.TotalMilliseconds);
-                //    var maxDuration = completedCallbacks.Max(c => c.Duration.Value.TotalMilliseconds);
-                //    var minDuration = completedCallbacks.Min(c => c.Duration.Value.TotalMilliseconds);
-
-                //    Console.WriteLine($"Callback Performance Statistics:");
-                //    Console.WriteLine($"  Average Duration: {avgDuration:F2}ms");
-                //    Console.WriteLine($"  Max Duration: {maxDuration:F2}ms");
-                //    Console.WriteLine($"  Min Duration: {minDuration:F2}ms");
-                //}
-
-                //var successRate = (double)allCallbacks.Data.Count(c => c.IsSuccessful) / allCallbacks.Data.Count * 100;
-                //Console.WriteLine($"  Success Rate: {successRate:F1}%");
-            }
-
-            // Cleanup
-            await testContext.Documents.DeleteDocumentAsync(documentId).ConfigureAwait(false);
         }
     }
 }
