@@ -197,5 +197,26 @@ namespace SignNow.Net.Service
                 .RequestAsync<CallbacksResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        /// <inheritdoc />
+        public async Task<CallbacksResponse> GetCallbacksBySubscriptionIdAsync(string subscriptionId, GetCallbacksOptions options = default, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{subscriptionId.ValidateId()}/callbacks{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<CallbacksResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
