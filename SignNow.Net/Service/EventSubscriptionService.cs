@@ -120,14 +120,16 @@ namespace SignNow.Net.Service
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/api/v2/events/{updateEvent.Id.ValidateId()}"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{updateEvent.Id.ValidateId()}"),
                 Content = updateEvent,
                 Token = Token
             };
 
-            return await SignNowClient
-                .RequestAsync<EventUpdateResponse>(requestOptions, cancellationToken)
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
+
+            return new EventUpdateResponse { Id = updateEvent.Id };
         }
 
         /// <inheritdoc />

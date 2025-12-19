@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Updated netstandard min version to 2.0
 - Removed InheritDoc tool from the project
 - Upgraded NET Framework min supported version to 4.6.2
+- Update the 'UpdateEventSubscriptionAsync' method to use the latest implementation of SignNow API event-subscriptions endpoint
 
 
 ## [1.3.0] - 2024-12-18
