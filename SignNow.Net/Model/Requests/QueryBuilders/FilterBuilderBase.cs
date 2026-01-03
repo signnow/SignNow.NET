@@ -30,7 +30,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// If only one filter is provided, it returns that filter directly without wrapping in AND logic.
         /// Null filters are automatically excluded from the final condition.
         /// </remarks>
-        protected string And<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
+        protected static string And<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
         {
             if (filterBuilder == null || filterBuilder.Length == 0)
                 throw new ArgumentException("At least one filter must be provided for AND operation", nameof(filterBuilder));
@@ -55,7 +55,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// If only one filter is provided, it returns that filter directly without wrapping in OR logic.
         /// Null filters are automatically excluded from the final condition.
         /// </remarks>
-        protected string Or<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
+        protected static string Or<T>(params Func<T, string>[] filterBuilder) where T : FilterBuilderBase, new()
         {
             if (filterBuilder == null || filterBuilder.Length == 0)
                 throw new ArgumentException("At least one filter must be provided for OR operation", nameof(filterBuilder));

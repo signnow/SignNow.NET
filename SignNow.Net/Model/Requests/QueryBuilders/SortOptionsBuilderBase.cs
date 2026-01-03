@@ -14,7 +14,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
 
         /// <summary>
         /// Converts all configured sort options to a query string format.
-        /// Multiple sort parameters are joined with '&' characters for use in HTTP query strings.
+        /// Multiple sort parameters are joined with '&amp;' characters for use in HTTP query strings.
         /// </summary>
         public override string ToString() => string.Join("&", sorts.Values);
 

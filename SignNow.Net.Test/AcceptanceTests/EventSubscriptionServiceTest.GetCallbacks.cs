@@ -16,9 +16,8 @@ namespace AcceptanceTests
             {
                 Filters = f => f.And(
                     fb => fb.Code.Between(200, 299),
-                    fb => fb.Code.Between(400, 499),
-                    f => f.And(
-                        fb => fb.EventType.In(EventSubscriptionEntityType.User),
+                    f => f.Or(
+                        fb => fb.CallbackUrl.Like("example"),
                         fb => fb.Event.In(EventType.DocumentComplete, EventType.UserDocumentCreate)
                     )
                 ),

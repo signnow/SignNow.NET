@@ -14,7 +14,7 @@ namespace SignNow.Net.Examples
         /// Demonstrates how to get a list of webhook callback events with various filtering and sorting options.
         /// This example shows how to retrieve callback history and analyze webhook delivery results using the current SDK API.
         /// </summary>
-        /// <see cref="https://docs.signnow.com/docs/signnow/reference/operations/get-v2-event-subscriptions-callbacks"/>
+        /// <see cref="https://docs.signnow.com/docs/signnow/callbacks-info/operations/list-v-2-event-subscription-callbacks"/>
         [TestMethod]
         public async Task GetCallbacksAsync()
         {

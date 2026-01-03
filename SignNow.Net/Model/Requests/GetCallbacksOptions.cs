@@ -12,8 +12,18 @@ namespace SignNow.Net.Model.Requests
     /// </summary>
     public class GetCallbacksOptions : IQueryToString
     {
+        /// <summary>
+        /// Function to build filter criteria for callbacks.
+        /// Supports filtering by entity ID, callback URL, date range, response codes, event types, and applications.
+        /// </summary>
+        /// <seealso cref="CallbackFilterBuilder"/>
         public Func<CallbackFilterBuilder, string> Filters { get; set; }
 
+        /// <summary>
+        /// Function to configure sorting options for callbacks.
+        /// If not specified, results are sorted by start_time in descending order.
+        /// </summary>
+        /// <seealso cref="CallbackSortOptionsBuilder"/>
         public Func<CallbackSortOptionsBuilder, CallbackSortOptionsBuilder> Sortings { get; set; }
 
         /// <summary>

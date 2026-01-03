@@ -58,7 +58,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// <param name="filterBuilders">An array of filter builder functions to combine with AND logic.</param>
         /// <returns>Query string representing the combined AND filter condition.</returns>
         public string And(params Func<CallbackFilterBuilder, string>[] filterBuilders)
-            => base.And(filterBuilders);
+            => FilterBuilderBase.And(filterBuilders);
 
         /// <summary>
         /// Combines multiple filter conditions using logical OR operation.
@@ -67,16 +67,16 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// <param name="filterBuilders">An array of filter builder functions to combine with OR logic.</param>
         /// <returns>Query string representing the combined OR filter condition.</returns>
         public string Or(params Func<CallbackFilterBuilder, string>[] filterBuilders)
-            => base.Or(filterBuilders);
+            => FilterBuilderBase.Or(filterBuilders);
 
         public class ApplicationImplementation
         {
             /// <summary>
-            /// Filters callbacks where the application name matches any of the specified values.
+            /// Filters callbacks where the application id matches any of the specified values.
             /// </summary>
             /// <param name="ids">The application ids to filter by.</param>
-            /// <returns>A query string for application matching.</returns>
-            public string In(params string[] ids) => Filter("application", "in", ids);
+            /// <returns>A query string for application id matching.</returns>
+            public string In(params string[] ids) => FilterBuilderBase.Filter("application", "in", ids);
         }
 
         public class CodeImplementation
@@ -93,7 +93,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.Code.Between(200, 299)
             /// </code>
             /// </example>
-            public string Between(int from, int to) => Filter("code", "between", new[] { from.ToString(), to.ToString()}, quoteValues: false);
+            public string Between(int from, int to) => FilterBuilderBase.Filter("code", "between", new[] { from.ToString(), to.ToString()}, quoteValues: false);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// <param name="from">The start Unix timestamp.</param>
             /// <param name="to">The end Unix timestamp.</param>
             /// <returns>A query string for date range matching using Unix timestamps.</returns>
-            public string Between(long from, long to) => Filter("date", "between", new[] { from.ToString(), to.ToString()}, quoteValues: false);
+            public string Between(long from, long to) => FilterBuilderBase.Filter("date", "between", new[] { from.ToString(), to.ToString()}, quoteValues: false);
 
             /// <summary>
             /// Filters callbacks where the callback date is within the specified DateTime range.
@@ -122,7 +122,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.Date.Between(DateTime.Today.AddDays(-7), DateTime.Today)
             /// </code>
             /// </example>
-            public string Between(DateTime from, DateTime to) => Filter("date", "between", new[] {
+            public string Between(DateTime from, DateTime to) => FilterBuilderBase.Filter("date", "between", new[] {
                 ((DateTimeOffset)from).ToUnixTimeSeconds().ToString(), ((DateTimeOffset)to).ToUnixTimeSeconds().ToString()
             },quoteValues: false);
         }
@@ -140,7 +140,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.EntityId.Like("doc_")
             /// </code>
             /// </example>
-            public string Like(string value) => Filter("entity_id", "like", value);
+            public string Like(string value) => FilterBuilderBase.Filter("entity_id", "like", value);
         }
 
         public class CallbackUrlImplementation
@@ -156,7 +156,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.CallbackUrl.Like("/webhook")
             /// </code>
             /// </example>
-            public string Like(string value) => Filter("callback_url", "like", value);
+            public string Like(string value) => FilterBuilderBase.Filter("callback_url", "like", value);
         }
 
         public class InitiatorIdImplementation
@@ -172,7 +172,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.InitiatorId.Like("admin")
             /// </code>
             /// </example>
-            public string Like(string value) => Filter("initiator_id", "like", value);
+            public string Like(string value) => FilterBuilderBase.Filter("initiator_id", "like", value);
         }
 
         public class EventImplementation
@@ -188,7 +188,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.Event.In(EventType.DocumentComplete, EventType.DocumentUpdate)
             /// </code>
             /// </example>
-            public string In(params EventType[] events) => Filter("event", "in", EnumToStringValues(events));
+            public string In(params EventType[] events) => FilterBuilderBase.Filter("event", "in", EnumToStringValues(events));
         }
 
         public class EventTypeImplementation
@@ -204,7 +204,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// builder.EventType.In(EventSubscriptionEntityType.Document, EventSubscriptionEntityType.Template)
             /// </code>
             /// </example>
-            public string In(params EventSubscriptionEntityType[] events) => Filter("event_type", "in", EnumToStringValues(events));
+            public string In(params EventSubscriptionEntityType[] events) => FilterBuilderBase.Filter("event_type", "in", EnumToStringValues(events));
         }
     }
 
