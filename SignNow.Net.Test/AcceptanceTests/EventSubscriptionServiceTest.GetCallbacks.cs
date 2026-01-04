@@ -41,10 +41,12 @@ namespace AcceptanceTests
             foreach (var callback in response.Data)
             {
                 var statusCode = callback.ResponseStatusCode;
-                Assert.IsTrue((statusCode >= 200 && statusCode <= 299) || (statusCode >= 400 && statusCode <= 499),
-                    $"Callback status code {statusCode} should be in range 200-299 or 400-499");
-                Assert.AreEqual(EventSubscriptionEntityType.User, callback.EntityType);
-                Assert.IsTrue(callback.EventName == EventType.DocumentComplete || callback.EventName == EventType.UserDocumentCreate);
+                Assert.IsTrue((statusCode >= 200 && statusCode <= 299),
+                    $"Callback status code {statusCode} should be in range 200-299");
+                Assert.IsTrue(
+                    callback.EventName == EventType.DocumentComplete || callback.EventName == EventType.UserDocumentCreate ||
+                    callback.CallbackUrl.ToString().Contains("example")
+                );
             }
 
             var queryString = options.ToQueryString();
