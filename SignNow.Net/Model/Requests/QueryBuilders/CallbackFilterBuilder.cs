@@ -168,8 +168,8 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
             /// <returns>A query string for initiator ID pattern matching.</returns>
             /// <example>
             /// <code>
-            /// // Filter for callbacks initiated by users with IDs containing "admin"
-            /// builder.InitiatorId.Like("admin")
+            /// // Filter for callbacks initiated by users with IDs containing "user_id"
+            /// builder.InitiatorId.Like("user_id")
             /// </code>
             /// </example>
             public string Like(string value) => FilterBuilderBase.Filter("initiator_id", "like", value);

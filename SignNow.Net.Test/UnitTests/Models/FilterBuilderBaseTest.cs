@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests.QueryBuilders;
@@ -20,13 +19,13 @@ namespace UnitTests.Models
             public string Or(params Func<FilterBuilderTestClass, string>[] filterBuilder)
                 => FilterBuilderBase.Or(filterBuilder);
 
-            public string Filter(string param, string operation, string value)
+            public new string Filter(string param, string operation, string value)
                 => FilterBuilderBase.Filter(param, operation, value);
 
-            public string Filter(string param, string operation, string[] values, bool quoteValues = false)
+            public new string Filter(string param, string operation, string[] values, bool quoteValues = false)
                 => FilterBuilderBase.Filter(param, operation, values, quoteValues);
 
-            public string[] EnumToStringValues<T>(T[] enums) where T : Enum
+            public new string[] EnumToStringValues<T>(T[] enums) where T : Enum
                 => FilterBuilderBase.EnumToStringValues(enums);
         }
 

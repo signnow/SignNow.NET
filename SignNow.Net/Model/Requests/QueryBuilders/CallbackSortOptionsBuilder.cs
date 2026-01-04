@@ -21,27 +21,27 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// <summary>
         /// Sorts callbacks by application name.
         /// </summary>
-        public CallbackSortOptionsBuilder Application(SortOrder sort = SortOrder.Ascending)
+        public CallbackSortOptionsBuilder Application(SortOrder order = SortOrder.Ascending)
         {
-            sorts["application"] = Sort("application", sort);
+            sorts["application"] = Sort("application", order);
             return this;
         }
 
         /// <summary>
         /// Sorts callbacks by HTTP response status code.
         /// </summary>
-        public CallbackSortOptionsBuilder Code(SortOrder sort = SortOrder.Ascending)
+        public CallbackSortOptionsBuilder Code(SortOrder order = SortOrder.Ascending)
         {
-            sorts["code"] = Sort("code", sort);
+            sorts["code"] = Sort("code", order);
             return this;
         }
 
         /// <summary>
         /// Sorts callbacks by the timestamp when the callback request ended.
         /// </summary>
-        public CallbackSortOptionsBuilder EndTime(SortOrder sort = SortOrder.Ascending)
+        public CallbackSortOptionsBuilder EndTime(SortOrder order = SortOrder.Ascending)
         {
-            sorts["end_time"] = Sort("end_time", sort);
+            sorts["end_time"] = Sort("end_time", order);
             return this;
         }
 
@@ -49,18 +49,18 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         /// Sorts callbacks by the timestamp when the callback request started.
         /// This is the default sort field if no sorting is explicitly specified (descending order).
         /// </summary>
-        public CallbackSortOptionsBuilder StartTime(SortOrder sort = SortOrder.Ascending)
+        public CallbackSortOptionsBuilder StartTime(SortOrder order = SortOrder.Ascending)
         {
-            sorts["start_time"] = Sort("start_time", sort);
+            sorts["start_time"] = Sort("start_time", order);
             return this;
         }
 
         /// <summary>
         /// Sorts callbacks by event name (e.g., document.complete, user.document.create).
         /// </summary>
-        public CallbackSortOptionsBuilder Event(SortOrder sort = SortOrder.Ascending)
+        public CallbackSortOptionsBuilder Event(SortOrder order = SortOrder.Ascending)
         {
-            sorts["event"] = Sort("event", sort);
+            sorts["event"] = Sort("event", order);
             return this;
         }
 
