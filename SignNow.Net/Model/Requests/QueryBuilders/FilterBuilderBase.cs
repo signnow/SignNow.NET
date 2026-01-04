@@ -105,6 +105,7 @@ namespace SignNow.Net.Model.Requests.QueryBuilders
         {
             Guard.ArgumentNotNull(param, nameof(param));
             Guard.ArgumentNotNull(operation, nameof(operation));
+            Guard.ArgumentNotNull(values, nameof(values));
 
             var arrayValues = quoteValues ? values.Select(v => $"\"{v}\"") : values;
             return $"{{\"{param}\":{{\"type\": \"{operation}\", \"value\": [{string.Join(",", arrayValues)}]}}}}";
