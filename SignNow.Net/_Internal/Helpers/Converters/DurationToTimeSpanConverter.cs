@@ -18,11 +18,11 @@ namespace SignNow.Net._Internal.Helpers.Converters
         {
             return reader.TokenType switch
             {
-                JsonToken.Null => new TimeSpan(0),
+                JsonToken.Null => TimeSpan.FromSeconds(0),
 
-                JsonToken.Integer => new TimeSpan((long)reader.Value * TimeSpan.TicksPerSecond),
+                JsonToken.Integer => TimeSpan.FromSeconds((long)reader.Value),
 
-                JsonToken.Float => new TimeSpan((long)((double)reader.Value * TimeSpan.TicksPerSecond)),
+                JsonToken.Float => TimeSpan.FromSeconds((double)reader.Value),
 
                 _ => throw new JsonSerializationException(string.Format(
                         CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
