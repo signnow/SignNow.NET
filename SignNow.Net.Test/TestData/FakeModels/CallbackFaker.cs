@@ -72,9 +72,9 @@ namespace SignNow.Net.Test.FakeModels
             RuleFor(o => o.Duration, f => f.Random.Double(0.1, 30.0));
             
             // Timestamps
-            var baseTime = DateTimeOffset.UtcNow.AddDays(-7).ToUnixTimeSeconds();
-            RuleFor(o => o.RequestStartTime, f => baseTime + f.Random.Long(0, 604800)); // Within last 7 days
-            RuleFor(o => o.RequestEndTime, (f, o) => o.RequestStartTime + f.Random.Long(1, 300)); // 1-300 seconds after start
+            var baseTime = DateTimeOffset.UtcNow.AddDays(-7).DateTime;
+            RuleFor(o => o.RequestStartTime, f => baseTime.AddSeconds(f.Random.Long(0, 604800))); // Within last 7 days
+            RuleFor(o => o.RequestEndTime, (f, o) => o.RequestStartTime.AddSeconds(f.Random.Long(1, 300)) ); // 1-300 seconds after start
             
             // Headers
             RuleFor(o => o.RequestHeaders, f => f.Random.Bool(0.8f) ? new EventAttributeHeaders

@@ -32,7 +32,8 @@ namespace SignNow.Net.Model
         /// The timestamp when the event occurred.
         /// </summary>
         [JsonProperty("timestamp")]
-        public long Timestamp { get; set; }
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
+        public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// The event name.

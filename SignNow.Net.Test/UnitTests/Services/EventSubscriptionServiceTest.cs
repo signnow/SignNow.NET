@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -115,8 +116,8 @@ namespace UnitTests.Services
             Assert.AreEqual("https://example.com/webhook", callback.CallbackUrl.ToString());
             Assert.AreEqual("POST", callback.RequestMethod);
             Assert.AreEqual(1.5, callback.Duration, 0.01);
-            Assert.AreEqual(1609459200, callback.RequestStartTime);
-            Assert.AreEqual(1609459205, callback.RequestEndTime);
+            Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1609459200).DateTime, callback.RequestStartTime);
+            Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1609459205).DateTime, callback.RequestEndTime);
             Assert.AreEqual("OK", callback.ResponseContent);
             Assert.AreEqual(200, callback.ResponseStatusCode);
             Assert.AreEqual("owner@example.com", callback.EventSubscriptionOwnerEmail);
@@ -134,7 +135,7 @@ namespace UnitTests.Services
             Assert.IsNotNull(callback.RequestContent.Content);
 
             var meta = callback.RequestContent.Meta;
-            Assert.AreEqual(1609459200, meta.Timestamp);
+            Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1609459200).DateTime, meta.Timestamp);
             Assert.AreEqual(EventType.DocumentComplete, meta.Event);
             Assert.AreEqual("https://api.signnow.com/", meta.Environment.ToString());
             Assert.AreEqual("user_789", meta.InitiatorId);
