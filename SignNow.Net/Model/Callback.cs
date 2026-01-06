@@ -80,10 +80,11 @@ namespace SignNow.Net.Model
         public string RequestMethod { get; set; }
 
         /// <summary>
-        /// The duration of the callback execution in seconds.
+        /// The duration of the callback execution
         /// </summary>
         [JsonProperty("duration")]
-        public double Duration { get; set; } // todo TimeSpan
+        [JsonConverter(typeof(DurationToTimeSpanConverter))]
+        public TimeSpan Duration { get; set; }
 
         /// <summary>
         /// The timestamp when the callback request started (Unix timestamp).

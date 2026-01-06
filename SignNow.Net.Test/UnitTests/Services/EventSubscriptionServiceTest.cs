@@ -115,7 +115,7 @@ namespace UnitTests.Services
             Assert.AreEqual(EventType.DocumentComplete, callback.EventName);
             Assert.AreEqual("https://example.com/webhook", callback.CallbackUrl.ToString());
             Assert.AreEqual("POST", callback.RequestMethod);
-            Assert.AreEqual(1.5, callback.Duration, 0.01);
+            Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 1500), callback.Duration);
             Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1609459200).DateTime, callback.RequestStartTime);
             Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1609459205).DateTime, callback.RequestEndTime);
             Assert.AreEqual("OK", callback.ResponseContent);

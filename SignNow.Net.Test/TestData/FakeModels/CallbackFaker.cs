@@ -69,7 +69,7 @@ namespace SignNow.Net.Test.FakeModels
             RuleFor(o => o.EventName, f => f.PickRandom<EventType>());
             RuleFor(o => o.CallbackUrl, f => new Uri(f.Internet.Url()));
             RuleFor(o => o.RequestMethod, f => f.PickRandom("POST", "PUT", "PATCH"));
-            RuleFor(o => o.Duration, f => f.Random.Double(0.1, 30.0));
+            RuleFor(o => o.Duration, f => new TimeSpan((long) (f.Random.Double(0.1, 30.0) * TimeSpan.TicksPerSecond)));
             
             // Timestamps
             var baseTime = DateTimeOffset.UtcNow.AddDays(-7).DateTime;
