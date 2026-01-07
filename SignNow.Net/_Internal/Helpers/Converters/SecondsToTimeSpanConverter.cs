@@ -5,7 +5,7 @@ using SignNow.Net.Exceptions;
 
 namespace SignNow.Net._Internal.Helpers.Converters
 {
-    internal class DurationToTimeSpanConverter : JsonConverter
+    internal class SecondsToTimeSpanConverter : JsonConverter
     {
         /// <inheritdoc cref="JsonConverter.WriteJson" />
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

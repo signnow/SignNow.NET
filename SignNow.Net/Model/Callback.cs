@@ -83,18 +83,18 @@ namespace SignNow.Net.Model
         /// The duration of the callback execution
         /// </summary>
         [JsonProperty("duration")]
-        [JsonConverter(typeof(DurationToTimeSpanConverter))]
+        [JsonConverter(typeof(SecondsToTimeSpanConverter))]
         public TimeSpan Duration { get; set; }
 
         /// <summary>
-        /// The timestamp when the callback request started (Unix timestamp).
+        /// The DateTime when the callback request started.
         /// </summary>
         [JsonProperty("request_start_time")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime RequestStartTime { get; set; }
 
         /// <summary>
-        /// The timestamp when the callback request ended (Unix timestamp).
+        /// The DateTime when the callback request ended.
         /// </summary>
         [JsonProperty("request_end_time")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]

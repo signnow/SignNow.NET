@@ -7,7 +7,7 @@ using SignNow.Net.Model;
 namespace UnitTests.Helpers.Converters
 {
     [TestClass]
-    public class DurationToTimeSpanConverterTest
+    public class SecondsToTimeSpanConverterTest
     {
         [DataTestMethod]
         [DataRow(@"{'duration': 3}", 3)]
@@ -40,7 +40,7 @@ namespace UnitTests.Helpers.Converters
         [TestMethod]
         public void CanConvertTimeSpanType()
         {
-            var converter = new DurationToTimeSpanConverter();
+            var converter = new SecondsToTimeSpanConverter();
 
             Assert.IsTrue(converter.CanConvert(typeof(TimeSpan)));
             Assert.IsFalse(converter.CanConvert(typeof(int)));
