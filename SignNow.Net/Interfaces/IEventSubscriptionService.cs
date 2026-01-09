@@ -87,5 +87,15 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Events History page</returns>
         Task<EventHistoryListResponse> GetEventHistoryAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Allows to get the list of all webhook events (events history) with filtering and sorting options.
+        /// Results can be filtered by entity ID, callback URL, date range, response codes, event types, and applications.
+        /// If no sort parameter is specified, results are sorted by start_time in descending order.
+        /// </summary>
+        /// <param name="options">Options for filtering and sorting callbacks</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>List of callback events with metadata</returns>
+        Task<CallbacksResponse> GetCallbacksAsync(GetCallbacksOptions options = default, CancellationToken cancellationToken = default);
     }
 }
