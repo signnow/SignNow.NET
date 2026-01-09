@@ -5,12 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Added
+- `GetEventSubscriptionsListAsync` method with enhanced filtering and sorting capabilities for retrieving event subscriptions
+- `GetEventSubscriptionAsync` method for retrieving event subscription details by ID using the v2 event-subscriptions endpoint
+- `DeleteEventSubscriptionAsync` method for deleting event subscription
+- `GetCallbacksAsync` method for retrieving webhook callback events history with comprehensive filtering and sorting options
+
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
 - Drop support for .NET Core 2.1 and 3.1 (dropper netstandard 1.x)
 - Updated netstandard min version to 2.0
 - Removed InheritDoc tool from the project
 - Upgraded NET Framework min supported version to 4.6.2
+- Update the 'UpdateEventSubscriptionAsync' method to use the latest implementation of SignNow API event-subscriptions endpoint
 
 
 ## [1.3.0] - 2024-12-18

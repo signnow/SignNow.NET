@@ -60,6 +60,27 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        public async Task<EventSubscriptionResponse> GetEventSubscriptionsListAsync(GetEventSubscriptionsListOptions options = default, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EventSubscriptionResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<EventSubscription> GetEventSubscriptionInfoAsync(string eventId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
@@ -77,28 +98,62 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        public async Task<EventSubscription> GetEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{subscriptionId.ValidateId()}"),
+                Token = Token
+            };
+
+            var responseData = await SignNowClient
+                .RequestAsync<EventSubscriptionInfoResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+
+            return responseData.ResponseData;
+        }
+
+        /// <inheritdoc />
         public async Task<EventUpdateResponse> UpdateEventSubscriptionAsync(UpdateEventSubscription updateEvent, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Bearer;
             var requestOptions = new PutHttpRequestOptions
             {
-                RequestUrl = new Uri(ApiBaseUrl, $"/api/v2/events/{updateEvent.Id.ValidateId()}"),
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{updateEvent.Id.ValidateId()}"),
                 Content = updateEvent,
                 Token = Token
             };
 
-            return await SignNowClient
-                .RequestAsync<EventUpdateResponse>(requestOptions, cancellationToken)
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
+
+            return new EventUpdateResponse { Id = updateEvent.Id };
         }
 
         /// <inheritdoc />
-        public async Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default)
+        public async Task UnsubscribeEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default)
         {
             Token.TokenType = TokenType.Basic;
             var requestOptions = new DeleteHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, $"/api/v2/events/{eventId.ValidateId()}"),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task DeleteEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/{subscriptionId.ValidateId()}"),
                 Token = Token
             };
 
@@ -119,6 +174,27 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<EventHistoryListResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<CallbacksResponse> GetCallbacksAsync(GetCallbacksOptions options = default, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/event-subscriptions/callbacks{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<CallbacksResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }
