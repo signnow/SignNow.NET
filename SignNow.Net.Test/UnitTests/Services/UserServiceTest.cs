@@ -13,7 +13,7 @@ using SignNow.Net.Test.FakeModels;
 namespace UnitTests.Services
 {
     [TestClass]
-    public class UserServiceTest : SignNowTestBase
+    public partial class UserServiceTest : SignNowTestBase
     {
         [TestMethod]
         public void ThrowsExceptionOnInviteIsNull()

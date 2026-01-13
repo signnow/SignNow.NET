@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
@@ -94,6 +94,27 @@ namespace SignNow.Net.Service
 
             await SignNowClient
                 .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IFolderService.GetFolderByIdAsync"/>
+        /// <exception cref="System.ArgumentException">If folder identity is not valid.</exception>
+        public async Task<SignNowFolders> GetFolderByIdAsync(string folderId, GetFolderOptions options, CancellationToken cancellation = default)
+        {
+            var query = options?.ToQueryString();
+            var filters = string.IsNullOrEmpty(query)
+                ? string.Empty
+                : $"?{query}";
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/folder/{folderId.ValidateId()}{filters}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<SignNowFolders>(requestOptions, cancellation)
                 .ConfigureAwait(false);
         }
 

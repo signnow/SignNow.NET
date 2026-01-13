@@ -20,7 +20,7 @@ namespace UnitTests.Helpers.Converters
         public void ShouldDeserializeAsBoolean(string jsonParam, bool expected)
         {
             var json = $"{{\"active\": \"{jsonParam}\"}}";
-            var obj = JsonConvert.DeserializeObject<User>(json);
+            var obj = TestUtils.DeserializeFromJson<User>(json);
 
             Assert.AreEqual(expected, obj.Active);
         }
@@ -29,7 +29,7 @@ namespace UnitTests.Helpers.Converters
         public void ThrowsExceptionOnWrongValue()
         {
             var exception = Assert.ThrowsException<JsonSerializationException>(
-                () => JsonConvert.DeserializeObject<User>($"{{\"active\": \"error\"}}"));
+                () => TestUtils.DeserializeFromJson<User>($"{{\"active\": \"error\"}}"));
 
             var expectedMessage = string.Format(CultureInfo.CurrentCulture, ExceptionMessages.UnexpectedValueWhenConverting,
                 "Boolean", "`true`, `false`", "error");
@@ -47,8 +47,8 @@ namespace UnitTests.Helpers.Converters
                 Active = param
             };
 
-            var actual = JsonConvert.SerializeObject(obj);
-            var expected = $"\"active\":{param.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}";
+            var actual = TestUtils.SerializeToJsonFormatted(obj);
+            var expected = $"\"active\": {param.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}";
 
             StringAssert.Contains(actual, expected);
         }

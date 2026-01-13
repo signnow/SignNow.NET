@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -23,7 +23,7 @@ namespace UnitTests.Models
                     'signature_id': '5abc19d0e5b0e77b78fef3202000220f01fea3cf'
                 }";
 
-            var response = JsonConvert.DeserializeObject<FreeformInvite>(json);
+            var response = TestUtils.DeserializeFromJson<FreeformInvite>(json);
 
             Assert.AreEqual("827a6dc8a83805f5961234304d2166b75ba19cf3", response.Id);
             Assert.AreEqual("40204b3344984768bb16d61f8550f8b5edfd719a", response.UserId);

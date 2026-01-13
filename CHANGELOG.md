@@ -5,12 +5,33 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+
+## [1.4.0] - 2026-01-13
+### Added
+- Event Subscriptions & Webhooks:
+    - Get Event Subscriptions List: Enhanced filtering and sorting for retrieving event subscriptions with flexible query
+      options
+    - Get Event Subscription by ID: Retrieve detailed information about specific event subscriptions
+    - Delete Event Subscription: Remove event subscriptions programmatically
+    - Get Callbacks History: Comprehensive webhook callback event history with advanced filtering and sorting capabilities
+- Document Template Operations:
+    - Template Routing Management: Create, retrieve, and update routing configurations for document templates
+    - Bulk Invite from Template: Send signing invitations to multiple recipients using templates
+    - Document Group Templates: List, create, and update document group templates
+- Document & Folder Operations
+  - Get Document Fields: Retrieve all fields from documents with values, types, and metadata
+  - Get Folder by ID: Fetch detailed folder information including contained documents
+- User Management
+  - Update User Initials: Upload and update user's initial signature using base64-encoded images
+  - Verify User Email: Send and verify user email addresses with verification tokens
+
 ### Changed
-- Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
-- Drop support for .NET Core 2.1 and 3.1 (dropper netstandard 1.x)
-- Updated netstandard min version to 2.0
-- Removed InheritDoc tool from the project
-- Upgraded NET Framework min supported version to 4.6.2
+- Upgraded to .NET 7.0/8.0 for tests and examples
+- Minimum .NET Framework version upgraded to 4.6.2
+- Dropped support for .NET Core 2.1 and 3.1
+- Minimum netstandard version updated to 2.0
+- Removed InheritDoc tool
+- Update the 'UpdateEventSubscriptionAsync' method to use the latest implementation of SignNow API event-subscriptions endpoint
 
 
 ## [1.3.0] - 2024-12-18

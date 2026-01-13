@@ -1,7 +1,7 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Model;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -23,7 +23,7 @@ namespace UnitTests.Models
             ""folder_count"": ""20""
             }";
 
-            var folder = JsonConvert.DeserializeObject<Folder>(folderJson);
+            var folder = TestUtils.DeserializeFromJson<Folder>(folderJson);
 
             Assert.AreEqual("e1d8d63ba51c4009ab8241f249c908b0fd5a5e48", folder.Id);
             Assert.AreEqual("a7138ccc971e98080bfa999cc32d4bef4cca51a9", folder.ParentId);

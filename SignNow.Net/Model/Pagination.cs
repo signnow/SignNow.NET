@@ -22,6 +22,7 @@ namespace SignNow.Net.Model
         public int TotalPages { get; set; }
 
         [JsonProperty("links", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(PageLinksOrEmptyArrayConverter))]
         public PageLinks Links { get; set; }
     }
 

@@ -9,7 +9,7 @@ using SignNow.Net.Model.Requests;
 namespace SignNow.Net.Examples
 {
     [TestClass]
-    public partial class CreateEventSubscriptionForDocument : ExamplesBase
+    public partial class EventSubscriptionExamples : ExamplesBase
     {
         /// <summary>
         /// Allows to subscribe an external service(callback_url) to a specific event of user or document.
@@ -69,7 +69,7 @@ namespace SignNow.Net.Examples
             // Unsubscribes an external service (callback_url) from specific events of user or document
             // <see cref="https://docs.signnow.com/docs/signnow/reference/operations/delete-a-api-v-2-event"/>
             await testContext.Events
-                .DeleteEventSubscriptionAsync(myLatestEvent.Id)
+                .UnsubscribeEventSubscriptionAsync(myLatestEvent.Id)
                 .ConfigureAwait(false);
 
             // clean up

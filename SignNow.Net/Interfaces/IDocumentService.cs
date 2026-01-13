@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model.EditFields;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
@@ -121,6 +122,19 @@ namespace SignNow.Net.Interfaces
         Task<CreateDocumentFromTemplateResponse> CreateDocumentFromTemplateAsync(string templateId, string documentName, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Creates multiple invites to different signers from one template using a CSV file.
+        /// A new document is generated for each signer and stored in the specified folder.
+        /// </summary>
+        /// <param name="templateId">Identity of the template to create bulk invites from.</param>
+        /// <param name="request">Bulk invite request containing CSV file, folder, and optional parameters.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Returns status of the bulk invite job.</returns>
+        Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
+            string templateId,
+            CreateBulkInviteRequest request,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Adds values to fields that the Signers can later edit when they receive the document for signature.
         /// Works only with Text field types.
         /// </summary>
@@ -138,5 +152,41 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<EditDocumentResponse> EditDocumentAsync(string documentId, IEnumerable<IFieldEditable> fields, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Retrieves contents from the fields completed by the signer.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to retrieve field data from.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Document fields data with pagination information.</returns>
+        Task<DocumentFieldsResponse> GetDocumentFieldsAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets routing detail information for a document template.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to get routing detail for.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
+        Task<GetRoutingDetailResponse> GetRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets or creates or updates routing detail for a document template.
+        /// If routing detail is not active, updates the data. If routing detail is not found, creates routing detail based on actors data.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to post routing detail for.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Routing detail information including signers, CC recipients, and instructions.</returns>
+        Task<CreateRoutingDetailResponse> CreateRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates or creates routing detail for a document template.
+        /// Add recipients to document template. Update or create routing detail based on actors data.
+        /// </summary>
+        /// <param name="documentId">Identity of the document to update routing detail for.</param>
+        /// <param name="request">Routing detail request containing signers, CC recipients, viewers, and approvers.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Updated routing detail information including signers, CC recipients, and instructions.</returns>
+        Task<UpdateRoutingDetailResponse> UpdateRoutingDetailAsync(string documentId, UpdateRoutingDetailRequest request, CancellationToken cancellationToken = default);
+
     }
 }

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using SignNow.Net.Internal.Model;
+using UnitTests;
 
 namespace UnitTests.Models
 {
@@ -14,7 +14,7 @@ namespace UnitTests.Models
         [DynamicData(nameof(ErrorContentProvider), DynamicDataSourceType.Method, DynamicDataDisplayName = nameof(TestDisplayName))]
         public void ShouldProcessErrorMessage(string testName, string errorContext, string expectedMsg, string expectedCode)
         {
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorContext);
+            var errorResponse = TestUtils.DeserializeFromJson<ErrorResponse>(errorContext);
 
             Assert.AreEqual(expectedMsg, errorResponse.GetErrorMessage());
             Assert.AreEqual(expectedCode, errorResponse.GetErrorCode());

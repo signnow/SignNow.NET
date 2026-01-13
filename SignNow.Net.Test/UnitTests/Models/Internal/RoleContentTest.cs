@@ -94,17 +94,17 @@ namespace UnitTests.Models
 
             content.SetAuthenticationBySms("800 831-2050");
             Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
-            Assert.AreEqual("sms", content.SignerAuth.AuthenticationType);
+            Assert.AreEqual(AuthenticationType.Sms, content.SignerAuth.AuthenticationType);
             Assert.IsNull(content.SignerAuth.Password);
 
             content.SetAuthenticationByPassword("secret");
-            Assert.AreEqual("password", content.SignerAuth.AuthenticationType);
+            Assert.AreEqual(AuthenticationType.Password, content.SignerAuth.AuthenticationType);
             Assert.AreEqual("secret", content.SignerAuth.Password);
             Assert.IsNull(content.SignerAuth.Phone);
 
             content.SetAuthenticationByPhoneCall("800 831-2050");
             Assert.AreEqual("800 831-2050", content.SignerAuth.Phone);
-            Assert.AreEqual("phone_call", content.SignerAuth.AuthenticationType);
+            Assert.AreEqual(AuthenticationType.PhoneCall, content.SignerAuth.AuthenticationType);
             Assert.IsNull(content.SignerAuth.Password);
 
             content.ClearSignerAuthentication();
