@@ -1,5 +1,5 @@
 using System;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model.Requests.EventSubscriptionBase;
 

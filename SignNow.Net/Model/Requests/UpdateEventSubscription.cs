@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
+using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model.Requests.EventSubscriptionBase;
 
 namespace SignNow.Net.Model.Requests
@@ -15,6 +16,7 @@ namespace SignNow.Net.Model.Requests
 
         public UpdateEventSubscription(EventType eventType, string entityId, string eventId, Uri callbackUrl)
         {
+            Guard.ArgumentNotNull(callbackUrl, nameof(callbackUrl));
             Id = eventId.ValidateId();
             EntityId = entityId.ValidateId();
             Event = eventType;
@@ -32,6 +34,7 @@ namespace SignNow.Net.Model.Requests
                 Headers = update.JsonAttributes.Headers,
                 UseTls12 = update.JsonAttributes.UseTls12,
                 IntegrationId = update.JsonAttributes.IntegrationId,
+                IncludeMetadata = update.JsonAttributes.IncludeMetadata,
             };
             SecretKey = update.JsonAttributes.SecretKey;
         }

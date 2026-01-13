@@ -43,6 +43,16 @@ namespace SignNow.Net.Model
         }
     }
 
+    public class PatchHttpRequestOptions : RequestOptions
+    {
+        public override Method HttpMethod => new Method("PATCH");
+
+        public PatchHttpRequestOptions(IContent ContentObj = null)
+        {
+            Content = ContentObj;
+        }
+    }
+
     public class DeleteHttpRequestOptions : RequestOptions
     {
         public override Method HttpMethod => Method.Delete;

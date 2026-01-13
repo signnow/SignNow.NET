@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Exceptions;
 using SignNow.Net.Interfaces;
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Internal.Requests;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Service
 {
@@ -102,6 +104,49 @@ namespace SignNow.Net.Service
             };
 
             await SignNowClient.RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IUserService.VerifyEmailAsync"/>
+        /// <exception cref="ArgumentException"><paramref name="email"/> address is not valid</exception>
+        /// <exception cref="ArgumentException"><paramref name="verificationToken"/> is null or empty</exception>
+        public async Task<VerifyEmailResponse> VerifyEmailAsync(string email, string verificationToken, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentIsNotEmptyString(verificationToken, nameof(verificationToken));
+            
+            Token.TokenType = TokenType.Basic;
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user/email/verify"),
+                Content = new VerifyEmailRequest 
+                { 
+                    Email = email.ValidateEmail(),
+                    VerificationToken = verificationToken
+                },
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync<VerifyEmailResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="IUserService.UpdateUserInitialsAsync" />
+        /// <exception cref="ArgumentNullException"><paramref name="imageData"/> is null</exception>
+        public async Task<UpdateUserInitialsResponse> UpdateUserInitialsAsync(Stream imageData, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(imageData, nameof(imageData));
+
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/user/initial"),
+                Content = new UpdateUserInitialsRequest(imageData),
+                Token = Token
+            };
+
+            return await SignNowClient.RequestAsync<UpdateUserInitialsResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
 

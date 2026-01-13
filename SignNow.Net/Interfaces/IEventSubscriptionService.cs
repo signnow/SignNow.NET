@@ -30,12 +30,30 @@ namespace SignNow.Net.Interfaces
         Task<EventSubscriptionResponse> GetEventSubscriptionsAsync(IQueryToString options = default, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets a filtered and sorted list of event subscriptions with enhanced query options.
+        /// Supports filtering by entity ID, callback URL, date, event types, and applications,
+        /// as well as sorting by creation date, event type, or application name.
+        /// </summary>
+        /// <param name="options">Enhanced query options for filtering and sorting</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>Filtered and sorted list of event subscriptions</returns>
+        Task<EventSubscriptionResponse> GetEventSubscriptionsListAsync(GetEventSubscriptionsListOptions options = default, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Allows users to get detailed info about one event subscription by its ID.
         /// </summary>
         /// <param name="eventId">Identity of event</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns><see cref="EventSubscription"/> model</returns>
         Task<EventSubscription> GetEventSubscriptionInfoAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get detailed info about one event subscription by its ID.
+        /// </summary>
+        /// <param name="subscriptionId">ID of the subscription</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns><see cref="EventSubscription"/> model</returns>
+        Task<EventSubscription> GetEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Allows changing an existing Event subscription.
@@ -51,7 +69,16 @@ namespace SignNow.Net.Interfaces
         /// <param name="eventId">Specific event identity</param>
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
-        Task DeleteEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
+        Task UnsubscribeEventSubscriptionAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Deletes an event subscription.
+        /// This method uses Bearer token authentication.
+        /// </summary>
+        /// <param name="subscriptionId">The unique identifier of the event subscription to delete.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>A task representing the asynchronous delete operation.</returns>
+        Task DeleteEventSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Allows users to get the list of webhook events (events history) by the event subscription ID.
@@ -60,5 +87,15 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns>Events History page</returns>
         Task<EventHistoryListResponse> GetEventHistoryAsync(string eventId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Allows to get the list of all webhook events (events history) with filtering and sorting options.
+        /// Results can be filtered by entity ID, callback URL, date range, response codes, event types, and applications.
+        /// If no sort parameter is specified, results are sorted by start_time in descending order.
+        /// </summary>
+        /// <param name="options">Options for filtering and sorting callbacks</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns>List of callback events with metadata</returns>
+        Task<CallbacksResponse> GetCallbacksAsync(GetCallbacksOptions options = default, CancellationToken cancellationToken = default);
     }
 }

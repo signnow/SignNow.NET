@@ -30,8 +30,8 @@ namespace UnitTests.Models
                 .RuleFor(obj => obj.Radiobuttons, new RadiobuttonContentFaker().Generate(qty))
                 .RuleFor(obj => obj.Texts, new TextContentFaker().Generate(qty));
 
-            var expected = JsonConvert.SerializeObject(fakeDocument.Generate(), Formatting.Indented);
-            var testDocument = JsonConvert.DeserializeObject<SignNowDocument>(expected);
+            var expected = TestUtils.SerializeToJsonFormatted(fakeDocument.Generate());
+            var testDocument = TestUtils.DeserializeFromJson<SignNowDocument>(expected);
 
             Assert.That.JsonEqual(expected, testDocument);
         }

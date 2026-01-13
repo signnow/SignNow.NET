@@ -1,4 +1,4 @@
-using SignNow.Net.Internal.Extensions;
+using SignNow.Net.Extensions;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Model;
 using System;
@@ -260,6 +260,29 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <paramref name="templateId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <paramref name="request"/> is null.</exception>
+        public async Task<SuccessStatusResponse> CreateBulkInviteFromTemplateAsync(
+            string templateId,
+            CreateBulkInviteRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/template/{templateId.ValidateId()}/bulkinvite"),
+                Content = new BulkInviteTemplateRequest(request),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<SuccessStatusResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
         /// <exception cref="System.ArgumentNullException">If <see paramref="fields"/> is null.</exception>
         public async Task PrefillTextFieldsAsync(string documentId, IEnumerable<TextField> fields, CancellationToken cancellationToken = default)
@@ -296,6 +319,75 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<EditDocumentResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<DocumentFieldsResponse> GetDocumentFieldsAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/fields"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentFieldsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<GetRoutingDetailResponse> GetRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync(requestOptions, new HttpContentToRoutingDetailResponseAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        public async Task<CreateRoutingDetailResponse> CreateRoutingDetailAsync(string documentId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Content = new EmptyPayloadRequest(),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync(requestOptions, new HttpContentToCreateRoutingDetailResponseAdapter(), HttpCompletionOption.ResponseContentRead, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If <see paramref="documentId"/> is not valid.</exception>
+        /// <exception cref="System.ArgumentNullException">If <see paramref="request"/> is null.</exception>
+        public async Task<UpdateRoutingDetailResponse> UpdateRoutingDetailAsync(string documentId, UpdateRoutingDetailRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/document/{documentId.ValidateId()}/template/routing/detail"),
+                Content = request,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<UpdateRoutingDetailResponse>(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

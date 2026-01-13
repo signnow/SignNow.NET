@@ -20,23 +20,25 @@ namespace UnitTests.Requests
                 SecretKey = "12345",
                 Attributes =
                 {
-                    UseTls12 = true
+                    UseTls12 = true,
+                    IncludeMetadata = true,
                 }
             };
 
-            var expected = $@"{{
+            var expected = @"{
                 ""action"": ""callback"",
                 ""event"": ""document.update"",
                 ""entity_id"": ""5261f4a5c5fe47eaa68276366af40c259758fb30"",
-                ""attributes"": {{
+                ""attributes"": {
                     ""delete_access_token"": true,
                     ""callback"": ""http://localhost/callback"",
                     ""use_tls_12"": true,
-                    ""docid_queryparam"": false
-                }},
+                    ""docid_queryparam"": false,
+                    ""include_metadata"": true
+                },
 
                 ""secret_key"": ""12345""
-            }}";
+            }";
 
             Assert.That.JsonEqual(expected, option);
         }
@@ -50,17 +52,17 @@ namespace UnitTests.Requests
                 "827a6dc8a83805f5961234304d2166b75ba19cf3",
                 new Uri("http://localhost/callback"));
 
-            var expected = $@"{{
+            var expected = @"{
                 ""action"": ""callback"",
                 ""event"": ""document.update"",
                 ""entity_id"": ""5261f4a5c5fe47eaa68276366af40c259758fb30"",
-                ""attributes"": {{
+                ""attributes"": {
                     ""delete_access_token"": true,
                     ""callback"": ""http://localhost/callback"",
                     ""use_tls_12"": false,
                     ""docid_queryparam"": false
-                }}
-            }}";
+                }
+            }";
 
             Assert.That.JsonEqual(expected, option);
         }

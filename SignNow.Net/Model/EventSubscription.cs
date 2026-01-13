@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SignNow.Net.Internal.Helpers.Converters;
@@ -21,13 +22,29 @@ namespace SignNow.Net.Model
         public EventType Event { get; set; }
 
         /// <summary>
+        /// Entity type of the event subscription (e.g., "document", "user", "document_group", "template")
+        /// </summary>
+        [JsonProperty("entity_type")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EventSubscriptionEntityType EntityType { get; set; }
+
+        /// <summary>
         /// The unique ID of the event: "document_id", "user_id", "document_group_id", "template_id"
         /// </summary>
         [JsonProperty("entity_id")]
         public int EntityId { get; set; }
 
+        /// <summary>
+        /// The unique ID of the event entity: "document_id", "user_id", "document_group_id", "template_id"
+        /// </summary>
         [JsonProperty("entity_unique_id", NullValueHandling = NullValueHandling.Ignore)]
         public string EntityUid { get; internal set; }
+
+        /// <summary>
+        /// HTTP request method used for the event subscription callback.
+        /// </summary>
+        [JsonProperty("request_method")]
+        public string RequestMethod { get; set; }
 
         /// <summary>
         /// Always only "callback"
@@ -35,11 +52,29 @@ namespace SignNow.Net.Model
         [JsonProperty("action")]
         public string Action { get; set; } = "callback";
 
+        /// <summary>
+        /// Indicates whether the event subscription is currently active.
+        /// </summary>
+        [JsonProperty("active")]
+        public bool? Active { get; set; }
+
+        /// <summary>
+        /// Additional attributes and configuration for the event subscription callback.
+        /// </summary>
         [JsonProperty("json_attributes")]
         public EventAttributes JsonAttributes { get; set; }
 
+        /// <summary>
+        /// Name of the application that created the event subscription.
+        /// </summary>
         [JsonProperty("application_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ApplicationName { get; set; }
+
+        /// <summary>
+        /// Version of the event subscription schema or API.
+        /// </summary>
+        [JsonProperty("version")]
+        public int? Version { get; set; }
 
         /// <summary>
         /// Timestamp document was created.
@@ -47,6 +82,18 @@ namespace SignNow.Net.Model
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixTimeStampJsonConverter))]
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Number of events that have triggered this subscription (if included in response).
+        /// </summary>
+        [JsonProperty("event_count")]
+        public int? EventCount { get; set; }
+
+        /// <summary>
+        /// Email address of the owner of the event subscription.
+        /// </summary>
+        [JsonProperty("event_subscription_owner_email")]
+        public string EventSubscriptionOwnerEmail { get; set; }
     }
 
     public class EventAttributes
@@ -92,6 +139,12 @@ namespace SignNow.Net.Model
         public EventAttributeHeaders Headers { get; set; }
 
         /// <summary>
+        /// Whether the payload of the webhook should include metadata.
+        /// </summary>
+        [JsonProperty("include_metadata", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? IncludeMetadata { get; set; }
+
+        /// <summary>
         /// Enables the HMAC security logic
         /// </summary>
         [JsonProperty("secret_key", NullValueHandling = NullValueHandling.Ignore)]
@@ -111,5 +164,35 @@ namespace SignNow.Net.Model
 
         [JsonProperty("float_head")]
         public float FloatHead { get; set; }
+    }
+
+    /// <summary>
+    /// Represents the type of entity that an event subscription is associated with.
+    /// </summary>
+    public enum EventSubscriptionEntityType
+    {
+        /// <summary>
+        /// Event subscription is associated with a document entity.
+        /// </summary>
+        [EnumMember(Value = "document")]
+        Document,
+
+        /// <summary>
+        /// Event subscription is associated with a template entity.
+        /// </summary>
+        [EnumMember(Value = "template")]
+        Template,
+
+        /// <summary>
+        /// Event subscription is associated with a document group entity.
+        /// </summary>
+        [EnumMember(Value = "document_group")]
+        DocumentGroup,
+
+        /// <summary>
+        /// Event subscription is associated with a user entity.
+        /// </summary>
+        [EnumMember(Value = "user")]
+        User
     }
 }

@@ -23,8 +23,8 @@ namespace UnitTests.Models
                 .RuleFor(o => o.Type, type)
                 .Generate();
 
-            var expected =  JsonConvert.SerializeObject(fieldFake, Formatting.Indented);
-            var fieldActual = JsonConvert.DeserializeObject<Field>(expected);
+            var expected = TestUtils.SerializeToJsonFormatted(fieldFake);
+            var fieldActual = TestUtils.DeserializeFromJson<Field>(expected);
 
             Assert.That.JsonEqual(expected, fieldActual);
         }
