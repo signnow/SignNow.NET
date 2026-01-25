@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - `GetEventSubscriptionAsync` method for retrieving event subscription details by ID using the v2 event-subscriptions endpoint
 - `DeleteEventSubscriptionAsync` method for deleting event subscription
 - `GetCallbacksAsync` method for retrieving webhook callback events history with comprehensive filtering and sorting options
+- `GetCallbacksBySubscriptionIdAsync` method for retrieving webhook callback events history for a specific event subscription
 
 ### Changed
 - Upgraded .NET Core runtime to .NET 7.0 for Tests and Examples projects
