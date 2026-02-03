@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
     - Get Event Subscription by ID: Retrieve detailed information about specific event subscriptions
     - Delete Event Subscription: Remove event subscriptions programmatically
     - Get Callbacks History: Comprehensive webhook callback event history with advanced filtering and sorting capabilities
+    - Get Callbacks History by ID: webhook callback event history related to subscription ID with advanced filtering and sorting capabilities
 - Document Template Operations:
     - Template Routing Management: Create, retrieve, and update routing configurations for document templates
     - Bulk Invite from Template: Send signing invitations to multiple recipients using templates
