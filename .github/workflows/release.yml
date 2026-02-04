@@ -66,9 +66,10 @@ jobs:
 
       - name: Publish Nuget Package
         working-directory: ${{ github.workspace }}/SignNow.Net/bin/Publish
+        shell: pwsh
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
           dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg `
-              -k ${{ env.NUGET_TOKEN }} `
-              -s https://api.nuget.org/v3/index.json
+              --api-key ${{ env.NUGET_TOKEN }} `
+              --source https://api.nuget.org/v3/index.json
