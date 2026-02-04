@@ -386,4 +386,102 @@ namespace UnitTests.Services
             Assert.IsNotNull(callback.RequestContent);
             Assert.IsNotNull(callback.RequestContent.Content);
         }
-    }}
+
+        [TestMethod]
+        public async Task GetCallbacksBySubscriptionIdAsync_WithValidSubscriptionId_ShouldReturnCallbacks()
+        {
+            var subscriptionId = "8a49e32e267e42a18e4a3967669f347e06e3b71e";
+            var mockResponse = TestUtils.SerializeToJsonFormatted(new
+            {
+                data = new[]
+                {
+                    new
+                    {
+                        id = "callback_123",
+                        application_name = "TestApp",
+                        entity_id = "doc_456",
+                        event_subscription_id = subscriptionId,
+                        event_subscription_active = true,
+                        entity_type = "document",
+                        event_name = "document.complete",
+                        callback_url = "https://example.com/webhook",
+                        request_method = "POST",
+                        duration = 1.5,
+                        request_start_time = 1609459200,
+                        request_end_time = 1609459205,
+                        request_headers = new
+                        {
+                            string_head = "test_value",
+                            int_head = 42,
+                            bool_head = true,
+                            float_head = 3.14f
+                        },
+                        response_content = "OK",
+                        response_status_code = 200,
+                        event_subscription_owner_email = "owner@example.com",
+                        request_content = new
+                        {
+                            meta = new
+                            {
+                                timestamp = 1609459200,
+                                @event = "document.complete",
+                                environment = "https://api.signnow.com/",
+                                initiator_id = "user_789",
+                                callback_url = "https://example.com/webhook",
+                                access_token = "***masked***"
+                            },
+                            content = new
+                            {
+                                document_id = "doc_456",
+                                document_name = "Test Document.pdf",
+                                user_id = "user_789",
+                                initiator_id = "user_789",
+                                initiator_email = "initiator@example.com"
+                            }
+                        }
+                    }
+                },
+                meta = new
+                {
+                    pagination = new
+                    {
+                        total = 1,
+                        count = 1,
+                        per_page = 50,
+                        current_page = 1,
+                        total_pages = 1
+                    }
+                }
+            });
+
+            var service = new EventSubscriptionService(ApiBaseUrl, new Token(), SignNowClientMock(mockResponse));
+            var options = new GetCallbacksOptions
+            {
+                Page = 1,
+                PerPage = 50
+            };
+
+            var response = await service.GetCallbacksBySubscriptionIdAsync(subscriptionId, options).ConfigureAwait(false);
+
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Data);
+            Assert.IsNotNull(response.Meta);
+            Assert.AreEqual(1, response.Data.Count);
+            
+            var callback = response.Data[0];
+            Assert.AreEqual("callback_123", callback.Id);
+            Assert.AreEqual("TestApp", callback.ApplicationName);
+            Assert.AreEqual("doc_456", callback.EntityId);
+            Assert.AreEqual(subscriptionId, callback.EventSubscriptionId);
+            Assert.IsTrue(callback.EventSubscriptionActive);
+            Assert.AreEqual(EventSubscriptionEntityType.Document, callback.EntityType);
+            Assert.AreEqual(EventType.DocumentComplete, callback.EventName);
+            Assert.AreEqual("https://example.com/webhook", callback.CallbackUrl.ToString());
+            Assert.AreEqual(200, callback.ResponseStatusCode);
+
+            Assert.AreEqual(1, response.Meta.Pagination.Total);
+            Assert.AreEqual(1, response.Meta.Pagination.Count);
+            Assert.AreEqual(50, response.Meta.Pagination.PerPage);
+        }
+    }
+}
