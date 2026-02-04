@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -102,7 +103,7 @@ namespace SignNow.Net.Service
         {
             Guard.ArgumentNotNull(adapter, nameof(adapter));
 
-            DateTime startTime = DateTime.Now;
+            var stopWatch = Stopwatch.StartNew();
 
             try
             {
@@ -115,12 +116,12 @@ namespace SignNow.Net.Service
             }
             catch (TaskCanceledException ex)
             {
-                var requestTime = (DateTime.Now - startTime).TotalSeconds;
+                stopWatch.Stop();
                 var message = string.Format(CultureInfo.CurrentCulture,
                     ExceptionMessages.UnableToProcessRequest,
                     requestOptions.HttpMethod.Method,
                     requestOptions.RequestUrl.OriginalString,
-                    requestTime);
+                    stopWatch.ElapsedMilliseconds);
 
                 throw new SignNowException(message, ex);
             }

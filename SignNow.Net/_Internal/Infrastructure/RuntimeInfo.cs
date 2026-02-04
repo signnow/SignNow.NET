@@ -45,7 +45,7 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns>Windows, Linux, macOS or Unknown</returns>
         public static string GetOSName()
         {
-            var os = "Unknown";
+            var os = String.Empty;
 #if NETFRAMEWORK
             os = Environment.OSVersion.ToString();
 #else
@@ -93,11 +93,10 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static string GetArchitecture()
         {
-            var arch = "x86_64";
 #if NETFRAMEWORK
-            arch = typeof(RuntimeInfo).Assembly.GetName().ProcessorArchitecture.ToString();
+            var arch = typeof(RuntimeInfo).Assembly.GetName().ProcessorArchitecture.ToString();
 #else
-            arch = RuntimeInformation.OSArchitecture.ToString();
+            var arch = RuntimeInformation.OSArchitecture.ToString();
 #endif
             return arch;
         }
@@ -108,11 +107,10 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         private static string GetPlatform()
         {
-            var platform = "unknown";
 #if NETFRAMEWORK
-            platform = Environment.Is64BitOperatingSystem ? "win64" : "win32";
+            var platform = Environment.Is64BitOperatingSystem ? "win64" : "win32";
 #else
-            platform = RuntimeInformation.ProcessArchitecture.ToString();
+            var platform = RuntimeInformation.ProcessArchitecture.ToString();
 #endif
             return platform;
         }
@@ -125,10 +123,14 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         public static string GetWindowsVersion(string osDescription)
         {
-            string version = String.Empty;
+            var version = String.Empty;
 #if NETSTANDARD
             // Microsoft Windows 10.0.18363
-            var matched = new Regex(@"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)").Match(osDescription.Trim());
+            var matched = Regex.Match(
+                osDescription.Trim(),
+                @"(?<name>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)",
+                RegexOptions.None,
+                TimeSpan.FromMilliseconds(100));
             version = matched.Groups["version"].Value.Trim();
 #endif
             return version;
@@ -141,30 +143,35 @@ namespace SignNow.Net.Internal.Infrastructure
         /// <returns></returns>
         public static string GetLinuxVersion(string kernel)
         {
-            string version = String.Empty;
+            var version = String.Empty;
 #if NETSTANDARD
             // Linux 4.4.0 - 43 - Microsoft #1-Microsoft Wed Dec 31 14:42:53 PST 2014
             // Linux 3.10.0-693.21.1.el7.x86_64 #1 SMP Wed Mar 7 19:03:37 UTC 2018
-            var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)").Match(kernel.Trim());
+            var matched = Regex.Match(
+                    kernel.Trim(),
+                    @"^(?<kernel>\w+)+\s+(?<version>\d+.?\d+(?:\S)\S+)",
+                    RegexOptions.None,
+                    TimeSpan.FromMilliseconds(100)
+                );
             version = matched.Groups["version"].Value.Trim();
 #endif
             return version;
         }
 
         /// <summary>
-        /// Get MacOs version from string with kernel details.
+        /// Get macOS version from string with kernel details.
         /// </summary>
         /// <param name="kernel"></param>
         /// <returns></returns>
         public static string GetMacOsVersion(string kernel)
         {
-            string version = String.Empty;
+            var version = String.Empty;
 
 #if NETSTANDARD
             /* Darwin 17.5.0 Darwin Kernel Version 17.5.0: Mon Mar  5 22:24:32 PST 2018; root:xnu-4570.51.1~1/RELEASE_X86_64 */
             var matched = new Regex(@"^(?<kernel>\w+)+\s+(?<major>\d+).(?<minor>\d+).(?<patch>\d+)?").Match(kernel.Trim());
-            int major = int.Parse(matched.Groups["major"].Value, CultureInfo.InvariantCulture);
-            int minor = int.Parse(matched.Groups["minor"].Value, CultureInfo.InvariantCulture);
+            var major = int.Parse(matched.Groups["major"].Value, CultureInfo.InvariantCulture);
+            var minor = int.Parse(matched.Groups["minor"].Value, CultureInfo.InvariantCulture);
 
             switch (major)
             {
@@ -248,6 +255,10 @@ namespace SignNow.Net.Internal.Infrastructure
                     version = "15.0";
                     break;
 
+                case (int)MacOsVersions.macOS2600:
+                    version = "26.0";
+                    break;
+
                 default:
                     break;
             }
@@ -280,7 +291,8 @@ namespace SignNow.Net.Internal.Infrastructure
             macOS1200,
             macOS1300,
             macOS1400,
-            macOS1500
+            macOS1500,
+            macOS2600
         }
     }
 }

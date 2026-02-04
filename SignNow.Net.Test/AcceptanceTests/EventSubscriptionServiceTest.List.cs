@@ -15,8 +15,10 @@ namespace AcceptanceTests
         [TestMethod]
         public async Task GetEventSubscriptionsListAsync_WithFilters()
         {
+            const string TestDomain = "example.com";
+
             await SignNowTestContext.Events.CreateEventSubscriptionAsync(
-                new CreateEventSubscription(EventType.DocumentFreeformSigned, TestPdfDocumentId, new Uri("https://docs.signnow.com"))
+                new CreateEventSubscription(EventType.DocumentFreeformSigned, TestPdfDocumentId, new Uri($"https://{TestDomain}"))
             ).ConfigureAwait(false);
 
             var options = new GetEventSubscriptionsListOptions
@@ -24,7 +26,7 @@ namespace AcceptanceTests
                 Page = 1,
                 PerPage = 5,
                 EventTypeFilter = EventTypeFilter.In(EventType.DocumentFreeformSigned),
-                CallbackUrlFilter = CallbackUrlFilter.Like("docs.signnow"),
+                CallbackUrlFilter = CallbackUrlFilter.Like(TestDomain),
                 EntityIdFilter = EntityIdFilter.Like(TestPdfDocumentId),
                 SortByCreated = SortOrder.Descending
             };
@@ -34,7 +36,7 @@ namespace AcceptanceTests
 
             Assert.AreEqual(
                 $"filters=[{{\"entity_id\":{{\"type\": \"like\", \"value\":\"{TestPdfDocumentId}\"}}}}, " +
-                $"{{\"callback_url\":{{\"type\": \"like\", \"value\":\"docs.signnow\"}}}}, " +
+                $"{{\"callback_url\":{{\"type\": \"like\", \"value\":\"{TestDomain}\"}}}}, " +
                 $"{{\"event\":{{\"type\": \"in\", \"value\":[\"document.freeform.signed\"]}}}}]" +
                 $"&sort[created]=desc&page=1&per_page=5",
                 options.ToQueryString()

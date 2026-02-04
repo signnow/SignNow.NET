@@ -21,17 +21,17 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             7.0.x
             8.0.x
 
       - name: Setup Nuget Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: nuget-cache
         with:
           path: ~/.nuget
@@ -53,8 +53,10 @@ jobs:
 
       - name: Create Release
         uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ env.GITHUB_TOKEN }}
           name: signNow .Net SDK v${{ steps.get-version.outputs.VERSION }}
           tag: ${{ steps.get-version.outputs.VERSION }}
           bodyFile: ${{ github.workspace }}/release-notes.txt
@@ -64,7 +66,9 @@ jobs:
 
       - name: Publish Nuget Package
         working-directory: ${{ github.workspace }}/SignNow.Net/bin/Publish
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
-          dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
-              -k ${{ secrets.NUGET_TOKEN }} \
+          dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg `
+              -k ${{ env.NUGET_TOKEN }} `
               -s https://api.nuget.org/v3/index.json

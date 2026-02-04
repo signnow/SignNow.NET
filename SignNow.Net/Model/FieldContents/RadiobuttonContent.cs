@@ -49,7 +49,7 @@ namespace SignNow.Net.Model.FieldContents
         /// Returns Radiobutton content (actual state) as string.
         /// </summary>
         [JsonIgnore]
-        public string Data => Radio.FirstOrDefault(itm => itm.Checked == true)?.Data;
+        public string Data => Radio.FirstOrDefault(itm => itm.Checked)?.Data;
 
         /// <summary>
         /// Returns Radiobutton content (actual state) as string.
