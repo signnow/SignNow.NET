@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           # For pull_request_target (dependabot), checkout the PR head SHA
           ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.ref }}
 
@@ -121,7 +121,7 @@ jobs:
           } else {
             Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
           }
-
+          
       - name: SonarQube begin
         if: steps.sonar.outputs.has-project-key == 'true'
         run: |
@@ -145,7 +145,7 @@ jobs:
           dotnet build SignNow.Net.Test --configuration Debug --no-incremental `
             --framework ${{ matrix.framework }} `
             ${{ env.DOTNET_BUILD_ARGS }}
-
+          
           dotnet test SignNow.Net.Test --configuration Debug --no-build `
             --framework ${{ matrix.framework }} `
             --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
@@ -156,7 +156,7 @@ jobs:
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: ${{ env.COVERAGE_PATH }}/**/coverage*
-
+      
       - name: SonarQube end
         if: steps.sonar.outputs.has-project-key == 'true'
         continue-on-error: true

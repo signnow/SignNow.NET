@@ -18,7 +18,7 @@ jobs:
 
     defaults:
       run:
-        shell: pwsh
+        shell: bash
 
     steps:
       - uses: actions/checkout@v4
