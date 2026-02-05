@@ -77,11 +77,11 @@ namespace SignNow.Net.Model.Requests
         public string ToQueryString()
         {
             var parameters = new List<string>();
-            
+
             var filters = new List<EventSubscriptionFilter> { ApplicationFilter, DateFilter, EntityIdFilter, CallbackUrlFilter, EventTypeFilter }
                 .Where(f => f != null)
-                .Select(f => f?.FilterExpression);
-            if(filters.Count() > 0)
+                .Select(f => f.FilterExpression);
+            if(filters.Any())
             {
                 parameters.Add($"filters=[{string.Join(", ", filters)}]");
             }
@@ -141,7 +141,7 @@ namespace SignNow.Net.Model.Requests
         /// Initializes a new instance of the <see cref="EventSubscriptionFilter"/> class.
         /// This class helps create filters in format Filter.In("a", "b"), Filter.Equal("a") etc.
         /// </summary>
-        /// <param name="filterExpression">The filter expression string. Builded with help of CreateSingleValueFilter, CreateArrayValueFilter.</param>
+        /// <param name="filterExpression">The filter expression string. Built with help of CreateSingleValueFilter, CreateArrayValueFilter.</param>
         protected EventSubscriptionFilter(string filterExpression)
         {
             FilterExpression = filterExpression;

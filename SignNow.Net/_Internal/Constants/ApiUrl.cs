@@ -16,7 +16,7 @@ namespace SignNow.Net.Internal.Constants
         /// <summary>
         /// Base signNow API URL for Release configuration.
         /// </summary>
-        public static Uri ApiBaseUrl = new Uri("https://api.signnow.com");
+        public static readonly Uri ApiBaseUrl = new Uri("https://api.signnow.com");
 #endif
     }
 }

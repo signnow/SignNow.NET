@@ -18,14 +18,6 @@ on:
       - '**.md'
     tags-ignore:
       - '**'
-  pull_request_target:
-    branches:
-      - 'main'
-      - 'develop'
-    paths-ignore:
-      - '**.md'
-    tags-ignore:
-      - '**'
 
 env:
   COREHOST_TRACE: false
@@ -36,6 +28,11 @@ env:
   COVERAGE_PATH: SignNow.Net.Test/bin/Debug
   # Do not generate summary otherwise it leads to duplicate errors in build log
   DOTNET_BUILD_ARGS: /consoleloggerparameters:NoSummary /property:GenerateFullPaths=true
+
+  TEST_CREDITS_JSON: ${{ secrets.TEST_CREDITS_JSON }}
+  SONAR_SECRET: ${{ secrets.SONAR_SECRET }}
+  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 defaults:
   run:
@@ -62,11 +59,11 @@ jobs:
           - { name: 'Windows .NET 4.6', os: windows-latest, framework: 'net462', net-sdk: '8.0.x', target: 'net462' }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           # For pull_request_target (dependabot), checkout the PR head SHA
-          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
 
       - name: Get SDK Version
         id: props
@@ -77,18 +74,18 @@ jobs:
           Write-Host "✓ Found SignNow.NET SDK project version: $Version"
 
       - name: Setup JDK 17 (SonarQube requirement)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ matrix.net-sdk }}
 
       - name: Setup Nuget Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: nuget-cache
         with:
           path: ~/.nuget
@@ -102,12 +99,14 @@ jobs:
         run: dotnet restore -v:n
 
       - name: Configure signNow API
-        run: echo '${{ secrets.TEST_CREDITS_JSON }}' >> ${{ github.workspace }}/api-eval.signnow.com.json
+        run: |
+          $outPath = Join-Path $Env:GITHUB_WORKSPACE 'api-eval.signnow.com.json'
+          [IO.File]::WriteAllText($outPath, $Env:TEST_CREDITS_JSON)
 
       - name: Get SonarQube Project Key
         id: sonar
         run: |
-          $SonarConfigPath = "${{ github.workspace }}/SonarQube.Analysis.xml"
+          $SonarConfigPath = Join-Path $Env:GITHUB_WORKSPACE 'SonarQube.Analysis.xml'
           if (Test-Path $SonarConfigPath) {
             [xml]$SonarConfig = Get-Content $SonarConfigPath
             $ProjectKey = $SonarConfig.SonarQubeAnalysisProperties.Property | Where-Object { $_.Name -eq "sonar.projectKey" } | Select-Object -ExpandProperty '#text'
@@ -121,7 +120,7 @@ jobs:
           } else {
             Write-Warning "SonarQube configuration file not found: $SonarConfigPath"
           }
-
+          
       - name: SonarQube begin
         if: steps.sonar.outputs.has-project-key == 'true'
         run: |
@@ -130,8 +129,8 @@ jobs:
           /s:${{ github.workspace }}/SonarQube.Analysis.xml `
           /v:"${{ steps.props.outputs.version }}" `
           /d:sonar.projectBaseDir="${{ github.workspace }}" `
-          /d:sonar.token="${{ secrets.SONAR_SECRET }}" `
-          /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
+          /d:sonar.token="${{ env.SONAR_SECRET }}" `
+          /d:sonar.host.url="${{ env.SONAR_HOST_URL }}" `
           /d:sonar.scanner.skipJreProvisioning=true
 
       - name: Run Tests on ${{ matrix.framework }} for TargetFramework ${{ matrix.target }} with Coverage
@@ -145,22 +144,22 @@ jobs:
           dotnet build SignNow.Net.Test --configuration Debug --no-incremental `
             --framework ${{ matrix.framework }} `
             ${{ env.DOTNET_BUILD_ARGS }}
-
+          
           dotnet test SignNow.Net.Test --configuration Debug --no-build `
             --framework ${{ matrix.framework }} `
             --logger:trx --results-directory ./SignNow.Net.Test/TestResults `
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: ${{ env.COVERAGE_PATH }}/**/coverage*
-
+      
       - name: SonarQube end
         if: steps.sonar.outputs.has-project-key == 'true'
         continue-on-error: true
-        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_SECRET }}"
+        run: dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_SECRET }}"
 
       - name: Test Release Notes parser
         if: (runner.os == 'macOS' || runner.os == 'Linux')
@@ -177,12 +176,10 @@ jobs:
       - name: Upload Code Coverage Report (Codecov.io)
         if: env.CODECOV_TOKEN != ''
         continue-on-error: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v5
         with:
           name: ${{ runner.os }}-codecov-${{ matrix.framework }}
           flags: ${{ runner.os }},${{ matrix.target }}
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
           files: ${{ env.COVERAGE_PATH }}/${{ matrix.framework }}/coverage.${{ matrix.framework }}.opencover.xml
           fail_ci_if_error: false

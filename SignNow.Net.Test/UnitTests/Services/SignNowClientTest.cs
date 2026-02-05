@@ -104,7 +104,7 @@ namespace UnitTests.Services
                 .Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(
-                    new TaskCanceledException("A task was canceled."), TimeSpan.FromSeconds(3))
+                    new TaskCanceledException("A task was canceled."), TimeSpan.FromSeconds(2))
                 .Verifiable();
 
             var httpClient = new HttpClient(handlerMock.Object, false);
@@ -126,7 +126,7 @@ namespace UnitTests.Services
                 ExceptionMessages.UnableToProcessRequest,
                 "GET", ApiBaseUrl + "user", "");
 
-            StringAssert.Matches(exception.Message, new Regex(errorMessage.TrimEnd('s') + "\\d\\.\\d+s"));
+            StringAssert.Matches(exception.Message, new Regex(errorMessage.TrimEnd('s') + "\\d+s"));
 
             #if !NET45_OR_GREATER
             StringAssert.Contains(exception.InnerException?.Message, "The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.");

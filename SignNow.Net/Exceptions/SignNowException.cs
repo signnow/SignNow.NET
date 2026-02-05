@@ -27,7 +27,9 @@ namespace SignNow.Net.Exceptions
 
         public IEnumerable<KeyValuePair<string, IEnumerable<string>>> RawHeaders
         {
-            get => Data.Contains("RawHeaders") ? (IEnumerable<KeyValuePair<string, IEnumerable<string>>>)Data["RawHeaders"] : default;
+            get => Data.Contains("RawHeaders")
+                ? (IEnumerable<KeyValuePair<string, IEnumerable<string>>>)Data["RawHeaders"]
+                : Array.Empty<KeyValuePair<string, IEnumerable<string>>>();
 
             set => Data["RawHeaders"] = value;
         }

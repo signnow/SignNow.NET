@@ -6,6 +6,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: main
+    target-branch: develop
     commit-message:
       prefix: "ci: "

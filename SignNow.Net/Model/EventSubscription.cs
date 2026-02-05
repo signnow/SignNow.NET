@@ -98,14 +98,6 @@ namespace SignNow.Net.Model
 
     public class EventAttributes
     {
-        // /// <summary>
-        // /// Determines whether to keep access_token in the payload.
-        // /// If true, then we should delete access_token key from payload.
-        // /// If false, keep the access_token in payload attributes
-        // /// </summary>
-        // [JsonProperty("delete_access_token")]
-        // public bool DeleteAccessToken { get; set; } = true;
-
         /// <summary>
         /// If true, 1.2 tls version will be used. If false, default tls version will be used.
         /// </summary>

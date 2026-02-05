@@ -81,7 +81,7 @@ namespace SignNow.Net.Service
                 throw new ArgumentException("Offset must be 0 or greater.", nameof(options));
             }
 
-            var query = options?.ToQueryString();
+            var query = options.ToQueryString();
             var filters = string.IsNullOrEmpty(query)
                 ? string.Empty
                 : $"?{query}";

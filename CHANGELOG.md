@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
+### Added
+- Event Subscriptions & Webhooks:
+    - Get Callbacks History by ID: webhook callback event history related to subscription ID with advanced filtering and sorting capabilities
 
 ## [1.4.0] - 2026-01-13
 ### Added

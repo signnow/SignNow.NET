@@ -32,7 +32,7 @@ namespace SignNow.Net.Extensions
             if (string.IsNullOrWhiteSpace(id))
                 return false;
 
-            var regex = new Regex(IdPattern);
+            var regex = new Regex(IdPattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
             return regex.IsMatch(id);
         }
 
@@ -43,7 +43,7 @@ namespace SignNow.Net.Extensions
         /// <exception cref="ArgumentException">Invalid format of ID.</exception>
         public static string ValidateId(this string id)
         {
-            var regex = new Regex(IdPattern);
+            var regex = new Regex(IdPattern, RegexOptions.None, TimeSpan.FromMilliseconds(100));
 
             if (regex.IsMatch(id) && !string.IsNullOrWhiteSpace(id)) return id;
 
@@ -61,7 +61,7 @@ namespace SignNow.Net.Extensions
             if (string.IsNullOrWhiteSpace(email))
                 return false;
 
-            var regex = new Regex(EmailPattern, RegexOptions.IgnoreCase);
+            var regex = new Regex(EmailPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
             return regex.IsMatch(email);
         }
 
@@ -73,7 +73,7 @@ namespace SignNow.Net.Extensions
         /// <exception cref="ArgumentException">if email address is not valid.</exception>
         public static string ValidateEmail(this string email)
         {
-            var regex = new Regex(EmailPattern, RegexOptions.IgnoreCase);
+            var regex = new Regex(EmailPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
 
             if (regex.IsMatch(email) && !string.IsNullOrWhiteSpace(email)) return email;
 
