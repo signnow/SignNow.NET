@@ -43,7 +43,6 @@ jobs:
 
       - name: Prepare Release Assets
         id: get-version
-        shell: bash
         run: |
           echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           .github/release-notes.sh CHANGELOG.md > release-notes.txt
@@ -66,10 +65,9 @@ jobs:
 
       - name: Publish Nuget Package
         working-directory: ${{ github.workspace }}/SignNow.Net/bin/Publish
-        shell: pwsh
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
-          dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg `
-              --api-key ${{ env.NUGET_TOKEN }} `
+          dotnet nuget push SignNow.Net.${{ steps.get-version.outputs.VERSION }}.nupkg \
+              --api-key ${{ env.NUGET_TOKEN }} \
               --source https://api.nuget.org/v3/index.json
