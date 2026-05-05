@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Event Subscriptions & Webhooks:
     - Get Callbacks History by ID: webhook callback event history related to subscription ID with advanced filtering and sorting capabilities
 
-## [1.4.0] - 2026-01-13
+## [1.4.0] - 2025-01-13
 ### Added
 - Event Subscriptions & Webhooks:
     - Get Event Subscriptions List: Enhanced filtering and sorting for retrieving event subscriptions with flexible query

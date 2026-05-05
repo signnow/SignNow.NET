@@ -1,15 +1,33 @@
-# SignNow.NET gitignore
-#
-# OS and IDE specific ignoring files shold be configured
-# into ~/.global_gitignore
-# @see: https://help.github.com/en/articles/ignoring-files#create-a-global-gitignore
-#
-
-# ignore local files with API credentials
-*.signnow.com.json
-
-# source for API code generation
-endpoint.json
-
+# Build output
 */bin/
 */obj/
+[Bb]in/
+[Oo]bj/
+[Tt]est[Rr]esults/
+packages/
+
+# Visual Studio / Rider / VS Code
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+.vs/
+.idea/
+.vscode/
+
+# Editor swap files
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local credentials & generated inputs
+*.signnow.com.json
+endpoint.json
+
+# Dependency / build caches
+project.lock.json
+artifacts/
