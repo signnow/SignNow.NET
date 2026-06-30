@@ -22,6 +22,13 @@ namespace SignNow.Net.Interfaces
         Task CreateEventSubscriptionAsync(CreateEventSubscription createEvent, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Creates a new V2 event subscription using the /v2/event-subscriptions endpoint.
+        /// </summary>
+        /// <param name="createEvent">Event subscription details.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task CreateEventSubscriptionV2Async(CreateEventSubscriptionV2 createEvent, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets information about all subscriptions to Events made with a specific application.
         /// </summary>
         /// <param name="options">Query options</param>

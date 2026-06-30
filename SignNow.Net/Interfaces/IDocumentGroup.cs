@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
+using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Requests.DocumentGroup;
 using SignNow.Net.Model.Responses;
 
@@ -111,5 +112,60 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task<GetDocumentGroupTemplatesResponse> GetDocumentGroupTemplatesAsync(GetDocumentGroupTemplatesRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the list of recipients for a document group template.
+        /// </summary>
+        /// <param name="templateGroupId">ID of the Document Group Template.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<DocumentGroupTemplateRecipientsResponse> GetDocumentGroupTemplateRecipientsAsync(string templateGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates recipients for a document group template.
+        /// </summary>
+        /// <param name="templateGroupId">ID of the Document Group Template.</param>
+        /// <param name="request">Request containing updated invite steps and recipients.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task UpdateDocumentGroupTemplateRecipientsAsync(string templateGroupId, UpdateDocumentGroupTemplateRecipientsRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Creates an embedded signing invite for a document group without sending emails.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="request">Request containing invite details for each signer.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<DocumentGroupEmbeddedInviteResponse> CreateDocumentGroupEmbeddedInviteAsync(string documentGroupId, CreateDocumentGroupEmbeddedInviteRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Generates a link for an embedded document group signing invite.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="embeddedInviteId">ID of the embedded invite.</param>
+        /// <param name="options">Link generation options (auth method, expiration).</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedInviteLinkAsync(string documentGroupId, string embeddedInviteId, CreateDocumentGroupEmbedLinkOptions options, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Cancels all embedded signing invites for a document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task CancelDocumentGroupEmbeddedInviteAsync(string documentGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Generates a link to open the embedded editor for a document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="options">Options for the embedded editor link.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedEditorLinkAsync(string documentGroupId, EmbeddedEditorOptions options, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Generates a link to open the embedded sending workflow for a document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="options">Options for the embedded sending link.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedSendingLinkAsync(string documentGroupId, EmbeddedSendingOptions options, CancellationToken cancellationToken = default);
     }
 }
