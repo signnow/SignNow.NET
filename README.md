@@ -602,6 +602,80 @@ public async Task<DocumentGroupInfoResponse> CreateDocumentGroupAsync()
 ```
 More examples: [Document group operations][doc_group_operations example]
 
+### Send a document group invite
+
+Sends a signing invite to a document group, then checks its status.
+
+```csharp
+public async Task<GroupInviteResponse> SendDocumentGroupInviteAsync(string documentGroupId, string documentId, string roleId, string roleName)
+{
+    var signNowContext = new SignNowContext(token);
+
+    var request = new CreateGroupInviteRequest
+    {
+        InviteSteps = new List<GroupInviteStep>
+        {
+            new GroupInviteStep
+            {
+                Order = 1,
+                InviteEmails = new List<GroupInviteEmail>
+                {
+                    new GroupInviteEmail { Email = "signer@example.com", Role = roleName, RoleId = roleId, Order = 1 }
+                },
+                InviteActions = new List<GroupInviteAction>
+                {
+                    new GroupInviteAction { Email = "signer@example.com", RoleName = roleName, DocumentId = documentId }
+                }
+            }
+        }
+    };
+
+    var invite = await signNowContext.GroupInvites
+        .CreateGroupInviteAsync(documentGroupId, request)
+        .ConfigureAwait(false);
+
+    // Check invite status, list pending signers, cancel/resend/reassign as needed
+    return await signNowContext.GroupInvites
+        .GetGroupInviteAsync(documentGroupId, invite.Data.Id)
+        .ConfigureAwait(false);
+}
+```
+More examples: [Document group invite operations][doc_group_invite_operations example]
+
+### Create an embedded session for a document group
+
+Creates an embedded signing invite for a document group and generates links for the embedded editor, embedded sending and embedded signing flows, without sending emails.
+
+```csharp
+public async Task<Uri> CreateDocumentGroupEmbeddedEditorLinkAsync(string documentGroupId)
+{
+    var signNowContext = new SignNowContext(token);
+
+    var editorLink = await signNowContext.DocumentGroup
+        .GenerateDocumentGroupEmbeddedEditorLinkAsync(documentGroupId, new EmbeddedEditorOptions { LinkExpiration = 30 })
+        .ConfigureAwait(false);
+
+    return editorLink.Link;
+}
+```
+More examples: [Document group embedded operations][doc_group_embedded_operations example]
+
+### Get and update document group recipients
+
+Gets and updates the recipients, expiration, reminder and signing order settings for a document group.
+
+```csharp
+public async Task<DocumentGroupRecipientsResponse> GetDocumentGroupRecipientsAsync(string documentGroupId)
+{
+    var signNowContext = new SignNowContext(token);
+
+    return await signNowContext.DocumentGroup
+        .GetDocumentGroupRecipientsAsync(documentGroupId)
+        .ConfigureAwait(false);
+}
+```
+More examples: [Document group recipients operations][doc_group_recipients_operations example]
+
 
 ## Folders
 
@@ -708,7 +782,10 @@ If you have questions about the SignNow API, please visit [SignNow API Reference
 [create_document example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Documents/CreateDocumentFromTheTemplate.cs
 
 <!-- Document group -->
-[doc_group_operations example]:     https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupOperations.cs
+[doc_group_operations example]:            https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupOperations.cs
+[doc_group_invite_operations example]:      https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupInviteOperations.cs
+[doc_group_embedded_operations example]:    https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupEmbeddedOperations.cs
+[doc_group_recipients_operations example]:  https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Document%20group/DocumentGroupRecipientsOperations.cs
 
 <!-- Folders -->
 [get_all_folders example]:          https://github.com/signnow/SignNow.NET/blob/develop/SignNow.Net.Examples/Folders/GetAllFolders.cs

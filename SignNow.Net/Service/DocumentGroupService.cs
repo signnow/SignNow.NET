@@ -279,6 +279,38 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        public async Task<DocumentGroupRecipientsResponse> GetDocumentGroupRecipientsAsync(string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/recipients"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupRecipientsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateDocumentGroupRecipientsAsync(string documentGroupId, UpdateDocumentGroupRecipientsRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/recipients"),
+                Content = request,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<DocumentGroupEmbeddedInviteResponse> CreateDocumentGroupEmbeddedInviteAsync(string documentGroupId, CreateDocumentGroupEmbeddedInviteRequest request, CancellationToken cancellationToken = default)
         {
             Guard.ArgumentNotNull(request, nameof(request));

@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
-
+### Added
+- Document Groups:
+    - Document Group Invites: create, get status, cancel, resend, reassign signer, and list pending invites for a document group signing workflow
+    - Document Group Embedded: create/cancel embedded invites, generate embedded invite links, and embedded editor/sending links for a document group
+    - Document Group Recipients: get and update recipients, expiration, reminder and signing order settings for a document group
 
 ## [1.5.0] - 2025-02-05
 ### Added

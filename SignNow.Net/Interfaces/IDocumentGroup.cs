@@ -129,6 +129,21 @@ namespace SignNow.Net.Interfaces
         Task UpdateDocumentGroupTemplateRecipientsAsync(string templateGroupId, UpdateDocumentGroupTemplateRecipientsRequest request, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets the recipients, expiration, reminder and signing order settings for a document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<DocumentGroupRecipientsResponse> GetDocumentGroupRecipientsAsync(string documentGroupId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates recipients, expiration, reminder and signing order settings for a document group.
+        /// </summary>
+        /// <param name="documentGroupId">ID of the Document Group.</param>
+        /// <param name="request">Request containing updated recipients and signing settings.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task UpdateDocumentGroupRecipientsAsync(string documentGroupId, UpdateDocumentGroupRecipientsRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Creates an embedded signing invite for a document group without sending emails.
         /// </summary>
         /// <param name="documentGroupId">ID of the Document Group.</param>
