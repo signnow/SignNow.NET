@@ -76,7 +76,7 @@ namespace SignNow.Net.Examples
                     }
                 },
                 GeneralExpirationDays = 30,
-                OrderType = "recipient_order"
+                OrderType = DocumentGroupOrderType.RecipientOrder
             };
 
             await testContext.DocumentGroup

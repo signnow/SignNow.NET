@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +26,9 @@ namespace UnitTests
                 {
                     Id = DocumentGroupId,
                     Name = "Group from template",
-                    State = "active"
+                    State = "active",
+                    Created = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Updated = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 }
             };
 

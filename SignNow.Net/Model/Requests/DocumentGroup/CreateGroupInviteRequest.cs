@@ -87,16 +87,16 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         public string DocumentId { get; set; }
 
         /// <summary>
-        /// Whether the signer is allowed to reassign this action to someone else. "1" to allow, "0" to disallow.
+        /// Whether the signer is allowed to reassign this action to someone else. 1 to allow, 0 to disallow.
         /// </summary>
         [JsonProperty("allow_reassign")]
-        public string AllowReassign { get; set; } = "0";
+        public int AllowReassign { get; set; }
 
         /// <summary>
-        /// Whether the signer can decline by providing a signature. "1" to allow, "0" to disallow.
+        /// Whether the signer can decline by providing a signature. 1 to allow, 0 to disallow.
         /// </summary>
         [JsonProperty("decline_by_signature")]
-        public string DeclineBySignature { get; set; } = "0";
+        public int DeclineBySignature { get; set; }
     }
 
     /// <summary>

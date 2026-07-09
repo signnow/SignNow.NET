@@ -1,8 +1,35 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SignNow.Net.Model.Responses
 {
+    /// <summary>
+    /// Signing order mode for the recipients of a document group.
+    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum DocumentGroupOrderType
+    {
+        /// <summary>
+        /// All recipients can sign at the same time, in any order.
+        /// </summary>
+        [EnumMember(Value = "at_the_same_time")]
+        AtTheSameTime,
+
+        /// <summary>
+        /// Recipients must sign one after another, in the order they were added.
+        /// </summary>
+        [EnumMember(Value = "recipient_order")]
+        RecipientOrder,
+
+        /// <summary>
+        /// Recipients must sign according to a custom, explicitly configured order.
+        /// </summary>
+        [EnumMember(Value = "advanced_order")]
+        AdvancedOrder
+    }
+
     /// <summary>
     /// Common fields shared by every recipient of a document group, regardless of whether
     /// it comes from a "get recipients" response or an "update recipients" request.
@@ -46,10 +73,11 @@ namespace SignNow.Net.Model.Responses
     public class DocumentGroupRecipientAuthentication
     {
         /// <summary>
-        /// Type of authentication required, e.g. password or phone verification. Optional.
+        /// Type of authentication required. Optional.
         /// </summary>
         [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
-        public string Type { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AuthenticationType? Type { get; set; }
 
         /// <summary>
         /// Value used to authenticate, e.g. the expected password. Optional.
@@ -238,10 +266,11 @@ namespace SignNow.Net.Model.Responses
         public DocumentGroupTemplateReminder GeneralReminder { get; set; }
 
         /// <summary>
-        /// Signing order mode, e.g. "at_the_same_time", "recipient_order" or "advanced_order". Optional.
+        /// Signing order mode. Optional.
         /// </summary>
         [JsonProperty("order_type", NullValueHandling = NullValueHandling.Ignore)]
-        public string OrderType { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DocumentGroupOrderType? OrderType { get; set; }
     }
 
     /// <summary>

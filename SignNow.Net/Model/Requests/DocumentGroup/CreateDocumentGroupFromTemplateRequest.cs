@@ -1,4 +1,6 @@
+using System;
 using Newtonsoft.Json;
+using SignNow.Net.Internal.Helpers.Converters;
 
 namespace SignNow.Net.Model.Requests.DocumentGroup
 {
@@ -14,10 +16,11 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         public string GroupName { get; set; }
 
         /// <summary>
-        /// Client-side timestamp of the request. Optional.
+        /// Client-side timestamp of the request.
         /// </summary>
-        [JsonProperty("client_timestamp", NullValueHandling = NullValueHandling.Ignore)]
-        public string ClientTimestamp { get; set; }
+        [JsonProperty("client_timestamp")]
+        [JsonConverter(typeof(UnixTimeStampJsonConverter))]
+        public DateTime ClientTimestamp { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// ID of the folder to create the document group in. Optional.

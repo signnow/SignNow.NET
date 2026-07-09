@@ -49,7 +49,7 @@ namespace UnitTests
                         RemindAfter = 1,
                         RemindRepeat = 3
                     },
-                    OrderType = "recipient_order"
+                    OrderType = DocumentGroupOrderType.RecipientOrder
                 }
             };
 
@@ -62,7 +62,7 @@ namespace UnitTests
             Assert.IsNotNull(result.Data);
             Assert.AreEqual(1, result.Data.Recipients.Count);
             Assert.AreEqual("Signer 1", result.Data.Recipients[0].Name);
-            Assert.AreEqual("recipient_order", result.Data.OrderType);
+            Assert.AreEqual(DocumentGroupOrderType.RecipientOrder, result.Data.OrderType);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@ namespace UnitTests
                     }
                 },
                 GeneralExpirationDays = 30,
-                OrderType = "recipient_order"
+                OrderType = DocumentGroupOrderType.RecipientOrder
             };
 
             await service.UpdateDocumentGroupRecipientsAsync(DocumentGroupId, request, CancellationToken.None);

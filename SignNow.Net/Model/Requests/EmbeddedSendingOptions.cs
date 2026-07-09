@@ -1,9 +1,35 @@
 using System;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace SignNow.Net.Model.Requests
 {
+    /// <summary>
+    /// Embedded sending mode.
+    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum EmbeddedSendingType
+    {
+        /// <summary>
+        /// Recipient can manage the document group (default).
+        /// </summary>
+        [EnumMember(Value = "manage")]
+        Manage,
+
+        /// <summary>
+        /// Recipient can edit the document group.
+        /// </summary>
+        [EnumMember(Value = "edit")]
+        Edit,
+
+        /// <summary>
+        /// Recipient can send the document group for signing.
+        /// </summary>
+        [EnumMember(Value = "send-invite")]
+        SendInvite
+    }
+
     /// <summary>
     /// Options for generating a link to open the embedded sending workflow.
     /// </summary>
@@ -29,9 +55,10 @@ namespace SignNow.Net.Model.Requests
         public RedirectTarget? RedirectTarget { get; set; }
 
         /// <summary>
-        /// Embedded sending mode: "manage" (default), "edit" or "send-invite". Optional.
+        /// Embedded sending mode.
         /// </summary>
-        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
-        public string Type { get; set; }
+        [JsonProperty("type")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EmbeddedSendingType Type { get; set; } = EmbeddedSendingType.Manage;
     }
 }

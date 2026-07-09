@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Model.Requests.DocumentGroup
@@ -46,9 +47,10 @@ namespace SignNow.Net.Model.Requests.DocumentGroup
         public DocumentGroupTemplateReminder GeneralReminder { get; set; }
 
         /// <summary>
-        /// Signing order mode, e.g. "at_the_same_time", "recipient_order" or "advanced_order". Optional.
+        /// Signing order mode. Optional.
         /// </summary>
         [JsonProperty("order_type", NullValueHandling = NullValueHandling.Ignore)]
-        public string OrderType { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DocumentGroupOrderType? OrderType { get; set; }
     }
 }
