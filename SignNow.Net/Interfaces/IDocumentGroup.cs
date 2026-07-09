@@ -97,6 +97,15 @@ namespace SignNow.Net.Interfaces
         Task<SuccessStatusResponse> UpdateDocumentGroupTemplateAsync(string documentGroupTemplateId, UpdateDocumentGroupTemplateRequest updateRequest, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Creates a document group directly from a document group template.
+        /// </summary>
+        /// <param name="documentGroupTemplateId">ID of the Document Group Template.</param>
+        /// <param name="request">Request containing the new document group's name and options.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        /// <returns></returns>
+        Task<DocumentGroupInfoResponse> CreateDocumentGroupFromTemplateAsync(string documentGroupTemplateId, CreateDocumentGroupFromTemplateRequest request, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Creates a document group template from an existing document group.
         /// </summary>
         /// <param name="documentGroupId">ID of the Document Group to create template from.</param>

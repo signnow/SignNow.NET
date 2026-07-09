@@ -27,5 +27,11 @@ namespace SignNow.Net.Model.Requests
         [JsonProperty("redirect_target", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringEnumConverter))]
         public RedirectTarget? RedirectTarget { get; set; }
+
+        /// <summary>
+        /// Embedded sending mode: "manage" (default), "edit" or "send-invite". Optional.
+        /// </summary>
+        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
+        public string Type { get; set; }
     }
 }

@@ -206,6 +206,25 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group template identity is not valid.</exception>
+        public async Task<DocumentGroupInfoResponse> CreateDocumentGroupFromTemplateAsync(string documentGroupTemplateId, CreateDocumentGroupFromTemplateRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{documentGroupTemplateId.ValidateId()}/document-group"),
+                Content = request,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupInfoResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
         public async Task CreateDocumentGroupTemplateAsync(string documentGroupId, CreateDocumentGroupTemplateRequest createRequest, CancellationToken cancellationToken = default)
         {
