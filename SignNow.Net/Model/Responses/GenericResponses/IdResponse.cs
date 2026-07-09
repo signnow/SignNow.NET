@@ -7,6 +7,9 @@ namespace SignNow.Net.Model.Responses.GenericResponses
     /// </summary>
     public abstract class IdResponse
     {
+        /// <summary>
+        /// Unique identifier of the signNow object.
+        /// </summary>
         [JsonProperty("id")]
         public string Id { get; set; }
     }

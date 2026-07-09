@@ -4,35 +4,50 @@ using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Model.Requests.DocumentGroup
 {
-    public class UpdateDocumentGroupRecipientEntry
+    /// <summary>
+    /// A recipient to assign to a document group, along with the documents they must act on.
+    /// </summary>
+    public class UpdateDocumentGroupRecipientEntry : DocumentGroupRecipientBase
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("order")]
-        public int Order { get; set; }
-
+        /// <summary>
+        /// Documents and signing actions to assign to this recipient.
+        /// </summary>
         [JsonProperty("documents")]
         public IList<DocumentGroupRecipientDocument> Documents { get; set; } = new List<DocumentGroupRecipientDocument>();
     }
 
+    /// <summary>
+    /// Request to update recipients, expiration, reminder and signing order settings for a document group.
+    /// </summary>
     public class UpdateDocumentGroupRecipientsRequest : JsonHttpContent
     {
+        /// <summary>
+        /// Recipients to assign to the document group.
+        /// </summary>
         [JsonProperty("recipients")]
         public IList<UpdateDocumentGroupRecipientEntry> Recipients { get; set; } = new List<UpdateDocumentGroupRecipientEntry>();
 
+        /// <summary>
+        /// Email addresses to be copied on invite notifications. Optional.
+        /// </summary>
         [JsonProperty("cc", NullValueHandling = NullValueHandling.Ignore)]
         public IList<string> Cc { get; set; }
 
+        /// <summary>
+        /// Default number of days before an invite expires, applied when a recipient doesn't set its own. Optional.
+        /// </summary>
         [JsonProperty("general_expiration_days", NullValueHandling = NullValueHandling.Ignore)]
         public int? GeneralExpirationDays { get; set; }
 
+        /// <summary>
+        /// Default reminder schedule, applied when a recipient doesn't set its own. Optional.
+        /// </summary>
         [JsonProperty("general_reminder", NullValueHandling = NullValueHandling.Ignore)]
-        public DocumentGroupRecipientReminder GeneralReminder { get; set; }
+        public DocumentGroupTemplateReminder GeneralReminder { get; set; }
 
+        /// <summary>
+        /// Signing order mode, e.g. "at_the_same_time", "recipient_order" or "advanced_order". Optional.
+        /// </summary>
         [JsonProperty("order_type", NullValueHandling = NullValueHandling.Ignore)]
         public string OrderType { get; set; }
     }

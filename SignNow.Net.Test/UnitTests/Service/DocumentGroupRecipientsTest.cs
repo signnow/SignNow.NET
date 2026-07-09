@@ -43,7 +43,7 @@ namespace UnitTests
                     },
                     Cc = new[] { "cc@example.com" },
                     GeneralExpirationDays = 30,
-                    GeneralReminder = new DocumentGroupRecipientReminder
+                    GeneralReminder = new DocumentGroupTemplateReminder
                     {
                         RemindBefore = 5,
                         RemindAfter = 1,
