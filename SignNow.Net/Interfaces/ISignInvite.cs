@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
+using SignNow.Net.Model.Responses;
 
 namespace SignNow.Net.Interfaces
 {
@@ -69,5 +70,21 @@ namespace SignNow.Net.Interfaces
         /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
         /// <returns></returns>
         Task ResendEmailInviteAsync(string fieldInviteId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Generates a link to open the embedded document editor.
+        /// </summary>
+        /// <param name="documentId">Identity of the document.</param>
+        /// <param name="options">Options for the embedded editor link.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<EmbeddedInviteLinkResponse> GenerateEmbeddedEditorLinkAsync(string documentId, EmbeddedEditorOptions options, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Generates a link to open the embedded document sending workflow.
+        /// </summary>
+        /// <param name="documentId">Identity of the document.</param>
+        /// <param name="options">Options for the embedded sending link.</param>
+        /// <param name="cancellationToken">Propagates notification that operations should be canceled.</param>
+        Task<EmbeddedInviteLinkResponse> GenerateEmbeddedSendingLinkAsync(string documentId, EmbeddedSendingOptions options, CancellationToken cancellationToken = default);
     }
 }

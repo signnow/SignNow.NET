@@ -294,6 +294,40 @@ namespace SignNow.Net.Service
             await SignNowClient.RequestAsync(requestOptions, cancellationToken).ConfigureAwait(false);
         }
 
+        /// <inheritdoc cref="ISignInvite.GenerateEmbeddedEditorLinkAsync" />
+        public async Task<EmbeddedInviteLinkResponse> GenerateEmbeddedEditorLinkAsync(string documentId, EmbeddedEditorOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-editor"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc cref="ISignInvite.GenerateEmbeddedSendingLinkAsync" />
+        public async Task<EmbeddedInviteLinkResponse> GenerateEmbeddedSendingLinkAsync(string documentId, EmbeddedSendingOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/documents/{documentId.ValidateId()}/embedded-sending"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Returns an enumerable of user's documents.
         /// </summary>

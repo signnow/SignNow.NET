@@ -16,7 +16,7 @@ using InternalUpdateDocumentGroupTemplateRequest = SignNow.Net.Internal.Requests
 
 namespace SignNow.Net.Service
 {
-    public class DocumentGroupService : WebClientBase, IDocumentGroup
+    public class DocumentGroupService : WebClientBase, IDocumentGroup, IDocumentGroupInvite
     {
         /// <summary>
         /// Creates new instance of <see cref="DocumentService"/>
@@ -206,6 +206,25 @@ namespace SignNow.Net.Service
         }
 
         /// <inheritdoc />
+        /// <exception cref="System.ArgumentException">If document group template identity is not valid.</exception>
+        public async Task<DocumentGroupInfoResponse> CreateDocumentGroupFromTemplateAsync(string documentGroupTemplateId, CreateDocumentGroupFromTemplateRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{documentGroupTemplateId.ValidateId()}/document-group"),
+                Content = request,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupInfoResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         /// <exception cref="System.ArgumentException">If document group identity is not valid.</exception>
         public async Task CreateDocumentGroupTemplateAsync(string documentGroupId, CreateDocumentGroupTemplateRequest createRequest, CancellationToken cancellationToken = default)
         {
@@ -243,6 +262,251 @@ namespace SignNow.Net.Service
 
             return await SignNowClient
                 .RequestAsync<GetDocumentGroupTemplatesResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DocumentGroupTemplateRecipientsResponse> GetDocumentGroupTemplateRecipientsAsync(string templateGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{templateGroupId.ValidateId()}/recipients"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupTemplateRecipientsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateDocumentGroupTemplateRecipientsAsync(string templateGroupId, UpdateDocumentGroupTemplateRecipientsRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-group-templates/{templateGroupId.ValidateId()}/recipients"),
+                Content = request,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DocumentGroupRecipientsResponse> GetDocumentGroupRecipientsAsync(string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/recipients"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupRecipientsResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateDocumentGroupRecipientsAsync(string documentGroupId, UpdateDocumentGroupRecipientsRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PutHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/recipients"),
+                Content = request,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<DocumentGroupEmbeddedInviteResponse> CreateDocumentGroupEmbeddedInviteAsync(string documentGroupId, CreateDocumentGroupEmbeddedInviteRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/embedded-invites"),
+                Content = request,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<DocumentGroupEmbeddedInviteResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedInviteLinkAsync(string documentGroupId, string embeddedInviteId, CreateDocumentGroupEmbedLinkOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/embedded-invites/{embeddedInviteId.ValidateId()}/link"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task CancelDocumentGroupEmbeddedInviteAsync(string documentGroupId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new DeleteHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/embedded-invites"),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedEditorLinkAsync(string documentGroupId, EmbeddedEditorOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/embedded-editor"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<EmbeddedInviteLinkResponse> GenerateDocumentGroupEmbeddedSendingLinkAsync(string documentGroupId, EmbeddedSendingOptions options, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(options, nameof(options));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/v2/document-groups/{documentGroupId.ValidateId()}/embedded-sending"),
+                Content = options,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<EmbeddedInviteLinkResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        // ===== IDocumentGroupInvite =====
+
+        /// <inheritdoc />
+        public async Task<GroupInviteResponse> CreateGroupInviteAsync(string documentGroupId, CreateGroupInviteRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite"),
+                Content = request,
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<GroupInviteResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<GroupInviteResponse> GetGroupInviteAsync(string documentGroupId, string inviteId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite/{inviteId.ValidateId()}"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<GroupInviteResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task CancelGroupInviteAsync(string documentGroupId, string inviteId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite/{inviteId.ValidateId()}/cancelinvite"),
+                Content = new EmptyPayloadRequest(),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task ResendGroupInviteAsync(string documentGroupId, string inviteId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite/{inviteId.ValidateId()}/resendinvites"),
+                Content = new EmptyPayloadRequest(),
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<PendingGroupInvitesResponse> GetPendingGroupInvitesAsync(string documentGroupId, string inviteId, CancellationToken cancellationToken = default)
+        {
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new GetHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite/{inviteId.ValidateId()}/pendinginvites"),
+                Token = Token
+            };
+
+            return await SignNowClient
+                .RequestAsync<PendingGroupInvitesResponse>(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task ReassignSignerAsync(string documentGroupId, string inviteId, string stepId, ReassignSignerRequest request, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(request, nameof(request));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, $"/documentgroup/{documentGroupId.ValidateId()}/groupinvite/{inviteId.ValidateId()}/invitestep/{stepId.ValidateId()}/update"),
+                Content = request,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
                 .ConfigureAwait(false);
         }
     }

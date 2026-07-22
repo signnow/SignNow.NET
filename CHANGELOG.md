@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased] - TBD
 
+## [1.6.0] - 2025-07-22
+### Added
+- Document Groups:
+    - Create Document Group from Template: create a document group directly from a document group template
+    - Document Group Invites: create, get status, cancel, resend, reassign signer, and list pending invites for a document group signing workflow
+    - Document Group Embedded: create/cancel embedded invites, generate embedded invite links, and embedded editor/sending links for a document group
+    - Document Group Recipients: get and update recipients, expiration, reminder and signing order settings for a document group
+    - Document Group Template Recipients: get and update recipients for a document group template
+- Event Subscriptions & Webhooks:
+    - Create Event Subscription V2: create subscriptions via the `/v2/event-subscriptions` endpoint (`CreateEventSubscriptionV2Async`)
 
 ## [1.5.0] - 2025-02-05
 ### Added
@@ -257,7 +267,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 [create freeform invite]: https://github.com/signnow/SignNow.NET/blob/develop/README.md#create-freeform-invite
 
 <!-- Links to compare changes from previous version vs new version -->
-[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.3.0...HEAD
+[Unreleased]: https://github.com/signnow/SignNow.NET/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/signnow/SignNow.NET/compare/1.5.0...1.6.0
+[1.5.0]: https://github.com/signnow/SignNow.NET/compare/1.4.0...1.5.0
+[1.4.0]: https://github.com/signnow/SignNow.NET/compare/1.3.0...1.4.0
+[1.3.0]: https://github.com/signnow/SignNow.NET/compare/1.2.3...1.3.0
 [1.3.0]: https://github.com/signnow/SignNow.NET/compare/1.2.3...1.3.0
 [1.2.3]: https://github.com/signnow/SignNow.NET/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/signnow/SignNow.NET/compare/1.2.1...1.2.2

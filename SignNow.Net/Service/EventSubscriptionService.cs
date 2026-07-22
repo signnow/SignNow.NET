@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SignNow.Net.Interfaces;
 using SignNow.Net.Extensions;
+using SignNow.Net.Internal.Helpers;
 using SignNow.Net.Model;
 using SignNow.Net.Model.Requests;
 using SignNow.Net.Model.Responses;
@@ -29,6 +30,23 @@ namespace SignNow.Net.Service
             var requestOptions = new PostHttpRequestOptions
             {
                 RequestUrl = new Uri(ApiBaseUrl, "/api/v2/events"),
+                Content = createEvent,
+                Token = Token
+            };
+
+            await SignNowClient
+                .RequestAsync(requestOptions, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task CreateEventSubscriptionV2Async(CreateEventSubscriptionV2 createEvent, CancellationToken cancellationToken = default)
+        {
+            Guard.ArgumentNotNull(createEvent, nameof(createEvent));
+            Token.TokenType = TokenType.Bearer;
+            var requestOptions = new PostHttpRequestOptions
+            {
+                RequestUrl = new Uri(ApiBaseUrl, "/v2/event-subscriptions"),
                 Content = createEvent,
                 Token = Token
             };
