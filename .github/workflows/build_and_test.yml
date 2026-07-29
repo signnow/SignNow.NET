@@ -151,7 +151,7 @@ jobs:
             /p:CollectCoverage=true
 
       - name: Save Code Coverage Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: CoverageReports-${{ runner.os }}-${{ matrix.framework }}.zip
           path: ${{ env.COVERAGE_PATH }}/**/coverage*
